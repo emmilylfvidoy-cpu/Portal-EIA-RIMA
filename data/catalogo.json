@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "gerado_em": "2026-10-07T16:46:07.358Z",
+  "gerado_em": "2026-10-07T17:22:08.464Z",
   "cobertura": "Estado de São Paulo",
   "extensao_inicial": [
     -53.1053,
@@ -44,32 +44,32 @@
           "A4sn": "#8781bc",
           "C2P1a": "#92b9b2",
           "C2P1i": "#8da8b6",
-          "C_cortado_1a_gamma_4Igt": "#fe896e",
-          "C_cortado_1a_gamma_4Ipt": "#fd8164",
-          "C_cortado_1a_gamma_4Isb": "#fd8164",
-          "C_cortado_a_delta_4bm": "#4efcbf",
-          "C_cortado_a_gamma_4S": "#fe7373",
-          "C_cortado_a_gamma_4Smo": "#f88383",
-          "C_cortado_a_gamma_4Sna": "#f88383",
-          "C_cortado_a_gamma_4Spm": "#f88383",
-          "C_cortado_a_gamma_4Sta": "#f88383",
-          "C_cortado_a_gamma_4gs": "#e479a3",
+          "Є1aγ4Igt": "#fe896e",
+          "Є1aγ4Ipt": "#fd8164",
+          "Є1aγ4Isb": "#fd8164",
+          "Єaδ4bm": "#4efcbf",
+          "Єaγ4S": "#fe7373",
+          "Єaγ4Smo": "#f88383",
+          "Єaγ4Sna": "#f88383",
+          "Єaγ4Spm": "#f88383",
+          "Єaγ4Sta": "#f88383",
+          "Єaγ4gs": "#e479a3",
           "D1f": "#dd9100",
           "ENrc": "#fecf19",
           "Er": "#f5d061",
           "Esp": "#fdd591",
           "Et": "#fce4bb",
           "J3K1bt": "#90cadf",
-          "K1_beta_sg": "#46cb83",
-          "K1_delta_sg": "#44c686",
-          "K1_lambda_ja": "#00d8d8",
-          "K1_lambda_ju": "#00d8d8",
+          "K1βsg": "#46cb83",
+          "K1δsg": "#44c686",
+          "K1λja": "#00d8d8",
+          "K1λju": "#00d8d8",
           "K2Eit": "#f1eb9d",
-          "K2_lambda_i": "#00d1be",
-          "K2_lambda_pc": "#00d3bf",
-          "K2_lambda_po": "#00d6d6",
-          "K2_lambda_pq": "#00d6d6",
-          "K2_lambda_se": "#00e6b5",
+          "K2λi": "#00d1be",
+          "K2λpc": "#00d3bf",
+          "K2λpo": "#00d6d6",
+          "K2λpq": "#00d6d6",
+          "K2λse": "#00e6b5",
           "K2ar": "#83c68e",
           "K2m": "#79d379",
           "K2pa": "#c7d89a",
@@ -77,7 +77,7 @@
           "K2rp": "#91db99",
           "K2sa": "#9db975",
           "K2vp": "#c8eed9",
-          "K_lambda": "#00d8d8",
+          "Kλ": "#00d8d8",
           "MP1acc": "#9cc8c3",
           "MP1acq": "#d6cba7",
           "MP1acx": "#bbc8b3",
@@ -98,193 +98,193 @@
           "MPma": "#7fc5fe",
           "MPpi": "#98aca8",
           "MPpv": "#95f6fe",
-          "MPs_gamma_1It": "#fa88d0",
+          "MPsγ1It": "#fa88d0",
           "MPsac": "#72abca",
           "MPsap": "#c9a1a6",
           "MPsapc": "#81a9ac",
           "N1pq": "#f7fe86",
-          "NP2r_gamma_1Irn": "#edc7f8",
-          "NP3_C_cortado_1e": "#bad1e7",
-          "NP3_C_cortado_1i": "#e7e3ee",
-          "NP3_C_cortado_1q": "#d8baa8",
-          "NP3_C_cortado_1s": "#d8baa8",
-          "NP3a_gamma_1Ica": "#fb8af4",
-          "NP3a_gamma_1Iia": "#ff2d7b",
-          "NP3a_gamma_1Ipn": "#fb8af4",
-          "NP3a_gamma_1Ipp": "#fb8af4",
-          "NP3a_gamma_1Sar": "#fe8bee",
-          "NP3a_gamma_1Sro": "#fe8bee",
-          "NP3a_gamma_1st": "#e4bcbd",
-          "NP3a_gamma_2Cub": "#d389d4",
-          "NP3a_gamma_2I": "#fc4a74",
-          "NP3a_gamma_2Ica": "#f9497f",
-          "NP3a_gamma_2Inas": "#f9497f",
-          "NP3a_gamma_2Srt": "#fe6eb6",
-          "NP3a_gamma_3Spm": "#fc9898",
+          "NP2rγ1Irn": "#edc7f8",
+          "NP3Є1e": "#bad1e7",
+          "NP3Є1i": "#e7e3ee",
+          "NP3Є1q": "#d8baa8",
+          "NP3Є1s": "#d8baa8",
+          "NP3aγ1Ica": "#fb8af4",
+          "NP3aγ1Iia": "#ff2d7b",
+          "NP3aγ1Ipn": "#fb8af4",
+          "NP3aγ1Ipp": "#fb8af4",
+          "NP3aγ1Sar": "#fe8bee",
+          "NP3aγ1Sro": "#fe8bee",
+          "NP3aγ1st": "#e4bcbd",
+          "NP3aγ2Cub": "#d389d4",
+          "NP3aγ2I": "#fc4a74",
+          "NP3aγ2Ica": "#f9497f",
+          "NP3aγ2Inas": "#f9497f",
+          "NP3aγ2Srt": "#fe6eb6",
+          "NP3aγ3Spm": "#fc9898",
           "NP3ab": "#e3dbfd",
-          "NP3e_gamma": "#fda4a8",
-          "NP3e_gamma_1": "#feccf6",
-          "NP3e_gamma_1Ips": "#ff0000",
-          "NP3e_gamma_1Isp": "#fc68eb",
-          "NP3e_gamma_1S": "#fe7373",
-          "NP3e_gamma_1Scr": "#fd86a2",
-          "NP3e_gamma_1Sfs": "#fd86a2",
-          "NP3e_gamma_1Sfu": "#fd869c",
-          "NP3e_gamma_1Sgs": "#fd86a2",
-          "NP3e_gamma_1Sgu": "#fd86a2",
-          "NP3e_gamma_1Sib": "#fd86a2",
-          "NP3e_gamma_1Sip": "#fd86a2",
-          "NP3e_gamma_1Siq": "#fd86a2",
-          "NP3e_gamma_1Sis": "#fd86a2",
-          "NP3e_gamma_1Slg": "#fc9898",
-          "NP3e_gamma_1Sml": "#fd86a2",
-          "NP3e_gamma_1Smp": "#fd86a2",
-          "NP3e_gamma_1Spa": "#fd86a2",
-          "NP3e_gamma_1Sqc": "#e000a3",
-          "NP3e_gamma_1Sro": "#fd86a2",
-          "NP3e_gamma_1Srs": "#fd86a2",
-          "NP3e_gamma_1Ssb": "#fd86a2",
-          "NP3e_gamma_1Ssc": "#fd86a2",
-          "NP3e_gamma_1Sse": "#fd869c",
-          "NP3e_gamma_1Ssj": "#fd86a2",
-          "NP3e_gamma_1Ssl": "#fd86a2",
-          "NP3e_gamma_1Ssr": "#fd86a2",
-          "NP3e_gamma_1Ssu": "#e000a3",
-          "NP3e_gamma_1Stb": "#fd86a2",
-          "NP3e_gamma_1Stl": "#fd86a2",
-          "NP3e_gamma_1Stq": "#e000a3",
-          "NP3e_gamma_1Str": "#fd86a2",
-          "NP3e_gamma_1Stu": "#fd86a2",
-          "NP3e_gamma_1pi": "#fdd0de",
-          "NP3e_gamma_2Isi": "#ff0000",
-          "NP3e_gamma_2Sju": "#fe7373",
-          "NP3e_gamma_2Sma": "#ed8484",
-          "NP3e_gamma_2Smc": "#fd86a2",
-          "NP3e_gamma_2ap": "#fb4a5b",
-          "NP3e_gamma_2ca": "#fb4a5b",
-          "NP3e_gamma_2it": "#e05000",
-          "NP3e_gamma_2la": "#fb4a5b",
-          "NP3e_gamma_3A": "#fe634a",
-          "NP3e_gamma_3Aab": "#fe634a",
-          "NP3e_gamma_bc": "#fea4a6",
-          "NP3e_gamma_bv": "#fea4a6",
-          "NP3e_gamma_fa": "#fea4a6",
-          "NP3e_gamma_fc": "#fd8e68",
-          "NP3e_gamma_rp": "#fea4a6",
+          "NP3eγ": "#fda4a8",
+          "NP3eγ1": "#feccf6",
+          "NP3eγ1Ips": "#ff0000",
+          "NP3eγ1Isp": "#fc68eb",
+          "NP3eγ1S": "#fe7373",
+          "NP3eγ1Scr": "#fd86a2",
+          "NP3eγ1Sfs": "#fd86a2",
+          "NP3eγ1Sfu": "#fd869c",
+          "NP3eγ1Sgs": "#fd86a2",
+          "NP3eγ1Sgu": "#fd86a2",
+          "NP3eγ1Sib": "#fd86a2",
+          "NP3eγ1Sip": "#fd86a2",
+          "NP3eγ1Siq": "#fd86a2",
+          "NP3eγ1Sis": "#fd86a2",
+          "NP3eγ1Slg": "#fc9898",
+          "NP3eγ1Sml": "#fd86a2",
+          "NP3eγ1Smp": "#fd86a2",
+          "NP3eγ1Spa": "#fd86a2",
+          "NP3eγ1Sqc": "#e000a3",
+          "NP3eγ1Sro": "#fd86a2",
+          "NP3eγ1Srs": "#fd86a2",
+          "NP3eγ1Ssb": "#fd86a2",
+          "NP3eγ1Ssc": "#fd86a2",
+          "NP3eγ1Sse": "#fd869c",
+          "NP3eγ1Ssj": "#fd86a2",
+          "NP3eγ1Ssl": "#fd86a2",
+          "NP3eγ1Ssr": "#fd86a2",
+          "NP3eγ1Ssu": "#e000a3",
+          "NP3eγ1Stb": "#fd86a2",
+          "NP3eγ1Stl": "#fd86a2",
+          "NP3eγ1Stq": "#e000a3",
+          "NP3eγ1Str": "#fd86a2",
+          "NP3eγ1Stu": "#fd86a2",
+          "NP3eγ1pi": "#fdd0de",
+          "NP3eγ2Isi": "#ff0000",
+          "NP3eγ2Sju": "#fe7373",
+          "NP3eγ2Sma": "#ed8484",
+          "NP3eγ2Smc": "#fd86a2",
+          "NP3eγ2ap": "#fb4a5b",
+          "NP3eγ2ca": "#fb4a5b",
+          "NP3eγ2it": "#e05000",
+          "NP3eγ2la": "#fb4a5b",
+          "NP3eγ3A": "#fe634a",
+          "NP3eγ3Aab": "#fe634a",
+          "NP3eγbc": "#fea4a6",
+          "NP3eγbv": "#fea4a6",
+          "NP3eγfa": "#fea4a6",
+          "NP3eγfc": "#fd8e68",
+          "NP3eγrp": "#fea4a6",
           "NP3ic": "#aabfcb",
           "NP3ipb": "#c9baa1",
           "NP3ipcg": "#7f553e",
           "NP3ipp": "#9e8b8b",
           "NP3it": "#b9b4b2",
           "NP3ml": "#d1d1d1",
-          "NP3p_delta_a": "#008100",
-          "NP3p_gamma_1Iag": "#ea3389",
-          "NP3p_gamma_1Iar": "#ea3389",
-          "NP3p_gamma_1Ibc": "#ea3389",
-          "NP3p_gamma_1Iib": "#fd8bf3",
-          "NP3p_gamma_1Ijr": "#fe8bee",
-          "NP3p_gamma_1Irp": "#ea3389",
-          "NP3p_gamma_1It": "#fe8bee",
-          "NP3p_gamma_1Stu": "#fc7272",
-          "NP3p_gamma_1iv": "#fdaaaa",
-          "NP3p_gamma_1tp": "#fe4b4f",
-          "NP3p_gamma_2": "#fe4b4f",
-          "NP3p_gamma_2I": "#fe9ff3",
-          "NP3p_gamma_2Ibr": "#fe9ff3",
-          "NP3p_gamma_2Ica": "#fe9ff3",
-          "NP3p_gamma_2Icb": "#ea3389",
-          "NP3p_gamma_2Icp": "#fe9ff3",
-          "NP3p_gamma_2Ict": "#fe9ff3",
-          "NP3p_gamma_2Icu": "#fe9ff3",
-          "NP3p_gamma_2Iii": "#ea3389",
-          "NP3p_gamma_2Ipd": "#fd868c",
-          "NP3p_gamma_2Ipe": "#fd868c",
-          "NP3p_gamma_2Isa": "#fe9ff3",
-          "NP3p_gamma_2It": "#fe9ff3",
-          "NP3p_gamma_2Sap": "#e34352",
-          "NP3p_gamma_2Spd": "#fd7272",
-          "NP3p_gamma_2Sps": "#fd7272",
-          "NP3p_gamma_2Ssi": "#ea5cb6",
-          "NP3p_gamma_2Ssl": "#fd7272",
-          "NP3p_gamma_2Stb": "#fd7272",
-          "NP3p_gamma_2ap": "#e06400",
-          "NP3p_gamma_2bv": "#e06400",
-          "NP3p_gamma_2gu": "#e06400",
-          "NP3p_gamma_2ju": "#e06400",
-          "NP3p_gamma_2mc": "#e06400",
-          "NP3p_gamma_2mi": "#e06400",
-          "NP3p_gamma_2pa": "#e06400",
-          "NP3p_gamma_3Abl": "#fe674a",
-          "NP3p_gamma_3Abo": "#fe674a",
-          "NP3p_gamma_3Aco": "#fe674a",
-          "NP3p_gamma_3Acv": "#fe674a",
-          "NP3p_gamma_3Afv": "#fe674a",
-          "NP3p_gamma_3Ais": "#fe674a",
-          "NP3p_gamma_3Arp": "#fe7664",
-          "NP3p_gamma_3Asb": "#fd634a",
-          "NP3p_gamma_3Asg": "#fe674a",
-          "NP3p_gamma_3Asm": "#fe7373",
-          "NP3p_gamma_3Asv": "#fe674a",
-          "NP3p_gamma_3ag": "#fe7664",
-          "NP3p_gamma_3bs": "#fe7664",
-          "NP3p_gamma_3es": "#fd5e66",
-          "NP3p_gamma_3la": "#fe7664",
-          "NP3p_gamma_3vg": "#fd5e66",
-          "NP3p_gamma_po": "#e06400",
-          "NP3p_gamma_pp": "#ea7956",
-          "NP3p_gamma_pr": "#ea7956",
-          "NP3p_gamma_te": "#ea7956",
-          "NP3pe_gamma_1Igm": "#fc8aef",
-          "NP3pe_gamma_2I": "#fe9ff3",
-          "NP3pe_gamma_2Imi": "#e15c5c",
-          "NP3pe_gamma_2Sig": "#fe7373",
-          "NP3pe_gamma_3Aat": "#fe5864",
-          "NP3pe_gamma_3Abb": "#fe5864",
-          "NP3pe_gamma_3Aic": "#fe634a",
-          "NP3pe_gamma_3Amd": "#fe5864",
-          "NP3pe_gamma_3Arg": "#fe5864",
-          "NP3pe_gamma_3Asc": "#fe634a",
-          "NP3pe_gamma_3Avo": "#fe5864",
-          "NP3s_gamma_1Cjd": "#e2669d",
-          "NP3s_gamma_1Cpc": "#d2a8c1",
-          "NP3s_gamma_1Csm": "#e2669d",
-          "NP3s_gamma_1I": "#f887d4",
-          "NP3s_gamma_1Ibb": "#db5255",
-          "NP3s_gamma_1Ibp": "#f686d7",
-          "NP3s_gamma_1Icj": "#f686d7",
-          "NP3s_gamma_1Icr": "#db5255",
-          "NP3s_gamma_1Ict": "#f686d7",
-          "NP3s_gamma_1Iit": "#db5255",
-          "NP3s_gamma_1Ijg": "#f686d7",
-          "NP3s_gamma_1Ima": "#db5255",
-          "NP3s_gamma_1Imp": "#db5255",
-          "NP3s_gamma_1Imt": "#db5255",
-          "NP3s_gamma_1Ipi": "#f686d7",
-          "NP3s_gamma_1Isc": "#db5255",
-          "NP3s_gamma_1Ism": "#f686d7",
-          "NP3s_gamma_1Isp": "#f686d7",
-          "NP3s_gamma_1Isr": "#f686d7",
-          "NP3s_gamma_1Ita": "#db5255",
-          "NP3s_gamma_1Sgo": "#fc7272",
-          "NP3s_gamma_1Snp": "#e078c8",
-          "NP3s_gamma_1Sqc": "#fc7272",
-          "NP3s_gamma_1Stt": "#e078c8",
-          "NP3s_gamma_1ja": "#eeb6b6",
-          "NP3s_gamma_1po": "#eeb6b6",
-          "NP3s_gamma_2Cfx": "#dd96e6",
-          "NP3s_gamma_2I": "#fd9ff0",
-          "NP3s_gamma_2Imo": "#db5255",
-          "NP3s_gamma_2Iso": "#fb9df3",
-          "NP3s_gamma_2sl": "#fcaaaa",
-          "NP3s_gamma_3Aat": "#fe5864",
-          "NP3s_gamma_3Aca": "#fb717e",
-          "NP3s_gamma_3Ait": "#fb717e",
-          "NP3s_gamma_3Ama": "#fe5864",
-          "NP3s_gamma_3Amo": "#fe5864",
-          "NP3s_gamma_3Apc": "#fe5864",
-          "NP3s_gamma_3Asf": "#fb717e",
-          "NP3s_gamma_3Atn": "#fe5864",
-          "NP3s_gamma_cc": "#fdc1c1",
+          "NP3pδa": "#008100",
+          "NP3pγ1Iag": "#ea3389",
+          "NP3pγ1Iar": "#ea3389",
+          "NP3pγ1Ibc": "#ea3389",
+          "NP3pγ1Iib": "#fd8bf3",
+          "NP3pγ1Ijr": "#fe8bee",
+          "NP3pγ1Irp": "#ea3389",
+          "NP3pγ1It": "#fe8bee",
+          "NP3pγ1Stu": "#fc7272",
+          "NP3pγ1iv": "#fdaaaa",
+          "NP3pγ1tp": "#fe4b4f",
+          "NP3pγ2": "#fe4b4f",
+          "NP3pγ2I": "#fe9ff3",
+          "NP3pγ2Ibr": "#fe9ff3",
+          "NP3pγ2Ica": "#fe9ff3",
+          "NP3pγ2Icb": "#ea3389",
+          "NP3pγ2Icp": "#fe9ff3",
+          "NP3pγ2Ict": "#fe9ff3",
+          "NP3pγ2Icu": "#fe9ff3",
+          "NP3pγ2Iii": "#ea3389",
+          "NP3pγ2Ipd": "#fd868c",
+          "NP3pγ2Ipe": "#fd868c",
+          "NP3pγ2Isa": "#fe9ff3",
+          "NP3pγ2It": "#fe9ff3",
+          "NP3pγ2Sap": "#e34352",
+          "NP3pγ2Spd": "#fd7272",
+          "NP3pγ2Sps": "#fd7272",
+          "NP3pγ2Ssi": "#ea5cb6",
+          "NP3pγ2Ssl": "#fd7272",
+          "NP3pγ2Stb": "#fd7272",
+          "NP3pγ2ap": "#e06400",
+          "NP3pγ2bv": "#e06400",
+          "NP3pγ2gu": "#e06400",
+          "NP3pγ2ju": "#e06400",
+          "NP3pγ2mc": "#e06400",
+          "NP3pγ2mi": "#e06400",
+          "NP3pγ2pa": "#e06400",
+          "NP3pγ3Abl": "#fe674a",
+          "NP3pγ3Abo": "#fe674a",
+          "NP3pγ3Aco": "#fe674a",
+          "NP3pγ3Acv": "#fe674a",
+          "NP3pγ3Afv": "#fe674a",
+          "NP3pγ3Ais": "#fe674a",
+          "NP3pγ3Arp": "#fe7664",
+          "NP3pγ3Asb": "#fd634a",
+          "NP3pγ3Asg": "#fe674a",
+          "NP3pγ3Asm": "#fe7373",
+          "NP3pγ3Asv": "#fe674a",
+          "NP3pγ3ag": "#fe7664",
+          "NP3pγ3bs": "#fe7664",
+          "NP3pγ3es": "#fd5e66",
+          "NP3pγ3la": "#fe7664",
+          "NP3pγ3vg": "#fd5e66",
+          "NP3pγpo": "#e06400",
+          "NP3pγpp": "#ea7956",
+          "NP3pγpr": "#ea7956",
+          "NP3pγte": "#ea7956",
+          "NP3peγ1Igm": "#fc8aef",
+          "NP3peγ2I": "#fe9ff3",
+          "NP3peγ2Imi": "#e15c5c",
+          "NP3peγ2Sig": "#fe7373",
+          "NP3peγ3Aat": "#fe5864",
+          "NP3peγ3Abb": "#fe5864",
+          "NP3peγ3Aic": "#fe634a",
+          "NP3peγ3Amd": "#fe5864",
+          "NP3peγ3Arg": "#fe5864",
+          "NP3peγ3Asc": "#fe634a",
+          "NP3peγ3Avo": "#fe5864",
+          "NP3sγ1Cjd": "#e2669d",
+          "NP3sγ1Cpc": "#d2a8c1",
+          "NP3sγ1Csm": "#e2669d",
+          "NP3sγ1I": "#f887d4",
+          "NP3sγ1Ibb": "#db5255",
+          "NP3sγ1Ibp": "#f686d7",
+          "NP3sγ1Icj": "#f686d7",
+          "NP3sγ1Icr": "#db5255",
+          "NP3sγ1Ict": "#f686d7",
+          "NP3sγ1Iit": "#db5255",
+          "NP3sγ1Ijg": "#f686d7",
+          "NP3sγ1Ima": "#db5255",
+          "NP3sγ1Imp": "#db5255",
+          "NP3sγ1Imt": "#db5255",
+          "NP3sγ1Ipi": "#f686d7",
+          "NP3sγ1Isc": "#db5255",
+          "NP3sγ1Ism": "#f686d7",
+          "NP3sγ1Isp": "#f686d7",
+          "NP3sγ1Isr": "#f686d7",
+          "NP3sγ1Ita": "#db5255",
+          "NP3sγ1Sgo": "#fc7272",
+          "NP3sγ1Snp": "#e078c8",
+          "NP3sγ1Sqc": "#fc7272",
+          "NP3sγ1Stt": "#e078c8",
+          "NP3sγ1ja": "#eeb6b6",
+          "NP3sγ1po": "#eeb6b6",
+          "NP3sγ2Cfx": "#dd96e6",
+          "NP3sγ2I": "#fd9ff0",
+          "NP3sγ2Imo": "#db5255",
+          "NP3sγ2Iso": "#fb9df3",
+          "NP3sγ2sl": "#fcaaaa",
+          "NP3sγ3Aat": "#fe5864",
+          "NP3sγ3Aca": "#fb717e",
+          "NP3sγ3Ait": "#fb717e",
+          "NP3sγ3Ama": "#fe5864",
+          "NP3sγ3Amo": "#fe5864",
+          "NP3sγ3Apc": "#fe5864",
+          "NP3sγ3Asf": "#fb717e",
+          "NP3sγ3Atn": "#fe5864",
+          "NP3sγcc": "#fdc1c1",
           "NP3srbt": "#ba9e9e",
           "NP3srer": "#c19882",
           "NP3srpc": "#c1fbfd",
@@ -331,7 +331,7 @@
           "PP2ati": "#fc72ac",
           "PP2ita": "#e378a5",
           "PP2q": "#a19ebc",
-          "PPam_mu": "#3b7246",
+          "PPamμ": "#3b7246",
           "PPamag": "#e0a8a9",
           "PPamm": "#fe9ca1",
           "PPams": "#d0c928",
@@ -352,32 +352,32 @@
           "A4sn": "#000000",
           "C2P1a": "#000000",
           "C2P1i": "#000000",
-          "C_cortado_1a_gamma_4Igt": "#000000",
-          "C_cortado_1a_gamma_4Ipt": "#000000",
-          "C_cortado_1a_gamma_4Isb": "#000000",
-          "C_cortado_a_delta_4bm": "#000000",
-          "C_cortado_a_gamma_4S": "#000000",
-          "C_cortado_a_gamma_4Smo": "#000000",
-          "C_cortado_a_gamma_4Sna": "#000000",
-          "C_cortado_a_gamma_4Spm": "#000000",
-          "C_cortado_a_gamma_4Sta": "#000000",
-          "C_cortado_a_gamma_4gs": "#000000",
+          "Є1aγ4Igt": "#000000",
+          "Є1aγ4Ipt": "#000000",
+          "Є1aγ4Isb": "#000000",
+          "Єaδ4bm": "#000000",
+          "Єaγ4S": "#000000",
+          "Єaγ4Smo": "#000000",
+          "Єaγ4Sna": "#000000",
+          "Єaγ4Spm": "#000000",
+          "Єaγ4Sta": "#000000",
+          "Єaγ4gs": "#000000",
           "D1f": "#000000",
           "ENrc": "#000000",
           "Er": "#000000",
           "Esp": "#000000",
           "Et": "#000000",
           "J3K1bt": "#000000",
-          "K1_beta_sg": "#000000",
-          "K1_delta_sg": "#000000",
-          "K1_lambda_ja": "#000000",
-          "K1_lambda_ju": "#000000",
+          "K1βsg": "#000000",
+          "K1δsg": "#000000",
+          "K1λja": "#000000",
+          "K1λju": "#000000",
           "K2Eit": "#000000",
-          "K2_lambda_i": "#000000",
-          "K2_lambda_pc": "#000000",
-          "K2_lambda_po": "#000000",
-          "K2_lambda_pq": "#000000",
-          "K2_lambda_se": "#000000",
+          "K2λi": "#000000",
+          "K2λpc": "#000000",
+          "K2λpo": "#000000",
+          "K2λpq": "#000000",
+          "K2λse": "#000000",
           "K2ar": "#000000",
           "K2m": "#000000",
           "K2pa": "#000000",
@@ -385,7 +385,7 @@
           "K2rp": "#000000",
           "K2sa": "#000000",
           "K2vp": "#000000",
-          "K_lambda": "#000000",
+          "Kλ": "#000000",
           "MP1acc": "#000000",
           "MP1acq": "#000000",
           "MP1acx": "#000000",
@@ -406,193 +406,193 @@
           "MPma": "#000000",
           "MPpi": "#000000",
           "MPpv": "#000000",
-          "MPs_gamma_1It": "#000000",
+          "MPsγ1It": "#000000",
           "MPsac": "#000000",
           "MPsap": "#000000",
           "MPsapc": "#000000",
           "N1pq": "#000000",
-          "NP2r_gamma_1Irn": "#000000",
-          "NP3_C_cortado_1e": "#000000",
-          "NP3_C_cortado_1i": "#000000",
-          "NP3_C_cortado_1q": "#000000",
-          "NP3_C_cortado_1s": "#000000",
-          "NP3a_gamma_1Ica": "#000000",
-          "NP3a_gamma_1Iia": "#000000",
-          "NP3a_gamma_1Ipn": "#000000",
-          "NP3a_gamma_1Ipp": "#000000",
-          "NP3a_gamma_1Sar": "#000000",
-          "NP3a_gamma_1Sro": "#000000",
-          "NP3a_gamma_1st": "#000000",
-          "NP3a_gamma_2Cub": "#000000",
-          "NP3a_gamma_2I": "#000000",
-          "NP3a_gamma_2Ica": "#000000",
-          "NP3a_gamma_2Inas": "#000000",
-          "NP3a_gamma_2Srt": "#000000",
-          "NP3a_gamma_3Spm": "#000000",
+          "NP2rγ1Irn": "#000000",
+          "NP3Є1e": "#000000",
+          "NP3Є1i": "#000000",
+          "NP3Є1q": "#000000",
+          "NP3Є1s": "#000000",
+          "NP3aγ1Ica": "#000000",
+          "NP3aγ1Iia": "#000000",
+          "NP3aγ1Ipn": "#000000",
+          "NP3aγ1Ipp": "#000000",
+          "NP3aγ1Sar": "#000000",
+          "NP3aγ1Sro": "#000000",
+          "NP3aγ1st": "#000000",
+          "NP3aγ2Cub": "#000000",
+          "NP3aγ2I": "#000000",
+          "NP3aγ2Ica": "#000000",
+          "NP3aγ2Inas": "#000000",
+          "NP3aγ2Srt": "#000000",
+          "NP3aγ3Spm": "#000000",
           "NP3ab": "#000000",
-          "NP3e_gamma": "#000000",
-          "NP3e_gamma_1": "#000000",
-          "NP3e_gamma_1Ips": "#000000",
-          "NP3e_gamma_1Isp": "#000000",
-          "NP3e_gamma_1S": "#000000",
-          "NP3e_gamma_1Scr": "#000000",
-          "NP3e_gamma_1Sfs": "#000000",
-          "NP3e_gamma_1Sfu": "#000000",
-          "NP3e_gamma_1Sgs": "#000000",
-          "NP3e_gamma_1Sgu": "#000000",
-          "NP3e_gamma_1Sib": "#000000",
-          "NP3e_gamma_1Sip": "#000000",
-          "NP3e_gamma_1Siq": "#000000",
-          "NP3e_gamma_1Sis": "#000000",
-          "NP3e_gamma_1Slg": "#000000",
-          "NP3e_gamma_1Sml": "#000000",
-          "NP3e_gamma_1Smp": "#000000",
-          "NP3e_gamma_1Spa": "#000000",
-          "NP3e_gamma_1Sqc": "#000000",
-          "NP3e_gamma_1Sro": "#000000",
-          "NP3e_gamma_1Srs": "#000000",
-          "NP3e_gamma_1Ssb": "#000000",
-          "NP3e_gamma_1Ssc": "#000000",
-          "NP3e_gamma_1Sse": "#000000",
-          "NP3e_gamma_1Ssj": "#000000",
-          "NP3e_gamma_1Ssl": "#000000",
-          "NP3e_gamma_1Ssr": "#000000",
-          "NP3e_gamma_1Ssu": "#000000",
-          "NP3e_gamma_1Stb": "#000000",
-          "NP3e_gamma_1Stl": "#000000",
-          "NP3e_gamma_1Stq": "#000000",
-          "NP3e_gamma_1Str": "#000000",
-          "NP3e_gamma_1Stu": "#000000",
-          "NP3e_gamma_1pi": "#000000",
-          "NP3e_gamma_2Isi": "#000000",
-          "NP3e_gamma_2Sju": "#000000",
-          "NP3e_gamma_2Sma": "#000000",
-          "NP3e_gamma_2Smc": "#000000",
-          "NP3e_gamma_2ap": "#000000",
-          "NP3e_gamma_2ca": "#000000",
-          "NP3e_gamma_2it": "#000000",
-          "NP3e_gamma_2la": "#000000",
-          "NP3e_gamma_3A": "#000000",
-          "NP3e_gamma_3Aab": "#000000",
-          "NP3e_gamma_bc": "#000000",
-          "NP3e_gamma_bv": "#000000",
-          "NP3e_gamma_fa": "#000000",
-          "NP3e_gamma_fc": "#000000",
-          "NP3e_gamma_rp": "#000000",
+          "NP3eγ": "#000000",
+          "NP3eγ1": "#000000",
+          "NP3eγ1Ips": "#000000",
+          "NP3eγ1Isp": "#000000",
+          "NP3eγ1S": "#000000",
+          "NP3eγ1Scr": "#000000",
+          "NP3eγ1Sfs": "#000000",
+          "NP3eγ1Sfu": "#000000",
+          "NP3eγ1Sgs": "#000000",
+          "NP3eγ1Sgu": "#000000",
+          "NP3eγ1Sib": "#000000",
+          "NP3eγ1Sip": "#000000",
+          "NP3eγ1Siq": "#000000",
+          "NP3eγ1Sis": "#000000",
+          "NP3eγ1Slg": "#000000",
+          "NP3eγ1Sml": "#000000",
+          "NP3eγ1Smp": "#000000",
+          "NP3eγ1Spa": "#000000",
+          "NP3eγ1Sqc": "#000000",
+          "NP3eγ1Sro": "#000000",
+          "NP3eγ1Srs": "#000000",
+          "NP3eγ1Ssb": "#000000",
+          "NP3eγ1Ssc": "#000000",
+          "NP3eγ1Sse": "#000000",
+          "NP3eγ1Ssj": "#000000",
+          "NP3eγ1Ssl": "#000000",
+          "NP3eγ1Ssr": "#000000",
+          "NP3eγ1Ssu": "#000000",
+          "NP3eγ1Stb": "#000000",
+          "NP3eγ1Stl": "#000000",
+          "NP3eγ1Stq": "#000000",
+          "NP3eγ1Str": "#000000",
+          "NP3eγ1Stu": "#000000",
+          "NP3eγ1pi": "#000000",
+          "NP3eγ2Isi": "#000000",
+          "NP3eγ2Sju": "#000000",
+          "NP3eγ2Sma": "#000000",
+          "NP3eγ2Smc": "#000000",
+          "NP3eγ2ap": "#000000",
+          "NP3eγ2ca": "#000000",
+          "NP3eγ2it": "#000000",
+          "NP3eγ2la": "#000000",
+          "NP3eγ3A": "#000000",
+          "NP3eγ3Aab": "#000000",
+          "NP3eγbc": "#000000",
+          "NP3eγbv": "#000000",
+          "NP3eγfa": "#000000",
+          "NP3eγfc": "#000000",
+          "NP3eγrp": "#000000",
           "NP3ic": "#000000",
           "NP3ipb": "#000000",
           "NP3ipcg": "#000000",
           "NP3ipp": "#000000",
           "NP3it": "#000000",
           "NP3ml": "#000000",
-          "NP3p_delta_a": "#000000",
-          "NP3p_gamma_1Iag": "#000000",
-          "NP3p_gamma_1Iar": "#000000",
-          "NP3p_gamma_1Ibc": "#000000",
-          "NP3p_gamma_1Iib": "#000000",
-          "NP3p_gamma_1Ijr": "#000000",
-          "NP3p_gamma_1Irp": "#000000",
-          "NP3p_gamma_1It": "#000000",
-          "NP3p_gamma_1Stu": "#000000",
-          "NP3p_gamma_1iv": "#000000",
-          "NP3p_gamma_1tp": "#000000",
-          "NP3p_gamma_2": "#000000",
-          "NP3p_gamma_2I": "#000000",
-          "NP3p_gamma_2Ibr": "#000000",
-          "NP3p_gamma_2Ica": "#000000",
-          "NP3p_gamma_2Icb": "#000000",
-          "NP3p_gamma_2Icp": "#000000",
-          "NP3p_gamma_2Ict": "#000000",
-          "NP3p_gamma_2Icu": "#000000",
-          "NP3p_gamma_2Iii": "#000000",
-          "NP3p_gamma_2Ipd": "#000000",
-          "NP3p_gamma_2Ipe": "#000000",
-          "NP3p_gamma_2Isa": "#000000",
-          "NP3p_gamma_2It": "#000000",
-          "NP3p_gamma_2Sap": "#000000",
-          "NP3p_gamma_2Spd": "#000000",
-          "NP3p_gamma_2Sps": "#000000",
-          "NP3p_gamma_2Ssi": "#000000",
-          "NP3p_gamma_2Ssl": "#000000",
-          "NP3p_gamma_2Stb": "#000000",
-          "NP3p_gamma_2ap": "#000000",
-          "NP3p_gamma_2bv": "#000000",
-          "NP3p_gamma_2gu": "#000000",
-          "NP3p_gamma_2ju": "#000000",
-          "NP3p_gamma_2mc": "#000000",
-          "NP3p_gamma_2mi": "#000000",
-          "NP3p_gamma_2pa": "#000000",
-          "NP3p_gamma_3Abl": "#000000",
-          "NP3p_gamma_3Abo": "#000000",
-          "NP3p_gamma_3Aco": "#000000",
-          "NP3p_gamma_3Acv": "#000000",
-          "NP3p_gamma_3Afv": "#000000",
-          "NP3p_gamma_3Ais": "#000000",
-          "NP3p_gamma_3Arp": "#000000",
-          "NP3p_gamma_3Asb": "#000000",
-          "NP3p_gamma_3Asg": "#000000",
-          "NP3p_gamma_3Asm": "#000000",
-          "NP3p_gamma_3Asv": "#000000",
-          "NP3p_gamma_3ag": "#000000",
-          "NP3p_gamma_3bs": "#000000",
-          "NP3p_gamma_3es": "#000000",
-          "NP3p_gamma_3la": "#000000",
-          "NP3p_gamma_3vg": "#000000",
-          "NP3p_gamma_po": "#000000",
-          "NP3p_gamma_pp": "#000000",
-          "NP3p_gamma_pr": "#000000",
-          "NP3p_gamma_te": "#000000",
-          "NP3pe_gamma_1Igm": "#000000",
-          "NP3pe_gamma_2I": "#000000",
-          "NP3pe_gamma_2Imi": "#000000",
-          "NP3pe_gamma_2Sig": "#000000",
-          "NP3pe_gamma_3Aat": "#000000",
-          "NP3pe_gamma_3Abb": "#000000",
-          "NP3pe_gamma_3Aic": "#000000",
-          "NP3pe_gamma_3Amd": "#000000",
-          "NP3pe_gamma_3Arg": "#000000",
-          "NP3pe_gamma_3Asc": "#000000",
-          "NP3pe_gamma_3Avo": "#000000",
-          "NP3s_gamma_1Cjd": "#000000",
-          "NP3s_gamma_1Cpc": "#000000",
-          "NP3s_gamma_1Csm": "#000000",
-          "NP3s_gamma_1I": "#000000",
-          "NP3s_gamma_1Ibb": "#000000",
-          "NP3s_gamma_1Ibp": "#000000",
-          "NP3s_gamma_1Icj": "#000000",
-          "NP3s_gamma_1Icr": "#000000",
-          "NP3s_gamma_1Ict": "#000000",
-          "NP3s_gamma_1Iit": "#000000",
-          "NP3s_gamma_1Ijg": "#000000",
-          "NP3s_gamma_1Ima": "#000000",
-          "NP3s_gamma_1Imp": "#000000",
-          "NP3s_gamma_1Imt": "#000000",
-          "NP3s_gamma_1Ipi": "#000000",
-          "NP3s_gamma_1Isc": "#000000",
-          "NP3s_gamma_1Ism": "#000000",
-          "NP3s_gamma_1Isp": "#000000",
-          "NP3s_gamma_1Isr": "#000000",
-          "NP3s_gamma_1Ita": "#000000",
-          "NP3s_gamma_1Sgo": "#000000",
-          "NP3s_gamma_1Snp": "#000000",
-          "NP3s_gamma_1Sqc": "#000000",
-          "NP3s_gamma_1Stt": "#000000",
-          "NP3s_gamma_1ja": "#000000",
-          "NP3s_gamma_1po": "#000000",
-          "NP3s_gamma_2Cfx": "#000000",
-          "NP3s_gamma_2I": "#000000",
-          "NP3s_gamma_2Imo": "#000000",
-          "NP3s_gamma_2Iso": "#000000",
-          "NP3s_gamma_2sl": "#000000",
-          "NP3s_gamma_3Aat": "#000000",
-          "NP3s_gamma_3Aca": "#000000",
-          "NP3s_gamma_3Ait": "#000000",
-          "NP3s_gamma_3Ama": "#000000",
-          "NP3s_gamma_3Amo": "#000000",
-          "NP3s_gamma_3Apc": "#000000",
-          "NP3s_gamma_3Asf": "#000000",
-          "NP3s_gamma_3Atn": "#000000",
-          "NP3s_gamma_cc": "#000000",
+          "NP3pδa": "#000000",
+          "NP3pγ1Iag": "#000000",
+          "NP3pγ1Iar": "#000000",
+          "NP3pγ1Ibc": "#000000",
+          "NP3pγ1Iib": "#000000",
+          "NP3pγ1Ijr": "#000000",
+          "NP3pγ1Irp": "#000000",
+          "NP3pγ1It": "#000000",
+          "NP3pγ1Stu": "#000000",
+          "NP3pγ1iv": "#000000",
+          "NP3pγ1tp": "#000000",
+          "NP3pγ2": "#000000",
+          "NP3pγ2I": "#000000",
+          "NP3pγ2Ibr": "#000000",
+          "NP3pγ2Ica": "#000000",
+          "NP3pγ2Icb": "#000000",
+          "NP3pγ2Icp": "#000000",
+          "NP3pγ2Ict": "#000000",
+          "NP3pγ2Icu": "#000000",
+          "NP3pγ2Iii": "#000000",
+          "NP3pγ2Ipd": "#000000",
+          "NP3pγ2Ipe": "#000000",
+          "NP3pγ2Isa": "#000000",
+          "NP3pγ2It": "#000000",
+          "NP3pγ2Sap": "#000000",
+          "NP3pγ2Spd": "#000000",
+          "NP3pγ2Sps": "#000000",
+          "NP3pγ2Ssi": "#000000",
+          "NP3pγ2Ssl": "#000000",
+          "NP3pγ2Stb": "#000000",
+          "NP3pγ2ap": "#000000",
+          "NP3pγ2bv": "#000000",
+          "NP3pγ2gu": "#000000",
+          "NP3pγ2ju": "#000000",
+          "NP3pγ2mc": "#000000",
+          "NP3pγ2mi": "#000000",
+          "NP3pγ2pa": "#000000",
+          "NP3pγ3Abl": "#000000",
+          "NP3pγ3Abo": "#000000",
+          "NP3pγ3Aco": "#000000",
+          "NP3pγ3Acv": "#000000",
+          "NP3pγ3Afv": "#000000",
+          "NP3pγ3Ais": "#000000",
+          "NP3pγ3Arp": "#000000",
+          "NP3pγ3Asb": "#000000",
+          "NP3pγ3Asg": "#000000",
+          "NP3pγ3Asm": "#000000",
+          "NP3pγ3Asv": "#000000",
+          "NP3pγ3ag": "#000000",
+          "NP3pγ3bs": "#000000",
+          "NP3pγ3es": "#000000",
+          "NP3pγ3la": "#000000",
+          "NP3pγ3vg": "#000000",
+          "NP3pγpo": "#000000",
+          "NP3pγpp": "#000000",
+          "NP3pγpr": "#000000",
+          "NP3pγte": "#000000",
+          "NP3peγ1Igm": "#000000",
+          "NP3peγ2I": "#000000",
+          "NP3peγ2Imi": "#000000",
+          "NP3peγ2Sig": "#000000",
+          "NP3peγ3Aat": "#000000",
+          "NP3peγ3Abb": "#000000",
+          "NP3peγ3Aic": "#000000",
+          "NP3peγ3Amd": "#000000",
+          "NP3peγ3Arg": "#000000",
+          "NP3peγ3Asc": "#000000",
+          "NP3peγ3Avo": "#000000",
+          "NP3sγ1Cjd": "#000000",
+          "NP3sγ1Cpc": "#000000",
+          "NP3sγ1Csm": "#000000",
+          "NP3sγ1I": "#000000",
+          "NP3sγ1Ibb": "#000000",
+          "NP3sγ1Ibp": "#000000",
+          "NP3sγ1Icj": "#000000",
+          "NP3sγ1Icr": "#000000",
+          "NP3sγ1Ict": "#000000",
+          "NP3sγ1Iit": "#000000",
+          "NP3sγ1Ijg": "#000000",
+          "NP3sγ1Ima": "#000000",
+          "NP3sγ1Imp": "#000000",
+          "NP3sγ1Imt": "#000000",
+          "NP3sγ1Ipi": "#000000",
+          "NP3sγ1Isc": "#000000",
+          "NP3sγ1Ism": "#000000",
+          "NP3sγ1Isp": "#000000",
+          "NP3sγ1Isr": "#000000",
+          "NP3sγ1Ita": "#000000",
+          "NP3sγ1Sgo": "#000000",
+          "NP3sγ1Snp": "#000000",
+          "NP3sγ1Sqc": "#000000",
+          "NP3sγ1Stt": "#000000",
+          "NP3sγ1ja": "#000000",
+          "NP3sγ1po": "#000000",
+          "NP3sγ2Cfx": "#000000",
+          "NP3sγ2I": "#000000",
+          "NP3sγ2Imo": "#000000",
+          "NP3sγ2Iso": "#000000",
+          "NP3sγ2sl": "#000000",
+          "NP3sγ3Aat": "#000000",
+          "NP3sγ3Aca": "#000000",
+          "NP3sγ3Ait": "#000000",
+          "NP3sγ3Ama": "#000000",
+          "NP3sγ3Amo": "#000000",
+          "NP3sγ3Apc": "#000000",
+          "NP3sγ3Asf": "#000000",
+          "NP3sγ3Atn": "#000000",
+          "NP3sγcc": "#000000",
           "NP3srbt": "#000000",
           "NP3srer": "#000000",
           "NP3srpc": "#000000",
@@ -639,7 +639,7 @@
           "PP2ati": "#000000",
           "PP2ita": "#000000",
           "PP2q": "#000000",
-          "PPam_mu": "#000000",
+          "PPamμ": "#000000",
           "PPamag": "#000000",
           "PPamm": "#000000",
           "PPams": "#000000",
@@ -916,43 +916,43 @@
           "feicoes": 18
         },
         {
-          "classe": "C_cortado_1a_gamma_4Igt",
+          "classe": "Є1aγ4Igt",
           "feicoes": 1
         },
         {
-          "classe": "C_cortado_1a_gamma_4Ipt",
+          "classe": "Є1aγ4Ipt",
           "feicoes": 2
         },
         {
-          "classe": "C_cortado_1a_gamma_4Isb",
+          "classe": "Є1aγ4Isb",
           "feicoes": 1
         },
         {
-          "classe": "C_cortado_a_delta_4bm",
+          "classe": "Єaδ4bm",
           "feicoes": 1
         },
         {
-          "classe": "C_cortado_a_gamma_4S",
+          "classe": "Єaγ4S",
           "feicoes": 2
         },
         {
-          "classe": "C_cortado_a_gamma_4Smo",
+          "classe": "Єaγ4Smo",
           "feicoes": 1
         },
         {
-          "classe": "C_cortado_a_gamma_4Sna",
+          "classe": "Єaγ4Sna",
           "feicoes": 1
         },
         {
-          "classe": "C_cortado_a_gamma_4Spm",
+          "classe": "Єaγ4Spm",
           "feicoes": 1
         },
         {
-          "classe": "C_cortado_a_gamma_4Sta",
+          "classe": "Єaγ4Sta",
           "feicoes": 1
         },
         {
-          "classe": "C_cortado_a_gamma_4gs",
+          "classe": "Єaγ4gs",
           "feicoes": 4
         },
         {
@@ -980,19 +980,19 @@
           "feicoes": 77
         },
         {
-          "classe": "K1_beta_sg",
+          "classe": "K1βsg",
           "feicoes": 116
         },
         {
-          "classe": "K1_delta_sg",
+          "classe": "K1δsg",
           "feicoes": 159
         },
         {
-          "classe": "K1_lambda_ja",
+          "classe": "K1λja",
           "feicoes": 1
         },
         {
-          "classe": "K1_lambda_ju",
+          "classe": "K1λju",
           "feicoes": 1
         },
         {
@@ -1000,23 +1000,23 @@
           "feicoes": 17
         },
         {
-          "classe": "K2_lambda_i",
+          "classe": "K2λi",
           "feicoes": 1
         },
         {
-          "classe": "K2_lambda_pc",
+          "classe": "K2λpc",
           "feicoes": 2
         },
         {
-          "classe": "K2_lambda_po",
+          "classe": "K2λpo",
           "feicoes": 1
         },
         {
-          "classe": "K2_lambda_pq",
+          "classe": "K2λpq",
           "feicoes": 1
         },
         {
-          "classe": "K2_lambda_se",
+          "classe": "K2λse",
           "feicoes": 9
         },
         {
@@ -1048,7 +1048,7 @@
           "feicoes": 28
         },
         {
-          "classe": "K_lambda",
+          "classe": "Kλ",
           "feicoes": 2
         },
         {
@@ -1132,7 +1132,7 @@
           "feicoes": 1
         },
         {
-          "classe": "MPs_gamma_1It",
+          "classe": "MPsγ1It",
           "feicoes": 1
         },
         {
@@ -1152,75 +1152,75 @@
           "feicoes": 19
         },
         {
-          "classe": "NP2r_gamma_1Irn",
+          "classe": "NP2rγ1Irn",
           "feicoes": 2
         },
         {
-          "classe": "NP3_C_cortado_1e",
+          "classe": "NP3Є1e",
           "feicoes": 1
         },
         {
-          "classe": "NP3_C_cortado_1i",
+          "classe": "NP3Є1i",
           "feicoes": 1
         },
         {
-          "classe": "NP3_C_cortado_1q",
+          "classe": "NP3Є1q",
           "feicoes": 1
         },
         {
-          "classe": "NP3_C_cortado_1s",
+          "classe": "NP3Є1s",
           "feicoes": 1
         },
         {
-          "classe": "NP3a_gamma_1Ica",
+          "classe": "NP3aγ1Ica",
           "feicoes": 1
         },
         {
-          "classe": "NP3a_gamma_1Iia",
+          "classe": "NP3aγ1Iia",
           "feicoes": 3
         },
         {
-          "classe": "NP3a_gamma_1Ipn",
+          "classe": "NP3aγ1Ipn",
           "feicoes": 6
         },
         {
-          "classe": "NP3a_gamma_1Ipp",
+          "classe": "NP3aγ1Ipp",
           "feicoes": 8
         },
         {
-          "classe": "NP3a_gamma_1Sar",
+          "classe": "NP3aγ1Sar",
           "feicoes": 1
         },
         {
-          "classe": "NP3a_gamma_1Sro",
+          "classe": "NP3aγ1Sro",
           "feicoes": 1
         },
         {
-          "classe": "NP3a_gamma_1st",
+          "classe": "NP3aγ1st",
           "feicoes": 1
         },
         {
-          "classe": "NP3a_gamma_2Cub",
+          "classe": "NP3aγ2Cub",
           "feicoes": 11
         },
         {
-          "classe": "NP3a_gamma_2I",
+          "classe": "NP3aγ2I",
           "feicoes": 2
         },
         {
-          "classe": "NP3a_gamma_2Ica",
+          "classe": "NP3aγ2Ica",
           "feicoes": 1
         },
         {
-          "classe": "NP3a_gamma_2Inas",
+          "classe": "NP3aγ2Inas",
           "feicoes": 2
         },
         {
-          "classe": "NP3a_gamma_2Srt",
+          "classe": "NP3aγ2Srt",
           "feicoes": 1
         },
         {
-          "classe": "NP3a_gamma_3Spm",
+          "classe": "NP3aγ3Spm",
           "feicoes": 6
         },
         {
@@ -1228,199 +1228,199 @@
           "feicoes": 4
         },
         {
-          "classe": "NP3e_gamma",
+          "classe": "NP3eγ",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1",
+          "classe": "NP3eγ1",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Ips",
+          "classe": "NP3eγ1Ips",
           "feicoes": 2
         },
         {
-          "classe": "NP3e_gamma_1Isp",
+          "classe": "NP3eγ1Isp",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1S",
+          "classe": "NP3eγ1S",
           "feicoes": 3
         },
         {
-          "classe": "NP3e_gamma_1Scr",
+          "classe": "NP3eγ1Scr",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Sfs",
+          "classe": "NP3eγ1Sfs",
           "feicoes": 2
         },
         {
-          "classe": "NP3e_gamma_1Sfu",
+          "classe": "NP3eγ1Sfu",
           "feicoes": 2
         },
         {
-          "classe": "NP3e_gamma_1Sgs",
+          "classe": "NP3eγ1Sgs",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Sgu",
+          "classe": "NP3eγ1Sgu",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Sib",
+          "classe": "NP3eγ1Sib",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Sip",
+          "classe": "NP3eγ1Sip",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Siq",
+          "classe": "NP3eγ1Siq",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Sis",
+          "classe": "NP3eγ1Sis",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Slg",
+          "classe": "NP3eγ1Slg",
           "feicoes": 2
         },
         {
-          "classe": "NP3e_gamma_1Sml",
+          "classe": "NP3eγ1Sml",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Smp",
+          "classe": "NP3eγ1Smp",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Spa",
+          "classe": "NP3eγ1Spa",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Sqc",
+          "classe": "NP3eγ1Sqc",
           "feicoes": 4
         },
         {
-          "classe": "NP3e_gamma_1Sro",
+          "classe": "NP3eγ1Sro",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Srs",
+          "classe": "NP3eγ1Srs",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Ssb",
+          "classe": "NP3eγ1Ssb",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Ssc",
+          "classe": "NP3eγ1Ssc",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Sse",
+          "classe": "NP3eγ1Sse",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Ssj",
+          "classe": "NP3eγ1Ssj",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Ssl",
+          "classe": "NP3eγ1Ssl",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Ssr",
+          "classe": "NP3eγ1Ssr",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Ssu",
+          "classe": "NP3eγ1Ssu",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Stb",
+          "classe": "NP3eγ1Stb",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Stl",
+          "classe": "NP3eγ1Stl",
           "feicoes": 3
         },
         {
-          "classe": "NP3e_gamma_1Stq",
+          "classe": "NP3eγ1Stq",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1Str",
+          "classe": "NP3eγ1Str",
           "feicoes": 3
         },
         {
-          "classe": "NP3e_gamma_1Stu",
+          "classe": "NP3eγ1Stu",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_1pi",
+          "classe": "NP3eγ1pi",
           "feicoes": 3
         },
         {
-          "classe": "NP3e_gamma_2Isi",
+          "classe": "NP3eγ2Isi",
           "feicoes": 8
         },
         {
-          "classe": "NP3e_gamma_2Sju",
+          "classe": "NP3eγ2Sju",
           "feicoes": 9
         },
         {
-          "classe": "NP3e_gamma_2Sma",
+          "classe": "NP3eγ2Sma",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_2Smc",
+          "classe": "NP3eγ2Smc",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_2ap",
+          "classe": "NP3eγ2ap",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_2ca",
+          "classe": "NP3eγ2ca",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_2it",
+          "classe": "NP3eγ2it",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_2la",
+          "classe": "NP3eγ2la",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_3A",
+          "classe": "NP3eγ3A",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_3Aab",
+          "classe": "NP3eγ3Aab",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_bc",
+          "classe": "NP3eγbc",
           "feicoes": 2
         },
         {
-          "classe": "NP3e_gamma_bv",
+          "classe": "NP3eγbv",
           "feicoes": 2
         },
         {
-          "classe": "NP3e_gamma_fa",
+          "classe": "NP3eγfa",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_fc",
+          "classe": "NP3eγfc",
           "feicoes": 1
         },
         {
-          "classe": "NP3e_gamma_rp",
+          "classe": "NP3eγrp",
           "feicoes": 1
         },
         {
@@ -1448,435 +1448,435 @@
           "feicoes": 12
         },
         {
-          "classe": "NP3p_delta_a",
+          "classe": "NP3pδa",
           "feicoes": 3
         },
         {
-          "classe": "NP3p_gamma_1Iag",
+          "classe": "NP3pγ1Iag",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_1Iar",
+          "classe": "NP3pγ1Iar",
           "feicoes": 3
         },
         {
-          "classe": "NP3p_gamma_1Ibc",
+          "classe": "NP3pγ1Ibc",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_1Iib",
+          "classe": "NP3pγ1Iib",
           "feicoes": 2
         },
         {
-          "classe": "NP3p_gamma_1Ijr",
+          "classe": "NP3pγ1Ijr",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_1Irp",
+          "classe": "NP3pγ1Irp",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_1It",
+          "classe": "NP3pγ1It",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_1Stu",
+          "classe": "NP3pγ1Stu",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_1iv",
+          "classe": "NP3pγ1iv",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_1tp",
+          "classe": "NP3pγ1tp",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2",
+          "classe": "NP3pγ2",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2I",
+          "classe": "NP3pγ2I",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Ibr",
+          "classe": "NP3pγ2Ibr",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Ica",
+          "classe": "NP3pγ2Ica",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Icb",
+          "classe": "NP3pγ2Icb",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Icp",
+          "classe": "NP3pγ2Icp",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Ict",
+          "classe": "NP3pγ2Ict",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Icu",
+          "classe": "NP3pγ2Icu",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Iii",
+          "classe": "NP3pγ2Iii",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Ipd",
+          "classe": "NP3pγ2Ipd",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Ipe",
+          "classe": "NP3pγ2Ipe",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Isa",
+          "classe": "NP3pγ2Isa",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2It",
+          "classe": "NP3pγ2It",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Sap",
+          "classe": "NP3pγ2Sap",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Spd",
+          "classe": "NP3pγ2Spd",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Sps",
+          "classe": "NP3pγ2Sps",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Ssi",
+          "classe": "NP3pγ2Ssi",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Ssl",
+          "classe": "NP3pγ2Ssl",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2Stb",
+          "classe": "NP3pγ2Stb",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2ap",
+          "classe": "NP3pγ2ap",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2bv",
+          "classe": "NP3pγ2bv",
           "feicoes": 2
         },
         {
-          "classe": "NP3p_gamma_2gu",
+          "classe": "NP3pγ2gu",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2ju",
+          "classe": "NP3pγ2ju",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2mc",
+          "classe": "NP3pγ2mc",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2mi",
+          "classe": "NP3pγ2mi",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_2pa",
+          "classe": "NP3pγ2pa",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Abl",
+          "classe": "NP3pγ3Abl",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Abo",
+          "classe": "NP3pγ3Abo",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Aco",
+          "classe": "NP3pγ3Aco",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Acv",
+          "classe": "NP3pγ3Acv",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Afv",
+          "classe": "NP3pγ3Afv",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Ais",
+          "classe": "NP3pγ3Ais",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Arp",
+          "classe": "NP3pγ3Arp",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Asb",
+          "classe": "NP3pγ3Asb",
           "feicoes": 2
         },
         {
-          "classe": "NP3p_gamma_3Asg",
+          "classe": "NP3pγ3Asg",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3Asm",
+          "classe": "NP3pγ3Asm",
           "feicoes": 2
         },
         {
-          "classe": "NP3p_gamma_3Asv",
+          "classe": "NP3pγ3Asv",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3ag",
+          "classe": "NP3pγ3ag",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3bs",
+          "classe": "NP3pγ3bs",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3es",
+          "classe": "NP3pγ3es",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3la",
+          "classe": "NP3pγ3la",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_3vg",
+          "classe": "NP3pγ3vg",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_po",
+          "classe": "NP3pγpo",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_pp",
+          "classe": "NP3pγpp",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_pr",
+          "classe": "NP3pγpr",
           "feicoes": 1
         },
         {
-          "classe": "NP3p_gamma_te",
+          "classe": "NP3pγte",
           "feicoes": 1
         },
         {
-          "classe": "NP3pe_gamma_1Igm",
+          "classe": "NP3peγ1Igm",
           "feicoes": 3
         },
         {
-          "classe": "NP3pe_gamma_2I",
+          "classe": "NP3peγ2I",
           "feicoes": 1
         },
         {
-          "classe": "NP3pe_gamma_2Imi",
+          "classe": "NP3peγ2Imi",
           "feicoes": 5
         },
         {
-          "classe": "NP3pe_gamma_2Sig",
+          "classe": "NP3peγ2Sig",
           "feicoes": 5
         },
         {
-          "classe": "NP3pe_gamma_3Aat",
+          "classe": "NP3peγ3Aat",
           "feicoes": 1
         },
         {
-          "classe": "NP3pe_gamma_3Abb",
+          "classe": "NP3peγ3Abb",
           "feicoes": 2
         },
         {
-          "classe": "NP3pe_gamma_3Aic",
+          "classe": "NP3peγ3Aic",
           "feicoes": 6
         },
         {
-          "classe": "NP3pe_gamma_3Amd",
+          "classe": "NP3peγ3Amd",
           "feicoes": 1
         },
         {
-          "classe": "NP3pe_gamma_3Arg",
+          "classe": "NP3peγ3Arg",
           "feicoes": 1
         },
         {
-          "classe": "NP3pe_gamma_3Asc",
+          "classe": "NP3peγ3Asc",
           "feicoes": 1
         },
         {
-          "classe": "NP3pe_gamma_3Avo",
+          "classe": "NP3peγ3Avo",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Cjd",
+          "classe": "NP3sγ1Cjd",
           "feicoes": 6
         },
         {
-          "classe": "NP3s_gamma_1Cpc",
+          "classe": "NP3sγ1Cpc",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Csm",
+          "classe": "NP3sγ1Csm",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_1I",
+          "classe": "NP3sγ1I",
           "feicoes": 4
         },
         {
-          "classe": "NP3s_gamma_1Ibb",
+          "classe": "NP3sγ1Ibb",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Ibp",
+          "classe": "NP3sγ1Ibp",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Icj",
+          "classe": "NP3sγ1Icj",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Icr",
+          "classe": "NP3sγ1Icr",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Ict",
+          "classe": "NP3sγ1Ict",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Iit",
+          "classe": "NP3sγ1Iit",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_1Ijg",
+          "classe": "NP3sγ1Ijg",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_1Ima",
+          "classe": "NP3sγ1Ima",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Imp",
+          "classe": "NP3sγ1Imp",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_1Imt",
+          "classe": "NP3sγ1Imt",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Ipi",
+          "classe": "NP3sγ1Ipi",
           "feicoes": 5
         },
         {
-          "classe": "NP3s_gamma_1Isc",
+          "classe": "NP3sγ1Isc",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_1Ism",
+          "classe": "NP3sγ1Ism",
           "feicoes": 3
         },
         {
-          "classe": "NP3s_gamma_1Isp",
+          "classe": "NP3sγ1Isp",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_1Isr",
+          "classe": "NP3sγ1Isr",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Ita",
+          "classe": "NP3sγ1Ita",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Sgo",
+          "classe": "NP3sγ1Sgo",
           "feicoes": 3
         },
         {
-          "classe": "NP3s_gamma_1Snp",
+          "classe": "NP3sγ1Snp",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Sqc",
+          "classe": "NP3sγ1Sqc",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1Stt",
+          "classe": "NP3sγ1Stt",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_1ja",
+          "classe": "NP3sγ1ja",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_1po",
+          "classe": "NP3sγ1po",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_2Cfx",
+          "classe": "NP3sγ2Cfx",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_2I",
+          "classe": "NP3sγ2I",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_2Imo",
+          "classe": "NP3sγ2Imo",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_2Iso",
+          "classe": "NP3sγ2Iso",
           "feicoes": 3
         },
         {
-          "classe": "NP3s_gamma_2sl",
+          "classe": "NP3sγ2sl",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_3Aat",
+          "classe": "NP3sγ3Aat",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_3Aca",
+          "classe": "NP3sγ3Aca",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_3Ait",
+          "classe": "NP3sγ3Ait",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_3Ama",
+          "classe": "NP3sγ3Ama",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_3Amo",
+          "classe": "NP3sγ3Amo",
           "feicoes": 3
         },
         {
-          "classe": "NP3s_gamma_3Apc",
+          "classe": "NP3sγ3Apc",
           "feicoes": 2
         },
         {
-          "classe": "NP3s_gamma_3Asf",
+          "classe": "NP3sγ3Asf",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_3Atn",
+          "classe": "NP3sγ3Atn",
           "feicoes": 1
         },
         {
-          "classe": "NP3s_gamma_cc",
+          "classe": "NP3sγcc",
           "feicoes": 9
         },
         {
@@ -2064,7 +2064,7 @@
           "feicoes": 3
         },
         {
-          "classe": "PPam_mu",
+          "classe": "PPamμ",
           "feicoes": 1
         },
         {

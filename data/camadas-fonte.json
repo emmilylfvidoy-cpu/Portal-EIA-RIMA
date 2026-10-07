@@ -19,6 +19,28 @@
       "nome": "Geologia",
       "meio": "fisico",
       "campo_classe": "SIGLA_UNID",
+      "_nota_substituicoes": [
+        "Troca as palavras que representam símbolos pela notação estratigráfica de verdade.",
+        "O .dbf não comporta γ δ β λ μ nem o Є do Cambriano, então o mapa antigo escreveu as palavras.",
+        "A ordem importa: a forma com os DOIS sublinhados vem antes da forma solta.",
+        "  '_gamma_' resolve 'NP3p_gamma_2Ipe' e '_gamma' resolve 'NP3e_gamma' (no fim).",
+        "Os sublinhados de separação saem, porque a notação correta é 'NP3pγ2Ipe'.",
+        "Cuidado com os falsos positivos que os sublinhados evitam: Betari, Leque Deltaico, Muscovita."
+      ],
+      "substituicoes": {
+        "_C_cortado_": "Є",
+        "C_cortado_": "Є",
+        "_gamma_": "γ",
+        "_gamma": "γ",
+        "_delta_": "δ",
+        "_delta": "δ",
+        "_beta_": "β",
+        "_beta": "β",
+        "_lambda_": "λ",
+        "_lambda": "λ",
+        "_mu_": "μ",
+        "_mu": "μ"
+      },
       "fonte": "Litologia do Estado de São Paulo (spaulo_lito)",
       "data_ref": "",
       "cor": "#8a6d3b",

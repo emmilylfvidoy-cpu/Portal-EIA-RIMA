@@ -599,6 +599,39 @@ function escreverGeoJson(caminho, features, metadados) {
 }
 
 // ============================================================ importação
+/**
+ * Troca, num texto, as palavras que representam SÍMBOLOS pela notação de verdade.
+ *
+ * O `.dbf` é um formato antigo, preso a uma página de código que não comporta γ, δ, β, λ, μ
+ * nem o **Є** do Cambriano. Quem gerou o mapa escreveu as palavras no lugar: `NP3p_gamma_2Ipe`
+ * em vez de `NP3pγ2Ipe`, `C_cortado_1a` em vez de `Є1a`. Aqui isso volta ao que se lê num
+ * mapa geológico — e a troca é feita no DADO, uma vez, então vale para a tabela, a legenda,
+ * o rótulo no mapa, o relatório e o arquivo exportado, sem ninguém precisar lembrar de nada.
+ *
+ * A troca é por TEXTO LITERAL (não expressão regular) e os padrões trazem o sublinhado
+ * (`_gamma`), que é o que separa símbolo de palavra comum: "BeTAri" (nome de unidade),
+ * "Leque DelTAico" (ambiente sedimentar) e "MUscovita" (mineral) contêm as letras e NÃO
+ * podem ser tocados. O sublinhado só existe nos códigos.
+ *
+ * A ordem das chaves importa: `_gamma_` antes de `_gamma`, senão fica um sublinhado órfão
+ * (`Є1aγ_4Igt` em vez de `Є1aγ4Igt`).
+ */
+function substituirEmTexto(texto, substituicoes) {
+  if (texto === null || texto === undefined || !substituicoes) return texto;
+  let s = String(texto);
+  for (const de of Object.keys(substituicoes)) {
+    if (s.indexOf(de) >= 0) s = s.split(de).join(substituicoes[de]);
+  }
+  return s;
+}
+
+/** Aplica a troca a um mapa classe -> valor, nas CHAVES. */
+function reChavear(mapa, substituicoes) {
+  const saida = {};
+  for (const k of Object.keys(mapa || {})) saida[substituirEmTexto(k, substituicoes)] = mapa[k];
+  return saida;
+}
+
 function importarCamada(entrada, opcoes) {
   const o = opcoes || {};
   const bruto = lerEntrada(entrada.origem)[0];
@@ -673,17 +706,52 @@ function importarCamada(entrada, opcoes) {
     : camposOriginais;
 
   // 5) classes e cores — com a paleta do arquivo de estilo, quando existir
+  // 4.5) NOMENCLATURA: troca as palavras que representam símbolos pelos símbolos.
+  //
+  // O .dbf é um formato antigo, preso a uma página de código que não comporta γ, δ, β nem
+  // o Є do Cambriano. Quem gerou o mapa escreveu as palavras no lugar: `NP3p_gamma_2Ipe`
+  // em vez de `NP3pγ2Ipe`, `C_cortado_1a` em vez de `Є1a`. Aqui isso volta ao que é a
+  // notação estratigráfica de verdade — na tabela, na legenda, no rótulo do mapa e no
+  // arquivo exportado, porque a troca é feita no DADO, uma vez, e não na hora de exibir.
+  //
+  // A troca usa texto literal (não expressão regular) e os padrões vêm com os sublinhados
+  // (`_gamma_`), o que a torna segura: "Betari" (nome de unidade) e "Leque Deltaico"
+  // (ambiente sedimentar) contêm "beta" e "delta", mas não `_beta_` nem `_delta_`.
+  // A ordem das chaves importa — `_C_cortado_` tem de ser testada antes de `C_cortado_`.
+  const substituicoes = entrada.substituicoes || {};
+  const substituirTexto = (t) => substituirEmTexto(t, substituicoes);
+  let valoresTrocados = 0;
+  if (Object.keys(substituicoes).length) {
+    for (const f of features) {
+      const p = f.properties || {};
+      for (const k of Object.keys(p)) {
+        if (typeof p[k] !== 'string' || !p[k]) continue;
+        const novo = substituirTexto(p[k]);
+        if (novo !== p[k]) { p[k] = novo; valoresTrocados++; }
+      }
+    }
+  }
+
+  /* ATENÇÃO: a troca tem de valer para as chaves da paleta TAMBÉM. O arquivo de estilo e
+   * o `cores_classe` do manifesto estão nomeados com o valor ANTIGO (`NP3p_gamma_2Ipe`);
+   * depois de trocar o dado para `NP3pγ2Ipe`, uma paleta com a chave velha não casa mais
+   * com classe nenhuma, e o mapa inteiro cai na cor de reserva. Este era um defeito real
+   * na primeira versão desta função. */
+  const temCoresNoManifesto = !!(entrada.cores_classe && Object.keys(entrada.cores_classe).length);
   const paleta = {
-    ordem: (entrada.cores_classe && Object.keys(entrada.cores_classe).length)
-      ? Object.keys(entrada.cores_classe) : (estilo ? (estilo.ordem || []) : []),
-    cores: (entrada.cores_classe && Object.keys(entrada.cores_classe).length)
-      ? entrada.cores_classe : (estilo ? (estilo.cores || {}) : {}),
+    ordem: temCoresNoManifesto
+      ? Object.keys(entrada.cores_classe).map(substituirTexto)
+      : (estilo ? (estilo.ordem || []).map(substituirTexto) : []),
+    cores: temCoresNoManifesto
+      ? reChavear(entrada.cores_classe, substituicoes)
+      : reChavear((estilo && estilo.cores) || {}, substituicoes),
   };
   const cc = classesECores({ type: 'FeatureCollection', features: features }, campoClasse, paleta);
   // O contorno vem do arquivo de estilo, por classe. Se o manifesto trouxer um, ele manda.
-  const paletaContorno = (entrada.cores_contorno && Object.keys(entrada.cores_contorno).length)
+  const paletaContornoBruta = (entrada.cores_contorno && Object.keys(entrada.cores_contorno).length)
     ? entrada.cores_contorno
     : ((estilo && estilo.contornos && Object.keys(estilo.contornos).length) ? estilo.contornos : null);
+  const paletaContorno = paletaContornoBruta ? reChavear(paletaContornoBruta, substituicoes) : null;
 
   const destino = path.resolve(raiz, entrada.arquivo || ('data/' + (entrada.id || slug(entrada.nome)) + '.geojson'));
   const metadados = {
@@ -699,6 +767,8 @@ function importarCamada(entrada, opcoes) {
     escala_alvo: o.escala || 50000,
     vertices_antes: verticesAntes,
     vertices_depois: verticesDepois,
+    // quantos valores de atributo foram trocados pela notação com símbolo
+    valores_trocados: valoresTrocados,
     real: true,
   };
 
@@ -1199,6 +1269,8 @@ module.exports = {
   toleranciaParaEscala: toleranciaParaEscala,
   adivinharCampoClasse: adivinharCampoClasse,
   candidatosCampoClasse: candidatosCampoClasse,
+  substituirEmTexto: substituirEmTexto,
+  reChavear: reChavear,
   adivinharMeio: adivinharMeio,
   classesECores: classesECores,
   escreverGeoJson: escreverGeoJson,

@@ -263,6 +263,59 @@ function executar() {
       importador.tituloDe('malha rodoviária e marcação quilométrica'));
   }
 
+  // ---------------------------------------------------------- nomenclatura
+  console.log('\n== Símbolos estratigráficos (palavra -> símbolo) ==');
+  {
+    /* O .dbf não comporta γ δ β λ μ nem o Є do Cambriano, então o mapa antigo escreveu as
+     * palavras. A troca é por texto literal com o sublinhado no padrão — é o sublinhado que
+     * separa símbolo de palavra comum, e é o que impede "Betari", "Leque Deltaico" e
+     * "Muscovita" de serem destruídos. */
+    const SUB = {
+      '_C_cortado_': 'Є', 'C_cortado_': 'Є',
+      '_gamma_': 'γ', '_gamma': 'γ',
+      '_delta_': 'δ', '_delta': 'δ',
+      '_beta_': 'β', '_beta': 'β',
+      '_lambda_': 'λ', '_lambda': 'λ',
+      '_mu_': 'μ', '_mu': 'μ',
+    };
+    const t = (v) => importador.substituirEmTexto(v, SUB);
+
+    const casos = [
+      ['NP3p_gamma_2Ipe', 'NP3pγ2Ipe'],
+      ['K1_beta_sg', 'K1βsg'],
+      ['K1_delta_sg', 'K1δsg'],
+      ['K1_lambda_ja', 'K1λja'],
+      ['C_cortado_1a_gamma_4Igt', 'Є1aγ4Igt'],
+      ['C_cortado_a_delta_4bm', 'Єaδ4bm'],
+      ['NP3_C_cortado_1e', 'NP3Є1e'],
+      ['NP3p_gamma_2', 'NP3pγ2'],
+      ['NP3p_gamma_2I', 'NP3pγ2I'],
+      ['NP3e_gamma', 'NP3eγ'],
+      ['K_lambda', 'Kλ'],
+      ['PPam_mu', 'PPamμ'],
+      ['A34atg', 'A34atg'],
+    ];
+    for (const [de, para] of casos) {
+      const saida = t(de);
+      ok('  ' + de + ' -> ' + para, saida === para, saida === para ? undefined : 'saiu "' + saida + '"');
+    }
+
+    // OS FALSOS POSITIVOS: palavras comuns que contêm o nome da letra
+    const intactos = ['Betari', 'Leque Deltaico', 'Muscovita', 'metavulcânica', 'Ponunduva',
+      'Xistos e metarenitos', 'Serra Preta', 'granulítica'];
+    for (const v of intactos) {
+      ok('  "' + v + '" fica intacto', t(v) === v, t(v) === v ? undefined : 'virou "' + t(v) + '"');
+    }
+
+    // a paleta precisa ser re-chaveada junto, senão a cor deixa de casar com a classe
+    const mapa = { 'NP3p_gamma_2Ipe': '#fd868c', 'K1_beta_sg': '#46cb83', 'A34atg': '#f5c4c8' };
+    const novo = importador.reChavear(mapa, SUB);
+    ok('paleta re-chaveada', !!novo['NP3pγ2Ipe'] && !!novo['K1βsg'] && !!novo['A34atg'],
+      Object.keys(novo).join(', '));
+    ok('cores preservadas na troca', novo['NP3pγ2Ipe'] === '#fd868c' && novo['K1βsg'] === '#46cb83');
+    ok('nenhuma chave antiga sobra', !novo['NP3p_gamma_2Ipe'] && !novo['K1_beta_sg']);
+  }
+
   // ---------------------------------------------------------- limpeza
   fs.rmSync(destinoTeste, { recursive: true, force: true });
   fs.rmSync(tmp, { recursive: true, force: true });

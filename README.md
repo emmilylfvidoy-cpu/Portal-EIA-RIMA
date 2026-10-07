@@ -331,7 +331,48 @@ geologia.shp  (poligono)
     FORMA             C   distintos: 3
 ```
 
-### A área de cobertura do portal (São Paulo hoje, outro estado depois)
+### Nomenclatura: as palavras que representam símbolos
+
+O `.dbf` é um formato antigo, preso a uma página de código que **não comporta** `γ`, `δ`, `β`,
+`λ`, `μ` nem o `Є` do Cambriano. Quem gerou o mapa escreveu as palavras no lugar — e é isso
+que aparece na tabela, na legenda e nos rótulos:
+
+```
+NP3p_gamma_2Ipe          ->  NP3pγ2Ipe
+K1_beta_sg               ->  K1βsg
+K1_delta_sg              ->  K1δsg
+K1_lambda_ja             ->  K1λja
+C_cortado_1a_gamma_4Igt  ->  Є1aγ4Igt      (C cortado = Є, o símbolo do Cambriano)
+NP3_C_cortado_1e         ->  NP3Є1e
+```
+
+A troca é declarada no manifesto e feita **no dado**, uma vez — então vale para a tabela, a
+legenda, o rótulo no mapa, o relatório e o arquivo exportado:
+
+```json
+"substituicoes": {
+  "_C_cortado_": "Є", "C_cortado_": "Є",
+  "_gamma_": "γ", "_gamma": "γ",
+  "_delta_": "δ", "_delta": "δ",
+  "_beta_": "β",  "_beta": "β",
+  "_lambda_": "λ", "_lambda": "λ",
+  "_mu_": "μ",   "_mu": "μ"
+}
+```
+
+Três detalhes que o formato exige e que estão testados:
+
+1. **O sublinhado no padrão é o que separa símbolo de palavra comum.** `_beta` troca
+   `K1_beta_sg`, mas deixa **"Betari"** (nome de unidade) intacto. O mesmo para **"Leque
+   Deltaico"** (ambiente sedimentar), **"Muscovita"** (mineral) e **"metavulcânica"**.
+2. **A ordem das chaves importa:** `_gamma_` antes de `_gamma`, senão sobra sublinhado órfão
+   (`Є1aγ_4Igt` em vez de `Є1aγ4Igt`). A forma com os dois sublinhados cobre o meio do código;
+   a forma solta cobre o fim (`NP3e_gamma` → `NP3eγ`).
+3. **A paleta é re-chaveada junto.** As cores do `estilo` e o `cores_classe` do manifesto
+   estão nomeados com o valor antigo (`NP3p_gamma_2Ipe`); sem trocar as chaves também, nenhuma
+   cor casaria com nenhuma classe e o mapa inteiro cairia na cor de reserva.
+
+
 
 O portal é do **Estado de São Paulo**, e a cobertura não está no código — está no catálogo,
 para o mesmo programa servir outro estado sem alteração:
