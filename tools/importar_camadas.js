@@ -241,6 +241,7 @@ function prepararGeometria(geometria, opcoes) {
   const escalaX = o.escalaX || 1;
   let antes = 0;
   let depois = 0;
+  let descartados = 0;
 
   const processar = (pontos, fechado) => {
     antes += pontos.length;
@@ -265,7 +266,13 @@ function prepararGeometria(geometria, opcoes) {
       if (simplificado.length >= minimo) resultado = simplificado;
     }
     if (fechado) {
-      if (resultado.length < 3) { resultado = limpos; }
+      /* Anel que sobrou com menos de 3 pontos distintos é geometria INVÁLIDA — um
+       * polígono de 2 pontos não existe. Antes eu emitia assim mesmo, e 2 slivers da
+       * camada de Geologia (pontos a menos de 5 cm entre si, que a limpeza de repetidos
+       * fundiu) saíram como "polígono" de 3 posições: o QGIS recusa e o recorte pode
+       * devolver resultado errado. Agora o anel degenerado SAI da camada, e a contagem
+       * aparece no relatório da importação — descartar em silêncio seria pior. */
+      if (resultado.length < 3) { descartados++; return null; }
       resultado = resultado.concat([resultado[0].slice()]);
     }
     depois += resultado.length;
@@ -276,16 +283,22 @@ function prepararGeometria(geometria, opcoes) {
     const t = g.type;
     if (t === 'LineString') return { type: t, coordinates: processar(g.coordinates, false) };
     if (t === 'MultiLineString') return { type: t, coordinates: g.coordinates.map((l) => processar(l, false)) };
-    if (t === 'Polygon') return { type: t, coordinates: g.coordinates.map((a) => processar(a, true)) };
+    if (t === 'Polygon') {
+      const aneis = g.coordinates.map((a) => processar(a, true)).filter(Boolean);
+      return aneis.length ? { type: t, coordinates: aneis } : null;
+    }
     if (t === 'MultiPolygon') {
-      return { type: t, coordinates: g.coordinates.map((p) => p.map((a) => processar(a, true))) };
+      const partes = g.coordinates
+        .map((p) => p.map((a) => processar(a, true)).filter(Boolean))
+        .filter((p) => p.length);
+      return partes.length ? { type: t, coordinates: partes } : null;
     }
     if (t === 'Point') { antes++; depois++; return { type: t, coordinates: arredondarPonto(g.coordinates, fator) }; }
     return g;
   };
 
   const saida = limpa(geometria);
-  return { geometria: saida, verticesAntes: antes, verticesDepois: depois };
+  return { geometria: saida, verticesAntes: antes, verticesDepois: depois, aneisDescartados: descartados };
 }
 
 /** Tolerância (em graus) para a escala de visualização pretendida. */
@@ -629,14 +642,16 @@ function importarCamada(entrada, opcoes) {
   const latMedia = bbox ? (bbox[1] + bbox[3]) / 2 : -15;
   const escalaX = Math.cos(latMedia * Math.PI / 180);
 
-  let verticesAntes = 0, verticesDepois = 0, descartadas = 0;
+  let verticesAntes = 0, verticesDepois = 0, descartadas = 0, aneisDescartados = 0;
   const features = [];
   for (const f of geojson.features) {
     if (!f || !f.geometry) { descartadas++; continue; }
     const prep = prepararGeometria(f.geometry, { casas: o.casas, tolerancia: tolerancia, escalaX: escalaX });
+    aneisDescartados += prep.aneisDescartados || 0;
+    // Geometria que ficou sem nenhum anel válido (polígono que colapsou) sai da camada.
+    if (!prep.geometria || prep.verticesDepois < 1) { descartadas++; continue; }
     verticesAntes += prep.verticesAntes;
     verticesDepois += prep.verticesDepois;
-    if (prep.verticesDepois < 1) { descartadas++; continue; }
     features.push({ type: 'Feature', properties: f.properties || {}, geometry: prep.geometria });
   }
   if (!features.length) throw new Error('Nenhuma feição válida em ' + entrada.origem);
@@ -698,6 +713,7 @@ function importarCamada(entrada, opcoes) {
     cor_por_classe: cc.cores,
     feicoes: features.length,
     descartadas: descartadas,
+    aneis_descartados: aneisDescartados,
     vertices_antes: verticesAntes,
     vertices_depois: verticesDepois,
     tolerancia: tolerancia,
@@ -873,6 +889,15 @@ function imprimirImportacao(resultados, mudancas, catalogoPath) {
     ? Math.round((1 - resultados.reduce((s, r) => s + r.vertices_depois, 0) / resultados.reduce((s, r) => s + r.vertices_antes, 0)) * 100)
     : 0;
   console.log('publicado em data/: ' + tamanhoLegivel(totalSaida) + '   ·   vértices: −' + reducao + '%');
+  // Anel que colapsou e saiu da camada NÃO pode ficar em silêncio: é feição do arquivo
+  // do usuário que não chegou ao portal.
+  const aneisFora = resultados.reduce((s, r) => s + (r.aneis_descartados || 0), 0);
+  const feicoesFora = resultados.reduce((s, r) => s + (r.descartadas || 0), 0);
+  if (aneisFora || feicoesFora) {
+    console.log('geometria descartada: ' + aneisFora + ' anel(is) e ' + feicoesFora + ' feição(ões) '
+      + 'degenerada(s) — pontos a menos de 5 cm entre si, sem área. Saíram para o arquivo publicado '
+      + 'não ter polígono inválido (o QGIS recusa).');
+  }
   console.log('catálogo: ' + mudancas.adicionadas.length + ' camada(s) nova(s), '
     + mudancas.atualizadas.length + ' atualizada(s), ' + mudancas.preservadas + ' preservada(s)');
 

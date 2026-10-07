@@ -64,15 +64,35 @@
     console.info('Portal EIA/RIMA ' + VERSAO + ' (' + VERSAO_DATA + ')');
   }
 
+  /* Área de cobertura padrão: Estado de São Paulo. O catálogo pode sobrescrever
+   * (`extensao_inicial`), que é como o portal vai ser replicado para outros estados
+   * sem mexer no código. */
+  const COBERTURA_PADRAO = [-53.2, -25.4, -44.1, -19.7];
+
+  /** Enquadra o mapa na área de cobertura declarada. */
+  function aplicarCobertura(bbox) {
+    if (!estado.mapa || !bbox || bbox.length !== 4) return;
+    const valido = bbox.every((x) => typeof x === 'number' && isFinite(x));
+    if (!valido) return;
+    estado.mapa.__cobertura = bbox;
+    estado.mapa.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], { padding: [14, 14] });
+  }
+
   function montarMapa() {
+    /* O enquadramento vem do CATÁLOGO, não de uma constante de cidade. A constante
+     * antiga (Piracicaba, zoom 10) fazia a camada estadual de Geologia parecer
+     * CORTADA: o mapa abria mostrando ~40 km de um estado de 920 km. */
+    const centro = [(COBERTURA_PADRAO[1] + COBERTURA_PADRAO[3]) / 2,
+      (COBERTURA_PADRAO[0] + COBERTURA_PADRAO[2]) / 2];
     const mapa = L.map('mapa', {
-      center: [-22.72, -47.65],           // Piracicaba/SP como ponto de partida
-      zoom: 10,
+      center: centro,
+      zoom: 6,
       zoomControl: false,
       preferCanvas: true,
       renderer: L.canvas({ padding: 0.4, preserveDrawingBuffer: true }),
     });
     estado.mapa = mapa;
+    mapa.__cobertura = COBERTURA_PADRAO;
 
     estado.base = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       maxZoom: 19,
@@ -166,6 +186,9 @@
       if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
       estado.catalogo = await resposta.json();
       renderizarCatalogo();
+      // A cobertura vem do catálogo: é o que permite o mesmo código servir São Paulo
+      // hoje e outro estado depois, sem alteração no programa.
+      aplicarCobertura(estado.catalogo.extensao_inicial || COBERTURA_PADRAO);
       status('Catálogo com ' + estado.catalogo.camadas.length + ' camadas.');
     } catch (e) {
       $('vazio-camadas').textContent = 'Não consegui ler data/catalogo.json. Verifique se a pasta data/ foi publicada junto.';

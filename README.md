@@ -240,6 +240,27 @@ geologia.shp  (poligono)
     FORMA             C   distintos: 3
 ```
 
+### A área de cobertura do portal (São Paulo hoje, outro estado depois)
+
+O portal é do **Estado de São Paulo**, e a cobertura não está no código — está no catálogo,
+para o mesmo programa servir outro estado sem alteração:
+
+```json
+// data/catalogo.json
+"cobertura": "Estado de São Paulo",
+"extensao_inicial": [-53.10530, -25.30832, -44.16996, -19.78756]
+```
+
+`extensao_inicial` é `[oeste, sul, leste, norte]` em graus: é o enquadramento com que o mapa
+abre. Sem ele, o portal usa o retângulo de São Paulo como padrão.
+
+**Para replicar em outro estado:** importe as camadas daquele estado, troque `cobertura` e
+`extensao_inicial` no `catalogo.json` e publique. É o único passo — e existe por um motivo
+concreto: o mapa abria fixo em Piracicaba no zoom 10, e com isso uma camada estadual de
+920 km **parecia cortada**, porque só ~40 km cabiam na tela. Enquadramento é dado do
+projeto, não constante de programa.
+
+
 Aceita também uma pasta inteira (inspeciona todos os `.shp` de uma vez).
 
 ### O que o importador NÃO lê

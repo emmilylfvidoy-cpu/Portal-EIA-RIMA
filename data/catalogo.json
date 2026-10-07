@@ -1,6 +1,13 @@
 {
   "versao": 1,
-  "gerado_em": "2026-10-07T15:21:46.254Z",
+  "gerado_em": "2026-10-07T15:35:21.393Z",
+  "cobertura": "Estado de São Paulo",
+  "extensao_inicial": [
+    -53.1053,
+    -25.30832,
+    -44.16996,
+    -19.78756
+  ],
   "aviso": "As camadas marcadas com fonte \"EXEMPLO SINTÉTICO\" servem para demonstrar o fluxo. Substitua por dado oficial antes de usar no estudo.",
   "meios": [
     {
@@ -280,11 +287,11 @@
       "classes": [
         {
           "classe": "Neoproterozóico",
-          "feicoes": 656
+          "feicoes": 651
         },
         {
           "classe": "Cenozóico",
-          "feicoes": 528
+          "feicoes": 527
         },
         {
           "classe": "Mesozóico",
@@ -316,7 +323,7 @@
         }
       ],
       "origem": "importado",
-      "feicoes": 2108,
+      "feicoes": 2102,
       "cores_origem": "auto",
       "estilo_arquivo": "Geologia.lyr"
     },
