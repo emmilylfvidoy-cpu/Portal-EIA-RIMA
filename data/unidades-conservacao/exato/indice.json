@@ -1,0 +1,856 @@
+{
+ "camada": "unidades-conservacao",
+ "nome": "Unidades de Conservação",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "total": {
+  "tiles": 67,
+  "feicoes": 2742,
+  "pontos": 3219661,
+  "bytes": 12012447
+ },
+ "campos": [
+  "gml_id",
+  "uc_id",
+  "cd_cnuc",
+  "wdpa_pid",
+  "nome_uc",
+  "cria_ano",
+  "cria_ato",
+  "outro_ato",
+  "pl_manejo",
+  "co_gestor",
+  "quali_pol",
+  "ppgr",
+  "ha_total",
+  "ha_ato",
+  "esfera",
+  "uf",
+  "municipio",
+  "org_gestor",
+  "grupo",
+  "categoria",
+  "cat_iucn",
+  "amazonia",
+  "caatinga",
+  "cerrado",
+  "matlantica",
+  "pampa",
+  "pantanal",
+  "marinho",
+  "situacao",
+  "limite",
+  "area_ha",
+  "NomeAbrev"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/unidades-conservacao/exato/t032.bin",
+   "bbox": [
+    -56.837822,
+    -5.499792,
+    -56.036266,
+    -4.683675
+   ],
+   "feicoes": 1,
+   "pontos": 133469,
+   "bytes": 387511
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t029.bin",
+   "bbox": [
+    -57.643893,
+    -7.940801,
+    -55.836032,
+    -5.316169
+   ],
+   "feicoes": 1,
+   "pontos": 113129,
+   "bytes": 342917
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t051.bin",
+   "bbox": [
+    -43.060745,
+    -22.69957,
+    -42.551486,
+    -22.359425
+   ],
+   "feicoes": 1,
+   "pontos": 110398,
+   "bytes": 330362
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t003.bin",
+   "bbox": [
+    -69.805832,
+    -12.50024,
+    -63.757194,
+    -7.666118
+   ],
+   "feicoes": 14,
+   "pontos": 57870,
+   "bytes": 220247
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t000.bin",
+   "bbox": [
+    -66.908717,
+    -0.953403,
+    -60.622841,
+    4.16434
+   ],
+   "feicoes": 12,
+   "pontos": 56339,
+   "bytes": 220037
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t059.bin",
+   "bbox": [
+    -46.718654,
+    -14.973188,
+    -40.559664,
+    -8.442708
+   ],
+   "feicoes": 23,
+   "pontos": 53729,
+   "bytes": 216046
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t037.bin",
+   "bbox": [
+    -51.433856,
+    -7.552885,
+    -46.458748,
+    0.746527
+   ],
+   "feicoes": 34,
+   "pontos": 51949,
+   "bytes": 215739
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t010.bin",
+   "bbox": [
+    -67.649481,
+    -7.547778,
+    -60.829927,
+    0.781235
+   ],
+   "feicoes": 13,
+   "pontos": 55714,
+   "bytes": 215504
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t009.bin",
+   "bbox": [
+    -69.876917,
+    -9.597382,
+    -61.80676,
+    -1.644821
+   ],
+   "feicoes": 30,
+   "pontos": 52316,
+   "bytes": 215438
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t001.bin",
+   "bbox": [
+    -61.356995,
+    -1.230356,
+    -49.881235,
+    5.27191
+   ],
+   "feicoes": 17,
+   "pontos": 54684,
+   "bytes": 211829
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t035.bin",
+   "bbox": [
+    -53.93916,
+    -14.681975,
+    -45.843141,
+    -5.480681
+   ],
+   "feicoes": 34,
+   "pontos": 52971,
+   "bytes": 210537
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t004.bin",
+   "bbox": [
+    -65.431429,
+    -13.537567,
+    -61.17146,
+    -9.377886
+   ],
+   "feicoes": 17,
+   "pontos": 55681,
+   "bytes": 208425
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t027.bin",
+   "bbox": [
+    -61.788998,
+    -13.101324,
+    -54.322894,
+    0.051197
+   ],
+   "feicoes": 56,
+   "pontos": 46450,
+   "bytes": 208185
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t040.bin",
+   "bbox": [
+    -47.308101,
+    -24.269445,
+    -44.723637,
+    -23.055807
+   ],
+   "feicoes": 11,
+   "pontos": 56601,
+   "bytes": 206960
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t019.bin",
+   "bbox": [
+    -48.965233,
+    -25.487315,
+    -46.793535,
+    -22.735962
+   ],
+   "feicoes": 26,
+   "pontos": 52985,
+   "bytes": 206437
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t026.bin",
+   "bbox": [
+    -62.100422,
+    -17.180868,
+    -46.113109,
+    -6.881875
+   ],
+   "feicoes": 50,
+   "pontos": 49994,
+   "bytes": 204243
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t012.bin",
+   "bbox": [
+    -59.581931,
+    -24.06896,
+    -53.699986,
+    -15.453233
+   ],
+   "feicoes": 65,
+   "pontos": 46524,
+   "bytes": 203838
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t024.bin",
+   "bbox": [
+    -49.866994,
+    -20.664611,
+    -46.102881,
+    -15.351731
+   ],
+   "feicoes": 50,
+   "pontos": 49940,
+   "bytes": 202367
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t030.bin",
+   "bbox": [
+    -58.031706,
+    -8.614829,
+    -55.236223,
+    -3.650436
+   ],
+   "feicoes": 3,
+   "pontos": 56991,
+   "bytes": 200781
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t053.bin",
+   "bbox": [
+    -45.830032,
+    -20.948868,
+    -42.23443,
+    -15.436805
+   ],
+   "feicoes": 62,
+   "pontos": 47123,
+   "bytes": 199019
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t022.bin",
+   "bbox": [
+    -53.747426,
+    -23.024207,
+    -47.549867,
+    -15.644728
+   ],
+   "feicoes": 71,
+   "pontos": 45427,
+   "bytes": 197949
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t018.bin",
+   "bbox": [
+    -49.930653,
+    -25.58638,
+    -47.968997,
+    -23.112564
+   ],
+   "feicoes": 30,
+   "pontos": 50712,
+   "bytes": 194094
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t054.bin",
+   "bbox": [
+    -45.601982,
+    -23.066666,
+    -41.297831,
+    -15.20648
+   ],
+   "feicoes": 82,
+   "pontos": 42827,
+   "bytes": 193062
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t036.bin",
+   "bbox": [
+    -54.434812,
+    -7.353991,
+    -49.799419,
+    -0.046122
+   ],
+   "feicoes": 20,
+   "pontos": 55707,
+   "bytes": 193007
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t063.bin",
+   "bbox": [
+    -42.491024,
+    -12.954573,
+    -37.113794,
+    -2.628
+   ],
+   "feicoes": 58,
+   "pontos": 46331,
+   "bytes": 191715
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t043.bin",
+   "bbox": [
+    -45.819934,
+    -23.016415,
+    -44.187848,
+    -21.919973
+   ],
+   "feicoes": 23,
+   "pontos": 55952,
+   "bytes": 190691
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t034.bin",
+   "bbox": [
+    -55.353529,
+    -15.308304,
+    -47.067479,
+    -1.000361
+   ],
+   "feicoes": 66,
+   "pontos": 44753,
+   "bytes": 190424
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t061.bin",
+   "bbox": [
+    -46.162893,
+    -13.145587,
+    -38.211304,
+    -0.780946
+   ],
+   "feicoes": 69,
+   "pontos": 43574,
+   "bytes": 190199
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t033.bin",
+   "bbox": [
+    -57.935183,
+    -6.84334,
+    -53.620268,
+    0.817207
+   ],
+   "feicoes": 18,
+   "pontos": 55394,
+   "bytes": 188636
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t011.bin",
+   "bbox": [
+    -64.979988,
+    -32.930311,
+    -50.754164,
+    1.209277
+   ],
+   "feicoes": 51,
+   "pontos": 45606,
+   "bytes": 188294
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t021.bin",
+   "bbox": [
+    -53.775976,
+    -24.006008,
+    -45.973497,
+    -22.036946
+   ],
+   "feicoes": 42,
+   "pontos": 52073,
+   "bytes": 186331
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t015.bin",
+   "bbox": [
+    -54.378736,
+    -29.42778,
+    -48.408189,
+    -22.270375
+   ],
+   "feicoes": 102,
+   "pontos": 37941,
+   "bytes": 185810
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t049.bin",
+   "bbox": [
+    -43.377301,
+    -22.968627,
+    -42.645798,
+    -22.104295
+   ],
+   "feicoes": 26,
+   "pontos": 53523,
+   "bytes": 184275
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t041.bin",
+   "bbox": [
+    -45.850015,
+    -24.034029,
+    -44.234983,
+    -22.709064
+   ],
+   "feicoes": 12,
+   "pontos": 51432,
+   "bytes": 182723
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t042.bin",
+   "bbox": [
+    -46.480004,
+    -23.594044,
+    -43.189997,
+    -21.407025
+   ],
+   "feicoes": 36,
+   "pontos": 50409,
+   "bytes": 182464
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t020.bin",
+   "bbox": [
+    -47.839342,
+    -24.635557,
+    -45.800145,
+    -22.876358
+   ],
+   "feicoes": 51,
+   "pontos": 48473,
+   "bytes": 180523
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t052.bin",
+   "bbox": [
+    -44.217058,
+    -22.944544,
+    -41.981046,
+    -19.69743
+   ],
+   "feicoes": 122,
+   "pontos": 32552,
+   "bytes": 177608
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t025.bin",
+   "bbox": [
+    -48.977918,
+    -19.168258,
+    -46.484587,
+    -15.180155
+   ],
+   "feicoes": 79,
+   "pontos": 43726,
+   "bytes": 177268
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t065.bin",
+   "bbox": [
+    -36.525451,
+    -9.77543,
+    -34.699577,
+    -7.830646
+   ],
+   "feicoes": 78,
+   "pontos": 42881,
+   "bytes": 174813
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t055.bin",
+   "bbox": [
+    -42.237412,
+    -22.107066,
+    -40.858145,
+    -19.209779
+   ],
+   "feicoes": 72,
+   "pontos": 45382,
+   "bytes": 174469
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t056.bin",
+   "bbox": [
+    -42.060027,
+    -21.010032,
+    -39.689454,
+    -17.076026
+   ],
+   "feicoes": 108,
+   "pontos": 36620,
+   "bytes": 172537
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t013.bin",
+   "bbox": [
+    -56.071844,
+    -30.572242,
+    -49.906704,
+    -15.089031
+   ],
+   "feicoes": 83,
+   "pontos": 40619,
+   "bytes": 172373
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t016.bin",
+   "bbox": [
+    -50.45374,
+    -27.822847,
+    -48.308816,
+    -24.122759
+   ],
+   "feicoes": 69,
+   "pontos": 45768,
+   "bytes": 171695
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t064.bin",
+   "bbox": [
+    -38.447648,
+    -12.595987,
+    -35.630835,
+    -7.880265
+   ],
+   "feicoes": 90,
+   "pontos": 40752,
+   "bytes": 170215
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t057.bin",
+   "bbox": [
+    -46.108626,
+    -19.149024,
+    -38.558703,
+    -13.882408
+   ],
+   "feicoes": 92,
+   "pontos": 37713,
+   "bytes": 169815
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t047.bin",
+   "bbox": [
+    -44.125167,
+    -23.023843,
+    -43.161367,
+    -21.797379
+   ],
+   "feicoes": 58,
+   "pontos": 48486,
+   "bytes": 169565
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t060.bin",
+   "bbox": [
+    -41.740596,
+    -15.306925,
+    -38.832521,
+    -11.521868
+   ],
+   "feicoes": 85,
+   "pontos": 35546,
+   "bytes": 167126
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t008.bin",
+   "bbox": [
+    -64.153936,
+    -11.688813,
+    -61.441112,
+    -7.976039
+   ],
+   "feicoes": 29,
+   "pontos": 52530,
+   "bytes": 166439
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t017.bin",
+   "bbox": [
+    -49.42688,
+    -26.847166,
+    -48.289497,
+    -24.919267
+   ],
+   "feicoes": 41,
+   "pontos": 47028,
+   "bytes": 165575
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t038.bin",
+   "bbox": [
+    -47.984641,
+    -24.251813,
+    -45.45056,
+    -0.519259
+   ],
+   "feicoes": 16,
+   "pontos": 45579,
+   "bytes": 164259
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t007.bin",
+   "bbox": [
+    -65.681322,
+    -9.613848,
+    -63.56857,
+    -7.39889
+   ],
+   "feicoes": 2,
+   "pontos": 58586,
+   "bytes": 164084
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t044.bin",
+   "bbox": [
+    -45.807874,
+    -23.101275,
+    -43.673052,
+    -19.249353
+   ],
+   "feicoes": 87,
+   "pontos": 33553,
+   "bytes": 160759
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t045.bin",
+   "bbox": [
+    -44.588546,
+    -22.563776,
+    -43.135469,
+    -22.102144
+   ],
+   "feicoes": 7,
+   "pontos": 58525,
+   "bytes": 159102
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t062.bin",
+   "bbox": [
+    -45.087267,
+    -7.841201,
+    -38.952437,
+    -0.216645
+   ],
+   "feicoes": 49,
+   "pontos": 34936,
+   "bytes": 158855
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t002.bin",
+   "bbox": [
+    -73.991207,
+    -11.070425,
+    -26.014472,
+    4.27012
+   ],
+   "feicoes": 14,
+   "pontos": 40909,
+   "bytes": 157066
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t046.bin",
+   "bbox": [
+    -43.795164,
+    -23.083394,
+    -43.374811,
+    -22.681277
+   ],
+   "feicoes": 26,
+   "pontos": 50743,
+   "bytes": 144561
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t048.bin",
+   "bbox": [
+    -43.858077,
+    -23.01097,
+    -42.804596,
+    -21.164591
+   ],
+   "feicoes": 43,
+   "pontos": 43433,
+   "bytes": 144192
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t023.bin",
+   "bbox": [
+    -49.543073,
+    -23.310352,
+    -46.042456,
+    -19.192999
+   ],
+   "feicoes": 61,
+   "pontos": 33652,
+   "bytes": 140417
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t014.bin",
+   "bbox": [
+    -53.801164,
+    -28.329801,
+    -50.355216,
+    -23.010851
+   ],
+   "feicoes": 27,
+   "pontos": 50890,
+   "bytes": 138950
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t058.bin",
+   "bbox": [
+    -46.375971,
+    -15.718115,
+    -42.441165,
+    -11.622004
+   ],
+   "feicoes": 33,
+   "pontos": 28730,
+   "bytes": 123225
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t066.bin",
+   "bbox": [
+    -38.48669,
+    -23.872113,
+    -25.290947,
+    0.966303
+   ],
+   "feicoes": 82,
+   "pontos": 21247,
+   "bytes": 122262
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t005.bin",
+   "bbox": [
+    -64.953899,
+    -9.346396,
+    -64.522793,
+    -8.985461
+   ],
+   "feicoes": 1,
+   "pontos": 54412,
+   "bytes": 112106
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t031.bin",
+   "bbox": [
+    -56.981613,
+    -5.562969,
+    -56.105404,
+    -5.173661
+   ],
+   "feicoes": 1,
+   "pontos": 29571,
+   "bytes": 86594
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t028.bin",
+   "bbox": [
+    -60.415201,
+    -7.224969,
+    -56.598858,
+    -0.71467
+   ],
+   "feicoes": 4,
+   "pontos": 15447,
+   "bytes": 57186
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t039.bin",
+   "bbox": [
+    -46.173405,
+    -23.828326,
+    -45.848837,
+    -23.699074
+   ],
+   "feicoes": 1,
+   "pontos": 20325,
+   "bytes": 47585
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t006.bin",
+   "bbox": [
+    -65.831786,
+    -8.998863,
+    -64.545128,
+    -7.864213
+   ],
+   "feicoes": 1,
+   "pontos": 9794,
+   "bytes": 38175
+  },
+  {
+   "arquivo": "data/unidades-conservacao/exato/t050.bin",
+   "bbox": [
+    -43.168128,
+    -22.511902,
+    -42.915831,
+    -22.037429
+   ],
+   "feicoes": 4,
+   "pontos": 4735,
+   "bytes": 16952
+  }
+ ]
+}

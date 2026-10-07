@@ -27,6 +27,52 @@
 | v3.0 | **Geometria EXATA nas 4 camadas leves** (Geologia, Geomorfologia, Aquíferos, Biomas): o importador passou a publicar sem simplificar nada, com etiqueta na tela quando a camada é generalizada |
 | v3.1 | **Formato binário de tiles** (quantizado + delta): a geometria volta idêntica ao shapefile e o arquivo é **11,7× menor** que o GeoJSON equivalente |
 | v3.2 | **As seis camadas ficaram EXATAS.** Pedologia e Unidades de Conservação passaram a ser publicadas em **tiles binários** — nenhum vértice movido, nenhuma fenda — e o portal carrega só as partes que a tela mostra; para recortar, busca a camada inteira |
+| v3.3 | **Camada em tile ficou rápida**: dois níveis — a **visão de longe** (generalizada, 4,65 MB) quando o zoom está longe e o **dado exato** quando aproxima, com o recorte sempre no exato. O estado inteiro caiu de 34 MB / 10,8 milhões de pontos para **4,65 MB / 167 mil** |
+
+## A camada em tile ficou leve de verdade (v3.3)
+
+A primeira versão em tiles **era exata, mas lenta**: um tile da Pedologia cobria em média
+**19.487 km² com 352 mil vértices** — então, mesmo olhando 1 km, o portal baixava e desenhava
+350 mil pontos. E no mapa do estado ele baixava a camada inteira: **34 MB**.
+
+**A correção foi por nível de detalhe, não por simplificar o dado:**
+
+| Situação | Nível usado | Download | Pontos desenhados |
+|---|---|---|---|
+| Estado inteiro | visão de longe (1:4.000.000) | **4,65 MB** | **167.534** |
+| 150 km | exato | 5,09 MB | 1.194.300 |
+| 40 km | exato | 1,40 MB | 266.125 |
+| 10 km | exato | 1,21 MB | 233.853 |
+| 2 km | exato | 1,04 MB | 207.491 |
+
+**O nível exato continua exato** — verificado contra o shapefile: mesmas feições, mesmos
+vértices, mesma área (0,0000%). O nível de visão é **só para o desenho de longe** (num mapa de
+estado cada mancha de solo tem poucos pixels) e **nunca é usado no recorte**.
+
+### Dois defeitos reais encontrados no caminho
+
+**1. Tolerância maior produzia arquivo MAIOR.** Quando a simplificação deixava um anel com
+menos de 3 pontos, o código devolvia o **anel original inteiro** — a intenção era "geometria
+inválida é pior que arquivo grande", mas o efeito era perverso. Medido na mesma amostra:
+
+| Tolerância pedida | Vértices |
+|---|---|
+| 800 m | 53.424 |
+| **2000 m** | **146.269** ✗ |
+
+Ou seja: **nenhuma escala grossa emagrecia o arquivo**, e era por isso que a visão de longe
+saía com 7,6 MB. Corrigido: no nível de desenho de longe o anel que colapsa é **descartado** (e
+contado). Resultado: 7,64 MB → **4,65 MB**.
+
+**2. O índice publicava "0 pontos".** O gerador lia `r.geometry` e o importador devolve
+`r.geometria` — os tiles estavam certos, mas a contagem no índice era falsa. A contagem agora é
+feita **decodificando o que está publicado**, não o que se pretendia publicar.
+
+### O que decide o nível
+
+`zoom_exato: 10` no catálogo. Longe disso → visão de longe; perto → exato. Trocar de nível
+**descarta o que estava carregado**, senão as duas versões ficariam desenhadas juntas. E o
+recorte força o nível exato mesmo que a tela esteja mostrando a visão.
 
 ## As camadas em tiles (v3.2)
 

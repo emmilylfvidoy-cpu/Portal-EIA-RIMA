@@ -2665,7 +2665,9 @@
       "estilo_arquivo": "Pedologia.xml",
       "obs": "Classe = Subordem (subordem de solo: Argissolos Vermelhos, Cambissolos Háplicos...), o agrupamento do Pedologia.xml: 27/27 valores têm cor. O campo area_ha da origem serve para conferir a área calculada pelo portal. CONFIRMAR a citação oficial. GEOMETRIA EXATA, publicada em tiles binarios (data/pedologia/indice.json): nenhum vertice foi movido, e o portal carrega so as partes que a tela mostra (para recortar, busca a camada inteira).",
       "geometria": "exata",
-      "tiles": "data/pedologia/indice.json"
+      "tiles": "data/pedologia/exato/indice.json",
+      "visao": "data/pedologia/visao/indice.json",
+      "zoom_exato": 10
     },
     {
       "id": "biomas",
@@ -2907,7 +2909,9 @@
       "estilo_arquivo": "Unidades de Conservação.xml",
       "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial. GEOMETRIA EXATA, publicada em tiles binarios (data/unidades-conservacao/indice.json): nenhum vertice foi movido, e o portal carrega so as partes que a tela mostra (para recortar, busca a camada inteira).",
       "geometria": "exata",
-      "tiles": "data/unidades-conservacao/indice.json"
+      "tiles": "data/unidades-conservacao/exato/indice.json",
+      "visao": "data/unidades-conservacao/visao/indice.json",
+      "zoom_exato": 10
     }
   ]
 }

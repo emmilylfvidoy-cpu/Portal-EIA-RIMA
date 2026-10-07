@@ -22,9 +22,12 @@ const tiles = require(path.join(raiz, 'js', 'tiles.js'));
 const CELULA_GRAUS = 0.05;          // ~5,5 km: célula fina que só agrupa, não define tile
 
 function argumentos(argv) {
-  const a = { id: argv[2], alvoMb: 1.5, contar: false };
+  const a = { id: argv[2], alvoMb: 1.5, contar: false, nivel: 'exato', celula: CELULA_GRAUS, escala: 0 };
   for (let i = 3; i < argv.length; i++) {
     if (argv[i] === '--alvo-mb') a.alvoMb = Number(argv[++i]);
+    else if (argv[i] === '--nivel') a.nivel = argv[++i];
+    else if (argv[i] === '--celula') a.celula = Number(argv[++i]);
+    else if (argv[i] === '--escala') a.escala = Number(argv[++i]);
     else if (argv[i] === '--so-contar') a.contar = true;
   }
   return a;
@@ -82,13 +85,44 @@ async function principal() {
     + pontos.toLocaleString('pt-BR') + ' pontos, ~' + (bytesEstimados / 1048576).toFixed(1) + ' MB em tile');
   if (args.contar) return;
 
+  /* NÍVEL DE VISÃO: quando o usuário está LONGE, desenhar 350 mil vértices para uma tela de
+   * 1000 pixels é desperdício — e era o que deixava a camada lenta. O nível de visão é
+   * generalizado (não é o dado: é o desenho de longe) e o nível exato continua no seu lugar,
+   * carregado quando o zoom aproxima e SEMPRE usado no recorte. */
+  if (args.escala > 0) {
+    const imp = require(path.join(raiz, 'tools', 'importar_camadas.js'));
+    const tolerancia = imp.toleranciaParaEscala(args.escala);
+    console.log('  nível de visão: generalizando a 1:' + args.escala.toLocaleString('pt-BR')
+      + ' (' + Math.round(tolerancia * 110574) + ' m)');
+    let antes = 0, depois = 0;
+    for (const f of feicoes) {
+      const r = imp.prepararGeometria(f.geometry, {
+        tolerancia: tolerancia, casas: 5, capEspessura: false, descartarColapsados: true,
+      });
+      if (!r.geometria) { f.geometry = null; continue; }
+      f.geometry = r.geometria;
+      f.bbox = bboxDeGeometria(r.geometria);
+      antes += r.verticesAntes; depois += r.verticesDepois;
+      f.pontos = 0;
+      // r.geometria (e não r.geometry): o importador devolve em português
+      for (const parte of tiles.aneisDe(r.geometria)) for (const anel of parte) f.pontos += anel.length;
+      f.bytes = estimarBytes(f);
+    }
+    for (let i = feicoes.length - 1; i >= 0; i--) if (!feicoes[i].geometry) feicoes.splice(i, 1);
+    pontos = 0; bytesEstimados = 0;
+    for (const f of feicoes) { pontos += f.pontos; bytesEstimados += f.bytes; }
+    console.log('  vértices ' + antes.toLocaleString('pt-BR') + ' -> ' + depois.toLocaleString('pt-BR')
+      + '   ' + feicoes.length.toLocaleString('pt-BR') + ' feições, ~'
+      + (bytesEstimados / 1048576).toFixed(2) + ' MB');
+  }
+
   // ---- células finas, por centro da feição
   const celulas = new Map();
   for (const f of feicoes) {
     const cx = (f.bbox[0] + f.bbox[2]) / 2;
     const cy = (f.bbox[1] + f.bbox[3]) / 2;
-    const ix = Math.floor(cx / CELULA_GRAUS);
-    const iy = Math.floor(cy / CELULA_GRAUS);
+    const ix = Math.floor(cx / args.celula);
+    const iy = Math.floor(cy / args.celula);
     const chave = ix + ':' + iy;
     if (!celulas.has(chave)) celulas.set(chave, { ix: ix, iy: iy, feicoes: [], bytes: 0 });
     const c = celulas.get(chave);
@@ -137,7 +171,7 @@ async function principal() {
   for (const g of grupos) g.bbox = bboxDoGrupo(g);
 
   // ---- grava os tiles
-  const destino = path.join(raiz, 'data', args.id);
+  const destino = path.join(raiz, 'data', args.id, args.nivel);
   fs.rmSync(destino, { recursive: true, force: true });
   fs.mkdirSync(destino, { recursive: true });
 
@@ -152,7 +186,7 @@ async function principal() {
     const nome = 't' + String(n).padStart(3, '0') + '.bin';
     fs.writeFileSync(path.join(destino, nome), bin);
     indice.push({
-      arquivo: 'data/' + args.id + '/' + nome,
+      arquivo: 'data/' + args.id + '/' + args.nivel + '/' + nome,
       bbox: g.bbox.map((v) => Number(v.toFixed(6))),
       feicoes: feicoesDoTile.length,
       pontos: feicoesDoTile.reduce((s, f) => s + f.pontos, 0),
@@ -165,11 +199,19 @@ async function principal() {
   fs.writeFileSync(path.join(destino, 'indice.json'), JSON.stringify({
     camada: args.id, nome: entrada.nome, formato: 'EIAT' + tiles.VERSAO,
     casas: tiles.CASAS,
-    geometria: 'exata',
+    nivel: args.nivel,
+    geometria: args.escala > 0 ? 'generalizada para o desenho de longe' : 'exata',
+    escala: args.escala || null,
     observacao: 'Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: '
       + 'cada vértice do shapefile está no tile, quantizado em ' + tiles.CASAS
       + ' casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.',
-    total: { tiles: n, feicoes: feicoes.length, pontos: pontos, bytes: total },
+    // somado dos tiles (e não de uma variável do caminho): o total já saiu errado uma vez
+    total: {
+      tiles: n,
+      feicoes: indice.reduce((s, i) => s + i.feicoes, 0),
+      pontos: indice.reduce((s, i) => s + i.pontos, 0),
+      bytes: total,
+    },
     campos: Object.keys(feicoes[0] ? feicoes[0].properties : {}),
     tiles: indice,
   }, null, 1), 'utf8');

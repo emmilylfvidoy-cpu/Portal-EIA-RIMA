@@ -260,6 +260,7 @@ function prepararGeometria(geometria, opcoes) {
   let depois = 0;
   let descartados = 0;
   let ajustados = 0;   // aneis em que a tolerancia foi limitada pela espessura
+  let tolUsadaMin = Infinity, tolUsadaMax = 0, nAneis = 0;
 
   const processar = (pontos, fechado) => {
     antes += pontos.length;
@@ -289,7 +290,10 @@ function prepararGeometria(geometria, opcoes) {
      * global — o arquivo não engorda por causa disso.
      */
     let tolAnel = tolerancia;
-    if (fechado && tolerancia > 0 && limpos.length >= 4) {
+    // o limite por espessura pode ser desligado para o DESENHO DE LONGE: num mapa de estado a
+    // faixa fina tem menos de um pixel, e manter o detalhe dela só engorda o arquivo. O dado
+    // exato continua publicado no nível exato, e o recorte usa ele.
+    if (fechado && tolerancia > 0 && limpos.length >= 4 && o.capEspessura !== false) {
       const area = Math.abs(areaAssinadaGraus(limpos));
       const per = perimetroGraus(limpos);
       const espessura = per > 0 ? (2 * area) / per : Infinity;
@@ -298,11 +302,21 @@ function prepararGeometria(geometria, opcoes) {
         ajustados++;
       }
     }
+    if (fechado) { nAneis++; if (tolAnel < tolUsadaMin) tolUsadaMin = tolAnel; if (tolAnel > tolUsadaMax) tolUsadaMax = tolAnel; }
     let resultado = limpos;
     if (tolerancia > 0 && limpos.length > 2) {
       const simplificado = EIA.vetorial.simplificar(limpos, tolAnel, escalaX);
       const minimo = fechado ? 3 : 2;
-      if (simplificado.length >= minimo) resultado = simplificado;
+      if (simplificado.length >= minimo) {
+        resultado = simplificado;
+      } else if (o.descartarColapsados) {
+        /* O anel virou menos que um polígono. No nível de DESENHO DE LONGE ele é descartado:
+         * numa tela de estado ele tem menos de um pixel. Devolver o anel ORIGINAL inteiro
+         * (o que o código fazia) é o que fazia tolerância maior produzir arquivo MAIOR —
+         * medido: 800 m dava 53.424 vértices e 2000 m dava 146.269 na mesma amostra. */
+        descartados++;
+        return null;
+      }
     }
     if (fechado) {
       /* Anel que sobrou com menos de 3 pontos distintos é geometria INVÁLIDA — um
@@ -337,7 +351,8 @@ function prepararGeometria(geometria, opcoes) {
   };
 
   const saida = limpa(geometria);
-  return { geometria: saida, verticesAntes: antes, verticesDepois: depois, aneisDescartados: descartados };
+  return { geometria: saida, verticesAntes: antes, verticesDepois: depois, aneisDescartados: descartados,
+    tolUsadaMin: tolUsadaMin, tolUsadaMax: tolUsadaMax, aneis: nAneis };
 }
 
 /** Tolerância (em graus) para a escala de visualização pretendida. */

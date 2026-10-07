@@ -1,0 +1,108 @@
+{
+ "camada": "pedologia",
+ "nome": "Pedologia",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "total": {
+  "tiles": 6,
+  "feicoes": 12664,
+  "pontos": 167534,
+  "bytes": 4878912
+ },
+ "campos": [
+  "Unidade_de",
+  "Associaç",
+  "Ordem",
+  "Subordem",
+  "DESCRIÇÃ",
+  "trofismo",
+  "profundida",
+  "pedreg_roc",
+  "textura_1",
+  "textura_2",
+  "relevo",
+  "ferro",
+  "hidromorfi",
+  "Relação",
+  "Esp_areia",
+  "area_ha"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/pedologia/visao/t002.bin",
+   "bbox": [
+    -51.30803,
+    -25.2085,
+    -47.23577,
+    -19.758
+   ],
+   "feicoes": 2472,
+   "pontos": 38844,
+   "bytes": 977548
+  },
+  {
+   "arquivo": "data/pedologia/visao/t000.bin",
+   "bbox": [
+    -53.20419,
+    -25.32118,
+    -47.34378,
+    -19.77185
+   ],
+   "feicoes": 2350,
+   "pontos": 32199,
+   "bytes": 961571
+  },
+  {
+   "arquivo": "data/pedologia/visao/t001.bin",
+   "bbox": [
+    -51.02235,
+    -24.11278,
+    -47.84012,
+    -19.78601
+   ],
+   "feicoes": 2176,
+   "pontos": 36437,
+   "bytes": 928266
+  },
+  {
+   "arquivo": "data/pedologia/visao/t004.bin",
+   "bbox": [
+    -48.1864,
+    -24.22643,
+    -45.0658,
+    -20.30448
+   ],
+   "feicoes": 2635,
+   "pontos": 27958,
+   "bytes": 900845
+  },
+  {
+   "arquivo": "data/pedologia/visao/t003.bin",
+   "bbox": [
+    -48.18793,
+    -24.66954,
+    -45.67969,
+    -21.51234
+   ],
+   "feicoes": 2176,
+   "pontos": 22503,
+   "bytes": 750449
+  },
+  {
+   "arquivo": "data/pedologia/visao/t005.bin",
+   "bbox": [
+    -48.02126,
+    -23.96798,
+    -44.16346,
+    -19.96705
+   ],
+   "feicoes": 855,
+   "pontos": 9593,
+   "bytes": 360233
+  }
+ ]
+}

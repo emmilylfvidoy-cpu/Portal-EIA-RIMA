@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.2';
+  const VERSAO = 'v3.3';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -53,6 +53,9 @@
     // Camadas publicadas em tiles binários: índice, tiles já carregados e o que está em voo.
     indices: {},
     tilesCarregados: {},
+    // Nível em memória por camada ('exato' ou 'visao'): trocar de nível descarta o que estava
+    // carregado, senão as duas versões da mesma camada ficariam desenhadas juntas.
+    nivelCarregado: {},
     kmCamada: null,
     kmCampo: null,
     grupoKm: null,
@@ -1113,8 +1116,9 @@
     try {
       for (const camada of estado.camadas) {
         if (!camada.tiles) continue;
-        const indice = await indiceDaCamada(camada);
-        if ((estado.tilesCarregados[camada.id] || new Set()).size < indice.tiles.length) {
+        const indice = await indiceDaCamada(camada, 'exato');
+        if (estado.nivelCarregado[camada.id] !== 'exato'
+          || (estado.tilesCarregados[camada.id] || new Set()).size < indice.tiles.length) {
           status('Buscando ' + camada.nome + ' inteira para o recorte ('
             + (indice.total.bytes / 1048576).toFixed(0) + ' MB, ' + indice.tiles.length + ' partes)…');
           await garantirCamadaCompleta(camada);
@@ -1393,18 +1397,48 @@
     return !(b[2] < caixa[0] || b[0] > caixa[2] || b[3] < caixa[1] || b[1] > caixa[3]);
   }
 
-  /** Índice de tiles da camada, buscado uma vez e guardado. */
-  async function indiceDaCamada(camada) {
-    if (!estado.indices[camada.id]) {
-      const resposta = await fetch(camada.tiles, { cache: 'no-cache' });
+  /**
+   * Qual versão da camada serve para o zoom atual.
+   *
+   * De LONGE vale a visão generalizada: numa tela de estado cada mancha de solo tem poucos
+   * pixels, e desenhar 350 mil vértices para isso é o que deixava a camada lenta. De PERTO
+   * vale o dado exato, que é o que se mede e se confere.
+   */
+  function nivelParaZoom(camada) {
+    const limite = camada.zoom_exato || 10;
+    if (camada.visao && estado.mapa.getZoom() < limite) return 'visao';
+    return 'exato';
+  }
+
+  function urlDoNivel(camada, nivel) {
+    return nivel === 'visao' ? camada.visao : camada.tiles;
+  }
+
+  /** Índice de tiles do nível pedido, buscado uma vez e guardado. */
+  async function indiceDaCamada(camada, nivel) {
+    const n = nivel || 'exato';
+    const chave = camada.id + ':' + n;
+    if (!estado.indices[chave]) {
+      const resposta = await fetch(urlDoNivel(camada, n), { cache: 'no-cache' });
       if (!resposta.ok) throw new Error('HTTP ' + resposta.status + ' no índice de tiles');
-      estado.indices[camada.id] = await resposta.json();
+      estado.indices[chave] = await resposta.json();
     }
-    return estado.indices[camada.id];
+    return estado.indices[chave];
+  }
+
+  /** Troca de nível: descarta o que estava carregado, para não desenhar as duas versões. */
+  function trocarNivel(camada, nivel) {
+    if (estado.nivelCarregado[camada.id] === nivel) return false;
+    estado.nivelCarregado[camada.id] = nivel;
+    estado.tilesCarregados[camada.id] = new Set();
+    const alvo = estado.camadas.find((c) => c.id === camada.id);
+    if (alvo) alvo.geojson.features = [];
+    return true;
   }
 
   /** Busca os tiles pedidos (os que ainda não estão na memória) e junta nas feições. */
   async function buscarTiles(camada, tiles, avisar) {
+    const nivel = estado.nivelCarregado[camada.id] || 'exato';
     if (!estado.tilesCarregados[camada.id]) estado.tilesCarregados[camada.id] = new Set();
     const jaTem = estado.tilesCarregados[camada.id];
     const faltam = tiles.filter((x) => !jaTem.has(x.arquivo));
@@ -1431,7 +1465,9 @@
 
   /** Carrega o que a janela atual mostra e redesenha. */
   async function carregarTilesDaJanela(camada) {
-    const indice = await indiceDaCamada(camada);
+    const nivel = nivelParaZoom(camada);
+    trocarNivel(camada, nivel);
+    const indice = await indiceDaCamada(camada, nivel);
     if (!estado.tilesCarregados[camada.id]) estado.tilesCarregados[camada.id] = new Set();
     const caixa = bboxDaJanela(0.02);
     const visiveis = indice.tiles.filter((x) => tileCruza(x, caixa));
@@ -1443,14 +1479,18 @@
       const el = document.querySelector('.estado[data-camada="' + camada.id + '"]');
       if (el && total) el.textContent = total.geojson.features.length.toLocaleString('pt-BR')
         + ' feições' + (camada.classes && camada.classes.length > 1 ? ' · ' + camada.classes.length + ' classes' : '')
-        + ' · ' + estado.tilesCarregados[camada.id].size + '/' + indice.tiles.length + ' partes';
+        + ' · ' + estado.tilesCarregados[camada.id].size + '/' + indice.tiles.length + ' partes'
+        + (nivel === 'visao' ? ' · visão de longe (aproxime para o dado exato)' : '');
     }
   }
 
   /** Para RECORTAR: garante a camada inteira em memória (todos os tiles). */
   async function garantirCamadaCompleta(camada) {
     if (!camada.tiles) return;
-    const indice = await indiceDaCamada(camada);
+    /* O RECORTE usa SEMPRE o nível exato, independente do zoom: recortar sobre a visão
+     * generalizada daria área errada. Se a visão estava carregada, ela é descartada. */
+    trocarNivel(camada, 'exato');
+    const indice = await indiceDaCamada(camada, 'exato');
     const antes = (estado.tilesCarregados[camada.id] || new Set()).size;
     if (antes >= indice.tiles.length) return;
     await buscarTiles(camada, indice.tiles, true);
