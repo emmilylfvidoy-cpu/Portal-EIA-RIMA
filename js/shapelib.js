@@ -137,18 +137,37 @@
     return { cabecalho: cab, registros: registros };
   }
 
+  /**
+   * Conteúdo de um registro, com o tipo em `base` (o cabeçalho de 8 bytes de número +
+   * tamanho fica ANTES). Deslocamentos da especificação ESRI:
+   *
+   *   Point:      +0 tipo · +4 X · +12 Y   (registro de 20 bytes, sem bbox)
+   *   multi-parte:+0 tipo · +4 bbox (4 doubles, até +36) · +36 NumParts · +40 NumPoints
+   *               +44 índices das partes · +44+4·NumParts pontos (16 bytes cada)
+   *
+   * Estes deslocamentos estiveram ERRADOS EM 4 BYTES (lia-se NumParts em +32, que cai
+   * dentro do double do Ymax). Consequência: toda camada de polígono vinda do ArcGIS
+   * chegava VAZIA — o leitor pegava lixo em NumParts, não montava anel nenhum e
+   * devolvia MultiPolygon sem coordenada. Camada de ponto escapava, porque o registro
+   * de ponto não tem bbox nem contadores.
+   */
   function lerGeometriaShp(v, base, tipo) {
-    // ATENÃ‡ÃƒO Ã€ ORDEM: o tipo Ã© checado ANTES de ler o bbox. Um registro de Point
-    // tem 20 bytes (tipo + X + Y) e nÃ£o tem bbox â€” ler os 4 doubles primeiro
-    // estourava o DataView e a feiÃ§Ã£o chegava vazia (o arquivo parecia corrompido).
+    // O tipo é checado ANTES de ler o bbox: registro de Point tem 20 bytes e não tem bbox.
     if (tipo === 1) {
       return { type: 'Point', coordinates: [v.getFloat64(base + 4, true), v.getFloat64(base + 12, true)] };
     }
 
-    const nParts = v.getInt32(base + 32, true);
-    const nPontos = v.getInt32(base + 36, true);
-    const partesEm = base + 40;
+    const nParts = v.getInt32(base + 36, true);
+    const nPontos = v.getInt32(base + 40, true);
+    const partesEm = base + 44;
     const pontosEm = partesEm + nParts * 4;
+
+    // Guarda de sanidade: valor absurdo aqui significa arquivo truncado ou layout
+    // diferente do esperado — melhor falhar alto do que devolver camada vazia em
+    // silêncio (foi assim que o defeito passou despercebido).
+    if (nParts < 0 || nPontos < 0 || nParts > 1e6 || nPontos > 5e7) {
+      throw new Error('Registro inconsistente (NumParts=' + nParts + ', NumPoints=' + nPontos + ').');
+    }
 
     const lerPonto = (i) => [v.getFloat64(pontosEm + i * 16, true), v.getFloat64(pontosEm + i * 16 + 8, true)];
 
@@ -507,16 +526,27 @@
   }
 
   /**
-   * ConteÃºdo de um registro multi-parte (linha ou polÃ­gono):
-   *   tipo (4) + bbox (32) + nParts (4) + nPontos (4) + partes (4Â·nParts) + pontos (16Â·nPontos)
-   * Os contadores ficam em +32/+36 e as partes comeÃ§am em +40 â€” o mesmo layout que
-   * `lerGeometriaShp` usa na leitura. Uma versÃ£o anterior escrevia os contadores em
-   * +36/+40 e o arquivo saÃ­a ilegÃ­vel (o leitor achava 0 pontos).
+   * Conteúdo de um registro multi-parte (linha ou polígono) — LAYOUT DA ESPECIFICAÇÃO ESRI:
+   *
+   *   +0   tipo                     (4)
+   *   +4   Xmin, Ymin, Xmax, Ymax   (4 doubles = 32 bytes, até +36)
+   *   +36  NumParts                 (4)
+   *   +40  NumPoints                (4)
+   *   +44  Parts                    (4 · NumParts)
+   *   +44+4·NumParts  Points        (16 bytes cada)
+   *
+   * ATENÇÃO — esta função JÁ ESTEVE ERRADA em 4 bytes: escrevia NumParts em +32, que
+   * cai DENTRO do double do Ymax. O resultado era shapefile com caixa envolvente
+   * corrompida, lido errado pelo QGIS e pelo ArcGIS. Passou desapercebido porque o
+   * LEITOR do portal tinha o mesmo erro: o teste de ida e volta fechava, e o defeito
+   * só apareceu ao ler um shapefile de verdade, gerado pelo ArcGIS. Por isso o teste
+   * de formatos agora confere os deslocamentos contra a especificação, com código
+   * escrito à parte — teste que só conversa com o próprio código não prova o formato.
    */
   function montarRegistroMulti(tipo, partes) {
     const nParts = partes.length;
     const nPontos = partes.reduce((s, p) => s + p.length, 0);
-    const b = new ArrayBuffer(40 + nParts * 4 + nPontos * 16);
+    const b = new ArrayBuffer(44 + nParts * 4 + nPontos * 16);
     const v = new DataView(b);
     const todos = [];
     partes.forEach((p) => p.forEach((pt) => todos.push(pt)));
@@ -524,9 +554,9 @@
     v.setInt32(0, tipo, true);
     v.setFloat64(4, bb[0], true); v.setFloat64(12, bb[1], true);
     v.setFloat64(20, bb[2], true); v.setFloat64(28, bb[3], true);
-    v.setInt32(32, nParts, true);
-    v.setInt32(36, nPontos, true);
-    let p = 40, acumulado = 0;
+    v.setInt32(36, nParts, true);
+    v.setInt32(40, nPontos, true);
+    let p = 44, acumulado = 0;
     for (const parte of partes) {
       v.setInt32(p, acumulado, true);
       p += 4;

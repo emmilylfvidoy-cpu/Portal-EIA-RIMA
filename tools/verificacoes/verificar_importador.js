@@ -83,7 +83,7 @@ function executar() {
 
   // ---------------------------------------------------------- rascunho
   console.log('\n== Rascunho do manifesto ==');
-  const rascunho = importador.gerarRascunho(tmp);
+  const rascunho = importador.gerarRascunho(tmp).manifesto;
   ok('gerou uma entrada por shapefile', rascunho.camadas.length === 1, rascunho.camadas.length + '');
   const rc = rascunho.camadas[0];
   ok('preencheu nome legível', /Geologia Teste/.test(rc.nome), rc.nome);

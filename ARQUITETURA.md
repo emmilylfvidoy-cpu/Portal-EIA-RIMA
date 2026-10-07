@@ -342,18 +342,40 @@ O importador **não** lê File Geodatabase nem GeoPackage (pede exportação par
 não lê KML/KMZ (o navegador lê, no upload). Está declarado na ferramenta e no README, com o
 caminho alternativo — não é limitação silenciosa.
 
+### 9.0.1 Simbologia: as cores não estão no shapefile
+
+Descoberta ao examinar a base real do cliente: as cores de uma camada vivem num arquivo de **estilo**
+ao lado do `.shp`, e cada SIG usa um formato diferente. O módulo `js/simbologia.js` (com um leitor de
+XML próprio em `js/xml.js`, porque `DOMParser` não existe no Node) lê os formatos abertos:
+
+| Formato | Origem | O que dá para aproveitar |
+|---|---|---|
+| `.qml` | QGIS | cor por classe, campo de classe, opacidade |
+| `.sld` | OGC | cor por classe, campo de classe |
+| `.lyrx` | ArcGIS Pro | cor por classe, campo de classe |
+| `.lyr` | ArcGIS Desktop | **só o CRS e o nome da rampa** — as cores são binárias |
+| `.shp.xml` | metadados ESRI | fonte, título e data → `fonte` e `data_ref` |
+
+A decisão de projeto que vale registrar: **o `.lyr` não é decodificado por tentativa**. Seria possível
+escrever heurísticas sobre os bytes e acertar parte das cores — e errar o resto em silêncio, pintando
+o mapa de um estudo com a cor errada. Em vez disso o módulo extrai o que **é** texto (o WKT com o
+EPSG, o nome da rampa) e devolve um aviso explícito com os dois caminhos de correção (salvar como
+`.lyrx` ou refazer no QGIS e salvar `.qml`). O manifesto também aceita `cores_classe` preenchido à
+mão, com a lista de classes já vinda do `.dbf` — então mesmo o caso fechado tem saída prática.
+
 ### 9.1 Estado da verificação
 
-`node tools/verificar.js` roda 9 suítes — **384 verificações, todas passando**:
+`node tools/verificar.js` roda 10 suítes — **481 verificações, todas passando**:
 
 | Suíte | Verificações |
 |---|---|
 | `math` — UTM, área, comprimento, formatação | 23 |
 | `vetorial` — recorte, linhas, pontos, validação | 41 |
-| `formatos` — SHP/DBF/KML/KMZ ida e volta | 38 |
+| `formatos` — SHP/DBF/KML/KMZ + layout contra a especificação ESRI | 56 |
 | `saidas` — tabela, CSV, XLSX, PDF, escala, articulação | 57 |
 | `importador` — curadoria da base | 45 |
-| `sintaxe` — compilação de todo arquivo servido + referências do HTML | 104 |
+| `simbologia` — `.qml`, `.sld`, `.lyrx`, `.lyr`, `.shp.xml` | 76 |
+| `sintaxe` — compilação de todo arquivo servido + referências do HTML | 107 |
 | `integracao` — fluxo completo sobre os dados reais de `data/` | 38 |
 | `fumaca` — módulos no `window` falso + fluxo completo | 38 |
 | `oraculo` — comparação com o Turf em polígonos aleatórios | centenas de casos |
@@ -362,12 +384,21 @@ Os defeitos que os testes pegaram e que estão registrados no código, por serem
 
 | Defeito | Onde estava | Como apareceu |
 |---|---|---|
+| **Layout do registro de polígono errado em 4 bytes** (`NumParts` gravado em `+32`, dentro do `double` do `Ymax`) | `shapelib.js` | o shapefile exportado saía com a caixa envolvente corrompida e inválido para QGIS/ArcGIS; só apareceu ao ler um shapefile real do ArcGIS, porque o teste de ida e volta tinha o erro simétrico no leitor |
 | `getInt32` com 4 bytes de deslocamento errado no `.shp` | `shapelib.js` | o shapefile lido voltava sem geometria |
 | Leitura do bbox antes de checar o tipo de registro | `shapelib.js` | registro de Point (20 bytes) estourava o DataView |
 | Campo de texto do `.dbf` dimensionado em caracteres, não bytes | `shapelib.js` | "Área A" chegava como "Área" |
 | CRS declarado no `.prj` avisado como "sem .prj" | `crs.js` | faria desconfiar do dado sem motivo |
 | Campos procurados em `lido.campos` em vez de `geojson.campos` | `importar_camadas.js` | a sugestão de campo de classe nunca funcionava |
 | Guarda de proteção do catálogo no fim do script | `gerar_amostra.js` | abortava depois de já ter reescrito os arquivos |
+| `.lyrx`: primeira cor encontrada é a do **contorno** | `simbologia.js` | pintaria todas as classes de cinza escuro |
+| Opacidade lida do quarto byte da cor (sempre 255) | `simbologia.js` | o `.qml` do QGIS guarda a opacidade no atributo `alpha` do símbolo |
+
+A lição que fica registrada, porque vai se repetir: **teste que só conversa com o próprio código não
+prova formato de arquivo.** O defeito do layout do `.shp` passou por 38 verificações verdes e só
+apareceu quando o importador leu um shapefile de verdade, feito por outro software. Por isso a suíte
+`formatos` ganhou um bloco que monta o arquivo byte a byte conforme a especificação ESRI e o lê de
+volta — código independente do portal, do lado de cá da fronteira.
 
 **Limitação de verificação declarada:** o teste de navegador (`tools/_fumaca.html`) está escrito,
 mas **não pôde ser executado neste ambiente** — o Chrome não inicia sob o sandbox

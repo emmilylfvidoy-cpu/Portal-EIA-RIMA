@@ -41,6 +41,8 @@ const EIA = {
   shapelib: require(path.join(raiz, 'js', 'shapelib.js')),
   crs: require(path.join(raiz, 'js', 'crs.js')),
   svg: require(path.join(raiz, 'js', 'svg.js')),
+  xml: require(path.join(raiz, 'js', 'xml.js')),
+  simbologia: require(path.join(raiz, 'js', 'simbologia.js')),
 };
 
 const MM_NO_PAPEL = 0.2;   // abaixo disso o olho não distingue no impresso
@@ -321,17 +323,67 @@ function adivinharMeio(nome) {
 }
 
 /** Conta as classes e sorteia uma cor para cada. */
-function classesECores(geojson, campo) {
+function classesECores(geojson, campo, paleta) {
   const contagem = new Map();
   for (const f of geojson.features) {
     const bruto = campo && f.properties ? f.properties[campo] : undefined;
     const chave = (bruto === undefined || bruto === null || bruto === '') ? 'Sem classe' : String(bruto);
     contagem.set(chave, (contagem.get(chave) || 0) + 1);
   }
-  const ordenado = Array.from(contagem.entries()).sort((a, b) => b[1] - a[1]);
+
+  // Ordem: primeiro as classes na ordem da legenda do arquivo de estilo (é a ordem
+  // que o cartógrafo escolheu), depois as que só existem no dado — por quantidade.
+  const ordemEstilo = (paleta && paleta.ordem ? paleta.ordem : []).filter((k) => contagem.has(k));
+  const restantes = Array.from(contagem.keys())
+    .filter((k) => ordemEstilo.indexOf(k) < 0)
+    .sort((a, b) => contagem.get(b) - contagem.get(a));
+  const ordem = ordemEstilo.concat(restantes);
+
   const cores = {};
-  ordenado.forEach(([chave], i) => { cores[chave] = EIA.svg.cor(i); });
-  return { cores: cores, classes: ordenado.map(([classe, n]) => ({ classe: classe, feicoes: n })) };
+  let daEstilo = 0;
+  ordem.forEach((chave, i) => {
+    const externa = paleta && paleta.cores ? paleta.cores[chave] : null;
+    if (externa) { cores[chave] = externa; daEstilo++; }
+    else cores[chave] = EIA.svg.cor(i);
+  });
+
+  return {
+    cores: cores,
+    classes: ordem.map((chave) => ({ classe: chave, feicoes: contagem.get(chave) })),
+    cores_origem: daEstilo === 0 ? 'auto' : (daEstilo === ordem.length ? 'estilo' : 'misto'),
+  };
+}
+
+// ============================================================ estilo e metadados
+/**
+ * Procura o arquivo de estilo (.qml, .sld, .lyrx, .lyr) e os metadados (.shp.xml)
+ * ao lado do shapefile.
+ *
+ * Ler o estilo resolve duas coisas de uma vez: o CAMPO DE CLASSE (que o arquivo de
+ * estilo conhece melhor que qualquer heurística de nome de campo) e a COR DE CADA
+ * CLASSE (que o usuário já escolheu no SIG dele).
+ */
+function resolverEstilo(caminhoShp) {
+  const lado = EIA.simbologia.sidecars(caminhoShp);
+  let estilo = null;
+  let arquivo = null;
+  for (const s of lado.estilos) {
+    let lido = null;
+    try {
+      lido = EIA.simbologia.lerSidecar(s.caminho);
+    } catch (e) {
+      lido = { formato: s.extensao, tipo: 'erro', campo: null, cor: null, cores: {}, ordem: [], opacidade: null, avisos: ['Falha ao ler ' + path.basename(s.caminho) + ': ' + e.message] };
+    }
+    const util = lido && (lido.cor || Object.keys(lido.cores || {}).length || lido.campo);
+    if (!estilo || util) { estilo = lido; arquivo = s.caminho; }
+    if (util) break;
+  }
+
+  let metadados = null;
+  if (lado.metadado) {
+    try { metadados = EIA.simbologia.lerMetadadosShpXml(fs.readFileSync(lado.metadado, 'utf8')); } catch (e) { metadados = null; }
+  }
+  return { estilo: estilo, arquivo: arquivo, metadados: metadados, temEstilo: !!arquivo, temMetadados: !!metadados };
 }
 
 // ============================================================ inspeção
@@ -370,6 +422,7 @@ function inspecionar(origem) {
     }
 
     const registros = geojson.features.map((f) => f.properties);
+    const infoEstilo = resolverEstilo(entrada.origem || origem);
     relatorio.camadas.push({
       origem: entrada.origem,
       tipo: entrada.tipo,
@@ -381,8 +434,12 @@ function inspecionar(origem) {
       crs_aviso: diag.aviso,
       codificacao: entrada.codificacao,
       campos: campos.map((c) => ({ nome: c.nome, tipo: c.tipo, tamanho: c.tamanho, distintos: distintos[c.nome], vazios: nulos[c.nome] || 0 })),
-      campo_classe_sugerido: adivinharCampoClasse(campos, registros),
+      campo_classe_sugerido: (infoEstilo.estilo && infoEstilo.estilo.campo) || adivinharCampoClasse(campos, registros),
+      campo_classe_origem: infoEstilo.estilo && infoEstilo.estilo.campo ? 'arquivo de estilo' : 'heurística',
       meio_sugerido: adivinharMeio(path.basename(origem)),
+      estilo_arquivo: infoEstilo.arquivo ? path.basename(infoEstilo.arquivo) : null,
+      estilo: infoEstilo.estilo || null,
+      metadados: infoEstilo.metadados || null,
       aviso: entrada.aviso || null,
     });
   }
@@ -395,6 +452,8 @@ function gerarRascunho(origem, opcoes) {
   const pasta = fs.statSync(origem).isDirectory() ? origem : path.dirname(origem);
   const shps = fs.statSync(origem).isDirectory() ? listarComExtensao(origem, '.shp') : [origem];
   const camadas = [];
+  const pistas = [];
+  void pasta;
 
   for (const shp of shps) {
     const nome = tituloDe(path.basename(shp, '.shp'));
@@ -411,20 +470,39 @@ function gerarRascunho(origem, opcoes) {
       }
     } catch (e) { /* segue sem sugestão */ }
 
-    camadas.push({
+    // O arquivo de estilo, quando existe, manda mais que a heurística: ele sabe qual
+    // campo dirige a simbologia e qual cor o usuário escolheu para cada classe.
+    const info = resolverEstilo(shp);
+    const estilo = info.estilo || {};
+    const coresClasse = (estilo.cores && Object.keys(estilo.cores).length) ? estilo.cores : null;
+    if (estilo.campo) campo = estilo.campo;
+
+    const entrada = {
       origem: path.resolve(shp),
       id: slug(nome),
       arquivo: 'data/' + slug(nome) + '.geojson',
       nome: nome,
       meio: meio,
       campo_classe: campo || '',
-      fonte: '',
-      data_ref: '',
-      cor: meio ? ({ fisico: '#8a6d3b', biotico: '#2f6b3a', socioeconomico: '#2f5b8a' })[meio] : '#7d8b93',
-      opacidade: 0.3,
+      fonte: info.metadados && info.metadados.fonte ? info.metadados.fonte : '',
+      data_ref: info.metadados && info.metadados.data ? info.metadados.data : '',
+      cor: estilo.cor || (meio ? ({ fisico: '#8a6d3b', biotico: '#2f6b3a', socioeconomico: '#2f5b8a' })[meio] : '#7d8b93'),
+      opacidade: estilo.opacidade !== null && estilo.opacidade !== undefined ? Number(estilo.opacidade.toFixed(2)) : 0.3,
       epsg_origem: 'auto',
       obs: '',
-      _pistas: { feicoes: feicoes, meio_adivinhado: !!meio, campo_adivinhado: !!campo },
+    };
+    if (coresClasse) entrada.cores_classe = coresClasse;
+
+    camadas.push(entrada);
+    pistas.push({
+      nome: nome,
+      feicoes: feicoes,
+      estilo: info.arquivo ? path.basename(info.arquivo) : null,
+      estilo_tipo: estilo.tipo || null,
+      cores_lidas: coresClasse ? Object.keys(coresClasse).length : 0,
+      metadados: info.metadados ? path.basename(info.metadado || 'shp.xml') : null,
+      avisos: (estilo.avisos || []).slice(),
+      campo_do_estilo: !!estilo.campo,
     });
   }
 
@@ -432,16 +510,19 @@ function gerarRascunho(origem, opcoes) {
     _instrucoes: [
       'Preencha "meio" em todas as camadas: fisico, biotico ou socioeconomico. Sem isso o importador não roda.',
       '"campo_classe" é o campo que agrupa as feições (uso do solo, unidade geológica...).',
-      '"fonte" e "data_ref" aparecem na tela e no relatório — preencha com a fonte real.',
+      '"cor" é a cor da camada, e "cores_classe" é a cor de CADA classe (classe -> cor em hexadecimal).',
+      '  Se o shapefile veio com arquivo de estilo (.qml do QGIS, .sld, .lyrx do ArcGIS Pro), isso já vem preenchido.',
+      '  No ArcGIS Desktop o estilo é .lyr (binário) e as cores NÃO são lidas — nesse caso ajuste as cores aqui à mão.',
+      '"fonte" e "data_ref" aparecem na tela, no relatório e no mapa. Vêm do .shp.xml quando existe; confira.',
       '"epsg_origem" aceita "auto" (lê o .prj) ou o código, tipo "EPSG:31983".',
       '"simplificar_graus" é opcional: sem ele a tolerância vem da escala (--escala).',
       'Rode: node tools/importar_camadas.js',
     ],
     destino: 'data',
-    camadas: camadas.map((c) => { delete c._pistas; return c; }),
+    camadas: camadas,
   };
   void o;
-  return manifesto;
+  return { manifesto: manifesto, pistas: pistas };
 }
 
 // ============================================================ escrita em fluxo
@@ -468,6 +549,8 @@ function importarCamada(entrada, opcoes) {
   const o = opcoes || {};
   const bruto = lerEntrada(entrada.origem)[0];
   const geojsonBruto = bruto.geojson;
+  const infoEstilo = resolverEstilo(entrada.origem);
+  const estilo = infoEstilo.estilo;
 
   // 1) sistema de referência -> WGS 84
   let epsg = EIA.crs.normalizarEpsg(entrada.epsg_origem || 'auto');
@@ -521,13 +604,26 @@ function importarCamada(entrada, opcoes) {
   const camposOriginais = (bruto.campos && bruto.campos.length)
     ? bruto.campos.map((c) => ({ nome: c.nome, tipo: c.tipo, rotulo: c.nome }))
     : camposInferidos({ type: 'FeatureCollection', features: features });
-  const campoClasse = entrada.campo_classe || null;
-  const campos = (campoClasse && camposOriginais.some((c) => c.nome === campoClasse))
+  // O campo de classe: o do manifesto manda; senão o que o arquivo de estilo usa
+  // (é a fonte mais confiável: foi o cartógrafo que escolheu); senão nenhum.
+  let campoClasse = entrada.campo_classe || (estilo && estilo.campo) || null;
+  if (campoClasse && !camposOriginais.some((c) => c.nome === campoClasse)) {
+    avisoCrs += (avisoCrs ? ' ' : '') + 'O campo de classe "' + campoClasse
+      + '" não existe na camada (a simbologia fica sem agrupamento).';
+    campoClasse = null;
+  }
+  const campos = campoClasse
     ? [camposOriginais.find((c) => c.nome === campoClasse)].concat(camposOriginais.filter((c) => c.nome !== campoClasse))
     : camposOriginais;
 
-  // 5) classes e cores
-  const cc = classesECores({ type: 'FeatureCollection', features: features }, campoClasse);
+  // 5) classes e cores — com a paleta do arquivo de estilo, quando existir
+  const paleta = {
+    ordem: (entrada.cores_classe && Object.keys(entrada.cores_classe).length)
+      ? Object.keys(entrada.cores_classe) : (estilo ? (estilo.ordem || []) : []),
+    cores: (entrada.cores_classe && Object.keys(entrada.cores_classe).length)
+      ? entrada.cores_classe : (estilo ? (estilo.cores || {}) : {}),
+  };
+  const cc = classesECores({ type: 'FeatureCollection', features: features }, campoClasse, paleta);
 
   const destino = path.resolve(raiz, entrada.arquivo || ('data/' + (entrada.id || slug(entrada.nome)) + '.geojson'));
   const metadados = {
@@ -573,6 +669,16 @@ function importarCamada(entrada, opcoes) {
     crs_origem: epsg || 'EPSG:4326',
     aviso_crs: avisoCrs,
     aviso: bruto.aviso || '',
+    // de onde vieram as cores: 'estilo' (arquivo do SIG), 'auto' (paleta do portal) ou 'misto'
+    cores_origem: cc.cores_origem,
+    estilo_cor: (estilo && estilo.cor) || null,
+    estilo_arquivo: infoEstilo.arquivo ? path.basename(infoEstilo.arquivo) : null,
+    estilo_formato: estilo ? estilo.formato : null,
+    estilo_tipo: estilo ? estilo.tipo : null,
+    avisos_estilo: (estilo && estilo.avisos) ? estilo.avisos.slice() : [],
+    metadados_shp_xml: infoEstilo.metadados || null,
+    opacidade: (estilo && estilo.opacidade !== null && estilo.opacidade !== undefined)
+      ? estilo.opacidade : (entrada.opacidade !== undefined ? entrada.opacidade : 0.32),
   };
 }
 
@@ -625,14 +731,16 @@ function atualizarCatalogo(caminho, resultados, opcoes) {
       campos: r.campos,
       classes: r.classes,
       estilo: {
-        cor: (r.cor_por_classe && r.classes.length === 1) ? Object.values(r.cor_por_classe)[0] : corDoMeio(r.meio),
-        opacidade: 0.32,
+        cor: r.estilo_cor || ((r.cor_por_classe && r.classes.length === 1) ? Object.values(r.cor_por_classe)[0] : corDoMeio(r.meio)),
+        opacidade: r.opacidade === undefined ? 0.32 : r.opacidade,
         cores: r.cor_por_classe,
       },
       fonte: r.fonte,
       data_ref: r.data_ref,
       origem: 'importado',
       feicoes: r.feicoes,
+      cores_origem: r.cores_origem,
+      estilo_arquivo: r.estilo_arquivo || undefined,
       obs: r.observacao || '',
     };
     if (existente) { mudancas.atualizadas.push(r); Object.assign(existente, entrada); }
@@ -667,8 +775,25 @@ function imprimirInspecao(rel) {
     console.log('  CRS: ' + (c.crs || 'não identificado') + (c.codificacao ? '   codificação: ' + c.codificacao : ''));
     if (c.crs_aviso) console.log('  aviso: ' + c.crs_aviso);
     if (c.bbox) console.log('  extensão: ' + c.bbox.map((v) => v.toFixed(5)).join(', '));
-    console.log('  campo de classe sugerido: ' + (c.campo_classe_sugerido || '(nenhum — a camada fica sem classe)'));
+    console.log('  campo de classe sugerido: ' + (c.campo_classe_sugerido || '(nenhum — a camada fica sem classe)')
+      + (c.campo_classe_sugerido ? '   (' + c.campo_classe_origem + ')' : ''));
     console.log('  meio sugerido: ' + (c.meio_sugerido || '(preencha no manifesto)'));
+    if (c.estilo_arquivo) {
+      const cores = c.estilo && c.estilo.cores ? Object.keys(c.estilo.cores).length : 0;
+      console.log('  arquivo de estilo: ' + c.estilo_arquivo + '  (' + (c.estilo.tipo || '?') + ')'
+        + (cores ? '  ' + cores + ' cores por classe' : (c.estilo.cor ? '  cor única ' + c.estilo.cor : '')));
+      if (c.estilo && c.estilo.crs) console.log('  o estilo declara o CRS: ' + c.estilo.crs);
+      if (c.estilo && c.estilo.rampa) console.log('  rampa de cor do estilo: ' + c.estilo.rampa);
+      for (const a of (c.estilo.avisos || [])) console.log('  aviso do estilo: ' + a);
+    } else {
+      const lado = EIA.simbologia.sidecars(c.origem || '');
+      console.log('  arquivo de estilo: NENHUM'
+        + (lado.estilos.length ? '' : ' — a camada entra com a paleta automática do portal')
+        + '  (procurei .qml, .sld, .lyrx, .lyr ao lado do .shp)');
+    }
+    if (c.metadados) {
+      console.log('  metadados do .shp.xml: ' + [c.metadados.titulo, c.metadados.fonte, c.metadados.data].filter(Boolean).join(' | '));
+    }
     if (c.campos.length) {
       console.log('  campos:');
       for (const f of c.campos.slice(0, 25)) {
@@ -701,6 +826,29 @@ function imprimirImportacao(resultados, mudancas, catalogoPath) {
   console.log('publicado em data/: ' + tamanhoLegivel(totalSaida) + '   ·   vértices: −' + reducao + '%');
   console.log('catálogo: ' + mudancas.adicionadas.length + ' camada(s) nova(s), '
     + mudancas.atualizadas.length + ' atualizada(s), ' + mudancas.preservadas + ' preservada(s)');
+
+  // Cores: de onde vieram, camada a camada. É a informação que decide se o mapa vai
+  // sair com a paleta do cliente ou com a do portal.
+  const doEstilo = resultados.filter((r) => r.cores_origem === 'estilo' || r.cores_origem === 'misto');
+  const auto = resultados.filter((r) => r.cores_origem === 'auto');
+  if (doEstilo.length) {
+    console.log('cores do arquivo de estilo: ' + doEstilo.length + ' camada(s)');
+    for (const r of doEstilo) {
+      console.log('  · ' + r.nome + ' — ' + r.classes.length + ' classes de ' + r.estilo_arquivo
+        + (r.cores_origem === 'misto' ? ' (algumas classes não estavam no estilo)' : ''));
+    }
+  }
+  if (auto.length) {
+    console.log('cores da paleta automática do portal: ' + auto.length + ' camada(s)'
+      + (auto.length <= 6 ? ' (' + auto.map((r) => r.nome).join(', ') + ')' : ''));
+    console.log('  Para usar as suas cores, preencha "cores_classe" no manifesto (classe -> #hex).');
+  }
+  const comLyr = resultados.filter((r) => r.estilo_formato === 'lyr');
+  if (comLyr.length) {
+    console.log('\n' + comLyr.length + ' camada(s) com .lyr (ArcGIS Desktop, binário) — as cores não foram lidas:');
+    for (const r of comLyr) console.log('  · ' + r.nome);
+    console.log('  Salve como .lyrx (ArcGIS Pro) ou refaça a simbologia no QGIS e salve o .qml.');
+  }
 
   // Sistema de referência: uma linha consolidada em vez de repetir por camada.
   const origens = Array.from(new Set(resultados.map((r) => r.crs_origem || '(desconhecido)')));
@@ -779,20 +927,44 @@ function executar(argv) {
     }
 
     if (args.rascunho) {
-      const manifesto = gerarRascunho(args.rascunho);
+      const r = gerarRascunho(args.rascunho);
+      const manifesto = r.manifesto;
       const destino = path.join(raiz, 'data', 'camadas-fonte.json');
       fs.writeFileSync(destino, JSON.stringify(manifesto, null, 2));
       console.log('Rascunho do manifesto em ' + path.relative(raiz, destino));
-      console.log(manifesto.camadas.length + ' camada(s) encontrada(s):');
+      console.log(manifesto.camadas.length + ' camada(s) encontrada(s):\n');
+      const pistaPorNome = new Map(r.pistas.map((p) => [p.nome, p]));
       for (const c of manifesto.camadas) {
-        console.log('  ' + c.nome.padEnd(32) + 'meio: ' + (c.meio || '?? preencher')
-          + '   classe: ' + (c.campo_classe || '?? preencher'));
+        const p = pistaPorNome.get(c.nome) || {};
+        const cores = p.cores_lidas ? ' · ' + p.cores_lidas + ' cores de ' + p.estilo : '';
+        console.log('  ' + c.nome.slice(0, 34).padEnd(35)
+          + 'meio: ' + (c.meio || '?? PREENCHER').padEnd(16)
+          + 'classe: ' + (c.campo_classe || '?? PREENCHER'));
+        if (cores || p.metadados) console.log('  ' + ' '.repeat(35) + (cores + (p.metadados ? ' · metadados de ' + p.metadados : '')).trim());
       }
+
+      const semEstilo = r.pistas.filter((p) => !p.estilo);
+      const comLyr = r.pistas.filter((p) => p.estilo && /\.lyr$/i.test(p.estilo));
+      console.log('');
+      if (semEstilo.length) {
+        console.log(semEstilo.length + ' camada(s) sem arquivo de estilo: as cores saem da paleta automática do portal.');
+      }
+      if (comLyr.length) {
+        console.log(comLyr.length + ' camada(s) com .lyr (ArcGIS Desktop): o formato é binário, as cores NÃO foram lidas.');
+        console.log('  Para aproveitar as cores do ArcGIS, salve como .lyrx (ArcGIS Pro) ou refaça no QGIS e salve o .qml.');
+      }
+      const avisosEstilo = r.pistas.filter((p) => (p.avisos || []).length);
+      for (const p of avisosEstilo) {
+        if (/\.lyr$/i.test(p.estilo || '')) continue;
+        console.log('  ! ' + p.nome + ': ' + p.avisos[0]);
+      }
+
       if (!manifesto.camadas.length) {
         console.log('\nNão achei nenhum .shp em ' + args.rascunho + '. Confira o caminho.');
         return 1;
       }
-      console.log('\nAgora edite o arquivo e preencha "meio", "fonte" e "data_ref". Depois rode:');
+      const faltando = manifesto.camadas.filter((c) => !c.meio).length;
+      console.log('\nAgora edite o arquivo e ' + (faltando ? 'preencha o "meio" das ' + faltando + ' camada(s) sem meio' : 'confira fonte e data_ref') + '. Depois rode:');
       console.log('  node tools/importar_camadas.js');
       return 0;
     }
@@ -875,6 +1047,7 @@ module.exports = {
   executar: executar,
   inspecionar: inspecionar,
   gerarRascunho: gerarRascunho,
+  resolverEstilo: resolverEstilo,
   importarCamada: importarCamada,
   atualizarCatalogo: atualizarCatalogo,
   prepararGeometria: prepararGeometria,
@@ -884,6 +1057,7 @@ module.exports = {
   classesECores: classesECores,
   escreverGeoJson: escreverGeoJson,
   lerShapefile: lerShapefile,
+  camposInferidos: camposInferidos,
   slug: slug,
   tamanhoLegivel: tamanhoLegivel,
 };

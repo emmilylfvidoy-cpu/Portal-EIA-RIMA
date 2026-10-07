@@ -159,7 +159,55 @@ A simplificação compensa a distorção da longitude (`cos(latitude)`): a −22
 mede ~103 km contra ~111 km de latitude, e sem essa correção o traço cortaria demais no sentido
 leste–oeste.
 
-### Antes de importar: o `--inspecionar`
+### As cores das camadas (simbologia)
+
+**As cores não ficam dentro do shapefile.** O SIG grava um arquivo de estilo ao lado dele, e o
+importador procura esse arquivo e aproveita o que der:
+
+| Arquivo | De onde vem | O importador lê? |
+|---|---|---|
+| `<camada>.qml` | QGIS (Salvar estilo → QGIS Layer Style File) | ✅ cor de **cada classe** + campo de classe + opacidade |
+| `<camada>.sld` | OGC / GeoServer | ✅ cor de cada classe + campo de classe |
+| `<camada>.lyrx` | ArcGIS **Pro** (Salvar como Layer File) | ✅ cor de cada classe + campo de classe |
+| `<camada>.lyr` | ArcGIS **Desktop** | ❌ **binário** — só o CRS e o nome da rampa são texto |
+| `<camada>.shp.xml` | metadados ESRI | ✅ título, fonte e data viram `fonte` e `data_ref` |
+
+Quando o estilo é lido, o `--rascunho` já preenche o campo de classe **e** a cor de cada classe, e
+o `--inspecionar` mostra o que achou:
+
+```
+  campo de classe sugerido: FORMA   (arquivo de estilo)
+  arquivo de estilo: geologia.qml  (categorizado)  8 cores por classe
+```
+
+E o mapa do portal passa a pintar **cada classe com a cor do seu SIG**, na legenda e no PDF.
+
+#### Se o seu estilo for `.lyr` (ArcGIS Desktop)
+
+O `.lyr` é formato binário fechado: as cores ficam em bytes, não em texto. O importador **não
+inventa** cor a partir de binário não verificado — pintar o mapa do cliente com cor errada é pior
+que não pintar. Você tem três caminhos:
+
+1. **ArcGIS Pro:** abra a camada e faça *Salvar como Layer File* → gera `.lyrx`, que é JSON e o
+   importador lê por completo.
+2. **QGIS (gratuito):** abra o mesmo `.shp`, aplique *Categorizado* no mesmo campo, escolha as cores
+   (ou copie os RGB do ArcGIS) e use *Salvar estilo → QGIS Layer Style File* → gera `.qml`.
+3. **Preencher à mão:** o próprio manifesto tem o campo `cores_classe`, com a lista de classes já
+   preenchida pelo `.dbf`. É trocar os códigos hexadecimais:
+
+```json
+"campo_classe": "SIGLA_UNID",
+"cores_classe": {
+  "NP3p_gamma_2Ipe": "#c8a165",
+  "NP3s_gamma_1Ibb": "#7a4f8a",
+  "Q1c": "#2f5b8a"
+}
+```
+
+Sem nada disso, a camada entra com a **paleta automática** do portal (uma cor por classe), e o
+`--inspecionar`/importação dizem isso claramente em vez de fingir que leram o estilo.
+
+
 
 Para decidir o campo de classe e conferir o que veio:
 
@@ -300,13 +348,22 @@ node tools/verificacoes/verificar_math.js   # uma suíte só
 |---|---|
 | `math` | UTM ida e volta, área de controle, UTM × geodésica, comprimento, formatação |
 | `vetorial` | Interseção, diferença, contenção, furo, côncavo, rotacionado, linhas, pontos |
-| `formatos` | Shapefile/DBF ida e volta (com acento, furo e booleano), KML, KMZ |
+| `formatos` | SHP/DBF/KML/KMZ ida e volta **e o layout conferido contra a especificação ESRI** |
 | `saidas` | Tabela, conferência de fechamento, CSV, XLSX, relatório, PDF, escala e articulação |
 | `importador` | Simplificação de camada pesada, detecção de campo de classe, catálogo, erros explicados |
+| `simbologia` | Leitura de `.qml`, `.sld`, `.lyrx`; recusa honesta do `.lyr`; metadados do `.shp.xml` |
 | `sintaxe` | Compila todo arquivo servido e confere as referências do HTML e os ids usados |
 | `integracao` | Fluxo completo sobre os arquivos reais de `data/`, com PDF de amostra |
 | `fumaca` | Módulos no `window` falso, na mesma ordem do HTML, com o fluxo completo |
 | `oraculo` | Compara o recorte com o Turf em polígonos aleatórios (área a área) |
+
+> A suíte `formatos` merece uma nota. Um teste de **ida e volta** não prova formato: se o escritor e
+> o leitor erram os mesmos bytes, o dado volta certo e o arquivo sai inválido para o QGIS. Foi o que
+> aconteceu — o `NumParts` era gravado 4 bytes antes do lugar, **dentro do `double` do `Ymax`**.
+> O teste passava e o shapefile exportado estava corrompido. A suíte agora lê e escreve os campos
+> com `DataView` cru, nos deslocamentos da especificação, **sem passar por nenhuma função do
+> portal**. Esse defeito só apareceu ao rodar o importador num shapefile de verdade, feito no
+> ArcGIS — que é o motivo de existir o passo de validar com dado real.
 
 O PDF de amostra sai em `tools/verificacoes/_amostra-mapa.pdf`.
 
