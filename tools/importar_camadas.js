@@ -397,7 +397,7 @@ function classesECores(geojson, campo, paleta) {
   ordem.forEach((chave, i) => {
     const externa = paleta && paleta.cores ? paleta.cores[chave] : null;
     if (externa) { cores[chave] = externa; daEstilo++; }
-    else cores[chave] = EIA.svg.cor(i);
+    else cores[chave] = EIA.svg.cor(i, ordem.length);
   });
 
   return {

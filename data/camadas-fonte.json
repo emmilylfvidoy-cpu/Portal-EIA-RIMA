@@ -18,13 +18,13 @@
       "arquivo": "data/geologia.geojson",
       "nome": "Geologia",
       "meio": "fisico",
-      "campo_classe": "ERA_MAXIMA",
+      "campo_classe": "SIGLA_UNID",
       "fonte": "Litologia do Estado de São Paulo (spaulo_lito)",
       "data_ref": "",
       "cor": "#8a6d3b",
       "opacidade": 0.3,
       "epsg_origem": "auto",
-      "obs": "Classe = ERA_MAXIMA (8 eras). As 306 unidades litológicas seguem nas colunas SIGLA_UNID e NOME_UNIDA do dado exportado. CONFIRMAR a citação oficial da fonte."
+      "obs": "Classe = SIGLA_UNID (unidade litológica), o mesmo agrupamento do Geologia.lyr no ArcGIS. As cores por classe entram em cores_classe; as unidades sem cor no arquivo de estilo ficam com a paleta automática do portal."
     }
   ]
 }

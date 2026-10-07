@@ -21,7 +21,43 @@
   const PALETA = ['#2f6b3a', '#8a6d3b', '#2f5b8a', '#b98645', '#7a4f8a', '#a33f3f',
     '#3f8a8a', '#6b8a2f', '#8a2f6b', '#4f5f8a', '#8a7a2f', '#2f8a6b'];
 
-  function cor(i) { return PALETA[i % PALETA.length]; }
+  /** HSL para #rrggbb. Serve para gerar cor fora da paleta fixa. */
+  function hslParaHex(h, s, l) {
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const hp = ((h % 360) + 360) % 360 / 60;
+    const x = c * (1 - Math.abs(hp % 2 - 1));
+    let r = 0, g = 0, b = 0;
+    if (hp < 1) { r = c; g = x; }
+    else if (hp < 2) { r = x; g = c; }
+    else if (hp < 3) { g = c; b = x; }
+    else if (hp < 4) { g = x; b = c; }
+    else if (hp < 5) { r = x; b = c; }
+    else { r = c; b = x; }
+    const m = l - c / 2;
+    const hex = (v) => Math.max(0, Math.min(255, Math.round((v + m) * 255))).toString(16).padStart(2, '0');
+    return '#' + hex(r) + hex(g) + hex(b);
+  }
+
+  /**
+   * Cor de índice `i`, com o total conhecido (`n`).
+   *
+   * A paleta fixa tem 12 cores: até 12 classes, cada uma tem a sua. A partir daí ela
+   * REPETE (`PALETA[i % 12]`), e com as 306 unidades litológicas da camada de Geologia
+   * cada cor serviria 25 classes diferentes — legenda inútil.
+   *
+   * Acima de 20 classes, a cor é gerada por ângulo áureo (137,5° entre cores vizinhas),
+   * que distribui os matizes de forma que cores consecutivas nunca se pareçam, e alterna
+   * saturação e luminosidade a cada volta para separar as que voltam ao mesmo matiz.
+   */
+  function cor(i, n) {
+    // Paleta fixa só quando TODAS as classes cabem nela (n <= 12). Com 13 já repetiria.
+    if (!n || n <= PALETA.length) return PALETA[i % PALETA.length];
+    const volta = Math.floor(i / 360 * 3);
+    const matiz = (i * 137.508) % 360;
+    const sat = 0.38 + 0.30 * ((volta + i) % 3) / 2;
+    const luz = 0.34 + 0.20 * ((i + volta) % 4) / 3;
+    return hslParaHex(matiz, sat, luz);
+  }
 
   function escapar(v) {
     return String(v === null || v === undefined ? '' : v)

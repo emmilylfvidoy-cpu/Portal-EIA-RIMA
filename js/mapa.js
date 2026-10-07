@@ -193,22 +193,42 @@
 
     const itensLegenda = e.legenda || [];
     if (itensLegenda.length) {
-      const colunas = e.folha === 'A4' ? 2 : 3;
+      /* Quantas entradas cabem no rodapé desta folha?
+       *
+       * Antes eram 2 colunas fixas em A4 e 3 nas outras — servia para 6 camadas, não
+       * para uma legenda de unidade litológica, que pode ter dezenas de entradas numa
+       * folha. Agora a conta é feita a partir da ALTURA do rodapé, e o número de colunas
+       * cresce até caber; se ainda não couber (folha pequena com legenda enorme), o que
+       * sobra é declarado em uma linha, em vez de sair do papel em silêncio. */
+      const alturaLinha = 5.2;   // mm por linha de legenda
+      const linhasPorColuna = Math.max(3, Math.floor((rod.altura - 10) / alturaLinha));
+      const larguraMinimaColuna = 34;   // mm — abaixo disso o rótulo não cabe
+      const colunasQueCabem = Math.max(1, Math.floor((rod.largura - 4) / larguraMinimaColuna));
+      const colunasNecessarias = Math.ceil(itensLegenda.length / linhasPorColuna);
+      const colunas = Math.max(1, Math.min(colunasQueCabem, Math.max(e.folha === 'A4' ? 2 : 3, colunasNecessarias)));
       const porColuna = Math.ceil(itensLegenda.length / colunas);
+      const capacidade = porColuna * colunas;
+      const cabem = itensLegenda.slice(0, capacidade);
+      const sobra = itensLegenda.length - cabem.length;
+
       for (let c = 0; c < colunas; c++) {
         const x = rod.x + 2 + c * (rod.largura / colunas);
-        const fatia = itensLegenda.slice(c * porColuna, (c + 1) * porColuna);
+        const fatia = cabem.slice(c * porColuna, (c + 1) * porColuna);
         fatia.forEach((item, i) => {
-          const y = rod.y + 8 + i * 6;
+          const y = rod.y + 7 + i * alturaLinha;
           if (item.forma === 'linha') {
             doc.linha(pagina, x, y, x + 8, y, { cor: item.cor, espessura: item.espessura || 0.9 });
           } else if (item.forma === 'ponto') {
             doc.circulo(pagina, x + 3, y, 1.4, { preenchimento: item.cor, borda: '#ffffff' });
           } else {
-            doc.retangulo(pagina, x, y - 2, 7, 4, { preenchimento: item.cor, borda: '#7d8b93' });
+            doc.retangulo(pagina, x, y - 1.8, 6.5, 3.6, { preenchimento: item.cor, borda: '#7d8b93' });
           }
-          doc.texto(pagina, item.rotulo, x + 11, y + 1.5, { tamanho: 7.2 });
+          doc.texto(pagina, item.rotulo, x + 10, y + 1.4, { tamanho: 6.6 });
         });
+      }
+      if (sobra > 0) {
+        doc.texto(pagina, 'e mais ' + sobra + ' classes — tabela de áreas em anexo',
+          rod.x + 2, rod.y + 7 + linhasPorColuna * alturaLinha + 1, { tamanho: 6.6, cor: '#43535d' });
       }
     }
 

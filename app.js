@@ -863,23 +863,98 @@
     };
   }
 
+  /** Teto de segurança da legenda. O PDF calcula a capacidade real da folha. */
+  const TETO_LEGENDA = 60;
+
+  /** bbox de uma geometria solta (math.bbox espera Feature/FeatureCollection). */
+  function bboxDaGeometria(geometria) {
+    let xmin = Infinity, ymin = Infinity, xmax = -Infinity, ymax = -Infinity, n = 0;
+    EIA.math.percorrerCoords(geometria, (p) => {
+      n++;
+      if (p[0] < xmin) xmin = p[0];
+      if (p[0] > xmax) xmax = p[0];
+      if (p[1] < ymin) ymin = p[1];
+      if (p[1] > ymax) ymax = p[1];
+    });
+    return n ? [xmin, ymin, xmax, ymax] : null;
+  }
+
+  /**
+   * Itens da legenda: o que APARECE no mapa, não o catálogo inteiro.
+   *
+   * Numa folha de 1:5.000 cabem uns 2 km²: aparecem 3 a 8 unidades geológicas, não as
+   * 306 do Estado de São Paulo. Legenda que lista o catálogo inteiro não serve para a
+   * folha — e era o que acontecia antes (a camada entrava como UM item, ou estourava o
+   * rodapé com 306). A ordem é por área decrescente, que é a convenção cartográfica:
+   * a unidade que domina a folha aparece primeiro.
+   *
+   * A fonte da legenda, em ordem de preferência:
+   *   1. o RESULTADO do recorte, quando já houve recorte (é o mapa do estudo);
+   *   2. as classes das feições que caem na extensão atual do mapa;
+   *   3. uma cor por camada, quando a camada não tem classe.
+   */
   function legendaAtual() {
     const itens = [];
     for (const a of estado.areas) itens.push({ rotulo: a.sigla + ' — ' + a.nome, cor: a.cor, forma: 'poligono' });
-    for (const c of estado.camadas) {
+
+    const bbox = extensaoAtual();
+
+    // 1) o que saiu do recorte, por camada
+    const doResultado = new Map();
+    for (const r of (estado.resultados || [])) {
+      if (!r || !r.features || !r.camada) continue;
+      const mapa = doResultado.get(r.camada.id) || new Map();
+      for (const f of r.features) {
+        const p = f.properties || {};
+        if (p.eia_classe === undefined || p.eia_classe === null) continue;
+        const chave = String(p.eia_classe);
+        mapa.set(chave, (mapa.get(chave) || 0) + (p.eia_area_ha || 0));
+      }
+      doResultado.set(r.camada.id, mapa);
+    }
+
+    const ordenados = estado.camadas.slice().sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+    for (const c of ordenados) {
       const estilo = c.estilo || {};
-      const classes = estilo.cores ? Object.keys(estilo.cores) : [];
-      // Camada com classes entra na legenda classe a classe (até um teto, para o
-      // rodapé da folha não estourar): é o que o leitor do mapa precisa ver.
-      if (classes.length > 1 && classes.length <= 10) {
-        for (const classe of classes) {
-          itens.push({ rotulo: c.nome + ': ' + classe, cor: estilo.cores[classe], forma: 'poligono' });
+      const cores = estilo.cores || {};
+      let pares = [];
+
+      if (doResultado.has(c.id)) {
+        pares = Array.from(doResultado.get(c.id).entries()).map(([classe, area]) => ({ classe: classe, peso: area }));
+      } else if (c.geojson && c.geojson.features && bbox) {
+        const contagem = new Map();
+        for (const f of c.geojson.features) {
+          const b = bboxDaGeometria(f.geometry);
+          if (!b) continue;
+          if (b[2] < bbox[0] || b[0] > bbox[2] || b[3] < bbox[1] || b[1] > bbox[3]) continue;
+          const bruto = c.campo_classe ? (f.properties || {})[c.campo_classe] : null;
+          const chave = (bruto === undefined || bruto === null || bruto === '') ? 'Sem classe' : String(bruto);
+          contagem.set(chave, (contagem.get(chave) || 0) + 1);
+        }
+        pares = Array.from(contagem.entries()).map(([classe, n]) => ({ classe: classe, peso: n }));
+      }
+
+      pares.sort((a, b) => b.peso - a.peso);
+      if (pares.length > 1) {
+        for (const p of pares) {
+          itens.push({
+            rotulo: c.nome + ': ' + p.classe,
+            cor: cores[p.classe] || estilo.cor || CORES_MEIO[c.meio] || '#7d8b93',
+            forma: 'poligono',
+          });
         }
       } else {
         itens.push({ rotulo: c.nome, cor: estilo.cor || CORES_MEIO[c.meio] || '#7d8b93', forma: 'poligono' });
       }
     }
-    return itens.slice(0, 18);
+
+    if (itens.length <= TETO_LEGENDA) return itens;
+    const resto = itens.length - TETO_LEGENDA + 1;
+    return itens.slice(0, TETO_LEGENDA - 1).concat([{
+      rotulo: 'e mais ' + resto + ' classes — ver tabela de áreas',
+      cor: '#c8ced3',
+      forma: 'poligono',
+    }]);
   }
 
   function atualizarInfoArticulacao() {
