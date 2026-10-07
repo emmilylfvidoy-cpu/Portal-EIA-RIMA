@@ -7,7 +7,7 @@
 <meta name="description" content="Portal para EIA/RIMA: carregue áreas de influência (SHP, KMZ, GeoJSON), recorte as camadas de caracterização dos meios físico, biótico e socioeconômico, gere tabela, gráficos, mini-relatório e mapa articulado.">
 <meta name="theme-color" content="#16323f">
 <link rel="stylesheet" href="vendor/leaflet.css">
-<link rel="stylesheet" href="style.css?v=2.6">
+<link rel="stylesheet" href="style.css?v=2.7">
 </head>
 <body>
 
@@ -49,14 +49,36 @@
     </section>
 
     <section class="bloco">
-      <h2>2 · Camadas de caracterização</h2>
+      <h2>2 · Quilometragem</h2>
+      <p class="ajuda">Suba a camada de km (SHP, KMZ, KML ou GeoJSON) — os <b>marcos</b> com a coluna de km, ou o <b>traçado</b> da rodovia, que o portal mede sozinho. Depois digite um km para o mapa ir até lá.</p>
+      <div class="acoes">
+        <label class="botao">
+          Carregar camada de km
+          <input type="file" id="upload-km" multiple accept=".shp,.dbf,.prj,.cpg,.zip,.kmz,.kml,.geojson,.json" hidden>
+        </label>
+      </div>
+      <p id="estado-km" class="vazio">Nenhuma camada de km carregada.</p>
+      <label class="opcao-linha campo-km" id="linha-campo-km" hidden>
+        <span>Coluna do km</span>
+        <select id="campo-km"></select>
+      </label>
+      <div class="busca-km">
+        <input type="text" id="busca-km" placeholder="70+500 ou 70,500" inputmode="decimal"
+               title="Aceita 70, 70,5, 70,500, 70+500 e KM 70+500">
+        <button id="btn-localizar-km" class="botao primario">Localizar km</button>
+      </div>
+      <div id="resultado-km" class="resultado-km" hidden></div>
+    </section>
+
+    <section class="bloco">
+      <h2>3 · Camadas de caracterização</h2>
       <p class="ajuda">Ligue as camadas do catálogo. Elas ficam em <code>data/*.geojson</code> e são carregadas só quando você pede.</p>
       <div id="lista-camadas" class="camadas"></div>
       <p id="vazio-camadas" class="vazio">Catálogo não carregado.</p>
     </section>
 
     <section class="bloco">
-      <h2>3 · Recorte</h2>
+      <h2>4 · Recorte</h2>
       <div class="campo">
         <label for="operacao">Operação</label>
         <select id="operacao">
@@ -80,7 +102,7 @@
     </section>
 
     <section class="bloco">
-      <h2>4 · Exportar o dado recortado</h2>
+      <h2>5 · Exportar o dado recortado</h2>
       <div class="acoes">
         <button id="btn-export-geojson" class="botao">GeoJSON</button>
         <button id="btn-export-shp" class="botao">Shapefile (ZIP)</button>
@@ -262,19 +284,20 @@
 
 <script src="vendor/leaflet.js"></script>
 <script src="vendor/turf.min.js"></script>
-<script src="js/math.js?v=2.6"></script>
-<script src="js/vetorial.js?v=2.6"></script>
-<script src="js/shapelib.js?v=2.6"></script>
-<script src="js/kml.js?v=2.6"></script>
-<script src="js/crs.js?v=2.6"></script>
-<script src="js/entrada.js?v=2.6"></script>
-<script src="js/recorte.js?v=2.6"></script>
-<script src="js/tabela.js?v=2.6"></script>
-<script src="js/svg.js?v=2.6"></script>
-<script src="js/pdf.js?v=2.6"></script>
-<script src="js/relatorio.js?v=2.6"></script>
-<script src="js/mapa.js?v=2.6"></script>
-<script src="js/xlsx.js?v=2.6"></script>
-<script src="app.js?v=2.6"></script>
+<script src="js/math.js?v=2.7"></script>
+<script src="js/km.js?v=2.7"></script>
+<script src="js/vetorial.js?v=2.7"></script>
+<script src="js/shapelib.js?v=2.7"></script>
+<script src="js/kml.js?v=2.7"></script>
+<script src="js/crs.js?v=2.7"></script>
+<script src="js/entrada.js?v=2.7"></script>
+<script src="js/recorte.js?v=2.7"></script>
+<script src="js/tabela.js?v=2.7"></script>
+<script src="js/svg.js?v=2.7"></script>
+<script src="js/pdf.js?v=2.7"></script>
+<script src="js/relatorio.js?v=2.7"></script>
+<script src="js/mapa.js?v=2.7"></script>
+<script src="js/xlsx.js?v=2.7"></script>
+<script src="app.js?v=2.7"></script>
 </body>
 </html>

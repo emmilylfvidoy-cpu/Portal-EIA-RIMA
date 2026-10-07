@@ -21,6 +21,68 @@
 | v2.4 | **Cor, traço e grossura da linha**, nos dois lugares que têm linha: o **contorno das camadas** (aba *Linha*) e o **traço das áreas de influência** (⚙ de cada área). Escolha pelo olho, com amostra do traço ao lado |
 | v2.5 | **A área da área de influência vinda de ARQUIVO era sempre ZERO** (`0,00 ha · 0,00 km²`): a função que lista os anéis ignorava `FeatureCollection`. Corrigido na raiz — e com ela o recorte de arquivo com vários polígonos, que era recusado |
 | v2.6 | Área carregada vem com **linha contínua** (o tracejado virou escolha, não padrão) e **transparência do preenchimento** ajustável; o ⚙ virou **✏ (lápis)**, que é o que a ação faz — editar |
+| v2.7 | **Quilometragem**: o usuário sobe a camada de km (marcos ou traçado) e **digita o km** para o mapa ir até lá. Entende `70`, `70,5`, `70,500`, `70+500` e `KM 70+500` |
+
+## Quilometragem: localizar um km (v2.7)
+
+```
+2 · Quilometragem
+Suba a camada de km — os marcos com a coluna de km, ou o traçado da rodovia.
+[ Carregar camada de km ]
+rodovia.shp · 42 feições · marcos · coluna KM
+Coluna do km  [ KM ▾ ]
+[ 70+500        ] [ Localizar km ]
+
+Entendi: km 70+500 (70,5 km). Localizado em km 70+500 (marco da camada).
+23°21'04,2"S · 45°12'38,7"O
+```
+
+**O mesmo km se escreve de várias formas**, e o usuário digita como está acostumado:
+
+| Digitado | Vale | Por quê |
+|---|---|---|
+| `70` | 70 km | inteiro |
+| `70,5` · `70.5` | 70,5 km | separador decimal |
+| `70,500` · `70.500` | 70,5 km | a forma que o cliente citou |
+| `70+500` | 70,5 km | convenção de rodovia: depois do `+` são **metros** |
+| `70+5` | 70,005 km | 5 metros |
+| `70+500,00` | 70,5 km | a parte decimal dos metros é descartada |
+| `KM 70+500` · `marco 70+500` | 70,5 km | com prefixo |
+| `70.500,00` | 70,5 km | **forma mista**, ver abaixo |
+
+**Formas mistas (dois separadores).** Vale a convenção brasileira (o último separador é o
+decimal) — mas com uma **guarda de plausibilidade**: se o resultado passar de 5.000 km (mais
+que a rodovia mais longa do Brasil), tenta-se a leitura alternativa. É o que faz `70.500,00`
+valer 70,5 km em vez de 70.500 km. Se nenhuma leitura for plausível, o portal **recusa e
+explica**, em vez de dar zoom num ponto que não existe.
+
+**A interpretação aparece na tela antes do resultado** — quem digitou algo ambíguo vê o que o
+portal entendeu e corrige, em vez de o mapa ir para um lugar sem explicação.
+
+### A camada pode vir de dois jeitos
+
+| Se o usuário subiu | O km é | Como o portal acha |
+|---|---|---|
+| **marcos** (pontos com coluna de km) | um atributo de cada ponto | o marco mais próximo do pedido, e diz a diferença (`a 100 m do pedido`) |
+| **traçado** (a linha da rodovia) | a distância percorrida | caminha ao longo da linha, somando Vincenty por trecho (~1 m de precisão) |
+
+O portal **decide sozinho** e diz qual usou — nenhuma pergunta a mais para o usuário. A coluna
+do km é detectada pelo nome (`KM`, `QUILOMETRO`, `KM_INICIO`, `MARCO`…), sem confundir com
+`LONGITUDE`, `CODIGO` ou `AREA_HA`, e o usuário pode trocar no seletor.
+
+**Traçado dividido em trechos** é o caso comum (a rodovia vem em várias feições, em ordem
+qualquer e às vezes invertidas). Os trechos são **encadeados** pela ponta mais próxima
+(tolerância de 25 m), crescendo pelas **duas pontas** e invertendo o sentido quando preciso.
+Trecho que não encaixa **não é inventado na sequência**: o portal avisa quantos ficaram de
+fora — melhor dizer isso do que localizar o km no lugar errado.
+
+> A primeira versão crescia só pela ponta final: se a semente fosse o trecho do meio, os
+> anteriores não tinham por onde se ligar e ficavam de fora **em silêncio**. O teste que pegou
+> isso monta dois trechos ligados ponta a ponta e exige que o km atravesse a emenda.
+
+A camada de km **não entra no recorte** — ela serve para localizar, não é caracterização do
+meio. O marcador da busca fica no mapa até a próxima, e o zoom vai a 1:2.000 (nível 15) ou
+mantém o atual se já estiver mais perto.
 
 ## Editar a aparência (v2.6)
 

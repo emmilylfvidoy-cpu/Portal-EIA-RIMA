@@ -308,3 +308,32 @@ dialog::backdrop { background: rgba(16, 32, 40, .55); }
   .coluna { max-height: none; border: none; }
   .mapa-area { height: 60vh; }
 }
+
+/* ------------------------------------------------------------------ quilometragem */
+.busca-km { display: flex; gap: 5px; margin-top: 6px; }
+.busca-km input[type="text"] {
+  flex: 1 1 auto; min-width: 0; font-size: 12px; padding: 4px 6px;
+  border: 1px solid #c3d1d9; border-radius: 4px; font-variant-numeric: tabular-nums;
+}
+.campo-km { justify-content: space-between; }
+.campo-km select { flex: 1 1 auto; min-width: 0; font-size: 11px; padding: 2px 3px; }
+.resultado-km {
+  margin-top: 6px; padding: 6px 8px; border-radius: 4px; font-size: 11px; line-height: 1.45;
+  background: #eef6f0; border: 1px solid #c8e0cf; color: #23402d;
+}
+.resultado-km.alerta { background: #fdf3e6; border-color: #e8cfa6; color: #4a3617; }
+.resultado-km .meta-km { color: var(--tinta-clara); font-size: 10.5px; }
+.resultado-km .aviso-km { margin-top: 4px; font-size: 10.5px; }
+/* Marcador da busca de km: o texto fica preso no ponto localizado. */
+.marcador-km { background: none; border: none; }
+.marcador-km span {
+  display: inline-block; transform: translate(-50%, -170%); white-space: nowrap;
+  font: 700 10px/1.2 "Segoe UI", Arial, sans-serif; color: #fff; background: #d94f3d;
+  padding: 2px 5px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+}
+/* Ponto do marcador: um alfinete simples desenhado com CSS, sem imagem externa. */
+.marcador-km::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 9px; height: 9px;
+  margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: #d94f3d;
+  border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.3);
+}

@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.6';
+  const VERSAO = 'v2.7';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -47,6 +47,13 @@
     // As áreas de influência do usuário desenham por cima das camadas de caracterização
     // por padrão — é o que ele acabou de inserir e quer conferir sobre o mapa.
     areasAcima: true,
+    // Quilometragem: a camada que o usuário subiu (marcos de km ou o traçado da rodovia),
+    // a coluna do km e o marcador da última busca. Camada de km NÃO entra no recorte: ela
+    // serve para localizar, não é caracterização do meio.
+    kmCamada: null,
+    kmCampo: null,
+    grupoKm: null,
+    marcadorKm: null,
     logos: [],
     desenhando: false,
     desenho: null,
@@ -131,11 +138,16 @@
      * ESTADO, não efeito de quem foi adicionado por último. */
     mapa.createPane('pane-areas');
     mapa.createPane('pane-resultado');
+    // A camada de km fica acima das camadas de caracterização (é referência de localização,
+    // precisa ser vista) e abaixo dos rótulos e do marcador da busca.
+    mapa.createPane('pane-km');
+    mapa.getPane('pane-km').style.zIndex = EIA.mapa.Z_CAMADAS + 60;
     estado.grupoCamadas = L.layerGroup().addTo(mapa);
     estado.grupoAreas = L.layerGroup().addTo(mapa);
     estado.grupoResultado = L.layerGroup().addTo(mapa);
     // Rótulos por cima de tudo: são texto, e texto embaixo de polígono não se lê.
     estado.grupoRotulos = L.layerGroup().addTo(mapa);
+    estado.grupoKm = L.layerGroup().addTo(mapa);
     estado.ordemCamadas = EIA.mapa.ordemInicial([]);
     aplicarOrdemDasCamadas();
 
@@ -163,6 +175,15 @@
 
   function ligarEventos() {
     $('upload-areas').onchange = (ev) => carregarArquivos(Array.from(ev.target.files || []));
+    $('upload-km').onchange = (ev) => carregarKm(Array.from(ev.target.files || []));
+    $('btn-localizar-km').onclick = localizarKm;
+    // Enter no campo de km localiza — é o gesto de quem está digitando o km e olhando o mapa
+    $('busca-km').onkeydown = (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); localizarKm(); } };
+    $('campo-km').onchange = () => {
+      estado.kmCampo = $('campo-km').value;
+      desenharKm();
+      if ($('busca-km').value) localizarKm();
+    };
     $('areas-acima').onchange = (ev) => alternarAreasAcima(ev.target.checked);
     $('btn-desenhar').onclick = alternarDesenho;
     $('btn-recortar').onclick = executarRecorte;
@@ -1112,6 +1133,179 @@
         },
       }).addTo(estado.grupoResultado);
     }
+  }
+
+
+  // =========================================================== quilometragem
+  /**
+   * Carrega a camada de km que o usuário subiu (marcos de km ou o traçado da rodovia).
+   *
+   * A mesma entrada do resto do portal (EIA.entrada.interpretar) — o usuário não precisa
+   * saber que o portal trata km de forma diferente; ele só diz que aquilo é km.
+   */
+  async function carregarKm(arquivos) {
+    if (!arquivos.length) return;
+    try {
+      status('Lendo a camada de km…');
+      const lido = await EIA.entrada.interpretar(arquivos);
+      const geojson = lido.geojson;
+      const nFeicoes = (geojson.features || []).length;
+      if (!nFeicoes) throw new Error('A camada não tem nenhuma feição.');
+
+      // Campos disponíveis para a coluna de km (o usuário pode trocar)
+      const campos = {};
+      for (const f of geojson.features) {
+        for (const k of Object.keys(f.properties || {})) if (!(k in campos)) campos[k] = true;
+      }
+      const nomesCampos = Object.keys(campos);
+      const temLinhas = EIA.km.temLinha(geojson);
+      const detectado = EIA.km.campoDeKm(nomesCampos);
+
+      estado.kmCamada = {
+        nome: (arquivos[0].name || 'camada de km').replace(/\.[^.]+$/, ''),
+        geojson: geojson, campos: nomesCampos, crs: lido.crs, aviso: lido.aviso || '',
+      };
+      estado.kmCampo = detectado;
+      estado.kmLink = null;   // nome que dá link com as áreas, quando der
+
+      // O select da coluna só aparece quando faz sentido: numa camada de traçado o km não
+      // está em coluna nenhuma, ele é a distância percorrida.
+      $('linha-campo-km').hidden = !nomesCampos.length || (temLinhas && !detectado);
+      const seletor = $('campo-km');
+      seletor.innerHTML = '';
+      for (const nome of nomesCampos) {
+        const op = document.createElement('option');
+        op.value = nome;
+        op.textContent = nome + (nome === detectado ? '  (parece o km)' : '');
+        seletor.appendChild(op);
+      }
+      if (estado.kmCampo) seletor.value = estado.kmCampo;
+
+      const modo = temLinhas ? 'traçado' : 'marcos';
+      $('estado-km').textContent = estado.kmCamada.nome + ' · ' + nFeicoes
+        + (nFeicoes === 1 ? ' feição' : ' feições') + ' · ' + modo
+        + (detectado ? ' · coluna ' + detectado : '');
+      $('estado-km').className = 'vazio';
+      desenharKm();
+      $('resultado-km').hidden = true;
+
+      let msg = 'Camada de km carregada (' + modo + ').';
+      if (!temLinhas && !detectado) {
+        msg += ' Não achei a coluna do km: escolha ela em "Coluna do km".';
+        status(msg, true);
+      } else {
+        if (lido.aviso) msg += ' ' + lido.aviso;
+        status(msg);
+      }
+    } catch (e) {
+      status('Não carreguei a camada de km: ' + e.message, true);
+      $('estado-km').textContent = 'Falhou: ' + e.message;
+      $('estado-km').className = 'vazio alerta';
+    }
+  }
+
+  /** Desenha a camada de km: marcos como pontos, traçado como linha destacada. */
+  function desenharKm() {
+    if (!estado.grupoKm) return;
+    estado.grupoKm.clearLayers();
+    const camada = estado.kmCamada;
+    if (!camada) return;
+    const campo = estado.kmCampo;
+    const rotulo = (props) => {
+      const v = EIA.km.valorDoRegistro(props, campo);
+      return v === null ? '' : 'km ' + EIA.km.formatar(v);
+    };
+
+    for (const f of camada.geojson.features) {
+      const g = f.geometry;
+      if (!g) continue;
+      if (g.type === 'LineString' || g.type === 'MultiLineString') {
+        // o traçado: linha forte, para se ver sobre o mapa de unidades
+        L.geoJSON(f, {
+          pane: 'pane-km',
+          style: () => ({ color: '#d94f3d', weight: 3, opacity: 0.9 }),
+          onEachFeature: (ff, layer) => layer.bindTooltip('Traçado', { sticky: true }),
+        }).addTo(estado.grupoKm);
+      } else {
+        const texto = rotulo(f.properties || {});
+        L.geoJSON(f, {
+          pane: 'pane-km',
+          pointToLayer: (ff, latlng) => L.circleMarker(latlng, {
+            pane: 'pane-km', radius: 5, color: '#ffffff', weight: 1.5,
+            fillColor: '#d94f3d', fillOpacity: 0.95,
+          }),
+          onEachFeature: (ff, layer) => {
+            layer.bindTooltip(texto || camada.nome, { sticky: true });
+          },
+        }).addTo(estado.grupoKm);
+      }
+    }
+  }
+
+  /**
+   * Localiza o km digitado e leva o mapa até lá.
+   *
+   * O texto passa por EIA.km.interpretar, que entende 70, 70,5, 70,500, 70+500 e
+   * KM 70+500. A INTERPRETAÇÃO É MOSTRADA na tela antes do resultado: se o usuário digitou
+   * algo ambíguo, ele vê o que o portal entendeu e corrige — em vez de o mapa ir para um
+   * lugar e ele não saber por quê.
+   */
+  function localizarKm() {
+    const caixa = $('resultado-km');
+    const texto = $('busca-km').value;
+    const mostrar = (html, alerta) => {
+      caixa.hidden = false;
+      caixa.className = 'resultado-km' + (alerta ? ' alerta' : '');
+      caixa.innerHTML = html;
+    };
+
+    if (!estado.kmCamada) {
+      mostrar('Carregue a camada de km primeiro (SHP, KMZ, KML ou GeoJSON) — é ela que diz onde cada km fica.', true);
+      return;
+    }
+    const lido = EIA.km.interpretar(texto);
+    if (!lido) {
+      mostrar('Não entendi <b>' + escapar(texto) + '</b> como um km. Escreva como no projeto: '
+        + '<b>70</b>, <b>70,5</b>, <b>70,500</b> ou <b>70+500</b>.', true);
+      return;
+    }
+
+    const achado = EIA.km.localizar(estado.kmCamada.geojson, estado.kmCampo, lido.km);
+    const interpretado = 'Entendi: <b>km ' + EIA.km.formatar(lido.km) + '</b> ('
+      + EIA.km.formatarCurto(lido.km) + ').';
+    if (!achado) {
+      mostrar(interpretado + ' Mas não consegui localizar: esta camada '
+        + (estado.kmCampo ? '' : 'não tem uma coluna de km escolhida, e ')
+        + 'não tem linha de traçado para medir. Confira a camada.', true);
+      return;
+    }
+
+    // marcador da busca: fica no mapa até a próxima
+    if (estado.marcadorKm) estado.mapa.removeLayer(estado.marcadorKm);
+    estado.marcadorKm = L.marker([achado.pos[1], achado.pos[0]], {
+      icon: L.divIcon({
+        className: 'marcador-km',
+        html: '<span>' + escapar(achado.rotulo) + '</span>',
+        iconSize: null,
+      }),
+    }).addTo(estado.mapa);
+
+    // zoom: aproxima o suficiente para ver o entorno, sem perder a referência da rodovia
+    const zoom = Math.max(estado.mapa.getZoom(), 15);
+    estado.mapa.setView([achado.pos[1], achado.pos[0]], zoom);
+
+    const coords = EIA.math.dms(achado.pos[0], 'lon') + ' · ' + EIA.math.dms(achado.pos[1], 'lat');
+    let linhas = interpretado + ' Localizado em <b>' + escapar(achado.rotulo) + '</b> ('
+      + (achado.modo === 'tracado' ? 'medido ao longo do traçado' : 'marco da camada') + ').<br>'
+      + '<span class="meta-km">' + coords + '</span>';
+    if (achado.nome) linhas += '<br><span class="meta-km">' + escapar(achado.nome) + '</span>';
+    if (achado.comprimentoKm) {
+      linhas += '<br><span class="meta-km">traçado com '
+        + EIA.km.formatarCurto(achado.comprimentoKm, 1) + '</span>';
+    }
+    mostrar(linhas + (achado.aviso ? '<div class="aviso-km">' + escapar(achado.aviso) + '</div>' : ''),
+      !!achado.aviso);
+    status(achado.rotulo + ' · ' + coords);
   }
 
   // =========================================================== ordem das camadas
