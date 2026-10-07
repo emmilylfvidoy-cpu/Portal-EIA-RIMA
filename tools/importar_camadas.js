@@ -531,6 +531,9 @@ function inspecionar(origem) {
       campos_candidatos: candidatosCampoClasse(campos, registros, 4),
       meio_sugerido: adivinharMeio(path.basename(origem)),
       estilo_arquivo: infoEstilo.arquivo ? path.basename(infoEstilo.arquivo) : null,
+    // GEOMETRIA EXATA ou generalizada: a tela avisa, para ninguém confundir um mapa de
+    // referência generalizado com o dado do projeto.
+    geometria: entrada.sem_simplificar === true ? 'exata' : 'generalizada',
       estilo: infoEstilo.estilo || null,
       metadados: infoEstilo.metadados || null,
       aviso: entrada.aviso || null,
@@ -709,10 +712,17 @@ function importarCamada(entrada, opcoes) {
   // simplificação mais dura que uma de 769. Com a escala no manifesto, essa decisão fica
   // ESCRITA junto da camada, em vez de depender de qual opção foi digitada no dia.
   const escalaDaCamada = Number(entrada.escala) || o.escala || 50000;
+  /* "sem_simplificar": true no manifesto publica a geometria COMO ELA É, sem mover um único
+   * vértice. É o que o cliente exigiu — "não pode alterar a feição" — e é possível enquanto a
+   * camada couber num arquivo que o navegador carrega. Medido: as 4 camadas leves ficam entre
+   * 4,6 e 9,6 MB exatas; a Pedologia (10,8 milhões de pontos) ficaria em ~265 MB e as
+   * Unidades de Conservação em ~78 MB, e essas duas não têm como ir exatas para um portal. */
   let tolerancia = 0;
-  if (entrada.simplificar_graus !== undefined && entrada.simplificar_graus !== null && Number(entrada.simplificar_graus) > 0) {
+  if (entrada.sem_simplificar === true || o.semSimplificar) {
+    tolerancia = 0;
+  } else if (entrada.simplificar_graus !== undefined && entrada.simplificar_graus !== null && Number(entrada.simplificar_graus) > 0) {
     tolerancia = Number(entrada.simplificar_graus);
-  } else if (!o.semSimplificar) {
+  } else {
     tolerancia = toleranciaParaEscala(escalaDaCamada);
   }
 
@@ -847,6 +857,7 @@ function importarCamada(entrada, opcoes) {
     aviso_crs: avisoCrs,
     aviso: bruto.aviso || '',
     // de onde vieram as cores: 'estilo' (arquivo do SIG), 'auto' (paleta do portal) ou 'misto'
+    geometria: entrada.sem_simplificar === true ? 'exata' : 'generalizada',
     cores_origem: cc.cores_origem,
     estilo_cor: (estilo && estilo.cor) || null,
     // contorno por classe (separação das unidades no mapa). Sem ele, 306 manchas de cor
@@ -932,6 +943,9 @@ function atualizarCatalogo(caminho, resultados, opcoes) {
       feicoes: r.feicoes,
       cores_origem: r.cores_origem,
       estilo_arquivo: r.estilo_arquivo || undefined,
+      // GEOMETRIA EXATA ou generalizada: a tela avisa, para ninguém confundir um mapa de
+      // referência generalizado com o dado do projeto.
+      geometria: r.geometria || 'exata',
       obs: r.observacao || '',
     };
     if (existente) { mudancas.atualizadas.push(r); Object.assign(existente, entrada); }

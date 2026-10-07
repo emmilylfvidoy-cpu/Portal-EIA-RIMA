@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.9';
+  const VERSAO = 'v3.0';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -288,6 +288,16 @@
         estadoTxt.className = 'estado';
         estadoTxt.dataset.camada = camada.id;
         estadoTxt.textContent = camada.presente === false ? 'sem arquivo' : '';
+        // Camada de referência generalizada: quem for medir precisa saber que a feição não é
+        // a do shapefile original.
+        if (camada.geometria === 'generalizada') {
+          const aviso = document.createElement('span');
+          aviso.className = 'tag-generalizada';
+          aviso.textContent = 'generalizada';
+          aviso.title = 'A geometria desta camada de referência foi simplificada para caber no '
+            + 'navegador — não é a feição exata do shapefile. Para medir, use o dado do projeto.';
+          linha.appendChild(aviso);
+        }
         linha.appendChild(caixa);
         linha.appendChild(amostra);
         linha.appendChild(nome);

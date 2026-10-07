@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "gerado_em": "2026-10-07T20:42:26.452Z",
+  "gerado_em": "2026-10-07T20:56:21.475Z",
   "cobertura": "Estado de São Paulo",
   "extensao_inicial": [
     -53.1053,
@@ -657,7 +657,7 @@
       },
       "fonte": "Litologia do Estado de São Paulo (spaulo_lito)",
       "data_ref": "",
-      "obs": "Classe = SIGLA_UNID (unidade litológica), o mesmo agrupamento do Geologia.lyr no ArcGIS. CORES vindas do estilo do projeto (Geologia.xml), não da paleta do portal. CONFIRMAR a citação oficial da fonte.",
+      "obs": "Classe = SIGLA_UNID (unidade litológica), o mesmo agrupamento do Geologia.lyr no ArcGIS. CORES vindas do estilo do projeto (Geologia.xml), não da paleta do portal. CONFIRMAR a citação oficial da fonte. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
       "campos": [
         {
           "nome": "SIGLA_UNID",
@@ -2119,7 +2119,8 @@
       "origem": "importado",
       "feicoes": 2102,
       "cores_origem": "estilo",
-      "estilo_arquivo": "Geologia.xml"
+      "estilo_arquivo": "Geologia.xml",
+      "geometria": "exata"
     },
     {
       "id": "geomorfologia",
@@ -2165,7 +2166,7 @@
       },
       "fonte": "Geomorfologia do Estado de São Paulo",
       "data_ref": "",
-      "obs": "Classe = COD_REL (código do compartimento de relevo), o agrupamento do Geomorfologia.xml: 13/13 valores do campo têm cor no arquivo. CONFIRMAR a citação oficial da fonte e a data de referência.",
+      "obs": "Classe = COD_REL (código do compartimento de relevo), o agrupamento do Geomorfologia.xml: 13/13 valores do campo têm cor no arquivo. CONFIRMAR a citação oficial da fonte e a data de referência. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
       "campos": [
         {
           "nome": "COD_REL",
@@ -2285,7 +2286,8 @@
       "origem": "importado",
       "feicoes": 2482,
       "cores_origem": "estilo",
-      "estilo_arquivo": "Geomorfologia.xml"
+      "estilo_arquivo": "Geomorfologia.xml",
+      "geometria": "exata"
     },
     {
       "id": "aquiferos",
@@ -2390,7 +2392,8 @@
       "feicoes": 765,
       "cores_origem": "estilo",
       "estilo_arquivo": "Aquíferos.xml",
-      "obs": "Classe = INT_VAZÃO (intervalo de vazão específica, em m³/h/m), o agrupamento do Aquíferos.xml: 10/10 valores têm cor. ATENÇÃO: o nome do campo tem acento (Ã) — se a importação reclamar que não achou o campo, é a codificação do .dbf. CONFIRMAR a citação oficial."
+      "obs": "Classe = INT_VAZÃO (intervalo de vazão específica, em m³/h/m), o agrupamento do Aquíferos.xml: 10/10 valores têm cor. ATENÇÃO: o nome do campo tem acento (Ã) — se a importação reclamar que não achou o campo, é a codificação do .dbf. CONFIRMAR a citação oficial. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
+      "geometria": "exata"
     },
     {
       "id": "pedologia",
@@ -2661,7 +2664,8 @@
       "feicoes": 17026,
       "cores_origem": "estilo",
       "estilo_arquivo": "Pedologia.xml",
-      "obs": "Classe = Subordem (subordem de solo: Argissolos Vermelhos, Cambissolos Háplicos...), o agrupamento do Pedologia.xml: 27/27 valores têm cor. O campo area_ha da origem serve para conferir a área calculada pelo portal. CONFIRMAR a citação oficial."
+      "obs": "Classe = Subordem (subordem de solo: Argissolos Vermelhos, Cambissolos Háplicos...), o agrupamento do Pedologia.xml: 27/27 valores têm cor. O campo area_ha da origem serve para conferir a área calculada pelo portal. CONFIRMAR a citação oficial. GEOMETRIA GENERALIZADA: o shapefile da origem é grande demais para o navegador (ver a tabela no README); o portal avisa na tela que esta camada é generalizada, para ninguém confundir com o dado exato.",
+      "geometria": "generalizada"
     },
     {
       "id": "biomas",
@@ -2701,7 +2705,8 @@
       "feicoes": 2,
       "cores_origem": "estilo",
       "estilo_arquivo": "Biomas.xml",
-      "obs": "Classe = Bioma (2 valores: Cerrado e Mata Atlântica), o agrupamento do Biomas.xml: 2/2 valores têm cor. São só 2 feições, mas com o contato entre biomas muito detalhado (3,9 MB de .shp). CONFIRMAR a citação oficial."
+      "obs": "Classe = Bioma (2 valores: Cerrado e Mata Atlântica), o agrupamento do Biomas.xml: 2/2 valores têm cor. São só 2 feições, mas com o contato entre biomas muito detalhado (3,9 MB de .shp). CONFIRMAR a citação oficial. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
+      "geometria": "exata"
     },
     {
       "id": "unidades-conservacao",
@@ -2901,7 +2906,8 @@
       "feicoes": 2742,
       "cores_origem": "estilo",
       "estilo_arquivo": "Unidades de Conservação.xml",
-      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial."
+      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial. GEOMETRIA GENERALIZADA: o shapefile da origem é grande demais para o navegador (ver a tabela no README); o portal avisa na tela que esta camada é generalizada, para ninguém confundir com o dado exato.",
+      "geometria": "generalizada"
     }
   ]
 }
