@@ -1185,6 +1185,94 @@
     return { features: saida, descartadas: descartadas };
   }
 
+  /** Ponto no meio do COMPRIMENTO de uma linha (não o vértice do meio). */
+  function meioDaLinha(pontos) {
+    if (!pontos || !pontos.length) return null;
+    if (pontos.length === 1) return pontos[0].slice(0, 2);
+    let total = 0;
+    const segs = [];
+    for (let i = 1; i < pontos.length; i++) {
+      const d = Math.hypot(pontos[i][0] - pontos[i - 1][0], pontos[i][1] - pontos[i - 1][1]);
+      segs.push(d);
+      total += d;
+    }
+    if (total === 0) return pontos[0].slice(0, 2);
+    const alvo = total / 2;
+    let andado = 0;
+    for (let i = 0; i < segs.length; i++) {
+      if (andado + segs[i] >= alvo) {
+        const t = segs[i] === 0 ? 0 : (alvo - andado) / segs[i];
+        return [
+          pontos[i][0] + (pontos[i + 1][0] - pontos[i][0]) * t,
+          pontos[i][1] + (pontos[i + 1][1] - pontos[i][1]) * t,
+        ];
+      }
+      andado += segs[i];
+    }
+    return pontos[pontos.length - 1].slice(0, 2);
+  }
+
+  /** Área com sinal do anel (sinal = orientação). */
+  function areaDoAnel(anel) {
+    let s = 0;
+    for (let i = 0; i < anel.length; i++) {
+      const p = anel[i], q = anel[(i + 1) % anel.length];
+      s += q[1] * p[0] - p[1] * q[0];
+    }
+    return s / 2;
+  }
+
+  /**
+   * Onde colocar o RÓTULO de uma geometria.
+   *
+   * Não é a média dos vértices: em forma côncava (um "L", um vale) a média cai FORA do
+   * polígono, e o rótulo aparece sobre a unidade vizinha — num mapa geológico isso é pior
+   * que não ter rótulo, porque afirma a unidade errada no lugar errado. Aqui usa
+   * `pontoInterior`, que faz varredura horizontal e devolve ponto comprovadamente dentro.
+   *
+   * Polígono com vários anéis é rotulado no MAIOR (é onde o texto cabe). Linha, no meio do
+   * comprimento; ponto, nele mesmo.
+   */
+  function posicaoRotulo(geometria) {
+    if (!geometria) return null;
+    const t = geometria.type;
+    if (t === 'Point') return geometria.coordinates.slice(0, 2);
+    if (t === 'MultiPoint') {
+      if (!geometria.coordinates.length) return null;
+      let sx = 0, sy = 0;
+      for (const p of geometria.coordinates) { sx += p[0]; sy += p[1]; }
+      return [sx / geometria.coordinates.length, sy / geometria.coordinates.length];
+    }
+    if (t === 'LineString') return meioDaLinha(geometria.coordinates);
+    if (t === 'MultiLineString') {
+      const maior = geometria.coordinates.slice().sort((a, b) => b.length - a.length)[0];
+      return maior ? meioDaLinha(maior) : null;
+    }
+    if (t === 'Polygon' || t === 'MultiPolygon') {
+      const aneis = [];
+      if (t === 'Polygon') for (const a of geometria.coordinates) aneis.push(a);
+      else for (const p of geometria.coordinates) for (const a of p) aneis.push(a);
+      if (!aneis.length) return null;
+      let maior = null, maiorArea = -1;
+      for (const a of aneis) {
+        const area = Math.abs(areaDoAnel(a));
+        if (area > maiorArea) { maiorArea = area; maior = a; }
+      }
+      const dentro = pontoInterior(maior);
+      if (dentro) return dentro;
+      const bb = bboxDeAnel(maior);
+      return bb ? [(bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2] : null;
+    }
+    if (t === 'GeometryCollection') {
+      for (const g of geometria.geometries || []) {
+        const p = posicaoRotulo(g);
+        if (p) return p;
+      }
+      return null;
+    }
+    return null;
+  }
+
   return {
     EPS: EPS,
     orientacao: orientacao,
@@ -1204,6 +1292,9 @@
     limparAnel: limparAnel,
     temAutoIntersecao: temAutoIntersecao,
     orientacaoAnel: orientacaoAnel,
+    // Posição de rótulo: usada pelo mapa para escrever o texto DENTRO da feição.
+    posicaoRotulo: posicaoRotulo,
+    meioDaLinha: meioDaLinha,
     // Internos expostos apenas para depuração e teste do encadeamento dos anéis.
     _interno: {
       No: No,
@@ -1222,6 +1313,8 @@
       encadearArestas: encadearArestas,
       cortesComAneis: cortesComAneis,
       pontoInterior: pontoInterior,
+      posicaoRotulo: posicaoRotulo,
+      meioDaLinha: meioDaLinha,
       poligonoDentro: poligonoDentro,
       peneirar: peneirar,
     },
