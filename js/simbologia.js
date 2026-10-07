@@ -32,7 +32,7 @@
   }
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (xml, svg) {
 
-  const ORDEM_SIDECAR = ['qml', 'sld', 'lyrx', 'lyr'];
+  const ORDEM_SIDECAR = ['qml', 'sld', 'lyrx', 'lyr', 'xml'];
 
   /** Nomes das opções de cor em QML, na ordem de preferência (preenchimento antes de contorno). */
   const OPCOES_COR = ['color', 'fillColor', 'line_color', 'fill', 'outline_color', 'stroke', 'strokeColor', 'color2'];
@@ -130,7 +130,35 @@
 
     let renderer = xml.descendentes(raiz, 'renderer-v2')[0] || null;
     if (!renderer) renderer = xml.descendentes(raiz, 'renderer')[0] || null;
-    if (!renderer) { saida.avisos.push('O .qml não tem bloco de renderizador reconhecível.'); return saida; }
+
+    if (!renderer) {
+      /* BIBLIOTECA DE SÍMBOLOS: <qgis_style><symbols><symbol name="CLASSE">.
+       *
+       * É o formato que sai do gerenciador de estilos do QGIS (e o que o complemento SLYR
+       * produz ao converter um .lyr do ArcMap): cada símbolo é NOMEADO com o valor da
+       * classe e carrega a cor no Option "color". Não há renderer — o pareamento
+       * classe/cor está no nome do símbolo. Foi assim que as cores do mapa do cliente
+       * chegaram ao portal, depois de o .lyr binário não permitir a leitura. */
+      const cont = xml.descendentes(raiz, 'symbols')[0];
+      if (cont) {
+        for (const s of xml.filhos(cont, 'symbol')) {
+          const nome = xml.atributo(s, 'name');
+          if (nome === undefined || nome === '') continue;
+          const info = corDoSimboloQml(s);
+          if (!info.cor) continue;
+          saida.ordem.push(nome);
+          saida.cores[nome] = info.cor;
+          if (saida.opacidade === null && info.opacidade !== null) saida.opacidade = info.opacidade;
+        }
+      }
+      if (saida.ordem.length) {
+        saida.tipo = 'categorizado';
+        saida.biblioteca_simbolos = true;
+        return saida;
+      }
+      saida.avisos.push('O arquivo de estilo não tem renderizador nem símbolos nomeados por classe.');
+      return saida;
+    }
 
     const tipo = (xml.atributo(renderer, 'type') || '').toLowerCase();
     const simbolos = mapaDeSimbolosQml(renderer);
@@ -395,12 +423,12 @@
 
   // ---------------------------------------------------------------- entrada
   /** Lê o arquivo de estilo pelo conteúdo (não pela extensão, que às vezes mente). */
-  function ler(texto, formato, bytes) {
+  function ler(texto, formato) {
     const f = String(formato || '').toLowerCase().replace(/^\./, '');
-    if (f === 'qml') return lerQml(texto);
+    if (f === 'qml' || f === 'xml') return lerQml(texto);
     if (f === 'sld') return lerSld(texto);
     if (f === 'lyrx') return lerLyrx(texto);
-    if (f === 'lyr') return lerLyr(bytes || []);
+    if (f === 'lyr') return null;   // binário: quem trata é lerLyr, com os bytes
     // sem extensão confiável: decide pelo conteúdo
     const t = String(texto || '').trim();
     if (/^\{/.test(t)) return lerLyrx(t);
@@ -438,7 +466,7 @@
   function lerSidecar(caminho, bytesOpcoes) {
     const fsModulo = require('fs');
     const ext = String(caminho).split('.').pop().toLowerCase();
-    if (ext === 'lyr') return ler('', 'lyr', bytesOpcoes && bytesOpcoes.bytes ? bytesOpcoes.bytes : fsModulo.readFileSync(caminho));
+    if (ext === 'lyr') return lerLyr(bytesOpcoes && bytesOpcoes.bytes ? bytesOpcoes.bytes : fsModulo.readFileSync(caminho));
     return ler(fsModulo.readFileSync(caminho, 'utf8'), ext);
   }
 

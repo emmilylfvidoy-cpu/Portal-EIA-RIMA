@@ -239,6 +239,65 @@ console.log('\n== ArcGIS Desktop .lyr (binario) ==');
   ok('aviso diz o caminho alternativo', /lyrx|qml/i.test(s.avisos[0]));
 }
 
+// ---------------------------------------------------------------- biblioteca de símbolos
+console.log('\n== Biblioteca de símbolos do QGIS (qgis_style com símbolos nomeados) ==');
+{
+  /* Este é o formato que salvou o caso real: o .lyr do ArcMap é binário e não dá as
+   * cores, mas o estilo exportado do projeto é um XML com os símbolos NOMEADOS pelo valor
+   * da classe. Foi assim que as 306 unidades litológicas do cliente receberam as cores
+   * dele. Sem este leitor, o portal pintaria o mapa com cor inventada. */
+  const estilo = `<!DOCTYPE qgis_style>
+<qgis_style version="2">
+  <symbols>
+    <symbol type="fill" is_animated="0" alpha="1" name="A34atg">
+      <data_defined_properties><Option type="Map"><Option name="properties"/></Option></data_defined_properties>
+      <layer class="SimpleFill" enabled="1" pass="0">
+        <Option type="Map">
+          <Option type="QString" value="245,196,200,255,rgb:0.9607843,0.7686275,0.7843137,1" name="color"/>
+          <Option type="QString" value="0,0,0,255,rgb:0,0,0,1" name="outline_color"/>
+        </Option>
+      </layer>
+    </symbol>
+    <symbol type="fill" alpha="1" name="A4PPr">
+      <layer class="SimpleFill" enabled="1" pass="0">
+        <Option type="Map">
+          <Option type="QString" value="188,92,130,255,rgb:0.7372549,0.3607843,0.5098039,1" name="color"/>
+        </Option>
+      </layer>
+    </symbol>
+    <symbol type="fill" alpha="1" name="C2P1a">
+      <layer class="SimpleFill" enabled="1" pass="0">
+        <Option type="Map">
+          <Option type="QString" value="146,185,178,255,rgb:0.572549,0.7254902,0.6980392,1" name="color"/>
+        </Option>
+      </layer>
+    </symbol>
+  </symbols>
+  <colorramps/>
+  <textformats/>
+</qgis_style>`;
+
+  const s = simbologia.lerQml(estilo);
+  ok('tipo categorizado', s.tipo === 'categorizado', s.tipo);
+  ok('marcado como biblioteca de símbolos', s.biblioteca_simbolos === true);
+  ok('leu as 3 classes', s.ordem.length === 3, s.ordem.join(' | '));
+  ok('A34atg -> #f5c4c8 (245,196,200)', s.cores['A34atg'] === '#f5c4c8', s.cores['A34atg']);
+  ok('A4PPr -> #bc5c82', s.cores['A4PPr'] === '#bc5c82', s.cores['A4PPr']);
+  ok('C2P1a -> #92b9b2', s.cores['C2P1a'] === '#92b9b2', s.cores['C2P1a']);
+  ok('pegou o preenchimento, nao o contorno (que e preto)',
+    s.cores['A34atg'] !== '#000000', 'o contorno era 0,0,0,255');
+  ok('sem aviso de erro', s.avisos.length === 0, s.avisos.join('; ') || 'nenhum');
+
+  // a extensão .xml também tem de ser aceita (é como o arquivo chega do projeto)
+  ok('lido pela extensão .xml', simbologia.ler(estilo, 'xml').cores['A34atg'] === '#f5c4c8');
+  ok('decidido pelo conteúdo sem extensão', simbologia.ler(estilo, '').cores['A34atg'] === '#f5c4c8');
+
+  // um QML de camada comum (com renderer) NÃO pode ser confundido com biblioteca
+  const comRenderer = simbologia.lerQml(QML_CATEGORIZADO);
+  ok('qml com renderer segue o caminho normal', !comRenderer.biblioteca_simbolos && comRenderer.campo === 'UNIDADE',
+    String(comRenderer.campo));
+}
+
 // ---------------------------------------------------------------- automático
 console.log('\n== Deteccao pelo conteudo (sem confiar na extensao) ==');
 {
@@ -285,6 +344,11 @@ console.log('\n== Integracao: shapefile + .qml + .shp.xml ==');
   ok('achou o .qml ao lado do shapefile', lado.estilos.length >= 1 && /\.qml$/.test(lado.estilos[0].caminho),
     lado.estilos.map((x) => x.extensao).join(','));
   ok('achou o .shp.xml como metadado', !!lado.metadado && /shp\.xml$/.test(lado.metadado));
+
+  // O .shp.xml é METADADO e não pode ser confundido com o arquivo de estilo .xml — são
+  // nomes diferentes (Geologia.shp.xml x Geologia.xml) e o sidecar só procura o segundo.
+  ok('o .shp.xml não entra na lista de estilos', !lado.estilos.some((x) => /\.shp\.xml$/.test(x.caminho)),
+    lado.estilos.map((x) => x.caminho.split(/[\\/]/).pop()).join(','));
 
   const meta = simbologia.lerMetadadosShpXml(fs.readFileSync(lado.metadado, 'utf8'));
   ok('metadados: titulo', meta.titulo === 'Geologia do município', String(meta.titulo));

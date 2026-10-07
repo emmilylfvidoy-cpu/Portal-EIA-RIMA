@@ -11,6 +11,7 @@
 | v1.4 | Cache: `/js` e `/style.css` revalidam sempre; versão visível no rodapé |
 | v1.5 | **Correção do cálculo de área geodésica** (errava 31% em anel recortado) e Geologia real no lugar do exemplo |
 | v1.6 | **Agrupamento escolhido pelo usuário** (tabela, gráfico e relatório) e legenda por folha, que suporta centenas de classes |
+| v1.7 | **Cores do mapa do projeto** na Geologia: leitura de `<camada>.xml` (estilo com símbolos nomeados pela classe) — 306 de 306 unidades com a cor do cliente |
 
 ## Escolher as colunas de agrupamento (v1.6)
 
@@ -208,10 +209,20 @@ importador procura esse arquivo e aproveita o que der:
 | Arquivo | De onde vem | O importador lê? |
 |---|---|---|
 | `<camada>.qml` | QGIS (Salvar estilo → QGIS Layer Style File) | ✅ cor de **cada classe** + campo de classe + opacidade |
+| `<camada>.xml` | estilo do QGIS / complemento SLYR (`<qgis_style>` com símbolos **nomeados pela classe**) | ✅ cor de cada classe (o nome do símbolo é a classe) |
 | `<camada>.sld` | OGC / GeoServer | ✅ cor de cada classe + campo de classe |
 | `<camada>.lyrx` | ArcGIS **Pro** (Salvar como Layer File) | ✅ cor de cada classe + campo de classe |
 | `<camada>.lyr` | ArcGIS **Desktop** | ❌ **binário** — só o CRS e o nome da rampa são texto |
 | `<camada>.shp.xml` | metadados ESRI | ✅ título, fonte e data viram `fonte` e `data_ref` |
+
+> O formato `<camada>.xml` (`<qgis_style><symbols><symbol name="CLASSE">`) é o que resolveu
+> o caso real da Geologia: o `.lyr` do ArcMap é binário, mas o estilo exportado do projeto
+> traz os símbolos **nomeados pelo valor da classe**, com a cor de cada um. Foram assim que
+> as **306 unidades litológicas** receberam as cores do mapa do cliente — 306 de 306, sem
+> sobrar nenhuma para a paleta automática.
+>
+> Cuidado com a confusão de nome: `<camada>.xml` é **estilo**; `<camada>.shp.xml` é
+> **metadado**. São arquivos diferentes e o importador trata cada um no seu papel.
 
 Quando o estilo é lido, o `--rascunho` já preenche o campo de classe **e** a cor de cada classe, e
 o `--inspecionar` mostra o que achou:
