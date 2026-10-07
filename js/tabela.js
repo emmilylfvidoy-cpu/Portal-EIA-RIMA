@@ -20,26 +20,108 @@
   }
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (math) {
 
+  /** Separador do agrupamento por mais de uma coluna. */
+  const SEPARADOR = ' · ';
+
   /**
-   * Tabela por classe dentro de cada área de influência (a tabela principal do EIA).
+   * Agrupamento ESCOLHIDO PELO USUÁRIO.
+   *
+   * O recorte já guarda TODOS os atributos originais de cada feição, então trocar o
+   * agrupamento não exige recortar de novo: a chave é recalculada na hora, a partir das
+   * colunas pedidas. Agrupar por "NOME_UNIDA + LITOTIPO1" é uma decisão de análise — e a
+   * análise muda de pergunta no meio do trabalho ("e se eu abrir por litotipo?"). Ter de
+   * reeditar o catálogo e reimportar a camada para isso seria inviável.
+   *
+   * O mapa NÃO muda: a cor continua vinda do campo de classe do catálogo, que é a
+   * definição cartográfica da camada (as cores do ArcGIS, no caso da Geologia). O
+   * agrupamento é da TABELA, do GRÁFICO e do RELATÓRIO.
+   */
+  function textoDe(valor) {
+    if (valor === null || valor === undefined) return '(vazio)';
+    const t = String(valor).trim();
+    return t === '' ? '(vazio)' : t;
+  }
+
+  /** Chave de agrupamento de uma feição, dadas as colunas pedidas. */
+  function chaveDoGrupo(props, colunas, campoPadrao) {
+    if (!colunas || !colunas.length) {
+      if (props.eia_classe !== undefined && props.eia_classe !== null) return String(props.eia_classe);
+      return campoPadrao ? textoDe(props[campoPadrao]) : 'Sem classe';
+    }
+    return colunas.map((c) => textoDe(props[c])).join(SEPARADOR);
+  }
+
+  /**
+   * Colunas que o usuário pode escolher para agrupar, POR CAMADA.
+   *
+   * Por camada, e não uma lista única, porque camada de geologia tem SIGLA_UNID e
+   * LITOTIPO1 e camada de uso do solo tem CLASSE — oferecer a união das duas faria o
+   * usuário escolher coluna que não existe no dado que está olhando.
+   */
+  function colunasDisponiveis(resultados) {
+    const porCamada = new Map();
+    for (const r of resultados) {
+      const id = r.camada.id;
+      if (porCamada.has(id)) continue;
+      // a ordem do catálogo é a ordem que o analista definiu, com a classe primeiro
+      let colunas = (r.camada.campos || []).map((c) => c.nome).filter((n) => n && !/^eia_/.test(n));
+      if (!colunas.length) {
+        const vistos = new Set();
+        for (const f of r.features) {
+          for (const k of Object.keys(f.properties || {})) if (!/^eia_/.test(k)) vistos.add(k);
+        }
+        colunas = Array.from(vistos).sort();
+      }
+      porCamada.set(id, {
+        id: id,
+        nome: r.camada.nome,
+        meio: r.camada.meio || '',
+        campo_padrao: r.camada.campo_classe || null,
+        padrao_texto: (r.camada.campos || []).find((c) => c.nome === r.camada.campo_classe),
+        colunas: colunas,
+      });
+    }
+    return Array.from(porCamada.values());
+  }
+
+  /** Classe do catálogo que domina um grupo (é a que dá a cor da barra). */
+  function dominante(mapaDeAreas) {
+    let melhor = null;
+    let maior = -1;
+    for (const [classe, area] of mapaDeAreas.entries()) {
+      if (area > maior) { maior = area; melhor = classe; }
+    }
+    return melhor;
+  }
+
+  /**
+   * Tabela por classe (ou por agrupamento escolhido) dentro de cada área de influência.
    * @param {Array} resultados saída de recorte.recortarTudo
+   * @param {object} opcoes { apenasMeio, agrupamento: { idDaCamada: [colunas] } }
    */
   function porClasse(resultados, opcoes) {
     const o = opcoes || {};
+    const agrup = o.agrupamento || {};
     const linhas = [];
     for (const r of resultados) {
       if (o.apenasMeio && r.camada.meio !== o.apenasMeio) continue;
+      const colunas = agrup[r.camada.id] || null;
       const grupos = new Map();
       let somaAreas = 0, somaComprimento = 0;
       for (const f of r.features) {
         const p = f.properties;
-        const chave = p.eia_classe || 'Sem classe';
+        const chave = chaveDoGrupo(p, colunas, r.camada.campo_classe);
         let g = grupos.get(chave);
-        if (!g) { g = { classe: chave, area: 0, n: 0, comprimento: 0 }; grupos.set(chave, g); }
-        g.area += Number(p.eia_area_ha) || 0;
+        if (!g) {
+          g = { classe: chave, area: 0, n: 0, comprimento: 0, base: new Map() };
+          grupos.set(chave, g);
+        }
+        const area = Number(p.eia_area_ha) || 0;
+        g.area += area;
         g.comprimento += Number(p.eia_compr_km) || 0;
         g.n += 1;
-        somaAreas += Number(p.eia_area_ha) || 0;
+        g.base.set(p.eia_classe || 'Sem classe', (g.base.get(p.eia_classe || 'Sem classe') || 0) + area);
+        somaAreas += area;
         somaComprimento += Number(p.eia_compr_km) || 0;
       }
       const areaAiHa = r.relatorio.ai_area_ha || 0;
@@ -51,6 +133,8 @@
           camada: r.camada.id,
           camada_nome: r.camada.nome,
           classe: g.classe,
+          classe_base: dominante(g.base),
+          grupo_por: colunas ? colunas.join(' + ') : (r.camada.campo_classe || ''),
           feicoes: g.n,
           area_ha: arredondar(g.area, 4),
           comprimento_km: arredondar(g.comprimento, 4),
@@ -136,6 +220,9 @@
     camada: 'Camada',
     camada_nome: 'Nome da camada',
     classe: 'Classe',
+    classe_base: 'Classe do mapa',
+    grupo_por: 'Agrupado por',
+    colunas_grupo: 'Agrupado por',
     feicoes: 'Feições',
     area_ha: 'Área (ha)',
     pct_ai: '% da AI',
@@ -182,28 +269,47 @@
   /** Grades para os gráficos: uma por camada, com classes ordenadas por área. */
   function dadosParaGraficos(resultados, opcoes) {
     const o = opcoes || {};
+    const agrup = o.agrupamento || {};
     const porAiCamada = new Map();
     for (const r of resultados) {
       if (o.apenasMeio && r.camada.meio !== o.apenasMeio) continue;
+      const colunas = agrup[r.camada.id] || null;
       const chave = r.relatorio.ai + '|' + r.camada.id;
       let item = porAiCamada.get(chave);
       if (!item) {
-        item = { ai: r.relatorio.ai, camada: r.camada.nome, meio: r.camada.meio, classes: new Map(), areaAi: r.relatorio.ai_area_ha };
+        item = {
+          ai: r.relatorio.ai, camada: r.camada.nome, camada_id: r.camada.id, meio: r.camada.meio,
+          classes: new Map(), areaAi: r.relatorio.ai_area_ha,
+          grupo_por: colunas ? colunas.join(' + ') : (r.camada.campo_classe || ''),
+        };
         porAiCamada.set(chave, item);
       }
       for (const f of r.features) {
-        const c = f.properties.eia_classe || 'Sem classe';
-        item.classes.set(c, (item.classes.get(c) || 0) + (Number(f.properties.eia_area_ha) || 0));
+        const p = f.properties;
+        const c = chaveDoGrupo(p, colunas, r.camada.campo_classe);
+        let g = item.classes.get(c);
+        if (!g) { g = { valor: 0, base: new Map() }; item.classes.set(c, g); }
+        const area = Number(p.eia_area_ha) || 0;
+        g.valor += area;
+        const cb = p.eia_classe || 'Sem classe';
+        g.base.set(cb, (g.base.get(cb) || 0) + area);
       }
     }
     const graficos = [];
     for (const item of porAiCamada.values()) {
       const classes = Array.from(item.classes.entries())
-        .map(([rotulo, valor]) => ({ rotulo: rotulo, valor: arredondar(valor, 3) }))
+        .map(([rotulo, g]) => ({
+          rotulo: rotulo,
+          valor: arredondar(g.valor, 3),
+          // a classe do catálogo dominante no grupo: é ela que dá a cor da barra, para o
+          // gráfico ler com a mesma cor do mapa
+          base: dominante(g.base),
+        }))
         .sort((a, b) => b.valor - a.valor);
       if (!classes.length) continue;
       graficos.push({
-        ai: item.ai, camada: item.camada, meio: item.meio, area_ai_ha: item.areaAi,
+        ai: item.ai, camada: item.camada, camada_id: item.camada_id, meio: item.meio,
+        grupo_por: item.grupo_por, area_ai_ha: item.areaAi,
         total_ha: arredondar(classes.reduce((s, c) => s + c.valor, 0), 3),
         classes: classes,
       });
@@ -218,6 +324,9 @@
 
   return {
     ROTULOS: ROTULOS,
+    SEPARADOR: SEPARADOR,
+    chaveDoGrupo: chaveDoGrupo,
+    colunasDisponiveis: colunasDisponiveis,
     porClasse: porClasse,
     porAreaCamada: porAreaCamada,
     atributos: atributos,

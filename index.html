@@ -137,6 +137,17 @@
           <button id="btn-xlsx" class="botao">Baixar XLSX</button>
           <button id="btn-csv" class="botao">Baixar CSV</button>
         </div>
+        <div id="bloco-agrupamento" hidden>
+          <div class="linha-titulo">
+            <label>Agrupar por</label>
+            <button id="btn-agrupamento-padrao" class="botao-mini" type="button"
+              title="Volta ao campo de classe definido para cada camada">Voltar ao padrão</button>
+          </div>
+          <p class="dica">Escolha uma ou mais colunas (Ctrl para várias). Somando duas colunas, cada
+            linha da tabela é uma combinação — por exemplo <b>NOME_UNIDA + LITOTIPO1</b>. As cores do
+            mapa não mudam: elas continuam vindo do campo de classe da camada.</p>
+          <div id="agrupamento-camadas"></div>
+        </div>
         <div class="tabela-rolagem"><table id="tabela-resultado"><thead></thead><tbody></tbody></table></div>
         <div id="avisos-conferencia"></div>
       </div>

@@ -1,6 +1,6 @@
 # Portal EIA/RIMA
 
-**Versão atual: v1.5** (a versão aparece no rodapé do mapa, sobre a área de coordenadas).
+**Versão atual: v1.6** (a versão aparece no rodapé do mapa, sobre a área de coordenadas).
 
 | Versão | O que entrou |
 |---|---|
@@ -9,7 +9,37 @@
 | v1.2 | Leitura de simbologia (`.qml`, `.sld`, `.lyrx`) e **correção do layout do shapefile**, que estava inválido para QGIS/ArcGIS |
 | v1.3 | Escolha do campo de classe corrigida, com lista de alternativas no `--inspecionar` |
 | v1.4 | Cache: `/js` e `/style.css` revalidam sempre; versão visível no rodapé |
-| v1.5 | **Correção do cálculo de área geodésica** (errava 31% em anel recortado) e base do projeto: Geologia real no lugar do exemplo |
+| v1.5 | **Correção do cálculo de área geodésica** (errava 31% em anel recortado) e Geologia real no lugar do exemplo |
+| v1.6 | **Agrupamento escolhido pelo usuário** (tabela, gráfico e relatório) e legenda por folha, que suporta centenas de classes |
+
+## Escolher as colunas de agrupamento (v1.6)
+
+Na aba **Resultado → Tabela** aparece o bloco **Agrupar por**, com um seletor por camada do
+resultado. O padrão é o campo de classe do catálogo; o usuário pode escolher **uma ou mais
+colunas** — e a tabela, os gráficos e o relatório passam a somar por essa combinação.
+
+Exemplo: escolhendo `NOME_UNIDA` e `LITOTIPO1` (Ctrl para marcar as duas), cada linha passa a
+ser uma combinação — *"Granito · biotita granito"*, *"Xisto · (vazio)"* — em vez de uma linha
+por unidade litológica.
+
+Por que isso é barato de fazer: **o recorte já guarda todos os atributos originais** de cada
+feição, então trocar o agrupamento não exige recortar de novo — a chave é recalculada na hora.
+E por que importa: a pergunta da análise muda no meio do trabalho ("e se eu abrir por
+litotipo?") e ter de reeditar o catálogo e reimportar a camada seria inviável.
+
+Quatro decisões que valem saber:
+
+1. **O mapa não muda de cor.** A cor continua vinda do campo de classe do catálogo, que é a
+   definição cartográfica da camada (as cores do ArcGIS, no caso da Geologia). O agrupamento é
+   da tabela, do gráfico e do relatório. No gráfico, a barra recebe a cor da **classe de mapa
+   dominante** dentro do grupo, para o gráfico e o mapa lerem na mesma cor.
+2. **Nada de área se perde.** Agrupar é repartir: o teste confere que a soma das linhas continua
+   igual à soma das feições, em qualquer agrupamento — é a invariante que pega erro.
+3. **Valor vazio vira `(vazio)`, não desaparece.** Se a coluna escolhida não existe na camada,
+   todas as feições caem em `(vazio)` em vez de a tabela sair vazia em silêncio.
+4. **O relatório declara o agrupamento.** Os totais por área de influência não mudam, mas a
+   soma dentro de cada camada muda — e um número sem a pergunta ao lado não se sustenta.
+
 
 Portal estático para estudo de impacto ambiental: carrega as **áreas de influência** (SHP, KMZ,
 GeoJSON ou desenho na tela), **recorta** as camadas de caracterização dos meios físico, biótico e

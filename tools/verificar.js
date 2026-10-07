@@ -18,6 +18,7 @@ const suites = [
   ['simbologia', path.join(raiz, 'verificacoes', 'verificar_simbologia.js')],
   ['referencias', path.join(raiz, 'verificacoes', 'verificar_referencias.js')],
   ['legenda', path.join(raiz, 'verificacoes', 'verificar_legenda.js')],
+  ['agrupamento', path.join(raiz, 'verificacoes', 'verificar_agrupamento.js')],
   ['sintaxe', path.join(raiz, 'verificacoes', 'verificar_sintaxe.js')],
   ['integracao', path.join(raiz, 'verificacoes', 'verificar_integracao.js')],
   ['fumaca', path.join(raiz, 'verificacoes', 'verificar_fumaca.js')],

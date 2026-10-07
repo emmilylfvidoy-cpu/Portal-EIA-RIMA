@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v1.5';
+  const VERSAO = 'v1.6';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -29,6 +29,9 @@
     resultados: [],
     resumo: null,
     relato: null,
+    // Agrupamento escolhido pelo usuário: { idDaCamada: [colunas] }. Vazio = usa o
+    // campo de classe de cada camada, que é o padrão.
+    agrupamento: {},
     logos: [],
     desenhando: false,
     desenho: null,
@@ -146,6 +149,7 @@
     $('visao-tabela').onchange = renderizarTabela;
     $('filtro-meio').onchange = () => { renderizarTabela(); renderizarGraficos(); };
     $('grafico-tipo').onchange = renderizarGraficos;
+    $('btn-agrupamento-padrao').onclick = limparAgrupamento;
     $('logos').onchange = (ev) => carregarLogos(Array.from(ev.target.files || []));
     $('articulado').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
     $('escala').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
@@ -534,6 +538,14 @@
       estado.resumo = r.resumo;
       estado.salvo = false;
       desenharResultado();
+      // O seletor de agrupamento é montado a partir das camadas que ENTRARAM no
+      // resultado — antes disso não há coluna para oferecer. Agrupamento antigo de
+      // camada que saiu do resultado é descartado, para não ficar escolha órfã.
+      const idsNoResultado = new Set(estado.resultados.map((x) => x.camada.id));
+      for (const id of Object.keys(estado.agrupamento)) {
+        if (!idsNoResultado.has(id)) delete estado.agrupamento[id];
+      }
+      renderizarAgrupamento();
       renderizarTabela();
       renderizarGraficos();
       montarRelato();
@@ -585,13 +597,85 @@
     }
   }
 
+  // =========================================================== agrupamento
+  /**
+   * Monta os seletores de coluna, UM POR CAMADA do resultado.
+   *
+   * Por camada, e não uma lista única: a geologia tem SIGLA_UNID e LITOTIPO1, o uso do
+   * solo tem CLASSE. Uma lista com a união das duas ofereceria coluna que não existe no
+   * dado que a pessoa está olhando — e a tabela sairia cheia de "(vazio)" sem motivo.
+   */
+  function renderizarAgrupamento() {
+    const bloco = $('bloco-agrupamento');
+    const alvo = $('agrupamento-camadas');
+    if (!bloco || !alvo) return;
+    const disponiveis = EIA.tabela.colunasDisponiveis(estado.resultados);
+    if (!disponiveis.length) {
+      bloco.hidden = true;
+      alvo.innerHTML = '';
+      return;
+    }
+    bloco.hidden = false;
+    alvo.innerHTML = '';
+    for (const c of disponiveis) {
+      const linha = document.createElement('div');
+      linha.className = 'agrupamento-linha';
+
+      const rotulo = document.createElement('label');
+      rotulo.className = 'agrupamento-nome';
+      rotulo.textContent = c.nome;
+      rotulo.title = c.meio ? 'Meio: ' + c.meio : '';
+      linha.appendChild(rotulo);
+
+      const sel = document.createElement('select');
+      sel.multiple = true;
+      sel.size = Math.min(5, Math.max(3, c.colunas.length));
+      sel.dataset.camada = c.id;
+      const escolhidas = estado.agrupamento[c.id] || [];
+      for (const col of c.colunas) {
+        const op = document.createElement('option');
+        op.value = col;
+        op.textContent = col + (col === c.campo_padrao ? '  (classe do mapa)' : '');
+        op.selected = escolhidas.indexOf(col) >= 0;
+        sel.appendChild(op);
+      }
+      sel.addEventListener('change', () => {
+        const valores = Array.from(sel.selectedOptions).map((o) => o.value);
+        if (valores.length) estado.agrupamento[c.id] = valores;
+        else delete estado.agrupamento[c.id];
+        // a área da tabela também tem de acompanhar na hora: é o ponto da funcionalidade
+        renderizarTabela();
+        renderizarGraficos();
+      });
+      linha.appendChild(sel);
+
+      const dica = document.createElement('span');
+      dica.className = 'agrupamento-atual';
+      dica.textContent = (estado.agrupamento[c.id] || []).length
+        ? 'agrupando por ' + estado.agrupamento[c.id].join(' + ')
+        : 'padrão: ' + (c.campo_padrao || '(sem classe)');
+      linha.appendChild(dica);
+
+      alvo.appendChild(linha);
+    }
+  }
+
+  function limparAgrupamento() {
+    estado.agrupamento = {};
+    renderizarAgrupamento();
+    renderizarTabela();
+    renderizarGraficos();
+    status('Agrupamento de volta ao campo de classe de cada camada.');
+  }
+
   // =========================================================== tabela
   function linhasDaVisao() {
     const meio = $('filtro-meio').value;
     const resultados = estado.resultados.filter((r) => !meio || r.camada.meio === meio);
     const visao = $('visao-tabela').value;
     if (visao === 'classe') {
-      return { colunas: colunasDe(EIA.tabela.porClasse(resultados)), linhas: EIA.tabela.porClasse(resultados) };
+      const l = EIA.tabela.porClasse(resultados, { agrupamento: estado.agrupamento });
+      return { colunas: colunasDe(l), linhas: l };
     }
     if (visao === 'areacamada') {
       const l = EIA.tabela.porAreaCamada(resultados);
@@ -605,9 +689,16 @@
     }) };
   }
 
+  // Campos internos do cálculo: aparecem no objeto da linha, mas não são coluna da
+  // tabela. `classe_base` existe só para dar cor à barra do gráfico; `grupo_por` é
+  // repetido em toda linha (o agrupamento já está escrito acima da tabela).
+  const CAMPOS_INTERNOS = ['classe_base', 'grupo_por'];
+
   function colunasDe(linhas) {
     if (!linhas.length) return [];
-    return Object.keys(linhas[0]).map((k) => ({ campo: k, rotulo: EIA.tabela.ROTULOS[k] || k }));
+    return Object.keys(linhas[0])
+      .filter((k) => CAMPOS_INTERNOS.indexOf(k) < 0)
+      .map((k) => ({ campo: k, rotulo: EIA.tabela.ROTULOS[k] || k }));
   }
 
   function renderizarTabela() {
@@ -682,7 +773,7 @@
     const alvo = $('graficos');
     if (!estado.resultados.length) { alvo.innerHTML = '<p class="vazio">Faça o recorte para ver os gráficos.</p>'; return; }
     const meio = $('filtro-meio').value;
-    const graficos = EIA.tabela.dadosParaGraficos(estado.resultados, { apenasMeio: meio });
+    const graficos = EIA.tabela.dadosParaGraficos(estado.resultados, { apenasMeio: meio, agrupamento: estado.agrupamento });
     const tipo = $('grafico-tipo').value;
     const partes = [];
     if (tipo === 'comparativo') {
@@ -707,8 +798,18 @@
     } else {
       for (const g of graficos) {
         if (!g.classes.length) continue;
-        const dados = g.classes.slice(0, 10).map((c) => ({ rotulo: c.rotulo, valor: c.valor }));
-        const titulo = g.camada + ' — ' + g.ai + ' (' + EIA.math.num(g.total_ha, 2) + ' ha)';
+        // A barra recebe a cor do MAPA: usa a classe do catálogo dominante no grupo. É o
+        // que faz o gráfico e o mapa lerem na mesma cor, mesmo quando o agrupamento da
+        // tabela é outro (por exemplo NOME_UNIDA + LITOTIPO1 sobre a cor de SIGLA_UNID).
+        const camada = estado.camadas.find((c) => c.id === g.camada_id) || {};
+        const cores = (camada.estilo && camada.estilo.cores) || {};
+        const dados = g.classes.slice(0, 10).map((c) => ({
+          rotulo: c.rotulo,
+          valor: c.valor,
+          cor: cores[c.base] || undefined,
+        }));
+        const titulo = g.camada + ' — ' + g.ai + ' (' + EIA.math.num(g.total_ha, 2) + ' ha)'
+          + (g.grupo_por ? '  ·  por ' + g.grupo_por : '');
         partes.push(tipo === 'pizza'
           ? EIA.svg.pizza(dados, { titulo: titulo, largura: 560, altura: 300 })
           : EIA.svg.barras(dados, { titulo: titulo, largura: 560, altura: 300, rotuloY: 'hectares' }));
@@ -739,7 +840,9 @@
 
   // =========================================================== relatório
   function montarRelato() {
-    estado.relato = EIA.relatorio.redigir(estado.resultados, dadosProjeto());
+    // O relatório também segue o agrupamento escolhido: o texto tem de falar dos mesmos
+    // grupos que aparecem na tabela, senão o número do texto não fecha com o da tabela.
+    estado.relato = EIA.relatorio.redigir(estado.resultados, dadosProjeto(), { agrupamento: estado.agrupamento });
     const alvo = $('relatorio-texto');
     alvo.innerHTML = estado.relato.secoes.map((s) =>
       '<h3>' + escapar(s.titulo) + '</h3>' + s.paragrafos.map((p) => '<p>' + escapar(p) + '</p>').join('')).join('');
@@ -759,7 +862,7 @@
     status('Montando o relatório…');
     try {
       const imagens = await imagensDosGraficos();
-      const bytes = EIA.relatorio.gerarPdf(estado.relato, estado.resultados, { folha: 'A4', imagens: imagens });
+      const bytes = EIA.relatorio.gerarPdf(estado.relato, estado.resultados, { folha: 'A4', imagens: imagens, agrupamento: estado.agrupamento });
       baixar(new Blob([bytes], { type: 'application/pdf' }), 'relatorio-eia.pdf');
       status('Relatório gerado.');
     } catch (e) {

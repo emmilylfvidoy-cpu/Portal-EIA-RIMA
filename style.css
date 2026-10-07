@@ -137,6 +137,38 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   white-space: nowrap;
 }
 
+/* ------------------------------------------------------------------ agrupamento */
+/* Escolha das colunas de agrupamento da tabela, do gráfico e do relatório. */
+#bloco-agrupamento {
+  margin: 8px 0; padding: 8px 10px; border: 1px solid var(--borda);
+  border-radius: 6px; background: #f7f9fa;
+}
+.linha-titulo {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.linha-titulo label { font-weight: 600; font-size: 12px; }
+.botao-mini {
+  font: inherit; font-size: 11px; padding: 2px 8px; cursor: pointer;
+  border: 1px solid var(--borda); border-radius: 4px; background: #fff; color: var(--tinta);
+}
+.botao-mini:hover { background: #eef3f5; }
+.dica { font-size: 11px; color: var(--tinta-clara); margin: 4px 0 8px; line-height: 1.45; }
+.agrupamento-linha {
+  display: flex; align-items: flex-start; gap: 8px; padding: 5px 0;
+  border-top: 1px solid #e6ebee;
+}
+.agrupamento-nome {
+  flex: 0 0 34%; font-size: 12px; font-weight: 600; padding-top: 2px;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.agrupamento-linha select {
+  flex: 1 1 auto; max-width: 46%; font-size: 11.5px; padding: 2px;
+}
+.agrupamento-atual {
+  flex: 0 0 20%; font-size: 10.5px; color: var(--acento-escuro); padding-top: 3px;
+  overflow-wrap: anywhere;
+}
+
 /* ------------------------------------------------------------- abas */
 .abas { display: flex; gap: 2px; border-bottom: 1px solid var(--borda); margin-bottom: 8px; }
 .aba {

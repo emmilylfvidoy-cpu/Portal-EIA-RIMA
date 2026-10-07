@@ -29,12 +29,40 @@
    * @param {object} projeto    { nome, cliente, processo, responsavel }
    * @returns {{titulo:string, secoes:Array<{titulo:string, paragrafos:string[]}>}}
    */
-  function redigir(resultados, projeto) {
+  /**
+   * Parágrafo que declara o agrupamento usado na tabela e nos gráficos.
+   *
+   * Existe porque o agrupamento é escolha do analista e MUDA o número da tabela: somar
+   * por unidade litológica e somar por unidade + litotipo dão totais diferentes na mesma
+   * linha. Sem declarar isso, quem lê o relatório não sabe a que pergunta o número
+   * responde — e um número sem a pergunta ao lado não se sustenta em estudo.
+   */
+  function textoDoAgrupamento(resultados, agrup) {
+    const declarados = [];
+    for (const r of resultados) {
+      const colunas = agrup[r.camada && r.camada.id];
+      if (!colunas || !colunas.length) continue;
+      const texto = r.camada.nome + ' por ' + colunas.join(' + ');
+      if (declarados.indexOf(texto) < 0) declarados.push(texto);
+    }
+    if (!declarados.length) {
+      return 'O agrupamento das tabelas e dos gráficos é o campo de classe definido para cada camada '
+        + 'no catálogo do portal.';
+    }
+    return 'Neste relatório, o agrupamento das tabelas e dos gráficos foi escolhido no portal: '
+      + declarados.join('; ') + '. As demais camadas seguem o campo de classe do catálogo. '
+      + 'Os totais por área de influência não mudam com o agrupamento; o que muda é como as '
+      + 'feições são somadas dentro de cada camada.';
+  }
+
+  function redigir(resultados, projeto, opcoes) {
     const p = projeto || {};
+    const o = opcoes || {};
+    const agrup = o.agrupamento || {};
     const secoes = [];
 
     const porAi = agrupar(resultados, (r) => r.relatorio.ai);
-    const graficos = tabela.dadosParaGraficos(resultados);
+    const graficos = tabela.dadosParaGraficos(resultados, { agrupamento: agrup });
 
     secoes.push({
       titulo: '1. Identificação',
@@ -60,6 +88,7 @@
         + 'influência e comprimento).',
         'A área de cada feição foi calculada em projeção (UTM), com conferência por área geodésica; a diferença '
         + 'entre os dois métodos ficou abaixo de 1% em todas as camadas, o que indica consistência do recorte.',
+        textoDoAgrupamento(resultados, agrup),
       ],
     });
 
@@ -207,7 +236,7 @@
     }
 
     // tabela por classe (primeiras 40 linhas por folha de propósito: relatório não é planilha)
-    const linhas = tabela.porClasse(resultados);
+    const linhas = tabela.porClasse(resultados, { agrupamento: (opcoes && opcoes.agrupamento) || {} });
     if (linhas.length) {
       quebraSeNecessario(30);
       doc.texto(pagina, 'Tabela 1 — Área por classe dentro de cada área de influência',
