@@ -662,12 +662,19 @@ function importarCamada(entrada, opcoes) {
     avisoCrs = diag.aviso;
   }
 
-  // 2) tolerância: explícita no manifesto, senão derivada da escala
+  // 2) tolerância: explícita no manifesto, senão derivada da escala DA CAMADA, e por último
+  // da escala da linha de comando.
+  //
+  // A escala por camada existe porque "deixe os arquivos leves" não é a mesma decisão para
+  // todas: uma camada de 17 mil polígonos (Pedologia, 332 MB de .shp na origem) precisa de
+  // simplificação mais dura que uma de 769. Com a escala no manifesto, essa decisão fica
+  // ESCRITA junto da camada, em vez de depender de qual opção foi digitada no dia.
+  const escalaDaCamada = Number(entrada.escala) || o.escala || 50000;
   let tolerancia = 0;
   if (entrada.simplificar_graus !== undefined && entrada.simplificar_graus !== null && Number(entrada.simplificar_graus) > 0) {
     tolerancia = Number(entrada.simplificar_graus);
   } else if (!o.semSimplificar) {
-    tolerancia = toleranciaParaEscala(o.escala || 50000);
+    tolerancia = toleranciaParaEscala(escalaDaCamada);
   }
 
   // 3) limpeza e simplificação (a longitude encolhe com o cosseno da latitude)
@@ -764,7 +771,7 @@ function importarCamada(entrada, opcoes) {
     origem_arquivo: path.basename(entrada.origem),
     crs_origem: epsg || 'EPSG:4326',
     simplificacao_graus: tolerancia,
-    escala_alvo: o.escala || 50000,
+    escala_alvo: escalaDaCamada,
     vertices_antes: verticesAntes,
     vertices_depois: verticesDepois,
     // quantos valores de atributo foram trocados pela notação com símbolo
@@ -791,7 +798,7 @@ function importarCamada(entrada, opcoes) {
     vertices_antes: verticesAntes,
     vertices_depois: verticesDepois,
     tolerancia: tolerancia,
-    escala: o.escala || 50000,
+    escala: escalaDaCamada,
     bytes_origem: fs.existsSync(entrada.origem) ? fs.statSync(entrada.origem).size : 0,
     bytes_saida: fs.statSync(destino).size,
     fonte: entrada.fonte || '',
@@ -1182,7 +1189,7 @@ function executar(argv) {
       for (const c of camadas) c.simplificar_graus = args.tolerancia;
     }
 
-    console.log('Importando ' + camadas.length + ' camada(s) — escala alvo 1:' + opcoes.escala.toLocaleString('pt-BR')
+    console.log('Importando ' + camadas.length + ' camada(s) — escala PADRÃO 1:' + opcoes.escala.toLocaleString('pt-BR')
       + (opcoes.semSimplificar
         ? ', SEM simplificar'
         : ', tolerância ' + Math.round(toleranciaParaEscala(opcoes.escala) * 110574) + ' m no terreno')
@@ -1190,7 +1197,10 @@ function executar(argv) {
 
     const resultados = [];
     for (const c of camadas) {
-      process.stdout.write('  · ' + (c.nome || c.id) + ' … ');
+      // A escala de CADA camada aparece aqui: o cabeçalho mostra só o padrão, e a camada
+      // pode fixar a sua no manifesto (é o que mantém a Pedologia publicável).
+      process.stdout.write('  · ' + (c.nome || c.id)
+        + ' (1:' + (Number(c.escala) || opcoes.escala).toLocaleString('pt-BR') + ') … ');
       const inicio = Date.now();
       try {
         const r = importarCamada(c, opcoes);

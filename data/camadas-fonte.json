@@ -354,7 +354,83 @@
         "Q2a": "#fefac2",
         "Qdi": "#f3fdcb",
         "Qli": "#f1febd"
-      }
+      },
+      "escala": 500000
+    },
+    {
+      "origem": "D:\\Geoportal\\Portal EIA\\Geomorfologia.shp",
+      "id": "geomorfologia",
+      "arquivo": "data/geomorfologia.geojson",
+      "nome": "Geomorfologia",
+      "meio": "fisico",
+      "campo_classe": "COD_REL",
+      "escala": 500000,
+      "fonte": "Geomorfologia do Estado de São Paulo",
+      "data_ref": "",
+      "cor": "#d9a05b",
+      "opacidade": 1,
+      "epsg_origem": "auto",
+      "obs": "Classe = COD_REL (código do compartimento de relevo), o agrupamento do Geomorfologia.xml: 13/13 valores do campo têm cor no arquivo. CONFIRMAR a citação oficial da fonte e a data de referência."
+    },
+    {
+      "origem": "D:\\Geoportal\\Portal EIA\\Pedologia.shp",
+      "id": "pedologia",
+      "arquivo": "data/pedologia.geojson",
+      "nome": "Pedologia",
+      "meio": "fisico",
+      "escala": 2000000,
+      "campo_classe": "Subordem",
+      "fonte": "Pedologia do Estado de São Paulo",
+      "data_ref": "",
+      "cor": "#a9743f",
+      "opacidade": 1,
+      "epsg_origem": "auto",
+      "obs": "Classe = Subordem (subordem de solo: Argissolos Vermelhos, Cambissolos Háplicos...), o agrupamento do Pedologia.xml: 27/27 valores têm cor. O campo area_ha da origem serve para conferir a área calculada pelo portal. CONFIRMAR a citação oficial."
+    },
+    {
+      "origem": "D:\\Geoportal\\Portal EIA\\Aquíferos.shp",
+      "id": "aquiferos",
+      "arquivo": "data/aquiferos.geojson",
+      "nome": "Aquíferos",
+      "meio": "fisico",
+      "escala": 500000,
+      "campo_classe": "INT_VAZÃO",
+      "fonte": "Aquíferos do Estado de São Paulo",
+      "data_ref": "",
+      "cor": "#7fc5fe",
+      "opacidade": 1,
+      "epsg_origem": "auto",
+      "obs": "Classe = INT_VAZÃO (intervalo de vazão específica, em m³/h/m), o agrupamento do Aquíferos.xml: 10/10 valores têm cor. ATENÇÃO: o nome do campo tem acento (Ã) — se a importação reclamar que não achou o campo, é a codificação do .dbf. CONFIRMAR a citação oficial."
+    },
+    {
+      "origem": "D:\\Geoportal\\Portal EIA\\Unidades de Conservação.shp",
+      "id": "unidades-conservacao",
+      "arquivo": "data/unidades-conservacao.geojson",
+      "nome": "Unidades de Conservação",
+      "meio": "socioeconomico",
+      "escala": 1000000,
+      "campo_classe": "grupo",
+      "fonte": "Unidades de Conservação do Estado de São Paulo",
+      "data_ref": "",
+      "cor": "#2f7d4f",
+      "opacidade": 1,
+      "epsg_origem": "auto",
+      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial."
+    },
+    {
+      "origem": "D:\\Geoportal\\Portal EIA\\Biomas.shp",
+      "id": "biomas",
+      "arquivo": "data/biomas.geojson",
+      "nome": "Biomas",
+      "meio": "biotico",
+      "escala": 500000,
+      "campo_classe": "Bioma",
+      "fonte": "Biomas do Estado de São Paulo (Cerrado e Mata Atlântica)",
+      "data_ref": "",
+      "cor": "#4e9a51",
+      "opacidade": 1,
+      "epsg_origem": "auto",
+      "obs": "Classe = Bioma (2 valores: Cerrado e Mata Atlântica), o agrupamento do Biomas.xml: 2/2 valores têm cor. São só 2 feições, mas com o contato entre biomas muito detalhado (3,9 MB de .shp). CONFIRMAR a citação oficial."
     }
   ]
 }

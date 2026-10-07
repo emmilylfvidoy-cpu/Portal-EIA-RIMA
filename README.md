@@ -22,6 +22,61 @@
 | v2.5 | **A área da área de influência vinda de ARQUIVO era sempre ZERO** (`0,00 ha · 0,00 km²`): a função que lista os anéis ignorava `FeatureCollection`. Corrigido na raiz — e com ela o recorte de arquivo com vários polígonos, que era recusado |
 | v2.6 | Área carregada vem com **linha contínua** (o tracejado virou escolha, não padrão) e **transparência do preenchimento** ajustável; o ⚙ virou **✏ (lápis)**, que é o que a ação faz — editar |
 | v2.7 | **Quilometragem**: o usuário sobe a camada de km (marcos ou traçado) e **digita o km** para o mapa ir até lá. Entende `70`, `70,5`, `70,500`, `70+500` e `KM 70+500` |
+| v2.8 | **A base do portal é o Estado de São Paulo inteiro**: as 8 camadas de exemplo de Piracicaba saíram e entraram as 6 camadas reais (Geologia, Geomorfologia, Pedologia, Aquíferos, Biomas, Unidades de Conservação), cada uma com **as cores do seu arquivo de estilo** |
+
+## A base de camadas (v2.8)
+
+Seis camadas, todas reais e cobrindo o estado inteiro. Nenhuma é amostra sintética:
+
+| Camada | Meio | Classe (agrupamento do mapa) | Feições | Arquivo |
+|---|---|---|---|---|
+| **Geologia** | físico | `SIGLA_UNID` — unidade litológica (306) | 2.102 | 5,6 MB |
+| **Geomorfologia** | físico | `COD_REL` — compartimento de relevo (13) | 2.482 | 4,7 MB |
+| **Pedologia** | físico | `Subordem` — subordem de solo (27) | 17.026 | 19,5 MB |
+| **Aquíferos** | físico | `INT_VAZÃO` — intervalo de vazão (10) | 765 | 1,8 MB |
+| **Biomas** | biótico | `Bioma` — Cerrado / Mata Atlântica (2) | 2 | 0,7 MB |
+| **Unidades de Conservação** | socioeconômico | `grupo` — Proteção Integral / Uso Sustentável (2) | 2.742 | 6,9 MB |
+
+**As cores vieram dos arquivos `.xml` de estilo do projeto**, camada por camada: conferi as 163
+cores do conjunto e **nenhuma difere** da cor do arquivo correspondente. Na Geologia os 197
+nomes que não batem literalmente são a troca dos símbolos gregos (`NP3p_gamma_2Ipe` →
+`NP3pγ2Ipe`), com a mesma cor.
+
+### O peso de cada camada foi uma decisão, não um acidente
+
+A origem tem **332 MB de geometria na Pedologia** e 49 MB nas Unidades de Conservação. A
+simplificação é declarada **por camada no manifesto** (`"escala"`), porque "deixe os arquivos
+leves" não é a mesma decisão para todas:
+
+| Camada | Escala | Tol. no terreno | Vértices | Resultado |
+|---|---|---|---|---|
+| Geologia | 1:500.000 | 100 m | 152.093 | 5,6 MB |
+| Geomorfologia | 1:500.000 | 100 m | 160.072 | 4,7 MB |
+| Aquíferos | 1:500.000 | 100 m | 68.746 | 1,8 MB |
+| Biomas | 1:500.000 | 100 m | 28.975 | 0,7 MB |
+| Unidades de Conservação | 1:1.000.000 | 200 m | 198.429 | 6,9 MB |
+| **Pedologia** | **1:2.000.000** | **400 m** | **444.019** | **19,5 MB** |
+
+A tolerância é o que o olho não distingue no impresso (0,2 mm no papel). Acima de 400 m eu
+estaria **inventando geometria**: a precisão posicional de um mapa de solos estadual é dessa
+ordem. Por isso a Pedologia para aí — e é a camada mais pesada do portal.
+
+**O que ainda dá para tirar da Pedologia**, se ela incomodar (números medidos):
+
+- `DESCRIÇÃO` é **2,4 MB** dos 19,5 MB (37% de todos os atributos) — é texto longo de
+  descrição da unidade de solo;
+- os 17.026 polígonos são a maior parte do resto: a geometria é 12,9 MB, e mesmo sem
+  simplificar mais, 17 mil polígonos fecham ~85 mil vértices só de fechamento de anel.
+
+> **Conferência de área contra o dado do cliente.** A Pedologia traz o campo `area_ha` da
+> origem. Somando as 17.030 feições: **250.348,6 km²** na origem, **249.513,5 km²** no portal —
+> **−0,33%**. É a validação independente do cálculo de área (v2.5) sobre dado real, e mostra
+> que a simplificação de 400 m não mexeu na área. A área do Estado de São Paulo é 248.219 km²;
+> as duas somas ficam ~0,5% acima porque as associações de solo se sobrepõem em faixa.
+
+**Nota de origem:** os `.shp.xml` das camadas são **modelos vazios** (só o texto "REQUIRED:"),
+então não há citação oficial a extrair deles. A `fonte` de cada camada é descritiva e cada
+entrada do manifesto termina com **CONFIRMAR a citação oficial e a data de referência**.
 
 ## Quilometragem: localizar um km (v2.7)
 

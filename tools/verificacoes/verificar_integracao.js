@@ -32,7 +32,13 @@ const catalogo = JSON.parse(fs.readFileSync(path.join(dataDir, 'catalogo.json'),
 console.log('\n== Catálogo e arquivos ==');
 {
   ok('catálogo tem 3 meios', catalogo.meios.length === 3);
-  ok('catálogo tem camadas', catalogo.camadas.length >= 8, catalogo.camadas.length + ' camadas');
+  // A base mudou de 9 camadas de exemplo para 6 reais do estado (v2.8). O teste NÃO pode
+  // fixar o número: ele mede que a base existe, tem mais de uma camada e que cada uma está
+  // completa — contar camadas foi o que fez este teste falhar sem nada estar errado.
+  ok('catálogo tem camadas', catalogo.camadas.length >= 2, catalogo.camadas.length + ' camadas');
+  ok('toda camada tem arquivo, classe e meio',
+    catalogo.camadas.every((c) => c.arquivo && c.campo_classe && c.meio && c.classes && c.classes.length),
+    catalogo.camadas.map((c) => c.id).join(', '));
   const faltando = [];
   for (const c of catalogo.camadas) {
     const arq = path.join(raiz, c.arquivo);

@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "gerado_em": "2026-10-07T17:22:08.464Z",
+  "gerado_em": "2026-10-07T20:18:31.268Z",
   "cobertura": "Estado de São Paulo",
   "extensao_inicial": [
     -53.1053,
@@ -2127,119 +2127,781 @@
       "meio": "fisico",
       "tipo": "poligono",
       "arquivo": "data/geomorfologia.geojson",
-      "campo_classe": "forma",
-      "estilo": {
-        "cor": "#b08d5a",
-        "opacidade": 0.3
-      },
-      "fonte": "EXEMPLO SINTÉTICO",
-      "data_ref": "exemplo",
-      "obs": ""
-    },
-    {
-      "id": "solos",
-      "nome": "Solos",
-      "meio": "fisico",
-      "tipo": "poligono",
-      "arquivo": "data/solos.geojson",
-      "campo_classe": "classe",
+      "campo_classe": "COD_REL",
       "estilo": {
         "cor": "#8a6d3b",
-        "opacidade": 0.3
+        "opacidade": 1,
+        "cores": {
+          "R1a": "#ffffbe",
+          "R1b": "#ffe800",
+          "R1d": "#ffe800",
+          "R1e": "#ffc27f",
+          "R2a1": "#d7cc9e",
+          "R2a2": "#cfa87f",
+          "R2b": "#bf7000",
+          "R4a1": "#d3ffbe",
+          "R4a2": "#55ff00",
+          "R4b": "#00e6a9",
+          "R4c": "#008f84",
+          "R4d": "#a80084",
+          "R4e": "#d69dbc"
+        },
+        "contornos": {
+          "R1a": "#6e6e6e",
+          "R1b": "#6e6e6e",
+          "R1d": "#6e6e6e",
+          "R1e": "#6e6e6e",
+          "R2a1": "#6e6e6e",
+          "R2a2": "#6e6e6e",
+          "R2b": "#6e6e6e",
+          "R4a1": "#6e6e6e",
+          "R4a2": "#6e6e6e",
+          "R4b": "#6e6e6e",
+          "R4c": "#6e6e6e",
+          "R4d": "#6e6e6e",
+          "R4e": "#6e6e6e"
+        },
+        "contorno_cor": "#6e6e6e"
       },
-      "fonte": "EXEMPLO SINTÉTICO",
-      "data_ref": "exemplo",
-      "obs": ""
+      "fonte": "Geomorfologia do Estado de São Paulo",
+      "data_ref": "",
+      "obs": "Classe = COD_REL (código do compartimento de relevo), o agrupamento do Geomorfologia.xml: 13/13 valores do campo têm cor no arquivo. CONFIRMAR a citação oficial da fonte e a data de referência.",
+      "campos": [
+        {
+          "nome": "COD_REL",
+          "tipo": "C",
+          "rotulo": "COD_REL"
+        },
+        {
+          "nome": "SIGLA_UNID",
+          "tipo": "C",
+          "rotulo": "SIGLA_UNID"
+        },
+        {
+          "nome": "NOME_UNIDA",
+          "tipo": "C",
+          "rotulo": "NOME_UNIDA"
+        },
+        {
+          "nome": "CLASSE_ROC",
+          "tipo": "C",
+          "rotulo": "CLASSE_ROC"
+        },
+        {
+          "nome": "COD_DOM",
+          "tipo": "C",
+          "rotulo": "COD_DOM"
+        },
+        {
+          "nome": "DOMINIO",
+          "tipo": "C",
+          "rotulo": "DOMINIO"
+        },
+        {
+          "nome": "COD_UNIGEO",
+          "tipo": "C",
+          "rotulo": "COD_UNIGEO"
+        },
+        {
+          "nome": "UNIGEO",
+          "tipo": "C",
+          "rotulo": "UNIGEO"
+        },
+        {
+          "nome": "RELEVO",
+          "tipo": "C",
+          "rotulo": "RELEVO"
+        },
+        {
+          "nome": "DECLIVIDAD",
+          "tipo": "C",
+          "rotulo": "DECLIVIDAD"
+        },
+        {
+          "nome": "AMPL_TOPO",
+          "tipo": "C",
+          "rotulo": "AMPL_TOPO"
+        },
+        {
+          "nome": "GEO_REL",
+          "tipo": "C",
+          "rotulo": "GEO_REL"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "R1a",
+          "feicoes": 228
+        },
+        {
+          "classe": "R1b",
+          "feicoes": 25
+        },
+        {
+          "classe": "R1d",
+          "feicoes": 36
+        },
+        {
+          "classe": "R1e",
+          "feicoes": 39
+        },
+        {
+          "classe": "R2a1",
+          "feicoes": 22
+        },
+        {
+          "classe": "R2a2",
+          "feicoes": 34
+        },
+        {
+          "classe": "R2b",
+          "feicoes": 49
+        },
+        {
+          "classe": "R4a1",
+          "feicoes": 500
+        },
+        {
+          "classe": "R4a2",
+          "feicoes": 629
+        },
+        {
+          "classe": "R4b",
+          "feicoes": 365
+        },
+        {
+          "classe": "R4c",
+          "feicoes": 374
+        },
+        {
+          "classe": "R4d",
+          "feicoes": 149
+        },
+        {
+          "classe": "R4e",
+          "feicoes": 32
+        }
+      ],
+      "origem": "importado",
+      "feicoes": 2482,
+      "cores_origem": "estilo",
+      "estilo_arquivo": "Geomorfologia.xml"
     },
     {
-      "id": "declividade",
-      "nome": "Declividade",
+      "id": "aquiferos",
+      "nome": "Aquíferos",
       "meio": "fisico",
       "tipo": "poligono",
-      "arquivo": "data/declividade.geojson",
-      "campo_classe": "classe",
+      "arquivo": "data/aquiferos.geojson",
+      "campo_classe": "INT_VAZÃO",
+      "campos": [
+        {
+          "nome": "INT_VAZÃO",
+          "tipo": "C",
+          "rotulo": "INT_VAZÃO"
+        },
+        {
+          "nome": "SIGLA_AQUI",
+          "tipo": "C",
+          "rotulo": "SIGLA_AQUI"
+        },
+        {
+          "nome": "NOME_AQUI",
+          "tipo": "C",
+          "rotulo": "NOME_AQUI"
+        },
+        {
+          "nome": "CLASSE",
+          "tipo": "C",
+          "rotulo": "CLASSE"
+        },
+        {
+          "nome": "TIPO_CARAC",
+          "tipo": "C",
+          "rotulo": "TIPO_CARAC"
+        },
+        {
+          "nome": "ROCHA_PRIN",
+          "tipo": "C",
+          "rotulo": "ROCHA_PRIN"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "0 a 10",
+          "feicoes": 183
+        },
+        {
+          "classe": "1 a 12",
+          "feicoes": 145
+        },
+        {
+          "classe": "1 a 6",
+          "feicoes": 30
+        },
+        {
+          "classe": "10 a 20",
+          "feicoes": 92
+        },
+        {
+          "classe": "20 a 40",
+          "feicoes": 49
+        },
+        {
+          "classe": "3 a 23",
+          "feicoes": 42
+        },
+        {
+          "classe": "40 a 80",
+          "feicoes": 45
+        },
+        {
+          "classe": "7 a 100",
+          "feicoes": 94
+        },
+        {
+          "classe": "80 a 120",
+          "feicoes": 50
+        },
+        {
+          "classe": "não consta",
+          "feicoes": 35
+        }
+      ],
       "estilo": {
-        "cor": "#a8763b",
-        "opacidade": 0.3
+        "cor": "#8a6d3b",
+        "opacidade": 1,
+        "cores": {
+          "0 a 10": "#ccf2ff",
+          "1 a 12": "#7ee67e",
+          "1 a 6": "#cbf2cb",
+          "10 a 20": "#99e6ff",
+          "20 a 40": "#66d9ff",
+          "3 a 23": "#19a64d",
+          "40 a 80": "#4dc1ff",
+          "7 a 100": "#006300",
+          "80 a 120": "#3399ff",
+          "não consta": "#e0e0e0"
+        }
       },
-      "fonte": "EXEMPLO SINTÉTICO",
-      "data_ref": "exemplo",
-      "obs": "No uso real, gerar do MDE (SRTM ou LiDAR)."
+      "fonte": "Aquíferos do Estado de São Paulo",
+      "data_ref": "",
+      "origem": "importado",
+      "feicoes": 765,
+      "cores_origem": "estilo",
+      "estilo_arquivo": "Aquíferos.xml",
+      "obs": "Classe = INT_VAZÃO (intervalo de vazão específica, em m³/h/m), o agrupamento do Aquíferos.xml: 10/10 valores têm cor. ATENÇÃO: o nome do campo tem acento (Ã) — se a importação reclamar que não achou o campo, é a codificação do .dbf. CONFIRMAR a citação oficial."
     },
     {
-      "id": "hidrografia",
-      "nome": "Hidrografia",
+      "id": "pedologia",
+      "nome": "Pedologia",
       "meio": "fisico",
-      "tipo": "linha",
-      "arquivo": "data/hidrografia.geojson",
-      "campo_classe": "tipo",
+      "tipo": "poligono",
+      "arquivo": "data/pedologia.geojson",
+      "campo_classe": "Subordem",
+      "campos": [
+        {
+          "nome": "Subordem",
+          "tipo": "C",
+          "rotulo": "Subordem"
+        },
+        {
+          "nome": "Unidade_de",
+          "tipo": "C",
+          "rotulo": "Unidade_de"
+        },
+        {
+          "nome": "Associaç",
+          "tipo": "C",
+          "rotulo": "Associaç"
+        },
+        {
+          "nome": "Ordem",
+          "tipo": "C",
+          "rotulo": "Ordem"
+        },
+        {
+          "nome": "DESCRIÇÃ",
+          "tipo": "C",
+          "rotulo": "DESCRIÇÃ"
+        },
+        {
+          "nome": "trofismo",
+          "tipo": "C",
+          "rotulo": "trofismo"
+        },
+        {
+          "nome": "profundida",
+          "tipo": "C",
+          "rotulo": "profundida"
+        },
+        {
+          "nome": "pedreg_roc",
+          "tipo": "C",
+          "rotulo": "pedreg_roc"
+        },
+        {
+          "nome": "textura_1",
+          "tipo": "C",
+          "rotulo": "textura_1"
+        },
+        {
+          "nome": "textura_2",
+          "tipo": "C",
+          "rotulo": "textura_2"
+        },
+        {
+          "nome": "relevo",
+          "tipo": "C",
+          "rotulo": "relevo"
+        },
+        {
+          "nome": "ferro",
+          "tipo": "C",
+          "rotulo": "ferro"
+        },
+        {
+          "nome": "hidromorfi",
+          "tipo": "C",
+          "rotulo": "hidromorfi"
+        },
+        {
+          "nome": "Relação",
+          "tipo": "C",
+          "rotulo": "Relação"
+        },
+        {
+          "nome": "Esp_areia",
+          "tipo": "C",
+          "rotulo": "Esp_areia"
+        },
+        {
+          "nome": "area_ha",
+          "tipo": "F",
+          "rotulo": "area_ha"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "Afloramento Rochoso",
+          "feicoes": 139
+        },
+        {
+          "classe": "Argissolos Amarelos",
+          "feicoes": 3
+        },
+        {
+          "classe": "Argissolos Vermelho-Amarelos",
+          "feicoes": 2152
+        },
+        {
+          "classe": "Argissolos Vermelhos",
+          "feicoes": 153
+        },
+        {
+          "classe": "Cambissolos Háplicos",
+          "feicoes": 1454
+        },
+        {
+          "classe": "Cambissolos Húmicos",
+          "feicoes": 74
+        },
+        {
+          "classe": "Chernossolos Argilúvicos",
+          "feicoes": 9
+        },
+        {
+          "classe": "Espodossolos Humilúvicos",
+          "feicoes": 130
+        },
+        {
+          "classe": "Gleissolos Háplicos",
+          "feicoes": 2688
+        },
+        {
+          "classe": "Gleissolos Melânicos",
+          "feicoes": 155
+        },
+        {
+          "classe": "Gleissolos Sálicos",
+          "feicoes": 321
+        },
+        {
+          "classe": "Gleissolos Tiomórficos",
+          "feicoes": 9
+        },
+        {
+          "classe": "Latossolos Amarelos",
+          "feicoes": 143
+        },
+        {
+          "classe": "Latossolos Brunos",
+          "feicoes": 14
+        },
+        {
+          "classe": "Latossolos Vermelho-Amarelos",
+          "feicoes": 1079
+        },
+        {
+          "classe": "Latossolos Vermelhos",
+          "feicoes": 2591
+        },
+        {
+          "classe": "Luvissolos Háplicos",
+          "feicoes": 8
+        },
+        {
+          "classe": "Neossolos Flúvicos",
+          "feicoes": 60
+        },
+        {
+          "classe": "Neossolos Litólicos",
+          "feicoes": 1610
+        },
+        {
+          "classe": "Neossolos Quartzarênicos",
+          "feicoes": 198
+        },
+        {
+          "classe": "Nitossolos Vermelhos",
+          "feicoes": 278
+        },
+        {
+          "classe": "Organossolos Háplicos",
+          "feicoes": 191
+        },
+        {
+          "classe": "Organossolos Tiomórficos",
+          "feicoes": 92
+        },
+        {
+          "classe": "Planossolos Háplicos",
+          "feicoes": 29
+        },
+        {
+          "classe": "Plintossolos Pétricos",
+          "feicoes": 5
+        },
+        {
+          "classe": "Rios, represas e lagoas",
+          "feicoes": 1012
+        },
+        {
+          "classe": "Área Urbana",
+          "feicoes": 2429
+        }
+      ],
       "estilo": {
-        "cor": "#2f5b8a",
-        "opacidade": 0
+        "cor": "#8a6d3b",
+        "opacidade": 1,
+        "cores": {
+          "Afloramento Rochoso": "#000000",
+          "Argissolos Amarelos": "#fdf1f0",
+          "Argissolos Vermelho-Amarelos": "#ffc8fa",
+          "Argissolos Vermelhos": "#f07f7f",
+          "Cambissolos Háplicos": "#d7c5a5",
+          "Cambissolos Húmicos": "#aa8669",
+          "Chernossolos Argilúvicos": "#9c4a82",
+          "Espodossolos Humilúvicos": "#cebedc",
+          "Gleissolos Háplicos": "#b6d8ee",
+          "Gleissolos Melânicos": "#78fcfa",
+          "Gleissolos Sálicos": "#5eb4e6",
+          "Gleissolos Tiomórficos": "#6ca3cd",
+          "Latossolos Amarelos": "#fecc5c",
+          "Latossolos Brunos": "#a87000",
+          "Latossolos Vermelho-Amarelos": "#ffebaf",
+          "Latossolos Vermelhos": "#f4b980",
+          "Luvissolos Háplicos": "#d4b300",
+          "Neossolos Flúvicos": "#eeebdc",
+          "Neossolos Litólicos": "#969595",
+          "Neossolos Quartzarênicos": "#fffe73",
+          "Nitossolos Vermelhos": "#a83800",
+          "Organossolos Háplicos": "#a7b3d5",
+          "Organossolos Tiomórficos": "#423096",
+          "Planossolos Háplicos": "#b5d6ae",
+          "Plintossolos Pétricos": "#d6bac9",
+          "Rios, represas e lagoas": "#0070ff",
+          "Área Urbana": "#9c9c9c"
+        },
+        "contornos": {
+          "Afloramento Rochoso": "#9c9c9c",
+          "Argissolos Amarelos": "#9c9c9c",
+          "Argissolos Vermelho-Amarelos": "#9c9c9c",
+          "Argissolos Vermelhos": "#9c9c9c",
+          "Cambissolos Háplicos": "#9c9c9c",
+          "Cambissolos Húmicos": "#9c9c9c",
+          "Chernossolos Argilúvicos": "#9c9c9c",
+          "Espodossolos Humilúvicos": "#9c9c9c",
+          "Gleissolos Háplicos": "#9c9c9c",
+          "Gleissolos Melânicos": "#9c9c9c",
+          "Gleissolos Sálicos": "#9c9c9c",
+          "Gleissolos Tiomórficos": "#9c9c9c",
+          "Latossolos Amarelos": "#9c9c9c",
+          "Latossolos Brunos": "#9c9c9c",
+          "Latossolos Vermelho-Amarelos": "#9c9c9c",
+          "Latossolos Vermelhos": "#9c9c9c",
+          "Luvissolos Háplicos": "#9c9c9c",
+          "Neossolos Flúvicos": "#9c9c9c",
+          "Neossolos Litólicos": "#9c9c9c",
+          "Neossolos Quartzarênicos": "#9c9c9c",
+          "Nitossolos Vermelhos": "#9c9c9c",
+          "Oceano Atlântico": "#9c9c9c",
+          "Organossolos Háplicos": "#9c9c9c",
+          "Organossolos Tiomórficos": "#9c9c9c",
+          "Planossolos Háplicos": "#9c9c9c",
+          "Plintossolos Pétricos": "#9c9c9c",
+          "Rios, represas e lagoas": "#9c9c9c",
+          "Área Urbana": "#828282"
+        },
+        "contorno_cor": "#9c9c9c"
       },
-      "fonte": "Base hidrográfica do projeto",
-      "data_ref": "2024",
-      "obs": "Simplificada para 60 m: confira a escala antes de usar em 1:5.000."
+      "fonte": "Pedologia do Estado de São Paulo",
+      "data_ref": "",
+      "origem": "importado",
+      "feicoes": 17026,
+      "cores_origem": "estilo",
+      "estilo_arquivo": "Pedologia.xml",
+      "obs": "Classe = Subordem (subordem de solo: Argissolos Vermelhos, Cambissolos Háplicos...), o agrupamento do Pedologia.xml: 27/27 valores têm cor. O campo area_ha da origem serve para conferir a área calculada pelo portal. CONFIRMAR a citação oficial."
     },
     {
-      "id": "vegetacao",
-      "nome": "Vegetação",
+      "id": "biomas",
+      "nome": "Biomas",
       "meio": "biotico",
       "tipo": "poligono",
-      "arquivo": "data/vegetacao.geojson",
-      "campo_classe": "fitofisionomia",
+      "arquivo": "data/biomas.geojson",
+      "campo_classe": "Bioma",
+      "campos": [
+        {
+          "nome": "Bioma",
+          "tipo": "C",
+          "rotulo": "Bioma"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "Cerrado",
+          "feicoes": 1
+        },
+        {
+          "classe": "Mata Atântica",
+          "feicoes": 1
+        }
+      ],
       "estilo": {
         "cor": "#2f6b3a",
-        "opacidade": 0.35
+        "opacidade": 1,
+        "cores": {
+          "Cerrado": "#ffd37f",
+          "Mata Atântica": "#00734c"
+        }
       },
-      "fonte": "EXEMPLO SINTÉTICO",
-      "data_ref": "exemplo",
-      "obs": ""
+      "fonte": "Biomas do Estado de São Paulo (Cerrado e Mata Atlântica)",
+      "data_ref": "",
+      "origem": "importado",
+      "feicoes": 2,
+      "cores_origem": "estilo",
+      "estilo_arquivo": "Biomas.xml",
+      "obs": "Classe = Bioma (2 valores: Cerrado e Mata Atlântica), o agrupamento do Biomas.xml: 2/2 valores têm cor. São só 2 feições, mas com o contato entre biomas muito detalhado (3,9 MB de .shp). CONFIRMAR a citação oficial."
     },
     {
-      "id": "uso-do-solo",
-      "nome": "Uso e ocupação do solo",
-      "meio": "biotico",
-      "tipo": "poligono",
-      "arquivo": "data/uso-do-solo.geojson",
-      "campo_classe": "classe",
-      "estilo": {
-        "cor": "#6b8a2f",
-        "opacidade": 0.3
-      },
-      "fonte": "EXEMPLO SINTÉTICO",
-      "data_ref": "exemplo",
-      "obs": "Substituir por classificação oficial ou obtida por sensoriamento remoto."
-    },
-    {
-      "id": "limite-municipal",
-      "nome": "Limite municipal",
+      "id": "unidades-conservacao",
+      "nome": "Unidades de Conservação",
       "meio": "socioeconomico",
       "tipo": "poligono",
-      "arquivo": "data/limite-municipal.geojson",
-      "campo_classe": "nome",
+      "arquivo": "data/unidades-conservacao.geojson",
+      "campo_classe": "grupo",
+      "campos": [
+        {
+          "nome": "grupo",
+          "tipo": "C",
+          "rotulo": "grupo"
+        },
+        {
+          "nome": "gml_id",
+          "tipo": "C",
+          "rotulo": "gml_id"
+        },
+        {
+          "nome": "uc_id",
+          "tipo": "C",
+          "rotulo": "uc_id"
+        },
+        {
+          "nome": "cd_cnuc",
+          "tipo": "C",
+          "rotulo": "cd_cnuc"
+        },
+        {
+          "nome": "wdpa_pid",
+          "tipo": "C",
+          "rotulo": "wdpa_pid"
+        },
+        {
+          "nome": "nome_uc",
+          "tipo": "C",
+          "rotulo": "nome_uc"
+        },
+        {
+          "nome": "cria_ano",
+          "tipo": "C",
+          "rotulo": "cria_ano"
+        },
+        {
+          "nome": "cria_ato",
+          "tipo": "C",
+          "rotulo": "cria_ato"
+        },
+        {
+          "nome": "outro_ato",
+          "tipo": "C",
+          "rotulo": "outro_ato"
+        },
+        {
+          "nome": "pl_manejo",
+          "tipo": "C",
+          "rotulo": "pl_manejo"
+        },
+        {
+          "nome": "co_gestor",
+          "tipo": "C",
+          "rotulo": "co_gestor"
+        },
+        {
+          "nome": "quali_pol",
+          "tipo": "C",
+          "rotulo": "quali_pol"
+        },
+        {
+          "nome": "ppgr",
+          "tipo": "C",
+          "rotulo": "ppgr"
+        },
+        {
+          "nome": "ha_total",
+          "tipo": "C",
+          "rotulo": "ha_total"
+        },
+        {
+          "nome": "ha_ato",
+          "tipo": "C",
+          "rotulo": "ha_ato"
+        },
+        {
+          "nome": "esfera",
+          "tipo": "C",
+          "rotulo": "esfera"
+        },
+        {
+          "nome": "uf",
+          "tipo": "C",
+          "rotulo": "uf"
+        },
+        {
+          "nome": "municipio",
+          "tipo": "C",
+          "rotulo": "municipio"
+        },
+        {
+          "nome": "org_gestor",
+          "tipo": "C",
+          "rotulo": "org_gestor"
+        },
+        {
+          "nome": "categoria",
+          "tipo": "C",
+          "rotulo": "categoria"
+        },
+        {
+          "nome": "cat_iucn",
+          "tipo": "C",
+          "rotulo": "cat_iucn"
+        },
+        {
+          "nome": "amazonia",
+          "tipo": "C",
+          "rotulo": "amazonia"
+        },
+        {
+          "nome": "caatinga",
+          "tipo": "C",
+          "rotulo": "caatinga"
+        },
+        {
+          "nome": "cerrado",
+          "tipo": "C",
+          "rotulo": "cerrado"
+        },
+        {
+          "nome": "matlantica",
+          "tipo": "C",
+          "rotulo": "matlantica"
+        },
+        {
+          "nome": "pampa",
+          "tipo": "C",
+          "rotulo": "pampa"
+        },
+        {
+          "nome": "pantanal",
+          "tipo": "C",
+          "rotulo": "pantanal"
+        },
+        {
+          "nome": "marinho",
+          "tipo": "C",
+          "rotulo": "marinho"
+        },
+        {
+          "nome": "situacao",
+          "tipo": "C",
+          "rotulo": "situacao"
+        },
+        {
+          "nome": "limite",
+          "tipo": "C",
+          "rotulo": "limite"
+        },
+        {
+          "nome": "area_ha",
+          "tipo": "F",
+          "rotulo": "area_ha"
+        },
+        {
+          "nome": "NomeAbrev",
+          "tipo": "C",
+          "rotulo": "NomeAbrev"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "Proteção Integral",
+          "feicoes": 873
+        },
+        {
+          "classe": "Uso Sustentável",
+          "feicoes": 1869
+        }
+      ],
       "estilo": {
-        "cor": "#1f2d36",
-        "opacidade": 0
+        "cor": "#2f5b8a",
+        "opacidade": 1,
+        "cores": {
+          "Proteção Integral": "#ff7f7f",
+          "Uso Sustentável": "#38a800"
+        },
+        "contornos": {
+          "Proteção Integral": "#ff0000",
+          "Uso Sustentável": "#267300"
+        },
+        "contorno_cor": "#ff0000"
       },
-      "fonte": "IBGE — malha municipal",
-      "data_ref": "2022",
-      "obs": ""
-    },
-    {
-      "id": "zoneamento",
-      "nome": "Zoneamento municipal",
-      "meio": "socioeconomico",
-      "tipo": "poligono",
-      "arquivo": "data/zoneamento.geojson",
-      "campo_classe": "sigla",
-      "estilo": {
-        "cor": "#8a5fd9",
-        "opacidade": 0.28
-      },
-      "fonte": "Zoneamento fornecido ao projeto",
-      "data_ref": "2024",
-      "obs": ""
+      "fonte": "Unidades de Conservação do Estado de São Paulo",
+      "data_ref": "",
+      "origem": "importado",
+      "feicoes": 2742,
+      "cores_origem": "estilo",
+      "estilo_arquivo": "Unidades de Conservação.xml",
+      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial."
     }
   ]
 }
