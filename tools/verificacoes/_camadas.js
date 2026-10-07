@@ -24,7 +24,7 @@ function carregar(raiz, camada) {
   const indice = JSON.parse(fs.readFileSync(path.join(raiz, camada.tiles), 'utf8'));
   const feicoes = [];
   for (const t of indice.tiles) {
-    const fc = tiles.decodificar(new Uint8Array(fs.readFileSync(path.join(raiz, t.arquivo))));
+    const fc = tiles.decodificar(lerTile(path.join(raiz, t.arquivo)));
     for (const f of fc.features) feicoes.push(f);
   }
   return { type: 'FeatureCollection', metadados: indice, features: feicoes };
@@ -35,4 +35,11 @@ function emTiles(camada) {
   return !!camada.tiles;
 }
 
-module.exports = { arquivos: arquivos, carregar: carregar, emTiles: emTiles };
+/** Le um tile publicado: aceita .bin cru ou .bin.gz (gzip, como ele e servido). */
+function lerTile(caminho) {
+  const bytes = fs.readFileSync(caminho);
+  if (/\.gz$/i.test(caminho)) return new Uint8Array(require('zlib').gunzipSync(bytes));
+  return new Uint8Array(bytes);
+}
+
+module.exports = { arquivos: arquivos, carregar: carregar, emTiles: emTiles, lerTile: lerTile };

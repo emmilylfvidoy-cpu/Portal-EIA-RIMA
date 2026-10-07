@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const raiz = path.resolve(__dirname, '..');
+const camadas = require(path.join(__dirname, 'verificacoes', '_camadas.js'));
 const shapelib = require(path.join(raiz, 'js', 'shapelib.js'));
 const tiles = require(path.join(raiz, 'js', 'tiles.js'));
 
@@ -22,7 +23,7 @@ function bboxDe(g) { const b = tiles.bboxDe([{ geometry: g }]); return b[0] === 
 // ---- tiles: carrega tudo e acha a janela mais densa de ~1 km
 const doTile = [];
 for (const t of indice.tiles) {
-  const fc = tiles.decodificar(new Uint8Array(fs.readFileSync(path.join(raiz, t.arquivo))));
+  const fc = tiles.decodificar(camadas.lerTile(path.join(raiz, t.arquivo)));
   for (const f of fc.features) doTile.push({ geometry: f.geometry, bbox: bboxDe(f.geometry) });
 }
 console.log('  ' + id + ': ' + doTile.length.toLocaleString('pt-BR') + ' feições nos tiles');

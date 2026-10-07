@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.3';
+  const VERSAO = 'v3.4';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -1392,6 +1392,26 @@
     return [bb.getWest() - m, bb.getSouth() - m, bb.getEast() + m, bb.getNorth() + m];
   }
 
+  /**
+   * Descomprime o tile quando ele vem em gzip.
+   *
+   * A checagem e pelo MAGIC do gzip (1f 8b), nao pela extensao: se o servidor entregar o
+   * conteudo ja descomprimido (por cabecalho de codificacao), os bytes chegam crus e
+   * descomprimir de novo daria erro. Olhar os dois primeiros bytes resolve os dois casos,
+   * sem tentativa e erro.
+   */
+  async function descomprimirSePreciso(buffer) {
+    const u8 = new Uint8Array(buffer);
+    if (u8.length > 2 && u8[0] === 0x1f && u8[1] === 0x8b) {
+      if (typeof DecompressionStream === 'undefined') {
+        throw new Error('este navegador nao descomprime os dados da camada');
+      }
+      const fluxo = new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip'));
+      return new Uint8Array(await new Response(fluxo).arrayBuffer());
+    }
+    return u8;
+  }
+
   function tileCruza(tile, caixa) {
     const b = tile.bbox;
     return !(b[2] < caixa[0] || b[0] > caixa[2] || b[3] < caixa[1] || b[1] > caixa[3]);
@@ -1405,13 +1425,18 @@
    * vale o dado exato, que é o que se mede e se confere.
    */
   function nivelParaZoom(camada) {
-    const limite = camada.zoom_exato || 10;
-    if (camada.visao && estado.mapa.getZoom() < limite) return 'visao';
+    const z = estado.mapa.getZoom();
+    /* As faixas vêm do catálogo (niveis: [{nivel, indice, zoom_max}]). De longe vale o desenho
+     * generalizado, de perto vale o dado exato — cada nível é carregado só na sua faixa, e é
+     * isso que mantém o download pequeno em qualquer zoom. */
+    for (const n of (camada.niveis || [])) if (z <= n.zoom_max) return n.nivel;
     return 'exato';
   }
 
   function urlDoNivel(camada, nivel) {
-    return nivel === 'visao' ? camada.visao : camada.tiles;
+    if (nivel === 'exato') return camada.tiles;
+    const n = (camada.niveis || []).find((x) => x.nivel === nivel);
+    return n ? n.indice : camada.tiles;
   }
 
   /** Índice de tiles do nível pedido, buscado uma vez e guardado. */
@@ -1451,7 +1476,8 @@
       }
       const resposta = await fetch(x.arquivo, { cache: 'no-cache' });
       if (!resposta.ok) throw new Error('HTTP ' + resposta.status + ' em ' + x.arquivo);
-      const fc = EIA.tiles.decodificar(new Uint8Array(await resposta.arrayBuffer()));
+      const bytes = await descomprimirSePreciso(await resposta.arrayBuffer());
+      const fc = EIA.tiles.decodificar(bytes);
       const alvo = estado.camadas.find((c) => c.id === camada.id);
       if (!alvo) return feicoes;              // desligaram a camada no meio do carregamento
       for (const f of fc.features) {
@@ -1480,7 +1506,7 @@
       if (el && total) el.textContent = total.geojson.features.length.toLocaleString('pt-BR')
         + ' feições' + (camada.classes && camada.classes.length > 1 ? ' · ' + camada.classes.length + ' classes' : '')
         + ' · ' + estado.tilesCarregados[camada.id].size + '/' + indice.tiles.length + ' partes'
-        + (nivel === 'visao' ? ' · visão de longe (aproxime para o dado exato)' : '');
+        + (nivel === 'exato' ? '' : ' · ' + nivel + ' (aproxime para o dado exato)');
     }
   }
 

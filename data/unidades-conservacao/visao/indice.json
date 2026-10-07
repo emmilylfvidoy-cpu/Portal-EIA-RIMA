@@ -6,12 +6,14 @@
  "nivel": "visao",
  "geometria": "generalizada para o desenho de longe",
  "escala": 4000000,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.34 MB crus -> 0.50 MB na rede (63% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.50 MB crus -> 0.50 MB na rede (0% menor).",
  "total": {
   "tiles": 2,
   "feicoes": 2134,
   "pontos": 59131,
-  "bytes": 1406707
+  "bytes": 522446,
+  "bytes_bruto": 522446,
+  "comprimido": true
  },
  "campos": [
   "gml_id",
@@ -49,7 +51,7 @@
  ],
  "tiles": [
   {
-   "arquivo": "data/unidades-conservacao/visao/t000.bin",
+   "arquivo": "data/unidades-conservacao/visao/t000.bin.gz",
    "bbox": [
     -73.99121,
     -32.93031,
@@ -58,10 +60,12 @@
    ],
    "feicoes": 1441,
    "pontos": 43989,
-   "bytes": 971665
+   "bytes": 373165,
+   "bytes_bruto": 373165,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/visao/t001.bin",
+   "arquivo": "data/unidades-conservacao/visao/t001.bin.gz",
    "bbox": [
     -51.43386,
     -23.86982,
@@ -70,7 +74,9 @@
    ],
    "feicoes": 693,
    "pontos": 15142,
-   "bytes": 435042
+   "bytes": 149281,
+   "bytes_bruto": 149281,
+   "comprimido": true
   }
  ]
 }

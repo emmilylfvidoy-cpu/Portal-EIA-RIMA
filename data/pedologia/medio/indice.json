@@ -1,0 +1,150 @@
+{
+ "camada": "pedologia",
+ "nome": "Pedologia",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "medio",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 1000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 6.89 MB crus -> 2.40 MB na rede (65% menor).",
+ "total": {
+  "tiles": 8,
+  "feicoes": 16527,
+  "pontos": 497994,
+  "bytes": 2513383,
+  "bytes_bruto": 7228853,
+  "comprimido": true
+ },
+ "campos": [
+  "Unidade_de",
+  "Associaç",
+  "Ordem",
+  "Subordem",
+  "DESCRIÇÃ",
+  "trofismo",
+  "profundida",
+  "pedreg_roc",
+  "textura_1",
+  "textura_2",
+  "relevo",
+  "ferro",
+  "hidromorfi",
+  "Relação",
+  "Esp_areia",
+  "area_ha"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/pedologia/medio/t002.bin.gz",
+   "bbox": [
+    -51.87542,
+    -23.21014,
+    -47.7688,
+    -19.758
+   ],
+   "feicoes": 2058,
+   "pontos": 99682,
+   "bytes": 466577,
+   "bytes_bruto": 1061100,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/pedologia/medio/t001.bin.gz",
+   "bbox": [
+    -49.78015,
+    -25.32118,
+    -47.34378,
+    -22.28843
+   ],
+   "feicoes": 2105,
+   "pontos": 71970,
+   "bytes": 357216,
+   "bytes_bruto": 1022495,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/pedologia/medio/t000.bin.gz",
+   "bbox": [
+    -53.20419,
+    -25.30609,
+    -47.89701,
+    -19.77185
+   ],
+   "feicoes": 2176,
+   "pontos": 68490,
+   "bytes": 346987,
+   "bytes_bruto": 1011766,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/pedologia/medio/t003.bin.gz",
+   "bbox": [
+    -49.70955,
+    -25.2085,
+    -47.51416,
+    -19.91652
+   ],
+   "feicoes": 2273,
+   "pontos": 65931,
+   "bytes": 337176,
+   "bytes_bruto": 984857,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/pedologia/medio/t006.bin.gz",
+   "bbox": [
+    -48.18708,
+    -23.82837,
+    -44.65163,
+    -20.01821
+   ],
+   "feicoes": 2336,
+   "pontos": 57404,
+   "bytes": 303245,
+   "bytes_bruto": 980059,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/pedologia/medio/t004.bin.gz",
+   "bbox": [
+    -48.18793,
+    -24.77591,
+    -46.37873,
+    -22.33301
+   ],
+   "feicoes": 2461,
+   "pontos": 59816,
+   "bytes": 313206,
+   "bytes_bruto": 957391,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/pedologia/medio/t005.bin.gz",
+   "bbox": [
+    -47.32835,
+    -24.33051,
+    -45.0658,
+    -22.28698
+   ],
+   "feicoes": 2562,
+   "pontos": 59417,
+   "bytes": 309385,
+   "bytes_bruto": 926738,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/pedologia/medio/t007.bin.gz",
+   "bbox": [
+    -47.87402,
+    -23.37078,
+    -44.16346,
+    -19.96705
+   ],
+   "feicoes": 556,
+   "pontos": 15284,
+   "bytes": 79591,
+   "bytes_bruto": 284447,
+   "comprimido": true
+  }
+ ]
+}

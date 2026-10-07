@@ -6,12 +6,14 @@
  "nivel": "exato",
  "geometria": "exata",
  "escala": null,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 34.08 MB crus -> 23.30 MB na rede (32% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 23.30 MB crus -> 23.30 MB na rede (0% menor).",
  "total": {
   "tiles": 227,
   "feicoes": 17030,
   "pontos": 10833016,
-  "bytes": 35740065
+  "bytes": 24432848,
+  "bytes_bruto": 24432848,
+  "comprimido": true
  },
  "campos": [
   "Unidade_de",
@@ -33,7 +35,7 @@
  ],
  "tiles": [
   {
-   "arquivo": "data/pedologia/exato/t218.bin",
+   "arquivo": "data/pedologia/exato/t218.bin.gz",
    "bbox": [
     -45.660541,
     -23.622598,
@@ -42,10 +44,12 @@
    ],
    "feicoes": 5,
    "pontos": 340477,
-   "bytes": 720904
+   "bytes": 605679,
+   "bytes_bruto": 605679,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t138.bin",
+   "arquivo": "data/pedologia/exato/t138.bin.gz",
    "bbox": [
     -46.39831,
     -23.498004,
@@ -54,10 +58,12 @@
    ],
    "feicoes": 8,
    "pontos": 230955,
-   "bytes": 493492
+   "bytes": 355163,
+   "bytes_bruto": 355163,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t093.bin",
+   "arquivo": "data/pedologia/exato/t093.bin.gz",
    "bbox": [
     -46.84956,
     -24.030535,
@@ -66,10 +72,12 @@
    ],
    "feicoes": 9,
    "pontos": 173671,
-   "bytes": 376674
+   "bytes": 302851,
+   "bytes_bruto": 302851,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t021.bin",
+   "arquivo": "data/pedologia/exato/t021.bin.gz",
    "bbox": [
     -48.600777,
     -25.118647,
@@ -78,10 +86,12 @@
    ],
    "feicoes": 3,
    "pontos": 129659,
-   "bytes": 348552
+   "bytes": 206699,
+   "bytes_bruto": 206699,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t154.bin",
+   "arquivo": "data/pedologia/exato/t154.bin.gz",
    "bbox": [
     -51.023013,
     -22.443409,
@@ -90,10 +100,12 @@
    ],
    "feicoes": 1,
    "pontos": 92779,
-   "bytes": 346956
+   "bytes": 295414,
+   "bytes_bruto": 295414,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t175.bin",
+   "arquivo": "data/pedologia/exato/t175.bin.gz",
    "bbox": [
     -50.933935,
     -21.847261,
@@ -102,10 +114,12 @@
    ],
    "feicoes": 4,
    "pontos": 85690,
-   "bytes": 334379
+   "bytes": 301572,
+   "bytes_bruto": 301572,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t219.bin",
+   "arquivo": "data/pedologia/exato/t219.bin.gz",
    "bbox": [
     -45.560627,
     -23.599008,
@@ -114,10 +128,12 @@
    ],
    "feicoes": 5,
    "pontos": 121689,
-   "bytes": 259415
+   "bytes": 219332,
+   "bytes_bruto": 219332,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t144.bin",
+   "arquivo": "data/pedologia/exato/t144.bin.gz",
    "bbox": [
     -52.972501,
     -22.485518,
@@ -126,10 +142,12 @@
    ],
    "feicoes": 65,
    "pontos": 52654,
-   "bytes": 221700
+   "bytes": 180767,
+   "bytes_bruto": 180767,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t167.bin",
+   "arquivo": "data/pedologia/exato/t167.bin.gz",
    "bbox": [
     -49.586078,
     -22.480377,
@@ -138,10 +156,12 @@
    ],
    "feicoes": 119,
    "pontos": 46442,
-   "bytes": 212390
+   "bytes": 160155,
+   "bytes_bruto": 160155,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t043.bin",
+   "arquivo": "data/pedologia/exato/t043.bin.gz",
    "bbox": [
     -48.656453,
     -24.112782,
@@ -150,10 +170,12 @@
    ],
    "feicoes": 106,
    "pontos": 45834,
-   "bytes": 211674
+   "bytes": 162467,
+   "bytes_bruto": 162467,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t163.bin",
+   "arquivo": "data/pedologia/exato/t163.bin.gz",
    "bbox": [
     -49.624992,
     -23.132967,
@@ -162,10 +184,12 @@
    ],
    "feicoes": 125,
    "pontos": 44172,
-   "bytes": 210143
+   "bytes": 157725,
+   "bytes_bruto": 157725,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t152.bin",
+   "arquivo": "data/pedologia/exato/t152.bin.gz",
    "bbox": [
     -51.083342,
     -22.540442,
@@ -174,10 +198,12 @@
    ],
    "feicoes": 120,
    "pontos": 45281,
-   "bytes": 209229
+   "bytes": 153519,
+   "bytes_bruto": 153519,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t164.bin",
+   "arquivo": "data/pedologia/exato/t164.bin.gz",
    "bbox": [
     -50.075724,
     -22.626792,
@@ -186,10 +212,12 @@
    ],
    "feicoes": 124,
    "pontos": 45133,
-   "bytes": 208955
+   "bytes": 155761,
+   "bytes_bruto": 155761,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t141.bin",
+   "arquivo": "data/pedologia/exato/t141.bin.gz",
    "bbox": [
     -52.871558,
     -23.002013,
@@ -198,10 +226,12 @@
    ],
    "feicoes": 46,
    "pontos": 54650,
-   "bytes": 207707
+   "bytes": 168149,
+   "bytes_bruto": 168149,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t173.bin",
+   "arquivo": "data/pedologia/exato/t173.bin.gz",
    "bbox": [
     -48.946307,
     -22.09686,
@@ -210,10 +240,12 @@
    ],
    "feicoes": 136,
    "pontos": 42859,
-   "bytes": 207695
+   "bytes": 149134,
+   "bytes_bruto": 149134,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t156.bin",
+   "arquivo": "data/pedologia/exato/t156.bin.gz",
    "bbox": [
     -51.715803,
     -21.77874,
@@ -222,10 +254,12 @@
    ],
    "feicoes": 115,
    "pontos": 45655,
-   "bytes": 207563
+   "bytes": 150715,
+   "bytes_bruto": 150715,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t198.bin",
+   "arquivo": "data/pedologia/exato/t198.bin.gz",
    "bbox": [
     -47.900151,
     -21.350239,
@@ -234,10 +268,12 @@
    ],
    "feicoes": 144,
    "pontos": 41666,
-   "bytes": 207518
+   "bytes": 148793,
+   "bytes_bruto": 148793,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t206.bin",
+   "arquivo": "data/pedologia/exato/t206.bin.gz",
    "bbox": [
     -46.147011,
     -23.243352,
@@ -246,10 +282,12 @@
    ],
    "feicoes": 11,
    "pontos": 96027,
-   "bytes": 206478
+   "bytes": 171764,
+   "bytes_bruto": 171764,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t140.bin",
+   "arquivo": "data/pedologia/exato/t140.bin.gz",
    "bbox": [
     -52.319556,
     -22.629088,
@@ -258,10 +296,12 @@
    ],
    "feicoes": 111,
    "pontos": 44724,
-   "bytes": 206260
+   "bytes": 155662,
+   "bytes_bruto": 155662,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t161.bin",
+   "arquivo": "data/pedologia/exato/t161.bin.gz",
    "bbox": [
     -50.024621,
     -22.563218,
@@ -270,10 +310,12 @@
    ],
    "feicoes": 120,
    "pontos": 43236,
-   "bytes": 206094
+   "bytes": 141686,
+   "bytes_bruto": 141686,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t170.bin",
+   "arquivo": "data/pedologia/exato/t170.bin.gz",
    "bbox": [
     -48.551922,
     -23.210675,
@@ -282,10 +324,12 @@
    ],
    "feicoes": 147,
    "pontos": 40262,
-   "bytes": 205272
+   "bytes": 148832,
+   "bytes_bruto": 148832,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t157.bin",
+   "arquivo": "data/pedologia/exato/t157.bin.gz",
    "bbox": [
     -51.533064,
     -21.482868,
@@ -294,10 +338,12 @@
    ],
    "feicoes": 155,
    "pontos": 42706,
-   "bytes": 204810
+   "bytes": 153791,
+   "bytes_bruto": 153791,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t223.bin",
+   "arquivo": "data/pedologia/exato/t223.bin.gz",
    "bbox": [
     -45.333128,
     -23.246815,
@@ -306,10 +352,12 @@
    ],
    "feicoes": 139,
    "pontos": 40433,
-   "bytes": 204285
+   "bytes": 140102,
+   "bytes_bruto": 140102,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t165.bin",
+   "arquivo": "data/pedologia/exato/t165.bin.gz",
    "bbox": [
     -49.961056,
     -22.175893,
@@ -318,10 +366,12 @@
    ],
    "feicoes": 134,
    "pontos": 42154,
-   "bytes": 203925
+   "bytes": 144586,
+   "bytes_bruto": 144586,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t041.bin",
+   "arquivo": "data/pedologia/exato/t041.bin.gz",
    "bbox": [
     -49.221755,
     -24.067993,
@@ -330,10 +380,12 @@
    ],
    "feicoes": 143,
    "pontos": 43863,
-   "bytes": 203719
+   "bytes": 155113,
+   "bytes_bruto": 155113,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t168.bin",
+   "arquivo": "data/pedologia/exato/t168.bin.gz",
    "bbox": [
     -49.213065,
     -23.122605,
@@ -342,10 +394,12 @@
    ],
    "feicoes": 164,
    "pontos": 39365,
-   "bytes": 203145
+   "bytes": 146910,
+   "bytes_bruto": 146910,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t160.bin",
+   "arquivo": "data/pedologia/exato/t160.bin.gz",
    "bbox": [
     -50.031124,
     -23.05623,
@@ -354,10 +408,12 @@
    ],
    "feicoes": 139,
    "pontos": 40399,
-   "bytes": 202904
+   "bytes": 141218,
+   "bytes_bruto": 141218,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t189.bin",
+   "arquivo": "data/pedologia/exato/t189.bin.gz",
    "bbox": [
     -47.647645,
     -22.119422,
@@ -366,10 +422,12 @@
    ],
    "feicoes": 162,
    "pontos": 39234,
-   "bytes": 202707
+   "bytes": 145195,
+   "bytes_bruto": 145195,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t177.bin",
+   "arquivo": "data/pedologia/exato/t177.bin.gz",
    "bbox": [
     -50.349823,
     -21.154569,
@@ -378,10 +436,12 @@
    ],
    "feicoes": 164,
    "pontos": 41433,
-   "bytes": 202633
+   "bytes": 146649,
+   "bytes_bruto": 146649,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t007.bin",
+   "arquivo": "data/pedologia/exato/t007.bin.gz",
    "bbox": [
     -49.912763,
     -24.21723,
@@ -390,10 +450,12 @@
    ],
    "feicoes": 136,
    "pontos": 39580,
-   "bytes": 202450
+   "bytes": 139832,
+   "bytes_bruto": 139832,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t149.bin",
+   "arquivo": "data/pedologia/exato/t149.bin.gz",
    "bbox": [
     -51.063045,
     -22.69403,
@@ -402,10 +464,12 @@
    ],
    "feicoes": 110,
    "pontos": 46469,
-   "bytes": 202174
+   "bytes": 147205,
+   "bytes_bruto": 147205,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t225.bin",
+   "arquivo": "data/pedologia/exato/t225.bin.gz",
    "bbox": [
     -44.52036,
     -22.850146,
@@ -414,10 +478,12 @@
    ],
    "feicoes": 133,
    "pontos": 39421,
-   "bytes": 201245
+   "bytes": 129441,
+   "bytes_bruto": 129441,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t008.bin",
+   "arquivo": "data/pedologia/exato/t008.bin.gz",
    "bbox": [
     -49.618223,
     -24.101893,
@@ -426,10 +492,12 @@
    ],
    "feicoes": 191,
    "pontos": 38428,
-   "bytes": 199991
+   "bytes": 141304,
+   "bytes_bruto": 141304,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t172.bin",
+   "arquivo": "data/pedologia/exato/t172.bin.gz",
    "bbox": [
     -49.150763,
     -22.33567,
@@ -438,10 +506,12 @@
    ],
    "feicoes": 186,
    "pontos": 36484,
-   "bytes": 199495
+   "bytes": 131202,
+   "bytes_bruto": 131202,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t159.bin",
+   "arquivo": "data/pedologia/exato/t159.bin.gz",
    "bbox": [
     -50.910806,
     -23.127079,
@@ -450,10 +520,12 @@
    ],
    "feicoes": 176,
    "pontos": 39067,
-   "bytes": 198982
+   "bytes": 137335,
+   "bytes_bruto": 137335,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t153.bin",
+   "arquivo": "data/pedologia/exato/t153.bin.gz",
    "bbox": [
     -51.875415,
     -22.255185,
@@ -462,10 +534,12 @@
    ],
    "feicoes": 131,
    "pontos": 43293,
-   "bytes": 198978
+   "bytes": 152062,
+   "bytes_bruto": 152062,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t171.bin",
+   "arquivo": "data/pedologia/exato/t171.bin.gz",
    "bbox": [
     -48.597258,
     -22.613522,
@@ -474,10 +548,12 @@
    ],
    "feicoes": 188,
    "pontos": 34118,
-   "bytes": 198464
+   "bytes": 129810,
+   "bytes_bruto": 129810,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t196.bin",
+   "arquivo": "data/pedologia/exato/t196.bin.gz",
    "bbox": [
     -47.083574,
     -22.08168,
@@ -486,10 +562,12 @@
    ],
    "feicoes": 156,
    "pontos": 37974,
-   "bytes": 197352
+   "bytes": 134859,
+   "bytes_bruto": 134859,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t148.bin",
+   "arquivo": "data/pedologia/exato/t148.bin.gz",
    "bbox": [
     -50.723731,
     -22.851526,
@@ -498,10 +576,12 @@
    ],
    "feicoes": 74,
    "pontos": 49868,
-   "bytes": 197113
+   "bytes": 141880,
+   "bytes_bruto": 141880,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t042.bin",
+   "arquivo": "data/pedologia/exato/t042.bin.gz",
    "bbox": [
     -49.121746,
     -24.067807,
@@ -510,10 +590,12 @@
    ],
    "feicoes": 194,
    "pontos": 37477,
-   "bytes": 195826
+   "bytes": 135457,
+   "bytes_bruto": 135457,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t010.bin",
+   "arquivo": "data/pedologia/exato/t010.bin.gz",
    "bbox": [
     -49.78015,
     -24.685024,
@@ -522,10 +604,12 @@
    ],
    "feicoes": 44,
    "pontos": 49542,
-   "bytes": 195487
+   "bytes": 148602,
+   "bytes_bruto": 148602,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t053.bin",
+   "arquivo": "data/pedologia/exato/t053.bin.gz",
    "bbox": [
     -47.96029,
     -24.403357,
@@ -534,10 +618,12 @@
    ],
    "feicoes": 6,
    "pontos": 69725,
-   "bytes": 195430
+   "bytes": 111116,
+   "bytes_bruto": 111116,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t071.bin",
+   "arquivo": "data/pedologia/exato/t071.bin.gz",
    "bbox": [
     -48.110235,
     -24.029834,
@@ -546,10 +632,12 @@
    ],
    "feicoes": 164,
    "pontos": 42947,
-   "bytes": 194678
+   "bytes": 148736,
+   "bytes_bruto": 148736,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t158.bin",
+   "arquivo": "data/pedologia/exato/t158.bin.gz",
    "bbox": [
     -51.084573,
     -21.196211,
@@ -558,10 +646,12 @@
    ],
    "feicoes": 221,
    "pontos": 35263,
-   "bytes": 194604
+   "bytes": 129101,
+   "bytes_bruto": 129101,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t145.bin",
+   "arquivo": "data/pedologia/exato/t145.bin.gz",
    "bbox": [
     -51.546512,
     -22.96028,
@@ -570,10 +660,12 @@
    ],
    "feicoes": 143,
    "pontos": 41599,
-   "bytes": 194580
+   "bytes": 137346,
+   "bytes_bruto": 137346,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t222.bin",
+   "arquivo": "data/pedologia/exato/t222.bin.gz",
    "bbox": [
     -46.208987,
     -23.426422,
@@ -582,10 +674,12 @@
    ],
    "feicoes": 216,
    "pontos": 33394,
-   "bytes": 194000
+   "bytes": 124442,
+   "bytes_bruto": 124442,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t146.bin",
+   "arquivo": "data/pedologia/exato/t146.bin.gz",
    "bbox": [
     -50.948799,
     -22.888913,
@@ -594,10 +688,12 @@
    ],
    "feicoes": 78,
    "pontos": 48865,
-   "bytes": 193312
+   "bytes": 139967,
+   "bytes_bruto": 139967,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t187.bin",
+   "arquivo": "data/pedologia/exato/t187.bin.gz",
    "bbox": [
     -48.141235,
     -22.123046,
@@ -606,10 +702,12 @@
    ],
    "feicoes": 212,
    "pontos": 32510,
-   "bytes": 192619
+   "bytes": 123445,
+   "bytes_bruto": 123445,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t182.bin",
+   "arquivo": "data/pedologia/exato/t182.bin.gz",
    "bbox": [
     -48.01342,
     -22.595563,
@@ -618,10 +716,12 @@
    ],
    "feicoes": 209,
    "pontos": 33738,
-   "bytes": 192489
+   "bytes": 128198,
+   "bytes_bruto": 128198,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t199.bin",
+   "arquivo": "data/pedologia/exato/t199.bin.gz",
    "bbox": [
     -47.758487,
     -24.226435,
@@ -630,10 +730,12 @@
    ],
    "feicoes": 78,
    "pontos": 47581,
-   "bytes": 192477
+   "bytes": 150825,
+   "bytes_bruto": 150825,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t143.bin",
+   "arquivo": "data/pedologia/exato/t143.bin.gz",
    "bbox": [
     -51.985285,
     -22.781235,
@@ -642,10 +744,12 @@
    ],
    "feicoes": 121,
    "pontos": 42917,
-   "bytes": 192186
+   "bytes": 142572,
+   "bytes_bruto": 142572,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t180.bin",
+   "arquivo": "data/pedologia/exato/t180.bin.gz",
    "bbox": [
     -48.737951,
     -23.042217,
@@ -654,10 +758,12 @@
    ],
    "feicoes": 217,
    "pontos": 32272,
-   "bytes": 191745
+   "bytes": 124469,
+   "bytes_bruto": 124469,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t150.bin",
+   "arquivo": "data/pedologia/exato/t150.bin.gz",
    "bbox": [
     -50.713878,
     -23.011701,
@@ -666,10 +772,12 @@
    ],
    "feicoes": 170,
    "pontos": 38420,
-   "bytes": 191461
+   "bytes": 130559,
+   "bytes_bruto": 130559,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t001.bin",
+   "arquivo": "data/pedologia/exato/t001.bin.gz",
    "bbox": [
     -48.460371,
     -25.306142,
@@ -678,10 +786,12 @@
    ],
    "feicoes": 94,
    "pontos": 47593,
-   "bytes": 190957
+   "bytes": 120803,
+   "bytes_bruto": 120803,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t179.bin",
+   "arquivo": "data/pedologia/exato/t179.bin.gz",
    "bbox": [
     -48.53296,
     -21.150801,
@@ -690,10 +800,12 @@
    ],
    "feicoes": 224,
    "pontos": 33437,
-   "bytes": 190215
+   "bytes": 125153,
+   "bytes_bruto": 125153,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t006.bin",
+   "arquivo": "data/pedologia/exato/t006.bin.gz",
    "bbox": [
     -49.369591,
     -24.539582,
@@ -702,10 +814,12 @@
    ],
    "feicoes": 79,
    "pontos": 49890,
-   "bytes": 189288
+   "bytes": 122874,
+   "bytes_bruto": 122874,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t176.bin",
+   "arquivo": "data/pedologia/exato/t176.bin.gz",
    "bbox": [
     -50.023574,
     -21.232788,
@@ -714,10 +828,12 @@
    ],
    "feicoes": 216,
    "pontos": 36681,
-   "bytes": 188820
+   "bytes": 134779,
+   "bytes_bruto": 134779,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t197.bin",
+   "arquivo": "data/pedologia/exato/t197.bin.gz",
    "bbox": [
     -48.187078,
     -21.240158,
@@ -726,10 +842,12 @@
    ],
    "feicoes": 215,
    "pontos": 31700,
-   "bytes": 187943
+   "bytes": 118896,
+   "bytes_bruto": 118896,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t142.bin",
+   "arquivo": "data/pedologia/exato/t142.bin.gz",
    "bbox": [
     -51.804343,
     -23.000828,
@@ -738,10 +856,12 @@
    ],
    "feicoes": 83,
    "pontos": 44904,
-   "bytes": 187230
+   "bytes": 146003,
+   "bytes_bruto": 146003,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t151.bin",
+   "arquivo": "data/pedologia/exato/t151.bin.gz",
    "bbox": [
     -50.631211,
     -22.804504,
@@ -750,10 +870,12 @@
    ],
    "feicoes": 118,
    "pontos": 38604,
-   "bytes": 186469
+   "bytes": 134990,
+   "bytes_bruto": 134990,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t188.bin",
+   "arquivo": "data/pedologia/exato/t188.bin.gz",
    "bbox": [
     -47.958232,
     -22.099089,
@@ -762,10 +884,12 @@
    ],
    "feicoes": 256,
    "pontos": 27171,
-   "bytes": 186393
+   "bytes": 105940,
+   "bytes_bruto": 105940,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t005.bin",
+   "arquivo": "data/pedologia/exato/t005.bin.gz",
    "bbox": [
     -49.404879,
     -24.493296,
@@ -774,10 +898,12 @@
    ],
    "feicoes": 105,
    "pontos": 44179,
-   "bytes": 185221
+   "bytes": 121421,
+   "bytes_bruto": 121421,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t004.bin",
+   "arquivo": "data/pedologia/exato/t004.bin.gz",
    "bbox": [
     -49.457527,
     -24.685525,
@@ -786,10 +912,12 @@
    ],
    "feicoes": 102,
    "pontos": 47865,
-   "bytes": 183885
+   "bytes": 118722,
+   "bytes_bruto": 118722,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t162.bin",
+   "arquivo": "data/pedologia/exato/t162.bin.gz",
    "bbox": [
     -49.712899,
     -22.57581,
@@ -798,10 +926,12 @@
    ],
    "feicoes": 115,
    "pontos": 37525,
-   "bytes": 182993
+   "bytes": 124080,
+   "bytes_bruto": 124080,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t190.bin",
+   "arquivo": "data/pedologia/exato/t190.bin.gz",
    "bbox": [
     -47.310156,
     -23.16011,
@@ -810,10 +940,12 @@
    ],
    "feicoes": 165,
    "pontos": 38598,
-   "bytes": 182568
+   "bytes": 128226,
+   "bytes_bruto": 128226,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t033.bin",
+   "arquivo": "data/pedologia/exato/t033.bin.gz",
    "bbox": [
     -48.147491,
     -24.666522,
@@ -822,10 +954,12 @@
    ],
    "feicoes": 27,
    "pontos": 57787,
-   "bytes": 182508
+   "bytes": 102867,
+   "bytes_bruto": 102867,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t035.bin",
+   "arquivo": "data/pedologia/exato/t035.bin.gz",
    "bbox": [
     -48.536757,
     -24.49941,
@@ -834,10 +968,12 @@
    ],
    "feicoes": 50,
    "pontos": 54318,
-   "bytes": 182189
+   "bytes": 103058,
+   "bytes_bruto": 103058,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t044.bin",
+   "arquivo": "data/pedologia/exato/t044.bin.gz",
    "bbox": [
     -48.573792,
     -25.208503,
@@ -846,10 +982,12 @@
    ],
    "feicoes": 179,
    "pontos": 32036,
-   "bytes": 182047
+   "bytes": 114934,
+   "bytes_bruto": 114934,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t183.bin",
+   "arquivo": "data/pedologia/exato/t183.bin.gz",
    "bbox": [
     -47.584256,
     -23.064947,
@@ -858,10 +996,12 @@
    ],
    "feicoes": 280,
    "pontos": 26362,
-   "bytes": 181383
+   "bytes": 104586,
+   "bytes_bruto": 104586,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t169.bin",
+   "arquivo": "data/pedologia/exato/t169.bin.gz",
    "bbox": [
     -48.96279,
     -22.598111,
@@ -870,10 +1010,12 @@
    ],
    "feicoes": 262,
    "pontos": 26902,
-   "bytes": 180589
+   "bytes": 106270,
+   "bytes_bruto": 106270,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t181.bin",
+   "arquivo": "data/pedologia/exato/t181.bin.gz",
    "bbox": [
     -48.049083,
     -23.057758,
@@ -882,10 +1024,12 @@
    ],
    "feicoes": 238,
    "pontos": 27961,
-   "bytes": 180528
+   "bytes": 109912,
+   "bytes_bruto": 109912,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t045.bin",
+   "arquivo": "data/pedologia/exato/t045.bin.gz",
    "bbox": [
     -48.01261,
     -25.133608,
@@ -894,10 +1038,12 @@
    ],
    "feicoes": 162,
    "pontos": 37331,
-   "bytes": 180102
+   "bytes": 107506,
+   "bytes_bruto": 107506,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t186.bin",
+   "arquivo": "data/pedologia/exato/t186.bin.gz",
    "bbox": [
     -48.101641,
     -22.103976,
@@ -906,10 +1052,12 @@
    ],
    "feicoes": 243,
    "pontos": 27951,
-   "bytes": 179947
+   "bytes": 106766,
+   "bytes_bruto": 106766,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t048.bin",
+   "arquivo": "data/pedologia/exato/t048.bin.gz",
    "bbox": [
     -47.948781,
     -24.76648,
@@ -918,10 +1066,12 @@
    ],
    "feicoes": 24,
    "pontos": 56692,
-   "bytes": 179828
+   "bytes": 111338,
+   "bytes_bruto": 111338,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t065.bin",
+   "arquivo": "data/pedologia/exato/t065.bin.gz",
    "bbox": [
     -47.621848,
     -24.726511,
@@ -930,10 +1080,12 @@
    ],
    "feicoes": 107,
    "pontos": 44241,
-   "bytes": 179794
+   "bytes": 110479,
+   "bytes_bruto": 110479,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t147.bin",
+   "arquivo": "data/pedologia/exato/t147.bin.gz",
    "bbox": [
     -50.778068,
     -22.954341,
@@ -942,10 +1094,12 @@
    ],
    "feicoes": 100,
    "pontos": 42867,
-   "bytes": 179780
+   "bytes": 126213,
+   "bytes_bruto": 126213,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t224.bin",
+   "arquivo": "data/pedologia/exato/t224.bin.gz",
    "bbox": [
     -44.70412,
     -22.858539,
@@ -954,10 +1108,12 @@
    ],
    "feicoes": 146,
    "pontos": 31796,
-   "bytes": 178998
+   "bytes": 105692,
+   "bytes_bruto": 105692,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t066.bin",
+   "arquivo": "data/pedologia/exato/t066.bin.gz",
    "bbox": [
     -47.672439,
     -24.487514,
@@ -966,10 +1122,12 @@
    ],
    "feicoes": 54,
    "pontos": 52682,
-   "bytes": 178928
+   "bytes": 108000,
+   "bytes_bruto": 108000,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t017.bin",
+   "arquivo": "data/pedologia/exato/t017.bin.gz",
    "bbox": [
     -49.013334,
     -24.626558,
@@ -978,10 +1136,12 @@
    ],
    "feicoes": 30,
    "pontos": 56295,
-   "bytes": 178456
+   "bytes": 108656,
+   "bytes_bruto": 108656,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t039.bin",
+   "arquivo": "data/pedologia/exato/t039.bin.gz",
    "bbox": [
     -48.313096,
     -24.454141,
@@ -990,10 +1150,12 @@
    ],
    "feicoes": 30,
    "pontos": 54753,
-   "bytes": 178385
+   "bytes": 101227,
+   "bytes_bruto": 101227,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t184.bin",
+   "arquivo": "data/pedologia/exato/t184.bin.gz",
    "bbox": [
     -47.564446,
     -23.027811,
@@ -1002,10 +1164,12 @@
    ],
    "feicoes": 302,
    "pontos": 25586,
-   "bytes": 177586
+   "bytes": 101826,
+   "bytes_bruto": 101826,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t063.bin",
+   "arquivo": "data/pedologia/exato/t063.bin.gz",
    "bbox": [
     -47.893945,
     -24.23866,
@@ -1014,10 +1178,12 @@
    ],
    "feicoes": 25,
    "pontos": 55818,
-   "bytes": 177028
+   "bytes": 108221,
+   "bytes_bruto": 108221,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t032.bin",
+   "arquivo": "data/pedologia/exato/t032.bin.gz",
    "bbox": [
     -48.677295,
     -25.321182,
@@ -1026,10 +1192,12 @@
    ],
    "feicoes": 9,
    "pontos": 52727,
-   "bytes": 176853
+   "bytes": 139370,
+   "bytes_bruto": 139370,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t046.bin",
+   "arquivo": "data/pedologia/exato/t046.bin.gz",
    "bbox": [
     -48.175407,
     -24.790598,
@@ -1038,10 +1206,12 @@
    ],
    "feicoes": 27,
    "pontos": 57497,
-   "bytes": 176643
+   "bytes": 111168,
+   "bytes_bruto": 111168,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t185.bin",
+   "arquivo": "data/pedologia/exato/t185.bin.gz",
    "bbox": [
     -47.580863,
     -22.631043,
@@ -1050,10 +1220,12 @@
    ],
    "feicoes": 273,
    "pontos": 25213,
-   "bytes": 176243
+   "bytes": 98400,
+   "bytes_bruto": 98400,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t068.bin",
+   "arquivo": "data/pedologia/exato/t068.bin.gz",
    "bbox": [
     -47.416315,
     -24.451291,
@@ -1062,10 +1234,12 @@
    ],
    "feicoes": 52,
    "pontos": 54155,
-   "bytes": 174977
+   "bytes": 109040,
+   "bytes_bruto": 109040,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t191.bin",
+   "arquivo": "data/pedologia/exato/t191.bin.gz",
    "bbox": [
     -47.166722,
     -23.175786,
@@ -1074,10 +1248,12 @@
    ],
    "feicoes": 177,
    "pontos": 40175,
-   "bytes": 174639
+   "bytes": 119596,
+   "bytes_bruto": 119596,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t034.bin",
+   "arquivo": "data/pedologia/exato/t034.bin.gz",
    "bbox": [
     -48.563691,
     -24.593788,
@@ -1086,10 +1262,12 @@
    ],
    "feicoes": 36,
    "pontos": 53324,
-   "bytes": 174591
+   "bytes": 101618,
+   "bytes_bruto": 101618,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t109.bin",
+   "arquivo": "data/pedologia/exato/t109.bin.gz",
    "bbox": [
     -46.872872,
     -23.34518,
@@ -1098,10 +1276,12 @@
    ],
    "feicoes": 8,
    "pontos": 81248,
-   "bytes": 174022
+   "bytes": 110078,
+   "bytes_bruto": 110078,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t061.bin",
+   "arquivo": "data/pedologia/exato/t061.bin.gz",
    "bbox": [
     -47.656143,
     -24.499094,
@@ -1110,10 +1290,12 @@
    ],
    "feicoes": 34,
    "pontos": 55662,
-   "bytes": 173884
+   "bytes": 95559,
+   "bytes_bruto": 95559,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t212.bin",
+   "arquivo": "data/pedologia/exato/t212.bin.gz",
    "bbox": [
     -46.155738,
     -23.449031,
@@ -1122,10 +1304,12 @@
    ],
    "feicoes": 1,
    "pontos": 79611,
-   "bytes": 173088
+   "bytes": 144298,
+   "bytes_bruto": 144298,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t002.bin",
+   "arquivo": "data/pedologia/exato/t002.bin.gz",
    "bbox": [
     -49.460737,
     -25.213646,
@@ -1134,10 +1318,12 @@
    ],
    "feicoes": 177,
    "pontos": 32184,
-   "bytes": 172754
+   "bytes": 100220,
+   "bytes_bruto": 100220,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t139.bin",
+   "arquivo": "data/pedologia/exato/t139.bin.gz",
    "bbox": [
     -53.204193,
     -23.226795,
@@ -1146,10 +1332,12 @@
    ],
    "feicoes": 92,
    "pontos": 47412,
-   "bytes": 172488
+   "bytes": 127180,
+   "bytes_bruto": 127180,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t178.bin",
+   "arquivo": "data/pedologia/exato/t178.bin.gz",
    "bbox": [
     -49.19741,
     -21.820771,
@@ -1158,10 +1346,12 @@
    ],
    "feicoes": 119,
    "pontos": 37061,
-   "bytes": 171922
+   "bytes": 130531,
+   "bytes_bruto": 130531,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t019.bin",
+   "arquivo": "data/pedologia/exato/t019.bin.gz",
    "bbox": [
     -48.841602,
     -24.957424,
@@ -1170,10 +1360,12 @@
    ],
    "feicoes": 92,
    "pontos": 43961,
-   "bytes": 171161
+   "bytes": 101110,
+   "bytes_bruto": 101110,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t174.bin",
+   "arquivo": "data/pedologia/exato/t174.bin.gz",
    "bbox": [
     -49.999296,
     -22.102566,
@@ -1182,10 +1374,12 @@
    ],
    "feicoes": 176,
    "pontos": 30386,
-   "bytes": 170583
+   "bytes": 113223,
+   "bytes_bruto": 113223,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t127.bin",
+   "arquivo": "data/pedologia/exato/t127.bin.gz",
    "bbox": [
     -46.707637,
     -23.388791,
@@ -1194,10 +1388,12 @@
    ],
    "feicoes": 28,
    "pontos": 73760,
-   "bytes": 169797
+   "bytes": 126866,
+   "bytes_bruto": 126866,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t120.bin",
+   "arquivo": "data/pedologia/exato/t120.bin.gz",
    "bbox": [
     -46.517782,
     -24.009015,
@@ -1206,10 +1402,12 @@
    ],
    "feicoes": 123,
    "pontos": 42972,
-   "bytes": 169454
+   "bytes": 111572,
+   "bytes_bruto": 111572,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t070.bin",
+   "arquivo": "data/pedologia/exato/t070.bin.gz",
    "bbox": [
     -48.187951,
     -24.28958,
@@ -1218,10 +1416,12 @@
    ],
    "feicoes": 50,
    "pontos": 52547,
-   "bytes": 169357
+   "bytes": 117099,
+   "bytes_bruto": 117099,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t050.bin",
+   "arquivo": "data/pedologia/exato/t050.bin.gz",
    "bbox": [
     -48.093932,
     -24.493665,
@@ -1230,10 +1430,12 @@
    ],
    "feicoes": 22,
    "pontos": 55616,
-   "bytes": 168482
+   "bytes": 100576,
+   "bytes_bruto": 100576,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t047.bin",
+   "arquivo": "data/pedologia/exato/t047.bin.gz",
    "bbox": [
     -48.046184,
     -24.667999,
@@ -1242,10 +1444,12 @@
    ],
    "feicoes": 26,
    "pontos": 55163,
-   "bytes": 168374
+   "bytes": 106036,
+   "bytes_bruto": 106036,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t084.bin",
+   "arquivo": "data/pedologia/exato/t084.bin.gz",
    "bbox": [
     -47.067159,
     -24.376094,
@@ -1254,10 +1458,12 @@
    ],
    "feicoes": 144,
    "pontos": 37009,
-   "bytes": 168289
+   "bytes": 105910,
+   "bytes_bruto": 105910,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t049.bin",
+   "arquivo": "data/pedologia/exato/t049.bin.gz",
    "bbox": [
     -48.020025,
     -25.052698,
@@ -1266,10 +1472,12 @@
    ],
    "feicoes": 123,
    "pontos": 37863,
-   "bytes": 167915
+   "bytes": 107420,
+   "bytes_bruto": 107420,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t064.bin",
+   "arquivo": "data/pedologia/exato/t064.bin.gz",
    "bbox": [
     -47.733309,
     -24.29222,
@@ -1278,10 +1486,12 @@
    ],
    "feicoes": 40,
    "pontos": 53141,
-   "bytes": 167904
+   "bytes": 97029,
+   "bytes_bruto": 97029,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t221.bin",
+   "arquivo": "data/pedologia/exato/t221.bin.gz",
    "bbox": [
     -46.028435,
     -23.761307,
@@ -1290,10 +1500,12 @@
    ],
    "feicoes": 79,
    "pontos": 49989,
-   "bytes": 166997
+   "bytes": 127741,
+   "bytes_bruto": 127741,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t056.bin",
+   "arquivo": "data/pedologia/exato/t056.bin.gz",
    "bbox": [
     -47.978119,
     -24.337446,
@@ -1302,10 +1514,12 @@
    ],
    "feicoes": 25,
    "pontos": 57647,
-   "bytes": 166849
+   "bytes": 90637,
+   "bytes_bruto": 90637,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t018.bin",
+   "arquivo": "data/pedologia/exato/t018.bin.gz",
    "bbox": [
     -48.788462,
     -24.685719,
@@ -1314,10 +1528,12 @@
    ],
    "feicoes": 17,
    "pontos": 54827,
-   "bytes": 166731
+   "bytes": 99322,
+   "bytes_bruto": 99322,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t085.bin",
+   "arquivo": "data/pedologia/exato/t085.bin.gz",
    "bbox": [
     -46.95911,
     -24.330816,
@@ -1326,10 +1542,12 @@
    ],
    "feicoes": 124,
    "pontos": 40792,
-   "bytes": 166129
+   "bytes": 104614,
+   "bytes_bruto": 104614,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t051.bin",
+   "arquivo": "data/pedologia/exato/t051.bin.gz",
    "bbox": [
     -48.013806,
     -24.498412,
@@ -1338,10 +1556,12 @@
    ],
    "feicoes": 29,
    "pontos": 55832,
-   "bytes": 165855
+   "bytes": 94067,
+   "bytes_bruto": 94067,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t215.bin",
+   "arquivo": "data/pedologia/exato/t215.bin.gz",
    "bbox": [
     -45.592041,
     -23.967975,
@@ -1350,10 +1570,12 @@
    ],
    "feicoes": 178,
    "pontos": 33614,
-   "bytes": 165617
+   "bytes": 93468,
+   "bytes_bruto": 93468,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t029.bin",
+   "arquivo": "data/pedologia/exato/t029.bin.gz",
    "bbox": [
     -48.275453,
     -24.733453,
@@ -1362,10 +1584,12 @@
    ],
    "feicoes": 47,
    "pontos": 52494,
-   "bytes": 163885
+   "bytes": 87672,
+   "bytes_bruto": 87672,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t025.bin",
+   "arquivo": "data/pedologia/exato/t025.bin.gz",
    "bbox": [
     -48.429542,
     -24.961742,
@@ -1374,10 +1598,12 @@
    ],
    "feicoes": 68,
    "pontos": 51097,
-   "bytes": 163510
+   "bytes": 90491,
+   "bytes_bruto": 90491,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t040.bin",
+   "arquivo": "data/pedologia/exato/t040.bin.gz",
    "bbox": [
     -49.018395,
     -24.303793,
@@ -1386,10 +1612,12 @@
    ],
    "feicoes": 123,
    "pontos": 40374,
-   "bytes": 162532
+   "bytes": 104251,
+   "bytes_bruto": 104251,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t077.bin",
+   "arquivo": "data/pedologia/exato/t077.bin.gz",
    "bbox": [
     -47.35253,
     -24.0904,
@@ -1398,10 +1626,12 @@
    ],
    "feicoes": 4,
    "pontos": 66102,
-   "bytes": 160694
+   "bytes": 135966,
+   "bytes_bruto": 135966,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t003.bin",
+   "arquivo": "data/pedologia/exato/t003.bin.gz",
    "bbox": [
     -49.318839,
     -24.703189,
@@ -1410,10 +1640,12 @@
    ],
    "feicoes": 62,
    "pontos": 48059,
-   "bytes": 160610
+   "bytes": 98610,
+   "bytes_bruto": 98610,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t036.bin",
+   "arquivo": "data/pedologia/exato/t036.bin.gz",
    "bbox": [
     -48.318037,
     -24.587477,
@@ -1422,10 +1654,12 @@
    ],
    "feicoes": 33,
    "pontos": 48955,
-   "bytes": 159736
+   "bytes": 91487,
+   "bytes_bruto": 91487,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t022.bin",
+   "arquivo": "data/pedologia/exato/t022.bin.gz",
    "bbox": [
     -48.54143,
     -24.948588,
@@ -1434,10 +1668,12 @@
    ],
    "feicoes": 15,
    "pontos": 56275,
-   "bytes": 158585
+   "bytes": 86154,
+   "bytes_bruto": 86154,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t012.bin",
+   "arquivo": "data/pedologia/exato/t012.bin.gz",
    "bbox": [
     -48.872394,
     -24.961775,
@@ -1446,10 +1682,12 @@
    ],
    "feicoes": 80,
    "pontos": 47057,
-   "bytes": 157756
+   "bytes": 81765,
+   "bytes_bruto": 81765,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t192.bin",
+   "arquivo": "data/pedologia/exato/t192.bin.gz",
    "bbox": [
     -47.231439,
     -23.047695,
@@ -1458,10 +1696,12 @@
    ],
    "feicoes": 182,
    "pontos": 30876,
-   "bytes": 157169
+   "bytes": 110524,
+   "bytes_bruto": 110524,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t155.bin",
+   "arquivo": "data/pedologia/exato/t155.bin.gz",
    "bbox": [
     -50.64731,
     -22.111343,
@@ -1470,10 +1710,12 @@
    ],
    "feicoes": 130,
    "pontos": 31039,
-   "bytes": 155797
+   "bytes": 112246,
+   "bytes_bruto": 112246,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t011.bin",
+   "arquivo": "data/pedologia/exato/t011.bin.gz",
    "bbox": [
     -49.010087,
     -24.68487,
@@ -1482,10 +1724,12 @@
    ],
    "feicoes": 27,
    "pontos": 54323,
-   "bytes": 154936
+   "bytes": 89815,
+   "bytes_bruto": 89815,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t098.bin",
+   "arquivo": "data/pedologia/exato/t098.bin.gz",
    "bbox": [
     -46.809091,
     -23.804057,
@@ -1494,10 +1738,12 @@
    ],
    "feicoes": 2,
    "pontos": 73102,
-   "bytes": 154918
+   "bytes": 105832,
+   "bytes_bruto": 105832,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t195.bin",
+   "arquivo": "data/pedologia/exato/t195.bin.gz",
    "bbox": [
     -47.050152,
     -23.106839,
@@ -1506,10 +1752,12 @@
    ],
    "feicoes": 88,
    "pontos": 47715,
-   "bytes": 154377
+   "bytes": 115097,
+   "bytes_bruto": 115097,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t166.bin",
+   "arquivo": "data/pedologia/exato/t166.bin.gz",
    "bbox": [
     -50.050359,
     -22.082275,
@@ -1518,10 +1766,12 @@
    ],
    "feicoes": 116,
    "pontos": 31123,
-   "bytes": 154228
+   "bytes": 110055,
+   "bytes_bruto": 110055,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t027.bin",
+   "arquivo": "data/pedologia/exato/t027.bin.gz",
    "bbox": [
     -48.169523,
     -24.988041,
@@ -1530,10 +1780,12 @@
    ],
    "feicoes": 33,
    "pontos": 55306,
-   "bytes": 153323
+   "bytes": 87410,
+   "bytes_bruto": 87410,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t013.bin",
+   "arquivo": "data/pedologia/exato/t013.bin.gz",
    "bbox": [
     -48.723315,
     -24.95968,
@@ -1542,10 +1794,12 @@
    ],
    "feicoes": 103,
    "pontos": 42647,
-   "bytes": 152589
+   "bytes": 75295,
+   "bytes_bruto": 75295,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t083.bin",
+   "arquivo": "data/pedologia/exato/t083.bin.gz",
    "bbox": [
     -47.300569,
     -24.492092,
@@ -1554,10 +1808,12 @@
    ],
    "feicoes": 120,
    "pontos": 47358,
-   "bytes": 151943
+   "bytes": 103629,
+   "bytes_bruto": 103629,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t015.bin",
+   "arquivo": "data/pedologia/exato/t015.bin.gz",
    "bbox": [
     -49.012138,
     -24.606305,
@@ -1566,10 +1822,12 @@
    ],
    "feicoes": 69,
    "pontos": 43720,
-   "bytes": 148227
+   "bytes": 82123,
+   "bytes_bruto": 82123,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t014.bin",
+   "arquivo": "data/pedologia/exato/t014.bin.gz",
    "bbox": [
     -48.744004,
     -24.725481,
@@ -1578,10 +1836,12 @@
    ],
    "feicoes": 57,
    "pontos": 45608,
-   "bytes": 145843
+   "bytes": 75255,
+   "bytes_bruto": 75255,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t023.bin",
+   "arquivo": "data/pedologia/exato/t023.bin.gz",
    "bbox": [
     -48.677092,
     -24.723988,
@@ -1590,10 +1850,12 @@
    ],
    "feicoes": 52,
    "pontos": 44579,
-   "bytes": 145829
+   "bytes": 78051,
+   "bytes_bruto": 78051,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t060.bin",
+   "arquivo": "data/pedologia/exato/t060.bin.gz",
    "bbox": [
     -47.764567,
     -24.485426,
@@ -1602,10 +1864,12 @@
    ],
    "feicoes": 24,
    "pontos": 49677,
-   "bytes": 145521
+   "bytes": 82353,
+   "bytes_bruto": 82353,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t069.bin",
+   "arquivo": "data/pedologia/exato/t069.bin.gz",
    "bbox": [
     -47.477601,
     -24.362447,
@@ -1614,10 +1878,12 @@
    ],
    "feicoes": 30,
    "pontos": 48477,
-   "bytes": 144751
+   "bytes": 94423,
+   "bytes_bruto": 94423,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t059.bin",
+   "arquivo": "data/pedologia/exato/t059.bin.gz",
    "bbox": [
     -47.841556,
     -24.570801,
@@ -1626,10 +1892,12 @@
    ],
    "feicoes": 3,
    "pontos": 53104,
-   "bytes": 143554
+   "bytes": 79410,
+   "bytes_bruto": 79410,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t058.bin",
+   "arquivo": "data/pedologia/exato/t058.bin.gz",
    "bbox": [
     -47.825415,
     -24.498271,
@@ -1638,10 +1906,12 @@
    ],
    "feicoes": 7,
    "pontos": 54213,
-   "bytes": 143021
+   "bytes": 77173,
+   "bytes_bruto": 77173,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t038.bin",
+   "arquivo": "data/pedologia/exato/t038.bin.gz",
    "bbox": [
     -48.173895,
     -24.524119,
@@ -1650,10 +1920,12 @@
    ],
    "feicoes": 18,
    "pontos": 43395,
-   "bytes": 141701
+   "bytes": 79494,
+   "bytes_bruto": 79494,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t121.bin",
+   "arquivo": "data/pedologia/exato/t121.bin.gz",
    "bbox": [
     -46.385586,
     -23.776824,
@@ -1662,10 +1934,12 @@
    ],
    "feicoes": 27,
    "pontos": 55771,
-   "bytes": 138510
+   "bytes": 106450,
+   "bytes_bruto": 106450,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t086.bin",
+   "arquivo": "data/pedologia/exato/t086.bin.gz",
    "bbox": [
     -47.247967,
     -24.053478,
@@ -1674,10 +1948,12 @@
    ],
    "feicoes": 54,
    "pontos": 44411,
-   "bytes": 137820
+   "bytes": 103574,
+   "bytes_bruto": 103574,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t202.bin",
+   "arquivo": "data/pedologia/exato/t202.bin.gz",
    "bbox": [
     -46.148045,
     -23.807291,
@@ -1686,10 +1962,12 @@
    ],
    "feicoes": 105,
    "pontos": 43741,
-   "bytes": 137756
+   "bytes": 91568,
+   "bytes_bruto": 91568,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t214.bin",
+   "arquivo": "data/pedologia/exato/t214.bin.gz",
    "bbox": [
     -45.678545,
     -23.747094,
@@ -1698,10 +1976,12 @@
    ],
    "feicoes": 35,
    "pontos": 56037,
-   "bytes": 136978
+   "bytes": 101385,
+   "bytes_bruto": 101385,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t123.bin",
+   "arquivo": "data/pedologia/exato/t123.bin.gz",
    "bbox": [
     -46.544789,
     -23.660321,
@@ -1710,10 +1990,12 @@
    ],
    "feicoes": 23,
    "pontos": 55904,
-   "bytes": 136906
+   "bytes": 106817,
+   "bytes_bruto": 106817,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t111.bin",
+   "arquivo": "data/pedologia/exato/t111.bin.gz",
    "bbox": [
     -46.713161,
     -24.013387,
@@ -1722,10 +2004,12 @@
    ],
    "feicoes": 106,
    "pontos": 42302,
-   "bytes": 136754
+   "bytes": 88080,
+   "bytes_bruto": 88080,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t209.bin",
+   "arquivo": "data/pedologia/exato/t209.bin.gz",
    "bbox": [
     -45.87143,
     -23.382913,
@@ -1734,10 +2018,12 @@
    ],
    "feicoes": 5,
    "pontos": 64351,
-   "bytes": 136164
+   "bytes": 113433,
+   "bytes_bruto": 113433,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t115.bin",
+   "arquivo": "data/pedologia/exato/t115.bin.gz",
    "bbox": [
     -46.509846,
     -24.000223,
@@ -1746,10 +2032,12 @@
    ],
    "feicoes": 88,
    "pontos": 47125,
-   "bytes": 135920
+   "bytes": 96765,
+   "bytes_bruto": 96765,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t067.bin",
+   "arquivo": "data/pedologia/exato/t067.bin.gz",
    "bbox": [
     -47.54075,
     -24.513657,
@@ -1758,10 +2046,12 @@
    ],
    "feicoes": 64,
    "pontos": 34336,
-   "bytes": 134990
+   "bytes": 81188,
+   "bytes_bruto": 81188,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t122.bin",
+   "arquivo": "data/pedologia/exato/t122.bin.gz",
    "bbox": [
     -46.277337,
     -23.807506,
@@ -1770,10 +2060,12 @@
    ],
    "feicoes": 28,
    "pontos": 56665,
-   "bytes": 134914
+   "bytes": 107547,
+   "bytes_bruto": 107547,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t102.bin",
+   "arquivo": "data/pedologia/exato/t102.bin.gz",
    "bbox": [
     -46.966543,
     -23.525137,
@@ -1782,10 +2074,12 @@
    ],
    "feicoes": 27,
    "pontos": 58554,
-   "bytes": 134569
+   "bytes": 92219,
+   "bytes_bruto": 92219,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t028.bin",
+   "arquivo": "data/pedologia/exato/t028.bin.gz",
    "bbox": [
     -48.243003,
     -24.8802,
@@ -1794,10 +2088,12 @@
    ],
    "feicoes": 21,
    "pontos": 46945,
-   "bytes": 133743
+   "bytes": 74151,
+   "bytes_bruto": 74151,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t132.bin",
+   "arquivo": "data/pedologia/exato/t132.bin.gz",
    "bbox": [
     -46.506425,
     -23.233939,
@@ -1806,10 +2102,12 @@
    ],
    "feicoes": 22,
    "pontos": 58003,
-   "bytes": 131926
+   "bytes": 100153,
+   "bytes_bruto": 100153,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t201.bin",
+   "arquivo": "data/pedologia/exato/t201.bin.gz",
    "bbox": [
     -45.972487,
     -23.871017,
@@ -1818,10 +2116,12 @@
    ],
    "feicoes": 27,
    "pontos": 57835,
-   "bytes": 130184
+   "bytes": 105467,
+   "bytes_bruto": 105467,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t110.bin",
+   "arquivo": "data/pedologia/exato/t110.bin.gz",
    "bbox": [
     -46.792452,
     -23.282289,
@@ -1830,10 +2130,12 @@
    ],
    "feicoes": 48,
    "pontos": 57105,
-   "bytes": 130169
+   "bytes": 84570,
+   "bytes_bruto": 84570,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t078.bin",
+   "arquivo": "data/pedologia/exato/t078.bin.gz",
    "bbox": [
     -47.284739,
     -23.944045,
@@ -1842,10 +2144,12 @@
    ],
    "feicoes": 62,
    "pontos": 52371,
-   "bytes": 130072
+   "bytes": 90095,
+   "bytes_bruto": 90095,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t125.bin",
+   "arquivo": "data/pedologia/exato/t125.bin.gz",
    "bbox": [
     -46.589907,
     -23.511952,
@@ -1854,10 +2158,12 @@
    ],
    "feicoes": 37,
    "pontos": 56000,
-   "bytes": 130069
+   "bytes": 83386,
+   "bytes_bruto": 83386,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t103.bin",
+   "arquivo": "data/pedologia/exato/t103.bin.gz",
    "bbox": [
     -47.118074,
     -23.399438,
@@ -1866,10 +2172,12 @@
    ],
    "feicoes": 70,
    "pontos": 49440,
-   "bytes": 129975
+   "bytes": 91961,
+   "bytes_bruto": 91961,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t024.bin",
+   "arquivo": "data/pedologia/exato/t024.bin.gz",
    "bbox": [
     -48.392444,
     -24.725799,
@@ -1878,10 +2186,12 @@
    ],
    "feicoes": 38,
    "pontos": 47149,
-   "bytes": 128660
+   "bytes": 61174,
+   "bytes_bruto": 61174,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t030.bin",
+   "arquivo": "data/pedologia/exato/t030.bin.gz",
    "bbox": [
     -48.18772,
     -24.718726,
@@ -1890,10 +2200,12 @@
    ],
    "feicoes": 28,
    "pontos": 41113,
-   "bytes": 128183
+   "bytes": 67392,
+   "bytes_bruto": 67392,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t074.bin",
+   "arquivo": "data/pedologia/exato/t074.bin.gz",
    "bbox": [
     -47.717347,
     -23.84293,
@@ -1902,10 +2214,12 @@
    ],
    "feicoes": 7,
    "pontos": 58409,
-   "bytes": 128046
+   "bytes": 107827,
+   "bytes_bruto": 107827,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t081.bin",
+   "arquivo": "data/pedologia/exato/t081.bin.gz",
    "bbox": [
     -47.699746,
     -23.635239,
@@ -1914,10 +2228,12 @@
    ],
    "feicoes": 78,
    "pontos": 45947,
-   "bytes": 127601
+   "bytes": 94995,
+   "bytes_bruto": 94995,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t026.bin",
+   "arquivo": "data/pedologia/exato/t026.bin.gz",
    "bbox": [
     -48.243297,
     -24.959677,
@@ -1926,10 +2242,12 @@
    ],
    "feicoes": 34,
    "pontos": 47998,
-   "bytes": 126387
+   "bytes": 66732,
+   "bytes_bruto": 66732,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t099.bin",
+   "arquivo": "data/pedologia/exato/t099.bin.gz",
    "bbox": [
     -47.062691,
     -23.543894,
@@ -1938,10 +2256,12 @@
    ],
    "feicoes": 30,
    "pontos": 54786,
-   "bytes": 126148
+   "bytes": 87266,
+   "bytes_bruto": 87266,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t076.bin",
+   "arquivo": "data/pedologia/exato/t076.bin.gz",
    "bbox": [
     -47.353118,
     -24.02213,
@@ -1950,10 +2270,12 @@
    ],
    "feicoes": 10,
    "pontos": 55802,
-   "bytes": 126137
+   "bytes": 107718,
+   "bytes_bruto": 107718,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t075.bin",
+   "arquivo": "data/pedologia/exato/t075.bin.gz",
    "bbox": [
     -47.467929,
     -23.955293,
@@ -1962,10 +2284,12 @@
    ],
    "feicoes": 17,
    "pontos": 56856,
-   "bytes": 125031
+   "bytes": 103908,
+   "bytes_bruto": 103908,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t104.bin",
+   "arquivo": "data/pedologia/exato/t104.bin.gz",
    "bbox": [
     -46.97568,
     -23.3083,
@@ -1974,10 +2298,12 @@
    ],
    "feicoes": 32,
    "pontos": 56911,
-   "bytes": 124903
+   "bytes": 79070,
+   "bytes_bruto": 79070,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t131.bin",
+   "arquivo": "data/pedologia/exato/t131.bin.gz",
    "bbox": [
     -46.50693,
     -23.407596,
@@ -1986,10 +2312,12 @@
    ],
    "feicoes": 8,
    "pontos": 55953,
-   "bytes": 124729
+   "bytes": 102510,
+   "bytes_bruto": 102510,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t119.bin",
+   "arquivo": "data/pedologia/exato/t119.bin.gz",
    "bbox": [
     -46.443839,
     -24.019215,
@@ -1998,10 +2326,12 @@
    ],
    "feicoes": 28,
    "pontos": 53560,
-   "bytes": 123857
+   "bytes": 79353,
+   "bytes_bruto": 79353,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t204.bin",
+   "arquivo": "data/pedologia/exato/t204.bin.gz",
    "bbox": [
     -46.071401,
     -23.521197,
@@ -2010,10 +2340,12 @@
    ],
    "feicoes": 26,
    "pontos": 53102,
-   "bytes": 123823
+   "bytes": 85561,
+   "bytes_bruto": 85561,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t091.bin",
+   "arquivo": "data/pedologia/exato/t091.bin.gz",
    "bbox": [
     -46.808628,
     -23.971009,
@@ -2022,10 +2354,12 @@
    ],
    "feicoes": 47,
    "pontos": 50912,
-   "bytes": 123717
+   "bytes": 89639,
+   "bytes_bruto": 89639,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t073.bin",
+   "arquivo": "data/pedologia/exato/t073.bin.gz",
    "bbox": [
     -47.506053,
     -23.985156,
@@ -2034,10 +2368,12 @@
    ],
    "feicoes": 4,
    "pontos": 59880,
-   "bytes": 123050
+   "bytes": 64882,
+   "bytes_bruto": 64882,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t134.bin",
+   "arquivo": "data/pedologia/exato/t134.bin.gz",
    "bbox": [
     -46.292132,
     -23.528122,
@@ -2046,10 +2382,12 @@
    ],
    "feicoes": 38,
    "pontos": 52947,
-   "bytes": 122694
+   "bytes": 79563,
+   "bytes_bruto": 79563,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t193.bin",
+   "arquivo": "data/pedologia/exato/t193.bin.gz",
    "bbox": [
     -46.676646,
     -23.052249,
@@ -2058,10 +2396,12 @@
    ],
    "feicoes": 23,
    "pontos": 52177,
-   "bytes": 122135
+   "bytes": 100711,
+   "bytes_bruto": 100711,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t101.bin",
+   "arquivo": "data/pedologia/exato/t101.bin.gz",
    "bbox": [
     -47.17107,
     -23.553564,
@@ -2070,10 +2410,12 @@
    ],
    "feicoes": 11,
    "pontos": 54607,
-   "bytes": 121825
+   "bytes": 83740,
+   "bytes_bruto": 83740,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t133.bin",
+   "arquivo": "data/pedologia/exato/t133.bin.gz",
    "bbox": [
     -46.327307,
     -23.522353,
@@ -2082,10 +2424,12 @@
    ],
    "feicoes": 50,
    "pontos": 52658,
-   "bytes": 121769
+   "bytes": 75091,
+   "bytes_bruto": 75091,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t087.bin",
+   "arquivo": "data/pedologia/exato/t087.bin.gz",
    "bbox": [
     -47.083744,
     -23.828637,
@@ -2094,10 +2438,12 @@
    ],
    "feicoes": 26,
    "pontos": 51860,
-   "bytes": 120825
+   "bytes": 88419,
+   "bytes_bruto": 88419,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t106.bin",
+   "arquivo": "data/pedologia/exato/t106.bin.gz",
    "bbox": [
     -46.788344,
     -23.472265,
@@ -2106,10 +2452,12 @@
    ],
    "feicoes": 36,
    "pontos": 52934,
-   "bytes": 120805
+   "bytes": 77987,
+   "bytes_bruto": 77987,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t009.bin",
+   "arquivo": "data/pedologia/exato/t009.bin.gz",
    "bbox": [
     -49.474598,
     -23.575783,
@@ -2118,10 +2466,12 @@
    ],
    "feicoes": 135,
    "pontos": 20807,
-   "bytes": 120233
+   "bytes": 77015,
+   "bytes_bruto": 77015,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t194.bin",
+   "arquivo": "data/pedologia/exato/t194.bin.gz",
    "bbox": [
     -46.445983,
     -23.033352,
@@ -2130,10 +2480,12 @@
    ],
    "feicoes": 2,
    "pontos": 56275,
-   "bytes": 120184
+   "bytes": 102603,
+   "bytes_bruto": 102603,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t094.bin",
+   "arquivo": "data/pedologia/exato/t094.bin.gz",
    "bbox": [
     -46.831253,
     -23.806364,
@@ -2142,10 +2494,12 @@
    ],
    "feicoes": 18,
    "pontos": 53608,
-   "bytes": 119937
+   "bytes": 94397,
+   "bytes_bruto": 94397,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t114.bin",
+   "arquivo": "data/pedologia/exato/t114.bin.gz",
    "bbox": [
     -46.534445,
     -23.888074,
@@ -2154,10 +2508,12 @@
    ],
    "feicoes": 50,
    "pontos": 46737,
-   "bytes": 119227
+   "bytes": 89633,
+   "bytes_bruto": 89633,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t082.bin",
+   "arquivo": "data/pedologia/exato/t082.bin.gz",
    "bbox": [
     -47.297722,
     -23.535027,
@@ -2166,10 +2522,12 @@
    ],
    "feicoes": 25,
    "pontos": 52249,
-   "bytes": 118272
+   "bytes": 79770,
+   "bytes_bruto": 79770,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t016.bin",
+   "arquivo": "data/pedologia/exato/t016.bin.gz",
    "bbox": [
     -49.036044,
     -24.492156,
@@ -2178,10 +2536,12 @@
    ],
    "feicoes": 15,
    "pontos": 41375,
-   "bytes": 117719
+   "bytes": 73077,
+   "bytes_bruto": 73077,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t135.bin",
+   "arquivo": "data/pedologia/exato/t135.bin.gz",
    "bbox": [
     -46.328609,
     -23.462041,
@@ -2190,10 +2550,12 @@
    ],
    "feicoes": 40,
    "pontos": 52031,
-   "bytes": 116185
+   "bytes": 74724,
+   "bytes_bruto": 74724,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t105.bin",
+   "arquivo": "data/pedologia/exato/t105.bin.gz",
    "bbox": [
     -46.864911,
     -23.484052,
@@ -2202,10 +2564,12 @@
    ],
    "feicoes": 24,
    "pontos": 51576,
-   "bytes": 115088
+   "bytes": 75777,
+   "bytes_bruto": 75777,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t062.bin",
+   "arquivo": "data/pedologia/exato/t062.bin.gz",
    "bbox": [
     -47.758601,
     -24.313132,
@@ -2214,10 +2578,12 @@
    ],
    "feicoes": 27,
    "pontos": 38798,
-   "bytes": 114946
+   "bytes": 66656,
+   "bytes_bruto": 66656,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t107.bin",
+   "arquivo": "data/pedologia/exato/t107.bin.gz",
    "bbox": [
     -46.702382,
     -23.380866,
@@ -2226,10 +2592,12 @@
    ],
    "feicoes": 43,
    "pontos": 50382,
-   "bytes": 114738
+   "bytes": 87508,
+   "bytes_bruto": 87508,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t090.bin",
+   "arquivo": "data/pedologia/exato/t090.bin.gz",
    "bbox": [
     -46.958925,
     -24.000536,
@@ -2238,10 +2606,12 @@
    ],
    "feicoes": 23,
    "pontos": 50783,
-   "bytes": 114153
+   "bytes": 72047,
+   "bytes_bruto": 72047,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t000.bin",
+   "arquivo": "data/pedologia/exato/t000.bin.gz",
    "bbox": [
     -48.590832,
     -25.100562,
@@ -2250,10 +2620,12 @@
    ],
    "feicoes": 42,
    "pontos": 35451,
-   "bytes": 113771
+   "bytes": 69165,
+   "bytes_bruto": 69165,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t207.bin",
+   "arquivo": "data/pedologia/exato/t207.bin.gz",
    "bbox": [
     -46.096352,
     -23.338186,
@@ -2262,10 +2634,12 @@
    ],
    "feicoes": 27,
    "pontos": 46195,
-   "bytes": 113496
+   "bytes": 81999,
+   "bytes_bruto": 81999,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t079.bin",
+   "arquivo": "data/pedologia/exato/t079.bin.gz",
    "bbox": [
     -47.266483,
     -23.794748,
@@ -2274,10 +2648,12 @@
    ],
    "feicoes": 24,
    "pontos": 43495,
-   "bytes": 112611
+   "bytes": 85695,
+   "bytes_bruto": 85695,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t096.bin",
+   "arquivo": "data/pedologia/exato/t096.bin.gz",
    "bbox": [
     -46.682535,
     -23.791506,
@@ -2286,10 +2662,12 @@
    ],
    "feicoes": 10,
    "pontos": 52283,
-   "bytes": 111843
+   "bytes": 92973,
+   "bytes_bruto": 92973,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t128.bin",
+   "arquivo": "data/pedologia/exato/t128.bin.gz",
    "bbox": [
     -46.613664,
     -23.277825,
@@ -2298,10 +2676,12 @@
    ],
    "feicoes": 61,
    "pontos": 41604,
-   "bytes": 110914
+   "bytes": 71068,
+   "bytes_bruto": 71068,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t112.bin",
+   "arquivo": "data/pedologia/exato/t112.bin.gz",
    "bbox": [
     -46.596995,
     -23.896477,
@@ -2310,10 +2690,12 @@
    ],
    "feicoes": 13,
    "pontos": 50379,
-   "bytes": 110891
+   "bytes": 91920,
+   "bytes_bruto": 91920,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t118.bin",
+   "arquivo": "data/pedologia/exato/t118.bin.gz",
    "bbox": [
     -46.43861,
     -23.761993,
@@ -2322,10 +2704,12 @@
    ],
    "feicoes": 35,
    "pontos": 47186,
-   "bytes": 110874
+   "bytes": 76760,
+   "bytes_bruto": 76760,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t088.bin",
+   "arquivo": "data/pedologia/exato/t088.bin.gz",
    "bbox": [
     -47.07838,
     -23.782548,
@@ -2334,10 +2718,12 @@
    ],
    "feicoes": 30,
    "pontos": 47675,
-   "bytes": 110369
+   "bytes": 84601,
+   "bytes_bruto": 84601,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t203.bin",
+   "arquivo": "data/pedologia/exato/t203.bin.gz",
    "bbox": [
     -46.125528,
     -23.362856,
@@ -2346,10 +2732,12 @@
    ],
    "feicoes": 16,
    "pontos": 49724,
-   "bytes": 108180
+   "bytes": 66450,
+   "bytes_bruto": 66450,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t216.bin",
+   "arquivo": "data/pedologia/exato/t216.bin.gz",
    "bbox": [
     -45.618454,
     -23.518407,
@@ -2358,10 +2746,12 @@
    ],
    "feicoes": 37,
    "pontos": 42187,
-   "bytes": 107313
+   "bytes": 78813,
+   "bytes_bruto": 78813,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t124.bin",
+   "arquivo": "data/pedologia/exato/t124.bin.gz",
    "bbox": [
     -46.578621,
     -23.510322,
@@ -2370,10 +2760,12 @@
    ],
    "feicoes": 17,
    "pontos": 48033,
-   "bytes": 107030
+   "bytes": 69723,
+   "bytes_bruto": 69723,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t054.bin",
+   "arquivo": "data/pedologia/exato/t054.bin.gz",
    "bbox": [
     -48.066616,
     -24.279145,
@@ -2382,10 +2774,12 @@
    ],
    "feicoes": 32,
    "pontos": 33201,
-   "bytes": 106183
+   "bytes": 62622,
+   "bytes_bruto": 62622,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t089.bin",
+   "arquivo": "data/pedologia/exato/t089.bin.gz",
    "bbox": [
     -46.975192,
     -23.771643,
@@ -2394,10 +2788,12 @@
    ],
    "feicoes": 35,
    "pontos": 41386,
-   "bytes": 105401
+   "bytes": 75173,
+   "bytes_bruto": 75173,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t200.bin",
+   "arquivo": "data/pedologia/exato/t200.bin.gz",
    "bbox": [
     -46.093072,
     -23.815916,
@@ -2406,10 +2802,12 @@
    ],
    "feicoes": 79,
    "pontos": 31153,
-   "bytes": 102363
+   "bytes": 67075,
+   "bytes_bruto": 67075,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t220.bin",
+   "arquivo": "data/pedologia/exato/t220.bin.gz",
    "bbox": [
     -45.602106,
     -23.52697,
@@ -2418,10 +2816,12 @@
    ],
    "feicoes": 73,
    "pontos": 34421,
-   "bytes": 101549
+   "bytes": 71112,
+   "bytes_bruto": 71112,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t055.bin",
+   "arquivo": "data/pedologia/exato/t055.bin.gz",
    "bbox": [
     -47.97873,
     -24.253028,
@@ -2430,10 +2830,12 @@
    ],
    "feicoes": 14,
    "pontos": 33778,
-   "bytes": 95870
+   "bytes": 51746,
+   "bytes_bruto": 51746,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t037.bin",
+   "arquivo": "data/pedologia/exato/t037.bin.gz",
    "bbox": [
     -48.256883,
     -24.389054,
@@ -2442,10 +2844,12 @@
    ],
    "feicoes": 24,
    "pontos": 26700,
-   "bytes": 94175
+   "bytes": 49130,
+   "bytes_bruto": 49130,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t137.bin",
+   "arquivo": "data/pedologia/exato/t137.bin.gz",
    "bbox": [
     -46.232557,
     -23.304789,
@@ -2454,10 +2858,12 @@
    ],
    "feicoes": 21,
    "pontos": 41491,
-   "bytes": 91005
+   "bytes": 72202,
+   "bytes_bruto": 72202,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t116.bin",
+   "arquivo": "data/pedologia/exato/t116.bin.gz",
    "bbox": [
     -46.567519,
     -23.925341,
@@ -2466,10 +2872,12 @@
    ],
    "feicoes": 76,
    "pontos": 23366,
-   "bytes": 90282
+   "bytes": 59752,
+   "bytes_bruto": 59752,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t130.bin",
+   "arquivo": "data/pedologia/exato/t130.bin.gz",
    "bbox": [
     -46.478384,
     -23.237627,
@@ -2478,10 +2886,12 @@
    ],
    "feicoes": 18,
    "pontos": 38600,
-   "bytes": 86965
+   "bytes": 67639,
+   "bytes_bruto": 67639,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t100.bin",
+   "arquivo": "data/pedologia/exato/t100.bin.gz",
    "bbox": [
     -47.00417,
     -23.406947,
@@ -2490,10 +2900,12 @@
    ],
    "feicoes": 10,
    "pontos": 39272,
-   "bytes": 82922
+   "bytes": 55859,
+   "bytes_bruto": 55859,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t126.bin",
+   "arquivo": "data/pedologia/exato/t126.bin.gz",
    "bbox": [
     -46.440158,
     -23.435492,
@@ -2502,10 +2914,12 @@
    ],
    "feicoes": 44,
    "pontos": 31115,
-   "bytes": 82822
+   "bytes": 51434,
+   "bytes_bruto": 51434,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t080.bin",
+   "arquivo": "data/pedologia/exato/t080.bin.gz",
    "bbox": [
     -47.178715,
     -23.650841,
@@ -2514,10 +2928,12 @@
    ],
    "feicoes": 16,
    "pontos": 36837,
-   "bytes": 81001
+   "bytes": 55241,
+   "bytes_bruto": 55241,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t092.bin",
+   "arquivo": "data/pedologia/exato/t092.bin.gz",
    "bbox": [
     -46.688623,
     -23.883493,
@@ -2526,10 +2942,12 @@
    ],
    "feicoes": 21,
    "pontos": 35064,
-   "bytes": 80243
+   "bytes": 66829,
+   "bytes_bruto": 66829,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t117.bin",
+   "arquivo": "data/pedologia/exato/t117.bin.gz",
    "bbox": [
     -46.533412,
     -23.777391,
@@ -2538,10 +2956,12 @@
    ],
    "feicoes": 11,
    "pontos": 36083,
-   "bytes": 77845
+   "bytes": 63205,
+   "bytes_bruto": 63205,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t129.bin",
+   "arquivo": "data/pedologia/exato/t129.bin.gz",
    "bbox": [
     -46.557448,
     -23.276327,
@@ -2550,10 +2970,12 @@
    ],
    "feicoes": 25,
    "pontos": 31107,
-   "bytes": 75846
+   "bytes": 53844,
+   "bytes_bruto": 53844,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t208.bin",
+   "arquivo": "data/pedologia/exato/t208.bin.gz",
    "bbox": [
     -46.028564,
     -23.625559,
@@ -2562,10 +2984,12 @@
    ],
    "feicoes": 4,
    "pontos": 33221,
-   "bytes": 74869
+   "bytes": 63111,
+   "bytes_bruto": 63111,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t213.bin",
+   "arquivo": "data/pedologia/exato/t213.bin.gz",
    "bbox": [
     -45.821998,
     -23.941274,
@@ -2574,10 +2998,12 @@
    ],
    "feicoes": 95,
    "pontos": 12684,
-   "bytes": 74607
+   "bytes": 42145,
+   "bytes_bruto": 42145,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t210.bin",
+   "arquivo": "data/pedologia/exato/t210.bin.gz",
    "bbox": [
     -45.839624,
     -23.526081,
@@ -2586,10 +3012,12 @@
    ],
    "feicoes": 14,
    "pontos": 33491,
-   "bytes": 74338
+   "bytes": 61758,
+   "bytes_bruto": 61758,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t136.bin",
+   "arquivo": "data/pedologia/exato/t136.bin.gz",
    "bbox": [
     -46.389682,
     -23.169519,
@@ -2598,10 +3026,12 @@
    ],
    "feicoes": 7,
    "pontos": 33145,
-   "bytes": 73795
+   "bytes": 61599,
+   "bytes_bruto": 61599,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t052.bin",
+   "arquivo": "data/pedologia/exato/t052.bin.gz",
    "bbox": [
     -47.874052,
     -24.448321,
@@ -2610,10 +3040,12 @@
    ],
    "feicoes": 11,
    "pontos": 25655,
-   "bytes": 71174
+   "bytes": 40436,
+   "bytes_bruto": 40436,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t108.bin",
+   "arquivo": "data/pedologia/exato/t108.bin.gz",
    "bbox": [
     -46.805017,
     -23.305357,
@@ -2622,10 +3054,12 @@
    ],
    "feicoes": 20,
    "pontos": 31787,
-   "bytes": 68138
+   "bytes": 42605,
+   "bytes_bruto": 42605,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t031.bin",
+   "arquivo": "data/pedologia/exato/t031.bin.gz",
    "bbox": [
     -48.187379,
     -24.692488,
@@ -2634,10 +3068,12 @@
    ],
    "feicoes": 9,
    "pontos": 21917,
-   "bytes": 67652
+   "bytes": 37596,
+   "bytes_bruto": 37596,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t211.bin",
+   "arquivo": "data/pedologia/exato/t211.bin.gz",
    "bbox": [
     -45.845245,
     -23.398466,
@@ -2646,10 +3082,12 @@
    ],
    "feicoes": 20,
    "pontos": 27329,
-   "bytes": 66214
+   "bytes": 52314,
+   "bytes_bruto": 52314,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t072.bin",
+   "arquivo": "data/pedologia/exato/t072.bin.gz",
    "bbox": [
     -47.838466,
     -24.027699,
@@ -2658,10 +3096,12 @@
    ],
    "feicoes": 32,
    "pontos": 14399,
-   "bytes": 58293
+   "bytes": 45754,
+   "bytes_bruto": 45754,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t217.bin",
+   "arquivo": "data/pedologia/exato/t217.bin.gz",
    "bbox": [
     -45.540259,
     -23.520021,
@@ -2670,10 +3110,12 @@
    ],
    "feicoes": 13,
    "pontos": 20185,
-   "bytes": 47728
+   "bytes": 37506,
+   "bytes_bruto": 37506,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t205.bin",
+   "arquivo": "data/pedologia/exato/t205.bin.gz",
    "bbox": [
     -46.200238,
     -23.382119,
@@ -2682,10 +3124,12 @@
    ],
    "feicoes": 15,
    "pontos": 15279,
-   "bytes": 42610
+   "bytes": 31694,
+   "bytes_bruto": 31694,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t113.bin",
+   "arquivo": "data/pedologia/exato/t113.bin.gz",
    "bbox": [
     -46.569203,
     -23.817299,
@@ -2694,10 +3138,12 @@
    ],
    "feicoes": 16,
    "pontos": 18529,
-   "bytes": 42391
+   "bytes": 32730,
+   "bytes_bruto": 32730,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t020.bin",
+   "arquivo": "data/pedologia/exato/t020.bin.gz",
    "bbox": [
     -48.492262,
     -24.990103,
@@ -2706,10 +3152,12 @@
    ],
    "feicoes": 15,
    "pontos": 11075,
-   "bytes": 40264
+   "bytes": 23472,
+   "bytes_bruto": 23472,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t097.bin",
+   "arquivo": "data/pedologia/exato/t097.bin.gz",
    "bbox": [
     -46.636225,
     -23.76327,
@@ -2718,10 +3166,12 @@
    ],
    "feicoes": 6,
    "pontos": 15287,
-   "bytes": 33673
+   "bytes": 23551,
+   "bytes_bruto": 23551,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t057.bin",
+   "arquivo": "data/pedologia/exato/t057.bin.gz",
    "bbox": [
     -47.82824,
     -24.462972,
@@ -2730,10 +3180,12 @@
    ],
    "feicoes": 16,
    "pontos": 9821,
-   "bytes": 33528
+   "bytes": 17519,
+   "bytes_bruto": 17519,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t095.bin",
+   "arquivo": "data/pedologia/exato/t095.bin.gz",
    "bbox": [
     -46.821845,
     -23.76686,
@@ -2742,10 +3194,12 @@
    ],
    "feicoes": 13,
    "pontos": 10166,
-   "bytes": 26538
+   "bytes": 19543,
+   "bytes_bruto": 19543,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/exato/t226.bin",
+   "arquivo": "data/pedologia/exato/t226.bin.gz",
    "bbox": [
     -44.230857,
     -22.703653,
@@ -2754,7 +3208,9 @@
    ],
    "feicoes": 8,
    "pontos": 2540,
-   "bytes": 13056
+   "bytes": 8996,
+   "bytes_bruto": 8996,
+   "comprimido": true
   }
  ]
 }

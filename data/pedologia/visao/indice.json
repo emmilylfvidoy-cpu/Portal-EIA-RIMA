@@ -6,12 +6,14 @@
  "nivel": "visao",
  "geometria": "generalizada para o desenho de longe",
  "escala": 4000000,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 4.65 MB crus -> 1.09 MB na rede (77% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.09 MB crus -> 1.09 MB na rede (0% menor).",
  "total": {
   "tiles": 6,
   "feicoes": 12664,
   "pontos": 167534,
-  "bytes": 4878912
+  "bytes": 1142007,
+  "bytes_bruto": 1142007,
+  "comprimido": true
  },
  "campos": [
   "Unidade_de",
@@ -33,7 +35,7 @@
  ],
  "tiles": [
   {
-   "arquivo": "data/pedologia/visao/t002.bin",
+   "arquivo": "data/pedologia/visao/t002.bin.gz",
    "bbox": [
     -51.30803,
     -25.2085,
@@ -42,10 +44,12 @@
    ],
    "feicoes": 2472,
    "pontos": 38844,
-   "bytes": 977548
+   "bytes": 249865,
+   "bytes_bruto": 249865,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/visao/t000.bin",
+   "arquivo": "data/pedologia/visao/t000.bin.gz",
    "bbox": [
     -53.20419,
     -25.32118,
@@ -54,10 +58,12 @@
    ],
    "feicoes": 2350,
    "pontos": 32199,
-   "bytes": 961571
+   "bytes": 217694,
+   "bytes_bruto": 217694,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/visao/t001.bin",
+   "arquivo": "data/pedologia/visao/t001.bin.gz",
    "bbox": [
     -51.02235,
     -24.11278,
@@ -66,10 +72,12 @@
    ],
    "feicoes": 2176,
    "pontos": 36437,
-   "bytes": 928266
+   "bytes": 234592,
+   "bytes_bruto": 234592,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/visao/t004.bin",
+   "arquivo": "data/pedologia/visao/t004.bin.gz",
    "bbox": [
     -48.1864,
     -24.22643,
@@ -78,10 +86,12 @@
    ],
    "feicoes": 2635,
    "pontos": 27958,
-   "bytes": 900845
+   "bytes": 202522,
+   "bytes_bruto": 202522,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/visao/t003.bin",
+   "arquivo": "data/pedologia/visao/t003.bin.gz",
    "bbox": [
     -48.18793,
     -24.66954,
@@ -90,10 +100,12 @@
    ],
    "feicoes": 2176,
    "pontos": 22503,
-   "bytes": 750449
+   "bytes": 167932,
+   "bytes_bruto": 167932,
+   "comprimido": true
   },
   {
-   "arquivo": "data/pedologia/visao/t005.bin",
+   "arquivo": "data/pedologia/visao/t005.bin.gz",
    "bbox": [
     -48.02126,
     -23.96798,
@@ -102,7 +114,9 @@
    ],
    "feicoes": 855,
    "pontos": 9593,
-   "bytes": 360233
+   "bytes": 69402,
+   "bytes_bruto": 69402,
+   "comprimido": true
   }
  ]
 }

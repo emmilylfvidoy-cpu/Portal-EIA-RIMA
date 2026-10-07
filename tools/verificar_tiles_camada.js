@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const raiz = path.resolve(__dirname, '..');
+const camadas = require(path.join(__dirname, 'verificacoes', '_camadas.js'));
 const shapelib = require(path.join(raiz, 'js', 'shapelib.js'));
 const tiles = require(path.join(raiz, 'js', 'tiles.js'));
 const recorte = require(path.join(raiz, 'js', 'recorte.js'));
@@ -45,7 +46,7 @@ let bbTile = [Infinity, Infinity, -Infinity, -Infinity];
 const classes = new Set();
 const t0 = Date.now();
 for (const t of indice.tiles) {
-  const bytes = new Uint8Array(fs.readFileSync(path.join(raiz, t.arquivo)));
+  const bytes = camadas.lerTile(path.join(raiz, t.arquivo));
   const fc = tiles.decodificar(bytes);
   for (const f of fc.features) {
     feicoesTile++;

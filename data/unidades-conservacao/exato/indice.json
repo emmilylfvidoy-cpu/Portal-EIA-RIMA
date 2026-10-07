@@ -6,12 +6,14 @@
  "nivel": "exato",
  "geometria": "exata",
  "escala": null,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 11.46 MB crus -> 8.83 MB na rede (23% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 8.83 MB crus -> 8.83 MB na rede (0% menor).",
  "total": {
   "tiles": 67,
   "feicoes": 2742,
   "pontos": 3219661,
-  "bytes": 12012447
+  "bytes": 9253714,
+  "bytes_bruto": 9253714,
+  "comprimido": true
  },
  "campos": [
   "gml_id",
@@ -49,7 +51,7 @@
  ],
  "tiles": [
   {
-   "arquivo": "data/unidades-conservacao/exato/t032.bin",
+   "arquivo": "data/unidades-conservacao/exato/t032.bin.gz",
    "bbox": [
     -56.837822,
     -5.499792,
@@ -58,10 +60,12 @@
    ],
    "feicoes": 1,
    "pontos": 133469,
-   "bytes": 387511
+   "bytes": 326690,
+   "bytes_bruto": 326690,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t029.bin",
+   "arquivo": "data/unidades-conservacao/exato/t029.bin.gz",
    "bbox": [
     -57.643893,
     -7.940801,
@@ -70,10 +74,12 @@
    ],
    "feicoes": 1,
    "pontos": 113129,
-   "bytes": 342917
+   "bytes": 280852,
+   "bytes_bruto": 280852,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t051.bin",
+   "arquivo": "data/unidades-conservacao/exato/t051.bin.gz",
    "bbox": [
     -43.060745,
     -22.69957,
@@ -82,10 +88,12 @@
    ],
    "feicoes": 1,
    "pontos": 110398,
-   "bytes": 330362
+   "bytes": 274240,
+   "bytes_bruto": 274240,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t003.bin",
+   "arquivo": "data/unidades-conservacao/exato/t003.bin.gz",
    "bbox": [
     -69.805832,
     -12.50024,
@@ -94,10 +102,12 @@
    ],
    "feicoes": 14,
    "pontos": 57870,
-   "bytes": 220247
+   "bytes": 176612,
+   "bytes_bruto": 176612,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t000.bin",
+   "arquivo": "data/unidades-conservacao/exato/t000.bin.gz",
    "bbox": [
     -66.908717,
     -0.953403,
@@ -106,10 +116,12 @@
    ],
    "feicoes": 12,
    "pontos": 56339,
-   "bytes": 220037
+   "bytes": 162944,
+   "bytes_bruto": 162944,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t059.bin",
+   "arquivo": "data/unidades-conservacao/exato/t059.bin.gz",
    "bbox": [
     -46.718654,
     -14.973188,
@@ -118,10 +130,12 @@
    ],
    "feicoes": 23,
    "pontos": 53729,
-   "bytes": 216046
+   "bytes": 177965,
+   "bytes_bruto": 177965,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t037.bin",
+   "arquivo": "data/unidades-conservacao/exato/t037.bin.gz",
    "bbox": [
     -51.433856,
     -7.552885,
@@ -130,10 +144,12 @@
    ],
    "feicoes": 34,
    "pontos": 51949,
-   "bytes": 215739
+   "bytes": 176611,
+   "bytes_bruto": 176611,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t010.bin",
+   "arquivo": "data/unidades-conservacao/exato/t010.bin.gz",
    "bbox": [
     -67.649481,
     -7.547778,
@@ -142,10 +158,12 @@
    ],
    "feicoes": 13,
    "pontos": 55714,
-   "bytes": 215504
+   "bytes": 180962,
+   "bytes_bruto": 180962,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t009.bin",
+   "arquivo": "data/unidades-conservacao/exato/t009.bin.gz",
    "bbox": [
     -69.876917,
     -9.597382,
@@ -154,10 +172,12 @@
    ],
    "feicoes": 30,
    "pontos": 52316,
-   "bytes": 215438
+   "bytes": 175011,
+   "bytes_bruto": 175011,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t001.bin",
+   "arquivo": "data/unidades-conservacao/exato/t001.bin.gz",
    "bbox": [
     -61.356995,
     -1.230356,
@@ -166,10 +186,12 @@
    ],
    "feicoes": 17,
    "pontos": 54684,
-   "bytes": 211829
+   "bytes": 177063,
+   "bytes_bruto": 177063,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t035.bin",
+   "arquivo": "data/unidades-conservacao/exato/t035.bin.gz",
    "bbox": [
     -53.93916,
     -14.681975,
@@ -178,10 +200,12 @@
    ],
    "feicoes": 34,
    "pontos": 52971,
-   "bytes": 210537
+   "bytes": 161690,
+   "bytes_bruto": 161690,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t004.bin",
+   "arquivo": "data/unidades-conservacao/exato/t004.bin.gz",
    "bbox": [
     -65.431429,
     -13.537567,
@@ -190,10 +214,12 @@
    ],
    "feicoes": 17,
    "pontos": 55681,
-   "bytes": 208425
+   "bytes": 167354,
+   "bytes_bruto": 167354,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t027.bin",
+   "arquivo": "data/unidades-conservacao/exato/t027.bin.gz",
    "bbox": [
     -61.788998,
     -13.101324,
@@ -202,10 +228,12 @@
    ],
    "feicoes": 56,
    "pontos": 46450,
-   "bytes": 208185
+   "bytes": 166057,
+   "bytes_bruto": 166057,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t040.bin",
+   "arquivo": "data/unidades-conservacao/exato/t040.bin.gz",
    "bbox": [
     -47.308101,
     -24.269445,
@@ -214,10 +242,12 @@
    ],
    "feicoes": 11,
    "pontos": 56601,
-   "bytes": 206960
+   "bytes": 170233,
+   "bytes_bruto": 170233,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t019.bin",
+   "arquivo": "data/unidades-conservacao/exato/t019.bin.gz",
    "bbox": [
     -48.965233,
     -25.487315,
@@ -226,10 +256,12 @@
    ],
    "feicoes": 26,
    "pontos": 52985,
-   "bytes": 206437
+   "bytes": 170203,
+   "bytes_bruto": 170203,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t026.bin",
+   "arquivo": "data/unidades-conservacao/exato/t026.bin.gz",
    "bbox": [
     -62.100422,
     -17.180868,
@@ -238,10 +270,12 @@
    ],
    "feicoes": 50,
    "pontos": 49994,
-   "bytes": 204243
+   "bytes": 163045,
+   "bytes_bruto": 163045,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t012.bin",
+   "arquivo": "data/unidades-conservacao/exato/t012.bin.gz",
    "bbox": [
     -59.581931,
     -24.06896,
@@ -250,10 +284,12 @@
    ],
    "feicoes": 65,
    "pontos": 46524,
-   "bytes": 203838
+   "bytes": 153481,
+   "bytes_bruto": 153481,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t024.bin",
+   "arquivo": "data/unidades-conservacao/exato/t024.bin.gz",
    "bbox": [
     -49.866994,
     -20.664611,
@@ -262,10 +298,12 @@
    ],
    "feicoes": 50,
    "pontos": 49940,
-   "bytes": 202367
+   "bytes": 151930,
+   "bytes_bruto": 151930,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t030.bin",
+   "arquivo": "data/unidades-conservacao/exato/t030.bin.gz",
    "bbox": [
     -58.031706,
     -8.614829,
@@ -274,10 +312,12 @@
    ],
    "feicoes": 3,
    "pontos": 56991,
-   "bytes": 200781
+   "bytes": 162045,
+   "bytes_bruto": 162045,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t053.bin",
+   "arquivo": "data/unidades-conservacao/exato/t053.bin.gz",
    "bbox": [
     -45.830032,
     -20.948868,
@@ -286,10 +326,12 @@
    ],
    "feicoes": 62,
    "pontos": 47123,
-   "bytes": 199019
+   "bytes": 151796,
+   "bytes_bruto": 151796,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t022.bin",
+   "arquivo": "data/unidades-conservacao/exato/t022.bin.gz",
    "bbox": [
     -53.747426,
     -23.024207,
@@ -298,10 +340,12 @@
    ],
    "feicoes": 71,
    "pontos": 45427,
-   "bytes": 197949
+   "bytes": 148167,
+   "bytes_bruto": 148167,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t018.bin",
+   "arquivo": "data/unidades-conservacao/exato/t018.bin.gz",
    "bbox": [
     -49.930653,
     -25.58638,
@@ -310,10 +354,12 @@
    ],
    "feicoes": 30,
    "pontos": 50712,
-   "bytes": 194094
+   "bytes": 156921,
+   "bytes_bruto": 156921,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t054.bin",
+   "arquivo": "data/unidades-conservacao/exato/t054.bin.gz",
    "bbox": [
     -45.601982,
     -23.066666,
@@ -322,10 +368,12 @@
    ],
    "feicoes": 82,
    "pontos": 42827,
-   "bytes": 193062
+   "bytes": 142607,
+   "bytes_bruto": 142607,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t036.bin",
+   "arquivo": "data/unidades-conservacao/exato/t036.bin.gz",
    "bbox": [
     -54.434812,
     -7.353991,
@@ -334,10 +382,12 @@
    ],
    "feicoes": 20,
    "pontos": 55707,
-   "bytes": 193007
+   "bytes": 162434,
+   "bytes_bruto": 162434,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t063.bin",
+   "arquivo": "data/unidades-conservacao/exato/t063.bin.gz",
    "bbox": [
     -42.491024,
     -12.954573,
@@ -346,10 +396,12 @@
    ],
    "feicoes": 58,
    "pontos": 46331,
-   "bytes": 191715
+   "bytes": 138740,
+   "bytes_bruto": 138740,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t043.bin",
+   "arquivo": "data/unidades-conservacao/exato/t043.bin.gz",
    "bbox": [
     -45.819934,
     -23.016415,
@@ -358,10 +410,12 @@
    ],
    "feicoes": 23,
    "pontos": 55952,
-   "bytes": 190691
+   "bytes": 141350,
+   "bytes_bruto": 141350,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t034.bin",
+   "arquivo": "data/unidades-conservacao/exato/t034.bin.gz",
    "bbox": [
     -55.353529,
     -15.308304,
@@ -370,10 +424,12 @@
    ],
    "feicoes": 66,
    "pontos": 44753,
-   "bytes": 190424
+   "bytes": 141651,
+   "bytes_bruto": 141651,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t061.bin",
+   "arquivo": "data/unidades-conservacao/exato/t061.bin.gz",
    "bbox": [
     -46.162893,
     -13.145587,
@@ -382,10 +438,12 @@
    ],
    "feicoes": 69,
    "pontos": 43574,
-   "bytes": 190199
+   "bytes": 138799,
+   "bytes_bruto": 138799,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t033.bin",
+   "arquivo": "data/unidades-conservacao/exato/t033.bin.gz",
    "bbox": [
     -57.935183,
     -6.84334,
@@ -394,10 +452,12 @@
    ],
    "feicoes": 18,
    "pontos": 55394,
-   "bytes": 188636
+   "bytes": 161222,
+   "bytes_bruto": 161222,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t011.bin",
+   "arquivo": "data/unidades-conservacao/exato/t011.bin.gz",
    "bbox": [
     -64.979988,
     -32.930311,
@@ -406,10 +466,12 @@
    ],
    "feicoes": 51,
    "pontos": 45606,
-   "bytes": 188294
+   "bytes": 142284,
+   "bytes_bruto": 142284,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t021.bin",
+   "arquivo": "data/unidades-conservacao/exato/t021.bin.gz",
    "bbox": [
     -53.775976,
     -24.006008,
@@ -418,10 +480,12 @@
    ],
    "feicoes": 42,
    "pontos": 52073,
-   "bytes": 186331
+   "bytes": 149757,
+   "bytes_bruto": 149757,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t015.bin",
+   "arquivo": "data/unidades-conservacao/exato/t015.bin.gz",
    "bbox": [
     -54.378736,
     -29.42778,
@@ -430,10 +494,12 @@
    ],
    "feicoes": 102,
    "pontos": 37941,
-   "bytes": 185810
+   "bytes": 129811,
+   "bytes_bruto": 129811,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t049.bin",
+   "arquivo": "data/unidades-conservacao/exato/t049.bin.gz",
    "bbox": [
     -43.377301,
     -22.968627,
@@ -442,10 +508,12 @@
    ],
    "feicoes": 26,
    "pontos": 53523,
-   "bytes": 184275
+   "bytes": 149828,
+   "bytes_bruto": 149828,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t041.bin",
+   "arquivo": "data/unidades-conservacao/exato/t041.bin.gz",
    "bbox": [
     -45.850015,
     -24.034029,
@@ -454,10 +522,12 @@
    ],
    "feicoes": 12,
    "pontos": 51432,
-   "bytes": 182723
+   "bytes": 142005,
+   "bytes_bruto": 142005,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t042.bin",
+   "arquivo": "data/unidades-conservacao/exato/t042.bin.gz",
    "bbox": [
     -46.480004,
     -23.594044,
@@ -466,10 +536,12 @@
    ],
    "feicoes": 36,
    "pontos": 50409,
-   "bytes": 182464
+   "bytes": 138364,
+   "bytes_bruto": 138364,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t020.bin",
+   "arquivo": "data/unidades-conservacao/exato/t020.bin.gz",
    "bbox": [
     -47.839342,
     -24.635557,
@@ -478,10 +550,12 @@
    ],
    "feicoes": 51,
    "pontos": 48473,
-   "bytes": 180523
+   "bytes": 138253,
+   "bytes_bruto": 138253,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t052.bin",
+   "arquivo": "data/unidades-conservacao/exato/t052.bin.gz",
    "bbox": [
     -44.217058,
     -22.944544,
@@ -490,10 +564,12 @@
    ],
    "feicoes": 122,
    "pontos": 32552,
-   "bytes": 177608
+   "bytes": 112329,
+   "bytes_bruto": 112329,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t025.bin",
+   "arquivo": "data/unidades-conservacao/exato/t025.bin.gz",
    "bbox": [
     -48.977918,
     -19.168258,
@@ -502,10 +578,12 @@
    ],
    "feicoes": 79,
    "pontos": 43726,
-   "bytes": 177268
+   "bytes": 125565,
+   "bytes_bruto": 125565,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t065.bin",
+   "arquivo": "data/unidades-conservacao/exato/t065.bin.gz",
    "bbox": [
     -36.525451,
     -9.77543,
@@ -514,10 +592,12 @@
    ],
    "feicoes": 78,
    "pontos": 42881,
-   "bytes": 174813
+   "bytes": 123422,
+   "bytes_bruto": 123422,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t055.bin",
+   "arquivo": "data/unidades-conservacao/exato/t055.bin.gz",
    "bbox": [
     -42.237412,
     -22.107066,
@@ -526,10 +606,12 @@
    ],
    "feicoes": 72,
    "pontos": 45382,
-   "bytes": 174469
+   "bytes": 132799,
+   "bytes_bruto": 132799,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t056.bin",
+   "arquivo": "data/unidades-conservacao/exato/t056.bin.gz",
    "bbox": [
     -42.060027,
     -21.010032,
@@ -538,10 +620,12 @@
    ],
    "feicoes": 108,
    "pontos": 36620,
-   "bytes": 172537
+   "bytes": 113769,
+   "bytes_bruto": 113769,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t013.bin",
+   "arquivo": "data/unidades-conservacao/exato/t013.bin.gz",
    "bbox": [
     -56.071844,
     -30.572242,
@@ -550,10 +634,12 @@
    ],
    "feicoes": 83,
    "pontos": 40619,
-   "bytes": 172373
+   "bytes": 119795,
+   "bytes_bruto": 119795,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t016.bin",
+   "arquivo": "data/unidades-conservacao/exato/t016.bin.gz",
    "bbox": [
     -50.45374,
     -27.822847,
@@ -562,10 +648,12 @@
    ],
    "feicoes": 69,
    "pontos": 45768,
-   "bytes": 171695
+   "bytes": 120674,
+   "bytes_bruto": 120674,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t064.bin",
+   "arquivo": "data/unidades-conservacao/exato/t064.bin.gz",
    "bbox": [
     -38.447648,
     -12.595987,
@@ -574,10 +662,12 @@
    ],
    "feicoes": 90,
    "pontos": 40752,
-   "bytes": 170215
+   "bytes": 116984,
+   "bytes_bruto": 116984,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t057.bin",
+   "arquivo": "data/unidades-conservacao/exato/t057.bin.gz",
    "bbox": [
     -46.108626,
     -19.149024,
@@ -586,10 +676,12 @@
    ],
    "feicoes": 92,
    "pontos": 37713,
-   "bytes": 169815
+   "bytes": 120013,
+   "bytes_bruto": 120013,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t047.bin",
+   "arquivo": "data/unidades-conservacao/exato/t047.bin.gz",
    "bbox": [
     -44.125167,
     -23.023843,
@@ -598,10 +690,12 @@
    ],
    "feicoes": 58,
    "pontos": 48486,
-   "bytes": 169565
+   "bytes": 129711,
+   "bytes_bruto": 129711,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t060.bin",
+   "arquivo": "data/unidades-conservacao/exato/t060.bin.gz",
    "bbox": [
     -41.740596,
     -15.306925,
@@ -610,10 +704,12 @@
    ],
    "feicoes": 85,
    "pontos": 35546,
-   "bytes": 167126
+   "bytes": 118457,
+   "bytes_bruto": 118457,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t008.bin",
+   "arquivo": "data/unidades-conservacao/exato/t008.bin.gz",
    "bbox": [
     -64.153936,
     -11.688813,
@@ -622,10 +718,12 @@
    ],
    "feicoes": 29,
    "pontos": 52530,
-   "bytes": 166439
+   "bytes": 128565,
+   "bytes_bruto": 128565,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t017.bin",
+   "arquivo": "data/unidades-conservacao/exato/t017.bin.gz",
    "bbox": [
     -49.42688,
     -26.847166,
@@ -634,10 +732,12 @@
    ],
    "feicoes": 41,
    "pontos": 47028,
-   "bytes": 165575
+   "bytes": 127343,
+   "bytes_bruto": 127343,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t038.bin",
+   "arquivo": "data/unidades-conservacao/exato/t038.bin.gz",
    "bbox": [
     -47.984641,
     -24.251813,
@@ -646,10 +746,12 @@
    ],
    "feicoes": 16,
    "pontos": 45579,
-   "bytes": 164259
+   "bytes": 109234,
+   "bytes_bruto": 109234,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t007.bin",
+   "arquivo": "data/unidades-conservacao/exato/t007.bin.gz",
    "bbox": [
     -65.681322,
     -9.613848,
@@ -658,10 +760,12 @@
    ],
    "feicoes": 2,
    "pontos": 58586,
-   "bytes": 164084
+   "bytes": 140203,
+   "bytes_bruto": 140203,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t044.bin",
+   "arquivo": "data/unidades-conservacao/exato/t044.bin.gz",
    "bbox": [
     -45.807874,
     -23.101275,
@@ -670,10 +774,12 @@
    ],
    "feicoes": 87,
    "pontos": 33553,
-   "bytes": 160759
+   "bytes": 111247,
+   "bytes_bruto": 111247,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t045.bin",
+   "arquivo": "data/unidades-conservacao/exato/t045.bin.gz",
    "bbox": [
     -44.588546,
     -22.563776,
@@ -682,10 +788,12 @@
    ],
    "feicoes": 7,
    "pontos": 58525,
-   "bytes": 159102
+   "bytes": 138718,
+   "bytes_bruto": 138718,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t062.bin",
+   "arquivo": "data/unidades-conservacao/exato/t062.bin.gz",
    "bbox": [
     -45.087267,
     -7.841201,
@@ -694,10 +802,12 @@
    ],
    "feicoes": 49,
    "pontos": 34936,
-   "bytes": 158855
+   "bytes": 127723,
+   "bytes_bruto": 127723,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t002.bin",
+   "arquivo": "data/unidades-conservacao/exato/t002.bin.gz",
    "bbox": [
     -73.991207,
     -11.070425,
@@ -706,10 +816,12 @@
    ],
    "feicoes": 14,
    "pontos": 40909,
-   "bytes": 157066
+   "bytes": 133408,
+   "bytes_bruto": 133408,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t046.bin",
+   "arquivo": "data/unidades-conservacao/exato/t046.bin.gz",
    "bbox": [
     -43.795164,
     -23.083394,
@@ -718,10 +830,12 @@
    ],
    "feicoes": 26,
    "pontos": 50743,
-   "bytes": 144561
+   "bytes": 105900,
+   "bytes_bruto": 105900,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t048.bin",
+   "arquivo": "data/unidades-conservacao/exato/t048.bin.gz",
    "bbox": [
     -43.858077,
     -23.01097,
@@ -730,10 +844,12 @@
    ],
    "feicoes": 43,
    "pontos": 43433,
-   "bytes": 144192
+   "bytes": 111100,
+   "bytes_bruto": 111100,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t023.bin",
+   "arquivo": "data/unidades-conservacao/exato/t023.bin.gz",
    "bbox": [
     -49.543073,
     -23.310352,
@@ -742,10 +858,12 @@
    ],
    "feicoes": 61,
    "pontos": 33652,
-   "bytes": 140417
+   "bytes": 100323,
+   "bytes_bruto": 100323,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t014.bin",
+   "arquivo": "data/unidades-conservacao/exato/t014.bin.gz",
    "bbox": [
     -53.801164,
     -28.329801,
@@ -754,10 +872,12 @@
    ],
    "feicoes": 27,
    "pontos": 50890,
-   "bytes": 138950
+   "bytes": 75011,
+   "bytes_bruto": 75011,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t058.bin",
+   "arquivo": "data/unidades-conservacao/exato/t058.bin.gz",
    "bbox": [
     -46.375971,
     -15.718115,
@@ -766,10 +886,12 @@
    ],
    "feicoes": 33,
    "pontos": 28730,
-   "bytes": 123225
+   "bytes": 95861,
+   "bytes_bruto": 95861,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t066.bin",
+   "arquivo": "data/unidades-conservacao/exato/t066.bin.gz",
    "bbox": [
     -38.48669,
     -23.872113,
@@ -778,10 +900,12 @@
    ],
    "feicoes": 82,
    "pontos": 21247,
-   "bytes": 122262
+   "bytes": 83091,
+   "bytes_bruto": 83091,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t005.bin",
+   "arquivo": "data/unidades-conservacao/exato/t005.bin.gz",
    "bbox": [
     -64.953899,
     -9.346396,
@@ -790,10 +914,12 @@
    ],
    "feicoes": 1,
    "pontos": 54412,
-   "bytes": 112106
+   "bytes": 73029,
+   "bytes_bruto": 73029,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t031.bin",
+   "arquivo": "data/unidades-conservacao/exato/t031.bin.gz",
    "bbox": [
     -56.981613,
     -5.562969,
@@ -802,10 +928,12 @@
    ],
    "feicoes": 1,
    "pontos": 29571,
-   "bytes": 86594
+   "bytes": 70967,
+   "bytes_bruto": 70967,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t028.bin",
+   "arquivo": "data/unidades-conservacao/exato/t028.bin.gz",
    "bbox": [
     -60.415201,
     -7.224969,
@@ -814,10 +942,12 @@
    ],
    "feicoes": 4,
    "pontos": 15447,
-   "bytes": 57186
+   "bytes": 51310,
+   "bytes_bruto": 51310,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t039.bin",
+   "arquivo": "data/unidades-conservacao/exato/t039.bin.gz",
    "bbox": [
     -46.173405,
     -23.828326,
@@ -826,10 +956,12 @@
    ],
    "feicoes": 1,
    "pontos": 20325,
-   "bytes": 47585
+   "bytes": 42066,
+   "bytes_bruto": 42066,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t006.bin",
+   "arquivo": "data/unidades-conservacao/exato/t006.bin.gz",
    "bbox": [
     -65.831786,
     -8.998863,
@@ -838,10 +970,12 @@
    ],
    "feicoes": 1,
    "pontos": 9794,
-   "bytes": 38175
+   "bytes": 31900,
+   "bytes_bruto": 31900,
+   "comprimido": true
   },
   {
-   "arquivo": "data/unidades-conservacao/exato/t050.bin",
+   "arquivo": "data/unidades-conservacao/exato/t050.bin.gz",
    "bbox": [
     -43.168128,
     -22.511902,
@@ -850,7 +984,9 @@
    ],
    "feicoes": 4,
    "pontos": 4735,
-   "bytes": 16952
+   "bytes": 14220,
+   "bytes_bruto": 14220,
+   "comprimido": true
   }
  ]
 }

@@ -1,0 +1,96 @@
+{
+ "camada": "unidades-conservacao",
+ "nome": "Unidades de Conservação",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "medio",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 1000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 2.08 MB crus -> 1.01 MB na rede (51% menor).",
+ "total": {
+  "tiles": 3,
+  "feicoes": 2678,
+  "pontos": 179181,
+  "bytes": 1062145,
+  "bytes_bruto": 2178424,
+  "comprimido": true
+ },
+ "campos": [
+  "gml_id",
+  "uc_id",
+  "cd_cnuc",
+  "wdpa_pid",
+  "nome_uc",
+  "cria_ano",
+  "cria_ato",
+  "outro_ato",
+  "pl_manejo",
+  "co_gestor",
+  "quali_pol",
+  "ppgr",
+  "ha_total",
+  "ha_ato",
+  "esfera",
+  "uf",
+  "municipio",
+  "org_gestor",
+  "grupo",
+  "categoria",
+  "cat_iucn",
+  "amazonia",
+  "caatinga",
+  "cerrado",
+  "matlantica",
+  "pampa",
+  "pantanal",
+  "marinho",
+  "situacao",
+  "limite",
+  "area_ha",
+  "NomeAbrev"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/unidades-conservacao/medio/t000.bin.gz",
+   "bbox": [
+    -73.99121,
+    -32.93031,
+    -26.01448,
+    5.27191
+   ],
+   "feicoes": 1176,
+   "pontos": 106736,
+   "bytes": 590608,
+   "bytes_bruto": 1084008,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/unidades-conservacao/medio/t001.bin.gz",
+   "bbox": [
+    -51.43386,
+    -23.87181,
+    -25.29095,
+    0.74653
+   ],
+   "feicoes": 1336,
+   "pontos": 68910,
+   "bytes": 438127,
+   "bytes_bruto": 992817,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/unidades-conservacao/medio/t002.bin.gz",
+   "bbox": [
+    -38.48669,
+    -9.77543,
+    -28.15,
+    0.9663
+   ],
+   "feicoes": 166,
+   "pontos": 3535,
+   "bytes": 33410,
+   "bytes_bruto": 101599,
+   "comprimido": true
+  }
+ ]
+}

@@ -28,6 +28,59 @@
 | v3.1 | **Formato binário de tiles** (quantizado + delta): a geometria volta idêntica ao shapefile e o arquivo é **11,7× menor** que o GeoJSON equivalente |
 | v3.2 | **As seis camadas ficaram EXATAS.** Pedologia e Unidades de Conservação passaram a ser publicadas em **tiles binários** — nenhum vértice movido, nenhuma fenda — e o portal carrega só as partes que a tela mostra; para recortar, busca a camada inteira |
 | v3.3 | **Camada em tile ficou rápida**: dois níveis — a **visão de longe** (generalizada, 4,65 MB) quando o zoom está longe e o **dado exato** quando aproxima, com o recorte sempre no exato. O estado inteiro caiu de 34 MB / 10,8 milhões de pontos para **4,65 MB / 167 mil** |
+| v3.4 | **A camada em tile ficou rápida de verdade**: três níveis de detalhe escolhidos pelo zoom (visão de longe, médio, exato) e **tiles em gzip** que o navegador descomprime. O estado inteiro caiu de 34,05 MB para **1,09 MB** (31× menos) e nenhuma janela passa de 2,4 MB |
+
+## A camada em tile ficou rápida (v3.4)
+
+Trilha, sempre para o estado inteiro da Pedologia:
+
+| Versão | Download | Pontos desenhados |
+|---|---|---|
+| v3.1 (um nível, tiles de 19.000 km²) | 34,05 MB | 10.833.016 |
+| v3.3 (dois níveis) | 4,65 MB | 167.534 |
+| **v3.4 (três níveis + gzip)** | **1,09 MB** | **167.534** |
+
+E nenhuma janela passa de 2,4 MB agora:
+
+| Janela | Nível | Download | Pontos desenhados |
+|---|---|---|---|
+| Estado inteiro | visão de longe | **1,09 MB** | 167.534 |
+| 150 km | médio | 2,40 MB | 497.994 |
+| 40 km | médio | 1,62 MB | 329.822 |
+| 10 km | exato | 0,78 MB | 233.853 |
+| 2 km | exato | 0,68 MB | 207.491 |
+
+### O que comprime, e por que tanto
+
+Os tiles são binários com **delta + varint**: a coordenada é a diferença entre vértices
+vizinhos. Isso deixa muita repetição, e repetição comprime:
+
+| Nível | Cru | Em gzip | Ganho |
+|---|---|---|---|
+| Pedologia visão | 4,65 MB | **1,09 MB** | **77%** |
+| Pedologia médio | 6,89 MB | 2,40 MB | 65% |
+| Pedologia exato | 34,08 MB | 23,30 MB | 32% |
+| UCs visão | 1,34 MB | 0,50 MB | 63% |
+
+O arquivo cru é **removido** depois de comprimido (manter os dois dobraria o repositório). O
+navegador descomprime com `DecompressionStream`, que é nativo — e a decisão de descomprimir é
+pelo **magic do gzip** (`1f 8b`), não pela extensão: se o servidor entregar o conteúdo já
+descomprimido por cabeçalho, os bytes chegam crus e descomprimir de novo daria erro.
+
+### Três níveis, porque um só não resolve
+
+Um nível só obriga a escolher entre leve (grosso demais de perto) e exato (pesado demais de
+longe). As faixas vêm do catálogo (`niveis: [{nivel, indice, zoom_max}]`):
+
+| Zoom | Nível | Por quê |
+|---|---|---|
+| ≤ 9 | visão de longe (1:4.000.000) | num mapa de estado cada mancha tem poucos pixels |
+| 10–11 | médio (1:1.000.000) | a faixa de 40 a 150 km, que num nível só pedia 3,4 MB |
+| ≥ 12 | **exato** | é o que se mede e se confere |
+
+**O recorte usa SEMPRE o exato**, em qualquer zoom: recortar sobre uma visão generalizada daria
+área menor que a real. Trocar de nível descarta o que estava carregado, senão as duas versões
+ficariam desenhadas juntas.
 
 ## A camada em tile ficou leve de verdade (v3.3)
 
