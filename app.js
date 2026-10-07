@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v1.7';
+  const VERSAO = 'v1.8';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -250,7 +250,18 @@
       const el = document.querySelector('.estado[data-camada="' + camada.id + '"]');
       if (el) el.textContent = 'carregando…';
       try {
-        const resposta = await fetch(camada.arquivo, { cache: 'force-cache' });
+        /* `cache: 'no-cache'` — REVALIDA sempre. Não é "não guardar": o navegador guarda
+         * e pergunta ao servidor se mudou; se não mudou, a resposta é 304 sem corpo, ou
+         * seja, barata mesmo para os 5,7 MB da camada de Geologia.
+         *
+         * Aqui já esteve `cache: 'force-cache'`, e o defeito foi grave: `force-cache` usa
+         * o que estiver guardado SEM NUNCA revalidar. Quando a base é reimportada (a
+         * Geologia trocou de exemplo para o mapa real de SP, com outros nomes de campo),
+         * quem já tinha aberto o portal continuava recebendo o geojson ANTIGO — e como as
+         * classes novas não existem nos atributos antigos, o mapa pintava tudo com a cor
+         * única de reserva. Parecia "o site não publicou as cores", quando o problema era
+         * o navegador servindo geometria velha para sempre. */
+        const resposta = await fetch(camada.arquivo, { cache: 'no-cache' });
         if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
         const geojson = await resposta.json();
         estado.camadas.push(Object.assign({}, camada, { geojson: geojson }));

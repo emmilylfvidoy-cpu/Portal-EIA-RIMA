@@ -150,6 +150,27 @@ console.log('\n== vercel.json ==');
   }
 }
 
+console.log('\n== Cache do que é carregado em tempo de execução ==');
+{
+  /* `force-cache` num fetch de dado é uma armadilha: o navegador usa o que está guardado
+   * e NUNCA revalida. Aconteceu — a camada de Geologia foi reimportada (do exemplo para o
+   * mapa real de SP, com outros nomes de campo) e quem já tinha aberto o portal continuou
+   * recebendo o geojson antigo. Como as classes do catálogo novo não existem nos atributos
+   * antigos, o mapa pintava tudo com a cor única de reserva: parecia que as cores não
+   * tinham sido publicadas, quando o navegador servia geometria velha para sempre.
+   *
+   * `no-cache` não significa "não guardar": significa revalidar. Resposta 304 é barata. */
+  const fonte = fs.readFileSync(path.join(raiz, 'app.js'), 'utf8');
+  const forcados = [];
+  for (const m of fonte.matchAll(/fetch\(([^)]*)\)/g)) {
+    if (/force-cache/.test(m[1])) forcados.push(m[1].trim().slice(0, 60));
+  }
+  ok('nenhum fetch de dado usa force-cache', forcados.length === 0,
+    forcados.length ? forcados.join(' | ') + '  → o visitante ficaria com o dado antigo' : 'ok');
+  ok('o catálogo é buscado revalidando', /data\/catalogo\.json',\s*\{\s*cache:\s*'no-cache'/.test(fonte));
+  ok('as camadas são buscadas revalidando', /fetch\(camada\.arquivo,\s*\{\s*cache:\s*'no-cache'/.test(fonte));
+}
+
 console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
 return falhas ? 1 : 0;
 }

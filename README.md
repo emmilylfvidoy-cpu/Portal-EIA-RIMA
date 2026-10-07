@@ -12,6 +12,7 @@
 | v1.5 | **Correção do cálculo de área geodésica** (errava 31% em anel recortado) e Geologia real no lugar do exemplo |
 | v1.6 | **Agrupamento escolhido pelo usuário** (tabela, gráfico e relatório) e legenda por folha, que suporta centenas de classes |
 | v1.7 | **Cores do mapa do projeto** na Geologia: leitura de `<camada>.xml` (estilo com símbolos nomeados pela classe) — 306 de 306 unidades com a cor do cliente |
+| v1.8 | **Correção do cache do dado**: a camada era buscada com `force-cache`, que nunca revalida — quem já tinha aberto o portal continuava recebendo a geometria antiga (e o mapa pintava de uma cor só, como se as cores não tivessem sido publicadas) |
 
 ## Escolher as colunas de agrupamento (v1.6)
 
