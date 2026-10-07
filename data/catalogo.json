@@ -1,0 +1,159 @@
+{
+  "versao": 1,
+  "gerado_em": "2026-10-07T13:08:10.297Z",
+  "aviso": "As camadas marcadas com fonte \"EXEMPLO SINTÉTICO\" servem para demonstrar o fluxo. Substitua por dado oficial antes de usar no estudo.",
+  "meios": [
+    {
+      "id": "fisico",
+      "nome": "Meio Físico",
+      "cor": "#8a6d3b"
+    },
+    {
+      "id": "biotico",
+      "nome": "Meio Biótico",
+      "cor": "#2f6b3a"
+    },
+    {
+      "id": "socioeconomico",
+      "nome": "Meio Socioeconômico",
+      "cor": "#2f5b8a"
+    }
+  ],
+  "camadas": [
+    {
+      "id": "geologia",
+      "nome": "Geologia",
+      "meio": "fisico",
+      "tipo": "poligono",
+      "arquivo": "data/geologia.geojson",
+      "campo_classe": "unidade",
+      "estilo": {
+        "cor": "#c8a165",
+        "opacidade": 0.35
+      },
+      "fonte": "EXEMPLO SINTÉTICO",
+      "data_ref": "exemplo",
+      "obs": "Substituir por carta geológica oficial (CPRM)."
+    },
+    {
+      "id": "geomorfologia",
+      "nome": "Geomorfologia",
+      "meio": "fisico",
+      "tipo": "poligono",
+      "arquivo": "data/geomorfologia.geojson",
+      "campo_classe": "forma",
+      "estilo": {
+        "cor": "#b08d5a",
+        "opacidade": 0.3
+      },
+      "fonte": "EXEMPLO SINTÉTICO",
+      "data_ref": "exemplo",
+      "obs": ""
+    },
+    {
+      "id": "solos",
+      "nome": "Solos",
+      "meio": "fisico",
+      "tipo": "poligono",
+      "arquivo": "data/solos.geojson",
+      "campo_classe": "classe",
+      "estilo": {
+        "cor": "#8a6d3b",
+        "opacidade": 0.3
+      },
+      "fonte": "EXEMPLO SINTÉTICO",
+      "data_ref": "exemplo",
+      "obs": ""
+    },
+    {
+      "id": "declividade",
+      "nome": "Declividade",
+      "meio": "fisico",
+      "tipo": "poligono",
+      "arquivo": "data/declividade.geojson",
+      "campo_classe": "classe",
+      "estilo": {
+        "cor": "#a8763b",
+        "opacidade": 0.3
+      },
+      "fonte": "EXEMPLO SINTÉTICO",
+      "data_ref": "exemplo",
+      "obs": "No uso real, gerar do MDE (SRTM ou LiDAR)."
+    },
+    {
+      "id": "hidrografia",
+      "nome": "Hidrografia",
+      "meio": "fisico",
+      "tipo": "linha",
+      "arquivo": "data/hidrografia.geojson",
+      "campo_classe": "tipo",
+      "estilo": {
+        "cor": "#2f5b8a",
+        "opacidade": 0
+      },
+      "fonte": "Base hidrográfica do projeto",
+      "data_ref": "2024",
+      "obs": "Simplificada para 60 m: confira a escala antes de usar em 1:5.000."
+    },
+    {
+      "id": "vegetacao",
+      "nome": "Vegetação",
+      "meio": "biotico",
+      "tipo": "poligono",
+      "arquivo": "data/vegetacao.geojson",
+      "campo_classe": "fitofisionomia",
+      "estilo": {
+        "cor": "#2f6b3a",
+        "opacidade": 0.35
+      },
+      "fonte": "EXEMPLO SINTÉTICO",
+      "data_ref": "exemplo",
+      "obs": ""
+    },
+    {
+      "id": "uso-do-solo",
+      "nome": "Uso e ocupação do solo",
+      "meio": "biotico",
+      "tipo": "poligono",
+      "arquivo": "data/uso-do-solo.geojson",
+      "campo_classe": "classe",
+      "estilo": {
+        "cor": "#6b8a2f",
+        "opacidade": 0.3
+      },
+      "fonte": "EXEMPLO SINTÉTICO",
+      "data_ref": "exemplo",
+      "obs": "Substituir por classificação oficial ou obtida por sensoriamento remoto."
+    },
+    {
+      "id": "limite-municipal",
+      "nome": "Limite municipal",
+      "meio": "socioeconomico",
+      "tipo": "poligono",
+      "arquivo": "data/limite-municipal.geojson",
+      "campo_classe": "nome",
+      "estilo": {
+        "cor": "#1f2d36",
+        "opacidade": 0
+      },
+      "fonte": "IBGE — malha municipal",
+      "data_ref": "2022",
+      "obs": ""
+    },
+    {
+      "id": "zoneamento",
+      "nome": "Zoneamento municipal",
+      "meio": "socioeconomico",
+      "tipo": "poligono",
+      "arquivo": "data/zoneamento.geojson",
+      "campo_classe": "sigla",
+      "estilo": {
+        "cor": "#8a5fd9",
+        "opacidade": 0.28
+      },
+      "fonte": "Zoneamento fornecido ao projeto",
+      "data_ref": "2024",
+      "obs": ""
+    }
+  ]
+}

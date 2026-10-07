@@ -1,0 +1,196 @@
+/* Portal EIA/RIMA — folha de estilo única, sem framework.
+   Paleta sóbria de documento técnico: o mapa é o protagonista, a interface é cinza. */
+
+:root {
+  --tinta: #16323f;
+  --tinta-clara: #43535d;
+  --papel: #f4f6f7;
+  --papel-2: #ffffff;
+  --borda: #d6dde1;
+  --borda-forte: #a9b6bd;
+  --acento: #1f6b7a;
+  --acento-escuro: #164f5b;
+  --fisico: #8a6d3b;
+  --biotico: #2f6b3a;
+  --socio: #2f5b8a;
+  --alerta: #a33f3f;
+  --sombra: 0 1px 3px rgba(20, 40, 50, .14);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: var(--tinta);
+  background: var(--papel);
+}
+
+body { display: flex; flex-direction: column; overflow: hidden; }
+
+/* ------------------------------------------------------------- topo */
+.topo {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 8px 14px; background: var(--tinta); color: #fff;
+  box-shadow: var(--sombra); z-index: 900;
+}
+.marca { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.logo { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
+.logo span { color: #7fc4d0; }
+.subtitulo { font-size: 12px; color: #b9cbd2; }
+.topo-acoes { display: flex; align-items: center; gap: 8px; }
+.status-topo { font-size: 12px; color: #cfe0e6; max-width: 46ch; }
+
+.discreto {
+  background: transparent; border: 1px solid #3d6470; color: #e6f0f3;
+  padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+}
+.discreto:hover { background: #1e4653; }
+
+/* ------------------------------------------------------------- layout */
+.layout {
+  flex: 1; display: grid; grid-template-columns: 330px minmax(0, 1fr) 400px;
+  gap: 0; min-height: 0;
+}
+.coluna { overflow-y: auto; background: var(--papel-2); border-right: 1px solid var(--borda); }
+.coluna.direita { border-right: none; border-left: 1px solid var(--borda); }
+.mapa-area { position: relative; min-width: 0; background: #dfe6e9; }
+#mapa { position: absolute; inset: 0; }
+
+.bloco { padding: 12px 14px; border-bottom: 1px solid var(--borda); }
+.bloco h2 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--acento-escuro); }
+.ajuda { margin: 0 0 8px; font-size: 11.5px; color: var(--tinta-clara); line-height: 1.45; }
+.ajuda code, .passos code { background: #eef2f4; padding: 0 3px; border-radius: 3px; }
+.vazio { font-size: 12px; color: #8b979d; font-style: italic; margin: 4px 0 0; }
+
+/* ------------------------------------------------------------- controles */
+.botao {
+  border: 1px solid var(--borda-forte); background: #fff; color: var(--tinta);
+  padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12.5px;
+}
+.botao:hover { background: #eef5f7; border-color: var(--acento); }
+.botao.primario { background: var(--acento); border-color: var(--acento-escuro); color: #fff; font-weight: 600; }
+.botao.primario:hover { background: var(--acento-escuro); }
+.botao.largo { width: 100%; }
+.botao[disabled] { opacity: .5; cursor: not-allowed; }
+.acoes { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+
+.campo { margin: 8px 0; }
+.campo.linha { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.campo label { display: block; font-size: 11.5px; color: var(--tinta-clara); margin-bottom: 3px; }
+.campo input[type="text"], .campo input[type="number"], .campo select {
+  width: 100%; padding: 5px 6px; border: 1px solid var(--borda-forte);
+  border-radius: 4px; font-size: 12.5px; background: #fff; color: var(--tinta);
+}
+.campo input[type="file"] { font-size: 11.5px; width: 100%; }
+.caixa { display: flex; align-items: center; gap: 6px; font-size: 12px; margin: 4px 0; }
+.caixa input { margin: 0; }
+
+.aviso {
+  margin: 8px 0 0; padding: 7px 9px; border-left: 3px solid var(--acento);
+  background: #eef5f7; font-size: 11.5px; line-height: 1.45; color: var(--tinta);
+}
+.aviso.alerta { border-color: var(--alerta); background: #fbeeee; }
+.aviso-inline { font-size: 11.5px; color: var(--alerta); }
+
+/* ------------------------------------------------------------- listas */
+.lista { list-style: none; margin: 8px 0 0; padding: 0; }
+.lista li {
+  display: flex; align-items: center; gap: 8px; padding: 6px 7px;
+  border: 1px solid var(--borda); border-radius: 4px; margin-bottom: 5px; background: #fbfcfc;
+}
+.lista .amostra { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; border: 1px solid rgba(0,0,0,.25); }
+.lista .nome { flex: 1; font-size: 12.5px; }
+.lista .meta { font-size: 11px; color: var(--tinta-clara); }
+.lista button { padding: 2px 6px; font-size: 11px; }
+
+.camadas .meio { margin: 8px 0 3px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.camadas .meio.fisico { color: var(--fisico); }
+.camadas .meio.biotico { color: var(--biotico); }
+.camadas .meio.socioeconomico { color: var(--socio); }
+.camada-item { display: flex; align-items: center; gap: 7px; padding: 4px 2px; font-size: 12.5px; }
+.camada-item .amostra { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.25); }
+.camada-item .estado { font-size: 10.5px; color: var(--tinta-clara); margin-left: auto; }
+
+/* ------------------------------------------------------------- progresso */
+.progresso { margin-top: 8px; font-size: 11.5px; color: var(--tinta-clara); }
+.progresso .barra { height: 6px; background: #e3e9ec; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+.progresso .barra i { display: block; height: 100%; width: 0; background: var(--acento); transition: width .18s; }
+
+/* ------------------------------------------------------------- mapa */
+.mapa-ferramentas { position: absolute; top: 12px; right: 12px; z-index: 500; display: flex; flex-direction: column; gap: 4px; }
+.mapa-ferramentas button {
+  width: 34px; height: 34px; border: 1px solid var(--borda-forte); background: #fff;
+  border-radius: 4px; cursor: pointer; font-size: 16px; color: var(--tinta); box-shadow: var(--sombra);
+}
+.mapa-ferramentas button:hover { background: #eef5f7; }
+.mapa-rodape {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 500;
+  display: flex; justify-content: space-between; gap: 10px; padding: 4px 10px;
+  background: rgba(255,255,255,.92); border-top: 1px solid var(--borda); font-size: 11px; color: var(--tinta-clara);
+}
+
+/* ------------------------------------------------------------- abas */
+.abas { display: flex; gap: 2px; border-bottom: 1px solid var(--borda); margin-bottom: 8px; }
+.aba {
+  border: 1px solid transparent; border-bottom: none; background: transparent;
+  padding: 6px 10px; font-size: 12.5px; cursor: pointer; color: var(--tinta-clara); border-radius: 4px 4px 0 0;
+}
+.aba.ativa { background: #fff; border-color: var(--borda); color: var(--tinta); font-weight: 600; }
+.painel { display: none; }
+.painel.ativo { display: block; }
+
+/* ------------------------------------------------------------- tabela */
+.tabela-rolagem { max-height: 46vh; overflow: auto; border: 1px solid var(--borda); border-radius: 4px; margin-top: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+thead th {
+  position: sticky; top: 0; background: #eef2f4; text-align: left; padding: 5px 6px;
+  border-bottom: 1px solid var(--borda-forte); font-weight: 600; white-space: nowrap;
+}
+tbody td { padding: 4px 6px; border-bottom: 1px solid #eef2f4; }
+tbody tr:nth-child(even) { background: #fafcfc; }
+td.numero, th.numero { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------- graficos / relatorio */
+.graficos { margin-top: 6px; overflow-x: auto; }
+.graficos svg { max-width: 100%; height: auto; }
+.relatorio { margin-top: 8px; font-size: 12.5px; line-height: 1.5; max-height: 52vh; overflow-y: auto; }
+.relatorio h3 { font-size: 12.5px; margin: 12px 0 4px; color: var(--acento-escuro); }
+.relatorio p { margin: 0 0 8px; text-align: justify; }
+
+.previa-mapa { margin-top: 8px; overflow: auto; border: 1px solid var(--borda); background: #fff; }
+.previa-mapa svg { display: block; max-width: 100%; height: auto; }
+.logos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.logos img { height: 34px; border: 1px solid var(--borda); background: #fff; padding: 2px; border-radius: 3px; }
+.logos .item { position: relative; display: inline-flex; }
+.logos .item button { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%;
+  border: 1px solid var(--borda-forte); background: #fff; cursor: pointer; font-size: 11px; line-height: 1; }
+
+/* ------------------------------------------------------------- dialogo */
+dialog {
+  border: none; border-radius: 6px; padding: 0; max-width: 660px; width: 92%;
+  box-shadow: 0 10px 40px rgba(0,0,0,.3); color: var(--tinta);
+}
+dialog::backdrop { background: rgba(16, 32, 40, .55); }
+.dialogo-topo { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--borda); }
+.dialogo-topo h2 { margin: 0; font-size: 15px; }
+.dialogo-topo button { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--tinta-clara); }
+.passos { padding: 12px 16px 12px 34px; margin: 0; font-size: 13px; line-height: 1.55; }
+.passos li { margin-bottom: 7px; }
+.ressalva { padding: 0 16px 16px; margin: 0; font-size: 12px; color: var(--tinta-clara); }
+
+/* ------------------------------------------------------------- utilidades */
+.oculto { display: none !important; }
+.carregando { opacity: .6; pointer-events: none; }
+
+@media (max-width: 1200px) {
+  .layout { grid-template-columns: 300px minmax(0, 1fr) 340px; }
+}
+@media (max-width: 980px) {
+  body { overflow: auto; }
+  .layout { grid-template-columns: 1fr; }
+  .coluna { max-height: none; border: none; }
+  .mapa-area { height: 60vh; }
+}

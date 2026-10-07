@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Teste de fumaça — Portal EIA/RIMA</title>
+<style>
+  body { margin: 0; font-family: Consolas, monospace; font-size: 13px; display: flex; height: 100vh; }
+  iframe { flex: 1; border: none; }
+  #painel { width: 420px; background: #10202a; color: #cfe0e6; overflow-y: auto; padding: 10px; }
+  h2 { font-size: 14px; margin: 0 0 8px; color: #7fc4d0; }
+  .linha { padding: 3px 0; border-bottom: 1px solid #1d3440; word-break: break-word; }
+  .ok { color: #8fe08f; }
+  .erro { color: #ff9a8a; }
+  .aviso { color: #ffd98a; }
+  #resumo { margin-top: 10px; padding: 8px; background: #0a1820; border-radius: 4px; font-weight: 700; }
+</style>
+</head>
+<body>
+<iframe id="portal" src="/index.html"></iframe>
+<div id="painel">
+  <h2>Teste de fumaça</h2>
+  <div id="log"></div>
+  <div id="resumo">rodando…</div>
+</div>
+<script>
+/* Teste de fumaça: carrega o portal num iframe, exercita o fluxo principal usando
+   os arquivos reais de data/ e reporta erro de console. É o único teste que roda
+   o app.js de verdade, com Leaflet e DOM. */
+(function () {
+  const log = document.getElementById('log');
+  const resumo = document.getElementById('resumo');
+  const problemas = [];
+  let etapas = 0, ok = 0;
+
+  function linha(texto, classe) {
+    const d = document.createElement('div');
+    d.className = 'linha ' + (classe || '');
+    d.textContent = texto;
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+  }
+  function verificar(nome, condicao, detalhe) {
+    etapas++;
+    if (condicao) { ok++; linha('ok  ' + nome + (detalhe ? '  [' + detalhe + ']' : ''), 'ok'); }
+    else { problemas.push(nome); linha('FALHA ' + nome + (detalhe ? '  [' + detalhe + ']' : ''), 'erro'); }
+  }
+  function esperar(ms) { return new Promise((r) => setTimeout(r, ms)); }
+  async function esperarPor(fn, ms, passo) {
+    const limite = Date.now() + (ms || 8000);
+    while (Date.now() < limite) {
+      try { const v = fn(); if (v) return v; } catch (e) { /* segue tentando */ }
+      await esperar(passo || 120);
+    }
+    return null;
+  }
+
+  window.addEventListener('error', (e) => {
+    problemas.push('erro global: ' + e.message);
+    linha('ERRO GLOBAL ' + e.message + ' @ ' + (e.filename || '').split('/').pop() + ':' + e.lineno, 'erro');
+  });
+
+  const quadro = document.getElementById('portal');
+  quadro.onload = async function () {
+    await esperar(600);
+    const win = quadro.contentWindow;
+    const doc = quadro.contentDocument;
+    win.addEventListener('error', (e) => {
+      problemas.push('erro no portal: ' + e.message);
+      linha('ERRO NO PORTAL ' + e.message + ' @ ' + (e.filename || '').split('/').pop() + ':' + e.lineno, 'erro');
+    });
+    win.addEventListener('unhandledrejection', (e) => {
+      problemas.push('promise rejeitada: ' + (e.reason && e.reason.message));
+      linha('PROMISE REJEITADA ' + (e.reason && e.reason.message), 'erro');
+    });
+
+    try {
+      linha('--- bibliotecas ---');
+      verificar('Leaflet carregado', typeof win.L === 'object' && !!win.L.map);
+      verificar('Turf carregado', typeof win.turf === 'object' && typeof win.turf.intersect === 'function');
+      verificar('módulos EIA carregados', !!win.EIA && !!win.EIA.recorte && !!win.EIA.mapa && !!win.EIA.pdf,
+        win.EIA ? Object.keys(win.EIA).join(',') : 'ausente');
+      verificar('mapa criado', !!doc.querySelector('#mapa .leaflet-pane'));
+
+      linha('--- catálogo ---');
+      const camadasNoDom = await esperarPor(() => {
+        const itens = doc.querySelectorAll('#lista-camadas .camada-item');
+        return itens.length ? itens : null;
+      }, 8000);
+      verificar('catálogo renderizou as camadas', !!camadasNoDom && camadasNoDom.length >= 8,
+        camadasNoDom ? camadasNoDom.length + ' camadas' : 'nenhuma');
+
+      linha('--- áreas de influência de exemplo ---');
+      const resposta = await win.fetch('/data/areas-influencia-exemplo.geojson');
+      const geojson = await resposta.json();
+      verificar('arquivo de exemplo acessível', geojson.features.length === 2);
+      // usa o caminho real do app: adiciona pela função interna via evento de arquivo
+      const caixa = doc.getElementById('upload-areas');
+      const arquivo = new win.File([JSON.stringify(geojson)], 'areas-influencia-exemplo.geojson', { type: 'application/geo+json' });
+      const dt = new win.DataTransfer();
+      dt.items.add(arquivo);
+      caixa.files = dt.files;
+      caixa.dispatchEvent(new win.Event('change', { bubbles: true }));
+      const areasOk = await esperarPor(() => doc.querySelectorAll('#lista-areas li').length >= 2 ? true : null, 8000);
+      verificar('duas áreas de influência carregadas', !!areasOk,
+        doc.querySelectorAll('#lista-areas li').length + ' na lista');
+      const areaTexto = doc.querySelector('#lista-areas li .meta');
+      verificar('área calculada e mostrada', !!areaTexto && /ha/.test(areaTexto.textContent),
+        areaTexto ? areaTexto.textContent : 'sem texto');
+
+      linha('--- camadas ---');
+      // liga 3 camadas pequenas (geologia, geomorfologia, uso do solo) para o teste ser rápido
+      const alvos = ['geologia', 'geomorfologia', 'uso-do-solo'];
+      for (const id of alvos) {
+        const item = Array.from(doc.querySelectorAll('.camada-item')).find((el) => {
+          const marca = el.querySelector('input');
+          const estado = el.querySelector('.estado');
+          return estado && estado.dataset.camada === id && marca;
+        });
+        if (item) {
+          const marca = item.querySelector('input');
+          marca.checked = true;
+          marca.dispatchEvent(new win.Event('change', { bubbles: true }));
+        }
+      }
+      const carregadas = await esperarPor(() => {
+        const estados = Array.from(doc.querySelectorAll('.estado[data-camada]'))
+          .filter((e) => alvos.indexOf(e.dataset.camada) >= 0)
+          .map((e) => e.textContent);
+        return estados.every((t) => /feições/.test(t)) ? estados : null;
+      }, 20000);
+      verificar('camadas carregadas do disco', !!carregadas, carregadas ? carregadas.join(' | ') : 'não carregaram');
+
+      linha('--- recorte ---');
+      doc.getElementById('btn-recortar').click();
+      const recortou = await esperarPor(() => {
+        const r = doc.getElementById('resumo-recorte');
+        return !r.hidden && /combinações/.test(r.textContent) ? r.textContent : null;
+      }, 40000);
+      verificar('recorte executado', !!recortou, recortou ? recortou.slice(0, 110) : 'sem resumo');
+      verificar('tabela preenchida', doc.querySelectorAll('#tabela-resultado tbody tr').length > 1,
+        doc.querySelectorAll('#tabela-resultado tbody tr').length + ' linhas');
+
+      linha('--- abas ---');
+      doc.querySelector('.aba[data-aba="graficos"]').click();
+      const svgGraf = await esperarPor(() => doc.querySelector('#graficos svg'), 8000);
+      verificar('gráfico gerado', !!svgGraf);
+      doc.querySelector('.aba[data-aba="relatorio"]').click();
+      const relato = await esperarPor(() => {
+        const t = doc.getElementById('relatorio-texto').textContent;
+        return t.length > 400 ? t : null;
+      }, 8000);
+      verificar('relatório redigido', !!relato, relato ? relato.length + ' caracteres' : 'vazio');
+      doc.querySelector('.aba[data-aba="mapa"]').click();
+      doc.getElementById('btn-mapa-previa').click();
+      const previa = await esperarPor(() => doc.querySelector('#previa-mapa svg'), 8000);
+      verificar('prévia do mapa desenhada', !!previa);
+      const info = doc.getElementById('info-articulacao');
+      verificar('informação de articulação disponível', !info.hidden && /folha/i.test(info.textContent),
+        info.textContent.slice(0, 90));
+
+      linha('--- articulação em 1:5.000 ---');
+      doc.getElementById('escala').value = '5000';
+      doc.getElementById('escala').dispatchEvent(new win.Event('change', { bubbles: true }));
+      doc.getElementById('articulado').checked = true;
+      doc.getElementById('articulado').dispatchEvent(new win.Event('change', { bubbles: true }));
+      const art = await esperarPor(() => /folhas/.test(doc.getElementById('info-articulacao').textContent)
+        ? doc.getElementById('info-articulacao').textContent : null, 8000);
+      verificar('articulação calculada em 1:5.000', !!art && /\d+ folhas/.test(art),
+        art ? (art.match(/(\d+) folhas/) || [])[0] : 'sem cálculo');
+
+      linha('--- exportações (sem baixar) ---');
+      const r = win.EIA.recorte;
+      verificar('motor de recorte exposto', typeof r.recortarTudo === 'function');
+      const pdf = win.EIA.pdf.criarDocumento({ titulo: 'teste' });
+      const pag = pdf.novaPagina(210, 297);
+      pdf.texto(pag, 'Teste de fumaça — acentuação: área, influência', 20, 20, { tamanho: 10 });
+      const bytes = pdf.construir();
+      verificar('PDF gerado no navegador', bytes.length > 500 && bytes[0] === 0x25, bytes.length + ' bytes');
+      const svg = win.EIA.svg.barras([{ rotulo: 'a', valor: 1 }], {});
+      verificar('SVG gerado no navegador', svg.indexOf('<svg') === 0);
+      const mapa = win.EIA.mapa.articular([-47.8, -22.9, -47.5, -22.6], 'A1', 'paisagem', 5000, {});
+      verificar('articulação gera grade', mapa.total > 1 && mapa.folhas.length === mapa.total,
+        mapa.total + ' folhas em ' + mapa.linhas + 'x' + mapa.colunas);
+    } catch (e) {
+      problemas.push('exceção no teste: ' + e.message);
+      linha('EXCEÇÃO NO TESTE ' + e.message + '\n' + (e.stack || '').split('\n').slice(0, 3).join('\n'), 'erro');
+    }
+
+    const passou = problemas.length === 0;
+    resumo.textContent = (passou ? 'TESTE DE FUMAÇA OK' : 'FALHAS: ' + problemas.length) + ' — ' + ok + '/' + etapas;
+    resumo.className = passou ? 'ok' : 'erro';
+    document.title = passou ? 'FUMAÇA OK' : 'FUMAÇA FALHOU';
+    window.__resultado = { ok: passou, etapas: etapas, passou: ok, problemas: problemas };
+  };
+})();
+</script>
+</body>
+</html>

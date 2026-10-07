@@ -1,0 +1,22 @@
+# artefatos locais
+tools/verificacoes/_amostra-mapa.pdf
+tools/verificacoes/_fumaca-dom.html
+tools/verificacoes/_fumaca-erro.txt
+tools/_fumaca-dom.html
+tools/_fumaca-erro.txt
+
+# editores e sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+
+# node (o portal não tem dependências; isto cobre uso eventual de ferramenta)
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+
+# logs
+*.log

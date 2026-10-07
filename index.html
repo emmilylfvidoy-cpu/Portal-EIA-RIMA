@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal EIA/RIMA — recorte, tabela, relatório e mapa</title>
+<meta name="description" content="Portal para EIA/RIMA: carregue áreas de influência (SHP, KMZ, GeoJSON), recorte as camadas de caracterização dos meios físico, biótico e socioeconômico, gere tabela, gráficos, mini-relatório e mapa articulado.">
+<meta name="theme-color" content="#16323f">
+<link rel="stylesheet" href="vendor/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="marca">
+    <span class="logo">EIA<span>/</span>RIMA</span>
+    <span class="subtitulo">Recorte por áreas de influência · tabela · relatório · mapa articulado</span>
+  </div>
+  <nav class="topo-acoes">
+    <button id="btn-ajuda" class="discreto">Como usar</button>
+    <button id="btn-salvar" class="discreto">Salvar projeto</button>
+    <button id="btn-abrir" class="discreto">Abrir projeto</button>
+    <input type="file" id="arquivo-projeto" accept=".json,.eiaproj" hidden>
+    <span id="status-topo" role="status" class="status-topo"></span>
+  </nav>
+</header>
+
+<main class="layout">
+
+  <!-- ============================================ coluna esquerda -->
+  <aside class="coluna esquerda">
+    <section class="bloco">
+      <h2>1 · Áreas de influência</h2>
+      <p class="ajuda">Carregue a ADA, a AID, a AII (SHP, KMZ, KML ou GeoJSON). Tudo que entrar aqui é usado como molde de recorte.</p>
+      <div class="acoes">
+        <label class="botao primario">
+          Carregar arquivos
+          <input type="file" id="upload-areas" multiple accept=".shp,.dbf,.prj,.cpg,.zip,.kmz,.kml,.geojson,.json" hidden>
+        </label>
+        <button id="btn-desenhar" class="botao">Desenhar no mapa</button>
+      </div>
+      <div id="aviso-crs" class="aviso" hidden></div>
+      <ul id="lista-areas" class="lista"></ul>
+      <p id="vazio-areas" class="vazio">Nenhuma área carregada ainda.</p>
+    </section>
+
+    <section class="bloco">
+      <h2>2 · Camadas de caracterização</h2>
+      <p class="ajuda">Ligue as camadas do catálogo. Elas ficam em <code>data/*.geojson</code> e são carregadas só quando você pede.</p>
+      <div id="lista-camadas" class="camadas"></div>
+      <p id="vazio-camadas" class="vazio">Catálogo não carregado.</p>
+    </section>
+
+    <section class="bloco">
+      <h2>3 · Recorte</h2>
+      <div class="campo">
+        <label for="operacao">Operação</label>
+        <select id="operacao">
+          <option value="intersecao">Interseção — o que está DENTRO da área de influência</option>
+          <option value="diferenca">Diferença — o que está FORA (exclusão)</option>
+        </select>
+      </div>
+      <div class="campo linha">
+        <div>
+          <label for="area-minima">Área mínima (ha)</label>
+          <input type="number" id="area-minima" value="0" min="0" step="0.01">
+        </div>
+        <div>
+          <label for="simplificar">Simplificar (graus)</label>
+          <input type="number" id="simplificar" value="0" min="0" step="0.00001">
+        </div>
+      </div>
+      <button id="btn-recortar" class="botao primario largo">Recortar camadas pelas áreas</button>
+      <div id="progresso" class="progresso" hidden><div class="barra"><i id="barra-progresso"></i></div><span id="texto-progresso"></span></div>
+      <div id="resumo-recorte" class="aviso" hidden></div>
+    </section>
+
+    <section class="bloco">
+      <h2>4 · Exportar o dado recortado</h2>
+      <div class="acoes">
+        <button id="btn-export-geojson" class="botao">GeoJSON</button>
+        <button id="btn-export-shp" class="botao">Shapefile (ZIP)</button>
+        <button id="btn-export-kmz" class="botao">KMZ</button>
+      </div>
+      <p class="ajuda">Cada par área × camada sai com as colunas de resultado (área em ha, percentual, comprimento).</p>
+    </section>
+  </aside>
+
+  <!-- ============================================ mapa -->
+  <section class="mapa-area">
+    <div id="mapa"></div>
+    <div class="mapa-ferramentas">
+      <button id="zoom-mais" title="Aproximar">+</button>
+      <button id="zoom-menos" title="Afastar">−</button>
+      <button id="enquadrar" title="Enquadrar tudo">⌖</button>
+      <button id="tela-cheia" title="Tela cheia">⛶</button>
+    </div>
+    <div class="mapa-rodape">
+      <span id="coordenadas">WGS 84 · EPSG:4326</span>
+      <span id="aviso-mapa" class="aviso-inline" hidden></span>
+    </div>
+  </section>
+
+  <!-- ============================================ coluna direita -->
+  <aside class="coluna direita">
+    <section class="bloco">
+      <h2>Resultado</h2>
+      <div class="abas" role="tablist">
+        <button class="aba ativa" data-aba="tabela" role="tab">Tabela</button>
+        <button class="aba" data-aba="graficos" role="tab">Gráficos</button>
+        <button class="aba" data-aba="relatorio" role="tab">Relatório</button>
+        <button class="aba" data-aba="mapa" role="tab">Mapa</button>
+      </div>
+
+      <div class="painel ativo" id="painel-tabela">
+        <div class="campo linha">
+          <div>
+            <label for="visao-tabela">Visão</label>
+            <select id="visao-tabela">
+              <option value="classe">Área por classe</option>
+              <option value="areacamada">Área × camada</option>
+              <option value="atributos">Atributos das feições</option>
+            </select>
+          </div>
+          <div>
+            <label for="filtro-meio">Meio</label>
+            <select id="filtro-meio">
+              <option value="">Todos</option>
+              <option value="fisico">Físico</option>
+              <option value="biotico">Biótico</option>
+              <option value="socioeconomico">Socioeconômico</option>
+            </select>
+          </div>
+        </div>
+        <div class="acoes">
+          <button id="btn-xlsx" class="botao">Baixar XLSX</button>
+          <button id="btn-csv" class="botao">Baixar CSV</button>
+        </div>
+        <div class="tabela-rolagem"><table id="tabela-resultado"><thead></thead><tbody></tbody></table></div>
+        <div id="avisos-conferencia"></div>
+      </div>
+
+      <div class="painel" id="painel-graficos">
+        <div class="campo">
+          <label for="grafico-tipo">Gráfico</label>
+          <select id="grafico-tipo">
+            <option value="barras">Barras — área por classe</option>
+            <option value="pizza">Pizza — participação das classes</option>
+            <option value="comparativo">Comparativo — classe entre áreas</option>
+          </select>
+        </div>
+        <div id="graficos" class="graficos"></div>
+        <div class="acoes">
+          <button id="btn-grafico-png" class="botao">Baixar PNG</button>
+          <button id="btn-grafico-svg" class="botao">Baixar SVG</button>
+        </div>
+      </div>
+
+      <div class="painel" id="painel-relatorio">
+        <p class="ajuda">O texto é montado a partir dos números da tabela. Revise e ajuste antes de usar no estudo.</p>
+        <div class="acoes">
+          <button id="btn-relatorio-pdf" class="botao primario">Gerar PDF do relatório</button>
+          <button id="btn-relatorio-txt" class="botao">Baixar texto</button>
+        </div>
+        <div id="relatorio-texto" class="relatorio"></div>
+      </div>
+
+      <div class="painel" id="painel-mapa">
+        <div class="campo linha">
+          <div>
+            <label for="folha">Folha</label>
+            <select id="folha">
+              <option>A4</option><option>A3</option><option selected>A1</option><option>A2</option><option>A0</option>
+            </select>
+          </div>
+          <div>
+            <label for="orientacao">Orientação</label>
+            <select id="orientacao"><option value="paisagem" selected>Paisagem</option><option value="retrato">Retrato</option></select>
+          </div>
+        </div>
+        <div class="campo linha">
+          <div>
+            <label for="escala">Escala</label>
+            <select id="escala">
+              <option value="1000">1:1.000</option>
+              <option value="2000">1:2.000</option>
+              <option value="2500">1:2.500</option>
+              <option value="5000" selected>1:5.000</option>
+              <option value="10000">1:10.000</option>
+              <option value="25000">1:25.000</option>
+              <option value="50000">1:50.000</option>
+              <option value="100000">1:100.000</option>
+            </select>
+          </div>
+          <div>
+            <label for="escala-auto">Ajuste</label>
+            <button id="btn-escala-auto" class="botao">Calcular escala que cabe</button>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="titulo-mapa">Título do mapa</label>
+          <input type="text" id="titulo-mapa" value="MAPA DE CARACTERIZAÇÃO AMBIENTAL">
+        </div>
+        <div class="campo linha">
+          <div><label for="projeto-nome">Nome do projeto</label><input type="text" id="projeto-nome" placeholder="Projeto / empreendimento"></div>
+          <div><label for="projeto-cliente">Interessado</label><input type="text" id="projeto-cliente" placeholder="Cliente"></div>
+        </div>
+        <div class="campo linha">
+          <div><label for="responsavel">Responsável técnico</label><input type="text" id="responsavel" placeholder="Nome"></div>
+          <div><label for="crea">CREA</label><input type="text" id="crea" placeholder="000000/D"></div>
+        </div>
+        <div class="campo">
+          <label>Logos do cabeçalho (PNG ou JPEG)</label>
+          <input type="file" id="logos" accept="image/png,image/jpeg" multiple>
+          <div id="lista-logos" class="logos"></div>
+        </div>
+        <div class="campo">
+          <label class="caixa"><input type="checkbox" id="articulado"> Gerar mapa articulado (recomendado em 1:5.000 ou menos)</label>
+          <label class="caixa"><input type="checkbox" id="incluir-indice" checked> Incluir mapa-índice das folhas</label>
+        </div>
+        <div id="info-articulacao" class="aviso" hidden></div>
+        <div id="previa-mapa" class="previa-mapa"></div>
+        <div class="acoes">
+          <button id="btn-mapa-previa" class="botao">Atualizar prévia</button>
+          <button id="btn-mapa-png" class="botao">Baixar folha em PNG</button>
+          <button id="btn-mapa-pdf" class="botao primario">Baixar PDF do mapa</button>
+        </div>
+      </div>
+    </section>
+  </aside>
+</main>
+
+<dialog id="dialogo-ajuda">
+  <div class="dialogo-topo"><h2>Como usar o portal</h2><button data-fechar="dialogo-ajuda" aria-label="Fechar">×</button></div>
+  <ol class="passos">
+    <li><b>Áreas de influência.</b> Carregue a ADA, AID e AII (SHP, KMZ ou GeoJSON) ou desenhe direto no mapa. O sistema avisa se as coordenadas não estiverem em graus.</li>
+    <li><b>Camadas.</b> Ligue as camadas de caracterização dos meios físico, biótico e socioeconômico no catálogo.</li>
+    <li><b>Recorte.</b> Escolha interseção (dentro) ou diferença (fora) e clique em recortar. Cada feição recebe área em hectares, percentual em relação à área de influência e comprimento.</li>
+    <li><b>Dado.</b> Exporte GeoJSON, shapefile (ZIP) ou KMZ. As colunas <code>eia_*</code> vão junto.</li>
+    <li><b>Tabela e gráficos.</b> Confira a área por classe, baixe em XLSX ou CSV e leve os gráficos para o estudo.</li>
+    <li><b>Relatório.</b> Gere o texto-base a partir dos números e o PDF do mini-relatório.</li>
+    <li><b>Mapa.</b> Escolha folha, escala e logos. Para 1:5.000 ou menos, use o mapa articulado: o portal calcula a grade de folhas, numera e gera o mapa-índice.</li>
+  </ol>
+  <p class="ressalva">Os números são calculados em projeção (UTM). Nada substitui a conferência do responsável técnico: confira os recortes e a legenda antes de assinar.</p>
+</dialog>
+
+<script src="vendor/leaflet.js"></script>
+<script src="vendor/turf.min.js"></script>
+<script src="js/math.js"></script>
+<script src="js/vetorial.js"></script>
+<script src="js/shapelib.js"></script>
+<script src="js/kml.js"></script>
+<script src="js/crs.js"></script>
+<script src="js/recorte.js"></script>
+<script src="js/tabela.js"></script>
+<script src="js/svg.js"></script>
+<script src="js/pdf.js"></script>
+<script src="js/relatorio.js"></script>
+<script src="js/mapa.js"></script>
+<script src="js/xlsx.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
