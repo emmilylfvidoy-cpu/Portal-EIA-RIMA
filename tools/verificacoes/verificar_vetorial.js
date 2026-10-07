@@ -199,6 +199,59 @@ console.log('\n== Simplificacao ==');
   ok('mantem as pontas', s[0][0] === 0 && s[s.length - 1][0] === 4);
 }
 
+console.log('\n== Posição do rótulo (tem de cair DENTRO da feição) ==');
+{
+  /* O erro que este teste impede: usar a média dos vértices para posicionar o rótulo. Em
+   * forma côncava a média cai FORA do polígono e o texto sai sobre a unidade vizinha — num
+   * mapa geológico isso é pior do que não ter rótulo, porque afirma a unidade errada no
+   * lugar errado. */
+  const dentro = (p, anel) => {
+    let c = false;
+    for (let i = 0, j = anel.length - 1; i < anel.length; j = i++) {
+      const pi = anel[i], pj = anel[j];
+      if (((pi[1] > p[1]) !== (pj[1] > p[1]))
+        && (p[0] < (pj[0] - pi[0]) * (p[1] - pi[1]) / (pj[1] - pi[1]) + pi[0])) c = !c;
+    }
+    return c;
+  };
+
+  const quadrado = { type: 'Polygon', coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]] };
+  const pq = v.posicaoRotulo(quadrado);
+  ok('quadrado: rótulo no centro', pq && Math.abs(pq[0] - 5) < 1e-9 && Math.abs(pq[1] - 5) < 1e-9, JSON.stringify(pq));
+
+  // "L": a média dos vértices cai no quadrante que NÃO existe
+  const anelL = [[0, 0], [10, 0], [10, 3], [3, 3], [3, 10], [0, 10], [0, 0]];
+  const pl = v.posicaoRotulo({ type: 'Polygon', coordinates: [anelL] });
+  let sx = 0, sy = 0;
+  for (const p of anelL) { sx += p[0]; sy += p[1]; }
+  const centroide = [sx / anelL.length, sy / anelL.length];
+  ok('L côncavo: a média dos vértices cairia fora', !dentro(centroide, anelL),
+    'centroide ' + centroide.map((x) => x.toFixed(2)).join(','));
+  ok('L côncavo: o rótulo cai DENTRO', dentro(pl, anelL), JSON.stringify(pl));
+
+  const linha = v.posicaoRotulo({ type: 'LineString', coordinates: [[0, 0], [10, 0], [10, 10]] });
+  ok('linha: rótulo no meio do COMPRIMENTO', linha && Math.abs(linha[0] - 10) < 1e-9 && Math.abs(linha[1]) < 1e-9,
+    JSON.stringify(linha) + ' (metade dos 20 de comprimento)');
+
+  const ponto = v.posicaoRotulo({ type: 'Point', coordinates: [-47.8, -22.7] });
+  ok('ponto: rótulo nele mesmo', ponto && ponto[0] === -47.8 && ponto[1] === -22.7, JSON.stringify(ponto));
+
+  const multi = {
+    type: 'MultiPolygon',
+    coordinates: [
+      [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]],
+      [[[5, 5], [25, 5], [25, 25], [5, 25], [5, 5]]],
+    ],
+  };
+  const pm = v.posicaoRotulo(multi);
+  ok('multipolígono: rotula o MAIOR anel', pm && Math.abs(pm[0] - 15) < 1e-9 && Math.abs(pm[1] - 15) < 1e-9,
+    JSON.stringify(pm) + ' (o anel de 400 de área, não o de 1)');
+
+  ok('geometria vazia devolve null',
+    v.posicaoRotulo(null) === null && v.posicaoRotulo({ type: 'Polygon', coordinates: [] }) === null);
+  ok('tipo desconhecido devolve null', v.posicaoRotulo({ type: 'Nada', coordinates: [] }) === null);
+}
+
 console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
   return falhas ? 1 : 0;
 }
