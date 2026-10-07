@@ -19,6 +19,49 @@
 | v2.2 | **Carregar a área de influência virou confiável**: o despacho de entrada saiu do `app.js` para `js/entrada.js` (sem DOM, testável) e passou a olhar **todos** os arquivos enviados — antes olhava só o primeiro, então selecionar `.shp` + `.dbf` + `.prj` era recusado como "formato não reconhecido" |
 | v2.3 | **Ordem das camadas é do usuário**: setas ▲▼ para subir e descer cada camada, opção "minhas áreas por cima das camadas", e os ajustes de transparência e rótulo passaram a viver numa **abinha recolhida** dentro de cada camada |
 | v2.4 | **Cor, traço e grossura da linha**, nos dois lugares que têm linha: o **contorno das camadas** (aba *Linha*) e o **traço das áreas de influência** (⚙ de cada área). Escolha pelo olho, com amostra do traço ao lado |
+| v2.5 | **A área da área de influência vinda de ARQUIVO era sempre ZERO** (`0,00 ha · 0,00 km²`): a função que lista os anéis ignorava `FeatureCollection`. Corrigido na raiz — e com ela o recorte de arquivo com vários polígonos, que era recusado |
+
+## A área da área de influência (v2.5)
+
+O defeito, e por que passou tanto tempo despercebido:
+
+```js
+// math.js, como estava
+function aneisDe(geometria) {
+  if (geometria.type === 'Polygon')      return [geometria.coordinates];
+  if (geometria.type === 'MultiPolygon') return geometria.coordinates;
+  return [];        // ← FeatureCollection cai aqui, EM SILÊNCIO
+}
+```
+
+O leitor de shapefile entrega um **`FeatureCollection`** — então `areaHectares` somava uma
+lista vazia e a área saía **zero**. E área zero não parece um defeito, parece um arquivo
+vazio: o polígono aparecia desenhado no mapa, com o rótulo "0,00 ha · 0,00 km²".
+
+**Passou por 600 verificações porque o polígono DESENHADO na tela é uma geometria simples.**
+Ele sempre mostrou a área certa. O erro só existia no caminho do arquivo, e nenhum teste
+conferia área de arquivo — todos usavam geometrias montadas à mão.
+
+O mesmo furo atingia mais dois pontos:
+
+| Onde | O que acontecia |
+|---|---|
+| `recorte.aneisDaGeometria` | arquivo com **vários polígonos** (guardado como `GeometryCollection`) era recusado no recorte: *"não tem polígono válido"* |
+| `math.linhasDe` / `pontosDe` | mesma regra, mesmo silêncio |
+
+Agora `aneisDe`, `linhasDe` e `pontosDe` percorrem `Feature`, `FeatureCollection` e
+`GeometryCollection` — a mesma regra que `percorrerCoords` (usado pelo `bbox`) já seguia.
+A área é calculada sobre a **geometria que é desenhada e recortada**, e a lista mostra
+quantos polígonos o arquivo tem.
+
+**A conferência que faltava** (agora na suíte, e é ela que impede a volta do defeito): um
+quadrado de **1 km × 1 km em UTM 23S** tem de dar **100,0000 ha** passando pelo caminho do
+arquivo — importar, reprojetar e calcular. Dois quadrados separados, 200 ha.
+
+> **Atenção a um caso:** se o arquivo trouxer polígonos **aninhados** (ADA dentro de AID
+> dentro de AII, comum em EIA), a área mostrada é a **SOMA** deles e a parte interna conta
+> duas vezes. O portal avisa isso na tela. Para o recorte, o efeito não existe — a área de
+> influência é usada como molde.
 
 ## Linha: cor, traço e grossura (v2.4)
 

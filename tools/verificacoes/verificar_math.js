@@ -158,6 +158,59 @@ console.log('\n== Área geodésica com vértices colineares (defeito real) ==');
     + ' ha (' + m.num(naDensa.diferenca_relativa * 100, 3) + '%)');
 }
 
+
+  console.log('\n== Anéis e coleções: a área de uma área de influência vinda de ARQUIVO ==');
+  {
+    /* O DEFEITO QUE ISTO COBRE: \`aneisDe\` só entendia Polygon e MultiPolygon e devolvia
+     * LISTA VAZIA para o resto, em silêncio. Como o leitor de shapefile entrega um
+     * FeatureCollection, toda área de influência carregada de arquivo calculava área ZERO:
+     * a tela mostrava "0,00 ha · 0,00 km²". Passou por todas as verificações porque o
+     * polígono DESENHADO na tela é uma geometria simples — ele sempre mostrou a área certa,
+     * e o erro só existia no caminho do arquivo. Área zero não parece errada, parece vazia. */
+    const quadrado = { type: 'Polygon', coordinates: [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]] };
+    ok('Polygon: 1 anel', m.aneisDe(quadrado).length === 1);
+    ok('MultiPolygon: 2 anéis',
+      m.aneisDe({ type: 'MultiPolygon', coordinates: [quadrado.coordinates, quadrado.coordinates] }).length === 2);
+    ok('Feature: chega no anel',
+      m.aneisDe({ type: 'Feature', properties: {}, geometry: quadrado }).length === 1);
+    ok('FeatureCollection: soma as feições',
+      m.aneisDe({
+        type: 'FeatureCollection',
+        features: [{ type: 'Feature', properties: {}, geometry: quadrado },
+          { type: 'Feature', properties: {}, geometry: quadrado }],
+      }).length === 2);
+    ok('GeometryCollection: soma as geometrias',
+      m.aneisDe({ type: 'GeometryCollection', geometries: [quadrado, quadrado] }).length === 2);
+    ok('coleção aninhada também é percorrida',
+      m.aneisDe({
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: { type: 'GeometryCollection', geometries: [quadrado] },
+        }],
+      }).length === 1);
+    ok('sem geometria devolve vazio', m.aneisDe(null).length === 0 && m.aneisDe({}).length === 0);
+
+    // linhas e pontos seguem a MESMA regra (têm o mesmo defeito de origem)
+    const linha = { type: 'LineString', coordinates: [[0, 0], [1, 1]] };
+    ok('linhas de uma FeatureCollection',
+      m.linhasDe({ type: 'FeatureCollection', features: [{ type: 'Feature', properties: {}, geometry: linha }] }).length === 1);
+    ok('pontos de uma GeometryCollection',
+      m.pontosDe({ type: 'GeometryCollection', geometries: [{ type: 'Point', coordinates: [0, 0] }] }).length === 1);
+
+    // UMA REGRA SÓ: a área e o bbox têm de enxergar a mesma coisa
+    const fc = {
+      type: 'FeatureCollection',
+      features: [{ type: 'Feature', properties: {}, geometry: quadrado },
+        { type: 'Feature', properties: {}, geometry: quadrado }],
+    };
+    ok('o bbox já enxergava a coleção (as duas regras agora concordam)',
+      JSON.stringify(m.bbox(fc)) === JSON.stringify([0, 0, 1, 1]), JSON.stringify(m.bbox(fc)));
+    ok('e a área passou a enxergar também', m.aneisDe(fc).length === 2,
+      m.aneisDe(fc).length + ' anéis');
+  }
+
 console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
   return falhas ? 1 : 0;
 }

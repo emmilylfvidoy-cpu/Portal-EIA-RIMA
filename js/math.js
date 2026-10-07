@@ -305,24 +305,74 @@
     if (geometria.geometries) geometria.geometries.forEach(function (g) { percorrerCoords(g, fn); });
   }
 
-  /** Lista de anéis externos e furos de um Polygon/MultiPolygon. */
+  /**
+   * Lista de anéis externos e furos de uma geometria — aceitando também Feature,
+   * FeatureCollection e GeometryCollection.
+   *
+   * A versão anterior só entendia Polygon e MultiPolygon e devolvia lista vazia para o
+   * resto, EM SILÊNCIO. Como o leitor de shapefile entrega um FeatureCollection, toda área
+   * de influência carregada de ARQUIVO calculava área ZERO — a tela mostrava
+   * "0,00 ha · 0,00 km²". O mesmo acontecia com arquivo de vários polígonos, que o portal
+   * guarda como GeometryCollection.
+   *
+   * Passou por todas as verificações porque o polígono DESENHADO na tela é uma geometria
+   * simples: ele sempre mostrou a área certa, e o erro só existia no caminho do arquivo.
+   * E área zero não parece errada, parece vazia.
+   *
+   * `percorrerCoords` (que o `bbox` usa) já tratava coleções; esta função não. Agora as
+   * duas seguem a mesma regra.
+   */
   function aneisDe(geometria) {
     if (!geometria) return [];
+    if (geometria.type === 'Feature') return aneisDe(geometria.geometry);
+    if (geometria.type === 'FeatureCollection') {
+      const saida = [];
+      for (const f of geometria.features || []) saida.push.apply(saida, aneisDe(f));
+      return saida;
+    }
+    if (geometria.type === 'GeometryCollection') {
+      const saida = [];
+      for (const g of geometria.geometries || []) saida.push.apply(saida, aneisDe(g));
+      return saida;
+    }
     if (geometria.type === 'Polygon') return [geometria.coordinates];
     if (geometria.type === 'MultiPolygon') return geometria.coordinates;
     return [];
   }
 
-  /** Lista de linhas de um LineString/MultiLineString. */
+  /** Lista de linhas — mesma regra de `aneisDe` (coleções incluídas). */
   function linhasDe(geometria) {
     if (!geometria) return [];
+    if (geometria.type === 'Feature') return linhasDe(geometria.geometry);
+    if (geometria.type === 'FeatureCollection') {
+      const saida = [];
+      for (const f of geometria.features || []) saida.push.apply(saida, linhasDe(f));
+      return saida;
+    }
+    if (geometria.type === 'GeometryCollection') {
+      const saida = [];
+      for (const g of geometria.geometries || []) saida.push.apply(saida, linhasDe(g));
+      return saida;
+    }
     if (geometria.type === 'LineString') return [geometria.coordinates];
     if (geometria.type === 'MultiLineString') return geometria.coordinates;
     return [];
   }
 
+  /** Lista de pontos — mesma regra de `aneisDe` (coleções incluídas). */
   function pontosDe(geometria) {
     if (!geometria) return [];
+    if (geometria.type === 'Feature') return pontosDe(geometria.geometry);
+    if (geometria.type === 'FeatureCollection') {
+      const saida = [];
+      for (const f of geometria.features || []) saida.push.apply(saida, pontosDe(f));
+      return saida;
+    }
+    if (geometria.type === 'GeometryCollection') {
+      const saida = [];
+      for (const g of geometria.geometries || []) saida.push.apply(saida, pontosDe(g));
+      return saida;
+    }
     if (geometria.type === 'Point') return [geometria.coordinates];
     if (geometria.type === 'MultiPoint') return geometria.coordinates;
     return [];

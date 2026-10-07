@@ -258,19 +258,33 @@
     };
   }
 
+  /**
+   * Todos os anéis (externos e furos) de uma geometria, achatados numa lista.
+   *
+   * Aceita Feature, FeatureCollection e GeometryCollection — porque a área de influência
+   * carregada de arquivo é um FeatureCollection, e a de vários polígonos o portal guarda
+   * como GeometryCollection. Antes esta função só entendia Polygon e MultiPolygon e
+   * devolvia lista VAZIA para o resto: o recorte de uma área vinda de arquivo com vários
+   * polígonos parava em "não tem polígono válido", mesmo com o polígono desenhado na tela.
+   *
+   * Delega para `math.aneisDe`, que é quem sabe percorrer coleções — uma regra só.
+   */
   function aneisDaGeometria(geometria) {
-    if (!geometria) return [];
-    if (geometria.type === 'Polygon') return geometria.coordinates;
-    if (geometria.type === 'MultiPolygon') {
-      const saida = [];
-      for (const parte of geometria.coordinates) for (const anel of parte) saida.push(anel);
-      return saida;
-    }
-    return [];
+    const partes = math.aneisDe(geometria);
+    const saida = [];
+    for (const parte of partes) for (const anel of parte) saida.push(anel);
+    return saida;
   }
 
   function contarPartes(geometria) {
     if (!geometria) return 0;
+    if (geometria.type === 'FeatureCollection') {
+      return (geometria.features || []).reduce(function (s, f) { return s + contarPartes(f); }, 0);
+    }
+    if (geometria.type === 'Feature') return contarPartes(geometria.geometry);
+    if (geometria.type === 'GeometryCollection') {
+      return (geometria.geometries || []).reduce(function (s, g) { return s + contarPartes(g); }, 0);
+    }
     if (geometria.type === 'Polygon') return 1;
     if (geometria.type === 'MultiPolygon') return geometria.coordinates.length;
     if (geometria.type === 'LineString') return 1;

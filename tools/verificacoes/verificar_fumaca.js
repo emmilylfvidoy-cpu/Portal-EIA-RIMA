@@ -238,6 +238,74 @@ async function executar() {
     ok('mensagens de erro são explicadas', typeof mensagem === 'string');
   }
 
+
+  console.log('\n== Área da área de influência: valor conferível ==');
+  if (EIA.entrada) {
+    /* REGRESSÃO COM ÁREA CONHECIDA: um quadrado de 1 km x 1 km em UTM 23S são 100 ha
+     * exatos. É o teste que faltava — o caminho do ARQUIVO nunca teve uma conferência de
+     * área, e por isso passou meses mostrando 0,00 ha sem ninguém notar que era um defeito
+     * e não um arquivo vazio. */
+    const shapelib = EIA.shapelib;
+    const UTM23S = 'PROJCS["SIRGAS_2000_UTM_Zone_23S",GEOGCS["GCS_SIRGAS_2000",DATUM["D_SIRGAS_2000",'
+      + 'SPHEROID["GRS_1980",6378137.0,298.257222101]],PRIMEM["Greenwich",0.0],'
+      + 'UNIT["Degree",0.0174532925199433]],PROJECTION["Transverse_Mercator"],PARAMETER["False_Easting",500000.0],'
+      + 'PARAMETER["False_Northing",10000000.0],PARAMETER["Central_Meridian",-45.0],PARAMETER["Scale_Factor",0.9996],'
+      + 'PARAMETER["Latitude_Of_Origin",0.0],UNIT["Meter",1.0],AUTHORITY["EPSG",31983]]';
+    const quilometro = (E0, N0) => ({
+      type: 'Feature',
+      properties: { nome: 'quadrado' },
+      geometry: {
+        type: 'Polygon',
+        coordinates: [[[E0, N0], [E0 + 1000, N0], [E0 + 1000, N0 + 1000], [E0, N0 + 1000], [E0, N0]]],
+      },
+    });
+    const comoArquivo = (nome, bytes) => {
+      const u8 = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+      return {
+        name: nome,
+        arrayBuffer: async () => u8.buffer.slice(u8.byteOffset, u8.byteOffset + u8.byteLength),
+        text: async () => Buffer.from(u8).toString('utf8'),
+      };
+    };
+    const conjuntoUTM = (feicoes) => {
+      const e = shapelib.escreverShapefile(feicoes, { prj: UTM23S });
+      return [
+        comoArquivo('area.shp', e.shp), comoArquivo('area.dbf', e.dbf),
+        comoArquivo('area.prj', e.prj),
+      ];
+    };
+
+    try {
+      const um = await EIA.entrada.interpretar(conjuntoUTM([quilometro(330000, 7460000)]));
+      // a área é calculada como o app faz: sobre a geometria que ele desenha
+      const geom = um.geojson.type === 'FeatureCollection'
+        ? { type: 'GeometryCollection', geometries: um.geojson.features.map((f) => f.geometry) }
+        : um.geojson;
+      const ha = EIA.recorte.areaHectares(geom) / 10000;
+      ok('1 km² em UTM 23S dá 100 ha (área de ARQUIVO)',
+        Math.abs(ha - 100) < 0.5, ha.toFixed(4) + ' ha   (esperado 100)');
+      ok('e 1 km², dividindo por 100', Math.abs(ha / 100 - 1) < 0.005, (ha / 100).toFixed(4) + ' km²');
+      ok('a área veio do FeatureCollection, não de zero',
+        EIA.recorte.areaHectares(um.geojson) > 0,
+        (EIA.recorte.areaHectares(um.geojson) / 10000).toFixed(2) + ' ha');
+
+      // dois quadrados separados: a área é a SOMA deles (200 ha)
+      const dois = await EIA.entrada.interpretar(conjuntoUTM([
+        quilometro(330000, 7460000), quilometro(334000, 7460000),
+      ]));
+      const ha2 = EIA.recorte.areaHectares({
+        type: 'GeometryCollection', geometries: dois.geojson.features.map((f) => f.geometry),
+      }) / 10000;
+      ok('dois polígonos somam 200 ha', Math.abs(ha2 - 200) < 1, ha2.toFixed(4) + ' ha');
+      ok('o recorte ACEITA a área de vários polígonos (antes recusava)',
+        EIA.recorte.aneisDaGeometria({
+          type: 'GeometryCollection', geometries: dois.geojson.features.map((f) => f.geometry),
+        }).length === 2);
+    } catch (err) {
+      ok('1 km² em UTM 23S dá 100 ha (área de ARQUIVO)', false, err.message);
+    }
+  }
+
   console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
   return falhas ? 1 : 0;
 }

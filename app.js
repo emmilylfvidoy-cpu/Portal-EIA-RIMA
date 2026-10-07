@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.4';
+  const VERSAO = 'v2.5';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -791,27 +791,46 @@
 
 
   function adicionarArea(geojson, nome, crs, aviso) {
-    const aneis = EIA.recorte.aneisDaGeometria(geojson.type === 'FeatureCollection' ? geojson.features[0].geometry : geojson);
+    const listaDeFeicoes = geojson.type === 'FeatureCollection' ? (geojson.features || []) : null;
+    const aneis = EIA.recorte.aneisDaGeometria(geojson);
     if (!aneis.length) throw new Error('Não encontrei polígono na área de influência.');
-    const areaHa = EIA.recorte.areaHectares(geojson) / 10000;
+    // A geometria é montada ANTES da área, e a área sai DELA: é a mesma geometria que é
+    // desenhada e recortada, então o número na tela e o número no relatório são o mesmo.
+    const geometria = geojson.type === 'FeatureCollection'
+      ? unirGeometrias(geojson) : (geojson.geometry || geojson);
+    const areaHa = EIA.recorte.areaHectares(geometria) / 10000;
     const area = {
       id: 'ai' + (++estado.vez),
       nome: nome,
       sigla: siglaDe(nome),
-      geometry: geojson.type === 'FeatureCollection' ? unirGeometrias(geojson) : (geojson.geometry || geojson),
+      geometry: geometria,
       cor: CORES_AREAS[estado.areas.length % CORES_AREAS.length],
       area_ha: areaHa,
+      partes: listaDeFeicoes ? listaDeFeicoes.length : 1,
       crs: crs || 'EPSG:4326',
       aviso: aviso || '',
     };
+    // Arquivo com vários polígonos: a área é a SOMA das partes. Se uma contiver a outra
+    // (ADA dentro de AID dentro de AII, comum em EIA), a parte interna conta duas vezes —
+    // e é melhor dizer isso do que entregar um número que ninguém sabe de onde veio.
+    if (area.partes > 1) {
+      area.aviso = (area.aviso ? area.aviso + ' ' : '')
+        + 'O arquivo tem ' + area.partes + ' polígonos: a área mostrada é a SOMA deles. '
+        + 'Se um estiver dentro do outro, a parte interna entra duas vezes na conta.';
+    }
+    if (areaHa <= 0) {
+      area.aviso = (area.aviso ? area.aviso + ' ' : '')
+        + 'A área calculada deu zero: confira se o polígono tem vértices suficientes e se o '
+        + 'sistema de referência foi reconhecido.';
+    }
     estado.areas.push(area);
     desenharAreas();
     renderizarAreas();
-    if (aviso) {
+    if (area.aviso) {
       const el = $('aviso-crs');
       el.hidden = false;
-      el.className = 'aviso' + (/não estão em graus|sem \.prj/i.test(aviso) ? ' alerta' : '');
-      el.textContent = aviso;
+      el.className = 'aviso' + (/não estão em graus|sem \.prj|deu zero|SOMA/i.test(area.aviso) ? ' alerta' : '');
+      el.textContent = area.aviso;
     }
     const bbox = EIA.math.bbox(area.geometry);
     if (bbox) estado.mapa.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], { padding: [30, 30] });
@@ -875,7 +894,9 @@
       const nome = document.createElement('span');
       nome.className = 'nome';
       nome.innerHTML = '<b>' + escapar(area.sigla) + '</b> ' + escapar(area.nome)
-        + '<br><span class="meta">' + EIA.math.num(area.area_ha, 2) + ' ha · ' + EIA.math.num(area.area_ha / 100, 2) + ' km²</span>';
+        + '<br><span class="meta">' + EIA.math.num(area.area_ha, 2) + ' ha · '
+        + EIA.math.num(area.area_ha / 100, 2) + ' km²'
+        + (area.partes > 1 ? ' · ' + area.partes + ' polígonos' : '') + '</span>';
 
       // Ajustes da área numa abinha, igual às camadas: o mesmo problema, o mesmo lugar.
       const engrenagem = document.createElement('button');
