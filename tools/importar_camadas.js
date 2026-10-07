@@ -680,6 +680,10 @@ function importarCamada(entrada, opcoes) {
       ? entrada.cores_classe : (estilo ? (estilo.cores || {}) : {}),
   };
   const cc = classesECores({ type: 'FeatureCollection', features: features }, campoClasse, paleta);
+  // O contorno vem do arquivo de estilo, por classe. Se o manifesto trouxer um, ele manda.
+  const paletaContorno = (entrada.cores_contorno && Object.keys(entrada.cores_contorno).length)
+    ? entrada.cores_contorno
+    : ((estilo && estilo.contornos && Object.keys(estilo.contornos).length) ? estilo.contornos : null);
 
   const destino = path.resolve(raiz, entrada.arquivo || ('data/' + (entrada.id || slug(entrada.nome)) + '.geojson'));
   const metadados = {
@@ -729,6 +733,18 @@ function importarCamada(entrada, opcoes) {
     // de onde vieram as cores: 'estilo' (arquivo do SIG), 'auto' (paleta do portal) ou 'misto'
     cores_origem: cc.cores_origem,
     estilo_cor: (estilo && estilo.cor) || null,
+    // contorno por classe (separação das unidades no mapa). Sem ele, 306 manchas de cor
+    // viram uma aquarela sem divisas — é o que o mapa do cliente mostra em preto.
+    cor_por_classe_contorno: (paletaContorno && Object.keys(paletaContorno).length) ? paletaContorno : null,
+    // contorno mais comum da camada: usado como reserva para classe sem contorno próprio
+    contorno_dominante: (() => {
+      if (!paletaContorno) return null;
+      const contagem = new Map();
+      for (const c of Object.values(paletaContorno)) contagem.set(c, (contagem.get(c) || 0) + 1);
+      let melhor = null, maior = 0;
+      for (const [c, n] of contagem.entries()) if (n > maior) { maior = n; melhor = c; }
+      return melhor;
+    })(),
     estilo_arquivo: infoEstilo.arquivo ? path.basename(infoEstilo.arquivo) : null,
     estilo_formato: estilo ? estilo.formato : null,
     estilo_tipo: estilo ? estilo.tipo : null,
@@ -791,6 +807,8 @@ function atualizarCatalogo(caminho, resultados, opcoes) {
         cor: r.estilo_cor || ((r.cor_por_classe && r.classes.length === 1) ? Object.values(r.cor_por_classe)[0] : corDoMeio(r.meio)),
         opacidade: r.opacidade === undefined ? 0.32 : r.opacidade,
         cores: r.cor_por_classe,
+        contornos: r.cor_por_classe_contorno || undefined,
+        contorno_cor: r.contorno_dominante || undefined,
       },
       fonte: r.fonte,
       data_ref: r.data_ref,

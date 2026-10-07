@@ -13,6 +13,7 @@
 | v1.6 | **Agrupamento escolhido pelo usuário** (tabela, gráfico e relatório) e legenda por folha, que suporta centenas de classes |
 | v1.7 | **Cores do mapa do projeto** na Geologia: leitura de `<camada>.xml` (estilo com símbolos nomeados pela classe) — 306 de 306 unidades com a cor do cliente |
 | v1.8 | **Correção do cache do dado**: a camada era buscada com `force-cache`, que nunca revalida — quem já tinha aberto o portal continuava recebendo a geometria antiga (e o mapa pintava de uma cor só, como se as cores não tivessem sido publicadas) |
+| v1.9 | **Contorno das unidades** lido do arquivo de estilo: é a divisa que separa as unidades no mapa do projeto (sem ela, 306 manchas de cor viram uma aquarela) |
 
 ## Escolher as colunas de agrupamento (v1.6)
 
@@ -221,6 +222,15 @@ importador procura esse arquivo e aproveita o que der:
 > traz os símbolos **nomeados pelo valor da classe**, com a cor de cada um. Foram assim que
 > as **306 unidades litológicas** receberam as cores do mapa do cliente — 306 de 306, sem
 > sobrar nenhuma para a paleta automática.
+>
+> Desse mesmo arquivo sai também o **contorno** de cada unidade — a divisa que separa as
+> unidades e que, num mapa geológico de 306 unidades, é o que impede que ele vire uma
+> aquarela. Pegadinha do formato, que vale registrar: no QGIS **`outline_width = 0` não
+> significa "sem contorno"** — significa fio de cabelo. Eu li como ausência e concluí errado;
+> o mapa do cliente mostrou a divisa preta. E quando o preenchimento traz
+> `outline_style="no"` **com** uma `outline_color` definida, essa cor está desligada — o
+> contorno real vem de uma segunda camada (`SimpleLine`). Ler a cor do preenchimento ali
+> pintaria uma divisa que o mapa não tem.
 >
 > Cuidado com a confusão de nome: `<camada>.xml` é **estilo**; `<camada>.shp.xml` é
 > **metadado**. São arquivos diferentes e o importador trata cada um no seu papel.

@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v1.8';
+  const VERSAO = 'v1.9';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -284,23 +284,47 @@
     for (const camada of estado.camadas) {
       const estilo = camada.estilo || {};
       const cor = estilo.cor || CORES_MEIO[camada.meio] || '#7d8b93';
+
+      // Chave de classe da feição: o valor do campo de classe do catálogo.
+      const chaveDaFeicao = (f) => {
+        if (!camada.campo_classe || !f || !f.properties) return null;
+        const bruto = f.properties[camada.campo_classe];
+        return (bruto === undefined || bruto === null || bruto === '') ? 'Sem classe' : String(bruto);
+      };
+
       // Cor por classe: o importador grava `estilo.cores` (classe -> cor) para as
       // camadas de uso do solo, geologia, solos... Sem isso, uma camada de 12 classes
       // apareceria de uma cor só — e a base perde justamente o que a torna legível.
       const corDaFeicao = (f) => {
-        if (estilo.cores && camada.campo_classe && f && f.properties) {
-          const bruto = f.properties[camada.campo_classe];
-          const chave = (bruto === undefined || bruto === null || bruto === '') ? 'Sem classe' : String(bruto);
-          if (estilo.cores[chave]) return estilo.cores[chave];
-        }
+        const chave = chaveDaFeicao(f);
+        if (chave && estilo.cores && estilo.cores[chave]) return estilo.cores[chave];
         return cor;
       };
+
+      // Contorno: é o que separa as unidades. O mapa do cliente desenha divisa preta em
+      // fio de cabelo entre as unidades — sem ela, 306 manchas de cor viram uma aquarela
+      // e as divisas somem. `estilo.contornos` traz a cor por classe; `contorno_cor` é a
+      // reserva (o contorno mais comum da camada).
+      const temContorno = !!(estilo.contorno_cor || estilo.contornos);
+      const corDoContorno = (f) => {
+        const chave = chaveDaFeicao(f);
+        if (chave && estilo.contornos && estilo.contornos[chave]) return estilo.contornos[chave];
+        if (estilo.contorno_cor) return estilo.contorno_cor;
+        return corDaFeicao(f);
+      };
+
       L.geoJSON(camada.geojson, {
         style: (f) => {
           const c = corDaFeicao(f);
           return {
-            color: c, weight: 0.9, opacity: 0.85,
-            fillColor: c, fillOpacity: estilo.opacidade === undefined ? 0.35 : estilo.opacidade,
+            // com contorno do estilo, a divisa é fina (fio de cabelo) e na cor do estilo;
+            // sem ele, o traço é a própria cor do preenchimento (evita emenda clara
+            // entre polígonos vizinhos, que aparece quando não há traço nenhum).
+            color: corDoContorno(f),
+            weight: temContorno ? 0.5 : 0.9,
+            opacity: 0.9,
+            fillColor: c,
+            fillOpacity: estilo.opacidade === undefined ? 0.35 : estilo.opacidade,
           };
         },
         pointToLayer: (f, latlng) => {

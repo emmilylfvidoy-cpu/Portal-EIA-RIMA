@@ -118,9 +118,45 @@
     if (!cont) return mapa;
     for (const s of xml.filhos(cont, 'symbol')) {
       const nome = xml.atributo(s, 'name');
-      if (nome !== undefined) mapa[nome] = corDoSimboloQml(s);
+      if (nome !== undefined) {
+        mapa[nome] = corDoSimboloQml(s);
+        mapa[nome].contorno = contornoDoSimbolo(s);
+      }
     }
     return mapa;
+  }
+
+  /**
+   * Cor do CONTORNO do símbolo.
+   *
+   * O contorno é o que separa as unidades num mapa geológico — sem ele, 306 manchas de
+   * cor viram uma aquarela e as divisas somem. Aqui mora uma pegadinha do QGIS que me
+   * custou uma conclusão errada: `outline_width = 0` NÃO significa "sem contorno" —
+   * significa fio de cabelo (hairline). O mapa do cliente mostra as divisas pretas, e é
+   * assim que tem de ser lido.
+   *
+   * Regra de leitura, na ordem:
+   *   1. a camada SimpleLine (é o contorno quando o preenchimento não desenha o dele);
+   *   2. a camada SimpleFill, MAS só se `outline_style` não for "no" — quando é "no", o
+   *      preenchimento tem cor de contorno definida e desligada ao mesmo tempo, e usar
+   *      essa cor seria pintar uma divisa que o mapa do cliente não tem.
+   */
+  function contornoDoSimbolo(simbolo) {
+    let doPreenchimento = null;
+    for (const l of xml.descendentes(simbolo, 'layer')) {
+      const classe = String(xml.atributo(l, 'class') || '');
+      const opcoes = {};
+      for (const o of xml.descendentes(l, 'Option')) opcoes[xml.atributo(o, 'name')] = xml.atributo(o, 'value');
+      if (/Line/i.test(classe) && opcoes.line_color) {
+        const c = normalizarCor(opcoes.line_color);
+        if (c) return c;
+      }
+      if (/Fill/i.test(classe) && opcoes.outline_color && opcoes.outline_style !== 'no') {
+        const c = normalizarCor(opcoes.outline_color);
+        if (c && !doPreenchimento) doPreenchimento = c;
+      }
+    }
+    return doPreenchimento;
   }
 
   function lerQml(texto) {
@@ -141,6 +177,7 @@
        * chegaram ao portal, depois de o .lyr binário não permitir a leitura. */
       const cont = xml.descendentes(raiz, 'symbols')[0];
       if (cont) {
+        saida.contornos = {};
         for (const s of xml.filhos(cont, 'symbol')) {
           const nome = xml.atributo(s, 'name');
           if (nome === undefined || nome === '') continue;
@@ -148,6 +185,8 @@
           if (!info.cor) continue;
           saida.ordem.push(nome);
           saida.cores[nome] = info.cor;
+          const contorno = contornoDoSimbolo(s);
+          if (contorno) saida.contornos[nome] = contorno;
           if (saida.opacidade === null && info.opacidade !== null) saida.opacidade = info.opacidade;
         }
       }
@@ -178,6 +217,10 @@
           if (rotulo !== valor) saida.rotulos = saida.rotulos || {};
           if (rotulo !== valor) saida.rotulos[valor] = rotulo;
           if (info.cor) saida.cores[valor] = info.cor;
+          if (info.contorno) {
+            saida.contornos = saida.contornos || {};
+            saida.contornos[valor] = info.contorno;
+          }
           if (saida.opacidade === null && info.opacidade !== null) saida.opacidade = info.opacidade;
         }
       }

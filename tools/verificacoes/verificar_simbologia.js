@@ -288,6 +288,36 @@ console.log('\n== Biblioteca de símbolos do QGIS (qgis_style com símbolos nome
     s.cores['A34atg'] !== '#000000', 'o contorno era 0,0,0,255');
   ok('sem aviso de erro', s.avisos.length === 0, s.avisos.join('; ') || 'nenhum');
 
+  // CONTORNO: e o que separa as unidades no mapa. `outline_width = 0` no QGIS significa
+  // fio de cabelo, NAO ausencia de contorno — o mapa do cliente tem divisa preta.
+  // Na massa só o A34atg declara contorno; os outros dois só têm preenchimento, e NÃO
+  // podem ganhar contorno inventado.
+  const contornos = s.contornos || {};
+  ok('contorno lido só de quem declara', Object.keys(contornos).length === 1,
+    Object.keys(contornos).length + ': ' + Object.keys(contornos).join(','));
+  ok('contorno do A34atg e preto', contornos['A34atg'] === '#000000', String(contornos['A34atg']));
+  ok('classe sem contorno no arquivo fica sem contorno', !contornos['A4PPr'] && !contornos['C2P1a']);
+
+  // caso 2 camadas: o preenchimento tem outline_style="no" (contorno DESLIGADO) e o
+  // contorno real vem da camada SimpleLine. Usar a cor do preenchimento aqui pintaria
+  // uma divisa que o mapa do cliente nao tem.
+  const duasCamadas = simbologia.lerQml(`<qgis_style version="2"><symbols>
+    <symbol type="fill" name="ENrc">
+      <layer class="SimpleFill" enabled="1" pass="0"><Option type="Map">
+        <Option type="QString" value="254,207,25,255,rgb:1,0.81,0.1,1" name="color"/>
+        <Option type="QString" value="35,35,35,255,rgb:0.13,0.13,0.13,1" name="outline_color"/>
+        <Option type="QString" value="no" name="outline_style"/>
+        <Option type="QString" value="0.26" name="outline_width"/>
+      </Option></layer>
+      <layer class="SimpleLine" enabled="1" pass="0"><Option type="Map">
+        <Option type="QString" value="0,0,0,255,rgb:0,0,0,1" name="line_color"/>
+        <Option type="QString" value="0" name="line_width"/>
+      </Option></layer>
+    </symbol></symbols></qgis_style>`);
+  ok('2 camadas: preenchimento lido', duasCamadas.cores['ENrc'] === '#fecf19', duasCamadas.cores['ENrc']);
+  ok('2 camadas: contorno vem da SimpleLine (preto), nao do outline_color desligado',
+    duasCamadas.contornos['ENrc'] === '#000000', String(duasCamadas.contornos['ENrc']));
+
   // a extensão .xml também tem de ser aceita (é como o arquivo chega do projeto)
   ok('lido pela extensão .xml', simbologia.ler(estilo, 'xml').cores['A34atg'] === '#f5c4c8');
   ok('decidido pelo conteúdo sem extensão', simbologia.ler(estilo, '').cores['A34atg'] === '#f5c4c8');
