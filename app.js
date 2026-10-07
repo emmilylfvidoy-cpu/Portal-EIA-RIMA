@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.0';
+  const VERSAO = 'v2.1';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -460,6 +460,31 @@
    */
   const TETO_ROTULOS = 220;
 
+  /**
+   * Posição do rótulo, com degradação honesta.
+   *
+   * `EIA.vetorial.posicaoRotulo` chegou na v2.0. Se o navegador ainda tiver um
+   * `js/vetorial.js` ANTIGO em cache, a função não existe — e a chamada direta lançava
+   * exceção no meio do laço, deixando o mapa SEM RÓTULO NENHUM e sem dizer por quê. Foi
+   * exatamente o que aconteceu: o `app.js` revalidava (controles novos na tela) e o
+   * `vetorial.js` vinha do cache imutável de 1 ano (função ausente).
+   *
+   * Agora, sem a função, cai no centro da caixa envolvente e AVISA uma vez. Rótulo um
+   * pouco deslocado é melhor que rótulo nenhum com erro escondido no console.
+   */
+  let avisouRotuloSemFuncao = false;
+  function posicaoDoRotulo(geometria) {
+    if (EIA.vetorial && typeof EIA.vetorial.posicaoRotulo === 'function') {
+      return EIA.vetorial.posicaoRotulo(geometria);
+    }
+    if (!avisouRotuloSemFuncao) {
+      avisouRotuloSemFuncao = true;
+      status('Rótulos no centro da caixa: recarregue com Ctrl+Shift+R para o portal usar o cálculo preciso.', true);
+    }
+    const b = EIA.math.bbox({ type: 'FeatureCollection', features: [{ type: 'Feature', geometry: geometria, properties: {} }] });
+    return b ? [(b.xmin + b.xmax) / 2, (b.ymin + b.ymax) / 2] : null;
+  }
+
   function atualizarRotulos() {
     if (!estado.grupoRotulos || !estado.mapa) return;
     estado.grupoRotulos.clearLayers();
@@ -475,7 +500,7 @@
         if (postos >= TETO_ROTULOS) { cortados++; continue; }
         const bruto = (f.properties || {})[coluna];
         if (bruto === null || bruto === undefined || String(bruto).trim() === '') continue;
-        const pos = EIA.vetorial.posicaoRotulo(f.geometry);
+        const pos = posicaoDoRotulo(f.geometry);
         if (!pos) continue;
         if (pos[0] < caixa[0] || pos[0] > caixa[2] || pos[1] < caixa[1] || pos[1] > caixa[3]) continue;
         L.marker([pos[1], pos[0]], {

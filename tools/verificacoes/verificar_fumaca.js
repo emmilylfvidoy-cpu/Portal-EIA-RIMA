@@ -27,7 +27,10 @@ function executar() {
   const scripts = [];
   const re = /<script src="([^"]+)"><\/script>/g;
   let m;
-  while ((m = re.exec(html)) !== null) scripts.push(m[1]);
+  while ((m = re.exec(html)) !== null) {
+    // A URL pode ter `?v=2.1` (cache-busting). O caminho do arquivo é o que vem antes.
+    scripts.push(m[1].split('?')[0]);
+  }
   ok('todos os módulos estão declarados na página', scripts.length >= 14, scripts.length + ' scripts');
 
   // A ordem importa: cada módulo assume o anterior no window.EIA

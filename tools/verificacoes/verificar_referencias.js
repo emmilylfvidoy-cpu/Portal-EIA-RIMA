@@ -22,9 +22,14 @@ const ok = (nome, cond, det) => {
   else { falhas++; console.log('  FALHA ' + nome + (det ? '  [' + det + ']' : '')); }
 };
 
+/** Tira a query string (`?v=2.1`) — ela é cache-busting, não faz parte do caminho. */
+function semVersao(alvo) {
+  return String(alvo).split('?')[0];
+}
+
 /** Confere um caminho relativo pedaço por pedaço, exigindo a grafia EXATA. */
 function conferirGrafia(alvo) {
-  const partes = String(alvo).split('/');
+  const partes = semVersao(alvo).split('/');
   let pasta = raiz;
   for (let i = 0; i < partes.length; i++) {
     let entradas;
@@ -64,6 +69,35 @@ console.log('\n== Arquivos que o index.html carrega ==');
   ok('turf.min.js é carregado antes do app.js', posTurf >= 0 && posTurf < posApp);
 }
 
+console.log('\n== Cache-busting do código do site ==');
+{
+  /* POR QUE ISTO EXISTE: na primeira publicação, `vercel.json` marcou `/js/` como
+   * `immutable` por 1 ano. Depois o cabeçalho foi corrigido, MAS um arquivo já guardado
+   * como imutável o navegador NUNCA revalida — ele não volta a perguntar. Resultado: o
+   * `app.js` (que revalidava) chegou novo e o `js/vetorial.js` ficou velho no navegador
+   * do cliente. A tela mostrava os controles novos e o mapa não desenhava os rótulos,
+   * porque a função que calcula a posição não existia no arquivo antigo.
+   *
+   * Query string na URL é o único remédio que não depende da boa vontade do cache: URL
+   * diferente = arquivo novo, sempre. O teste exige que a versão da query seja IGUAL à
+   * versão do portal — assim uma publicação não sai com cache-busting velho. */
+  const srcs = Array.from(html.matchAll(/(?:src|href)\s*=\s*"((?:js\/|app\.js|style\.css)[^"]*)"/g))
+    .map((m) => m[1]);
+  ok('os arquivos do site são carregados com versão na URL', srcs.length >= 12, srcs.length + ' referências');
+  const comVersao = srcs.filter((s) => /\?v=/.test(s));
+  ok('todos têm ?v=', comVersao.length === srcs.length,
+    (srcs.length - comVersao.length) + ' sem versão: ' + srcs.filter((s) => !/\?v=/.test(s)).join(', '));
+
+  const fonteApp = fs.readFileSync(path.join(raiz, 'app.js'), 'utf8');
+  const mv = /const VERSAO\s*=\s*'v([0-9.]+)'/.exec(fonteApp);
+  const versaoPortal = mv ? mv[1] : null;
+  ok('achei a versão do portal no app.js', !!versaoPortal, 'v' + versaoPortal);
+  const versoes = new Set(comVersao.map((s) => (/\?v=([0-9.]+)/.exec(s) || [])[1]));
+  ok('a versão da URL é a MESMA do portal', versoes.size === 1 && versoes.has(versaoPortal),
+    'URL: v' + Array.from(versoes).join('/v') + '   portal: v' + versaoPortal
+    + '   → ao publicar, troque o ?v= das tags do index.html');
+}
+
 console.log('\n== Camadas do catálogo ==');
 {
   const catalogo = JSON.parse(fs.readFileSync(path.join(raiz, 'data', 'catalogo.json'), 'utf8'));
@@ -90,7 +124,8 @@ console.log('\n== Camadas do catálogo ==');
 
 console.log('\n== Módulos em js/ ==');
 {
-  const noHtml = new Set(Array.from(html.matchAll(/src\s*=\s*"([^"]+)"/g)).map((m) => m[1]));
+  const noHtml = new Set(Array.from(html.matchAll(/src\s*=\s*"([^"]+)"/g))
+    .map((m) => semVersao(m[1])));
   const arquivos = fs.readdirSync(path.join(raiz, 'js'));
   const usados = arquivos.filter((f) => noHtml.has('js/' + f));
   const soFerramenta = arquivos.filter((f) => !noHtml.has('js/' + f));

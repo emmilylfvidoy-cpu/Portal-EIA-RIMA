@@ -15,6 +15,12 @@
 | v1.8 | **Correção do cache do dado**: a camada era buscada com `force-cache`, que nunca revalida — quem já tinha aberto o portal continuava recebendo a geometria antiga (e o mapa pintava de uma cor só, como se as cores não tivessem sido publicadas) |
 | v1.9 | **Contorno das unidades** lido do arquivo de estilo: é a divisa que separa as unidades no mapa do projeto (sem ela, 306 manchas de cor viram uma aquarela) |
 | v2.0 | **Transparência e rótulo por camada**, escolhidos na tela: o analista decide quanto a camada deixa ver do fundo e qual coluna quer ler no mapa |
+| v2.1 | **Versão na URL de cada arquivo do site** (`app.js?v=2.1`): um arquivo já guardado como "imutável" pelo navegador nunca é revalidado, e foi assim que os controles novos apareceram sem os rótulos funcionarem. Se a função de posição faltar, o rótulo cai no centro da caixa e **avisa**, em vez de sumir em silêncio |
+
+> **Ao publicar uma versão nova, troque o `?v=` das tags do `index.html`** para o mesmo
+> número do `VERSAO` do `app.js`. O teste de referências reprova a publicação se os dois
+> estiverem diferentes — é o que impede a repetição do problema: o navegador do visitante
+> fica com o JavaScript antigo e a tela mostra metade das funcionalidades novas.
 
 ## Transparência e rótulo por camada (v2.0)
 
