@@ -116,6 +116,48 @@ console.log('\n== Zoom x escala ==');
     'zoom=' + z.toFixed(2) + ' -> ' + Math.round(escala));
 }
 
+console.log('\n== Área geodésica com vértices colineares (defeito real) ==');
+{
+  /* O RECORTE produz muitos vértices COLINEARES: as bordas da área de influência são
+   * retas, e ao cortar um polígono por elas o resultado fica com uma sequência de
+   * pontos sobre a mesma reta. A fórmula geodésica que somava três ângulos internos
+   * errava nesses pontos: um anel recortado de 15 vértices dava 276 ha contra 211 ha
+   * na UTM e no Turf — 31% de erro, e o portal acusava divergência de área onde não
+   * havia nenhuma.
+   *
+   * A invariante que pega isso: acrescentar pontos colineares numa aresta NÃO MUDA a
+   * área. Se mudar, a fórmula está errada. */
+  const canto = [[-47.81, -22.73], [-47.77, -22.73], [-47.77, -22.69], [-47.81, -22.69]];
+  const simples = canto.concat([canto[0].slice()]);
+  const base = Math.abs(m.areaGeodesicaRapida(simples, 'WGS84'));
+  const naBase = m.conferirArea(simples, 'WGS84');
+  ok('anel de 5 vértices: UTM e geodésica concordam', naBase.diferenca_relativa < 0.01,
+    m.num(naBase.diferenca_relativa * 100, 3) + '%');
+
+  // 25 pontos colineares em cada aresta -> 105 vértices, MESMA forma
+  const denso = [];
+  for (let i = 0; i < canto.length; i++) {
+    const a = canto[i], b = canto[(i + 1) % canto.length];
+    for (let k = 0; k < 25; k++) {
+      const t = k / 25;
+      denso.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]);
+    }
+  }
+  denso.push(denso[0].slice());
+  ok('o anel denso tem mesmo número de lados, mais vértices', denso.length === 101, denso.length + ' vértices');
+
+  const densa = Math.abs(m.areaGeodesicaRapida(denso, 'WGS84'));
+  const erro = Math.abs(densa - base) / base;
+  ok('pontos colineares não mudam a área geodésica (< 0,01%)', erro < 0.0001,
+    '5 vértices ' + m.ha(base, 2) + ' ha  vs  101 vértices ' + m.ha(densa, 2) + ' ha  ('
+    + m.num(erro * 100, 4) + '% de erro)');
+
+  const naDensa = m.conferirArea(denso, 'WGS84');
+  ok('anel denso: UTM e geodésica continuam concordando (< 1%)', naDensa.diferenca_relativa < 0.01,
+    'UTM ' + m.ha(naDensa.area_utm_m2, 2) + ' ha vs geodésica ' + m.ha(naDensa.area_geodesica_m2, 2)
+    + ' ha (' + m.num(naDensa.diferenca_relativa * 100, 3) + '%)');
+}
+
 console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
   return falhas ? 1 : 0;
 }

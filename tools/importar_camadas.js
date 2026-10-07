@@ -58,12 +58,29 @@ function slug(texto) {
     .slice(0, 60) || 'camada';
 }
 
+/**
+ * Nome de exibição da camada.
+ *
+ * Duas regras que vieram de erro real:
+ *
+ * 1. Nome já em caixa mista é texto legível e NÃO se mexe nele. "3.1. Uso do solo,
+ *    ocupação e cobertura da terra" é o nome que o analista escolheu; passar a
+ *    maiúsculas por cima produz "Uso Do Solo", que é pior que o original.
+ * 2. A capitalização usa classe Unicode de letra. Com a fronteira ASCII (`\b`/`\w`),
+ *    o "á" de "rodoviária" conta como FIM de palavra e a letra seguinte é
+ *    maiusculizada: saía "Malha RodoviáRia". Em português isso atinge quase todo nome.
+ */
 function tituloDe(texto) {
-  return String(texto || '')
+  const base = String(texto || '')
     .replace(/[_-]+/g, ' ')
     .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+    .trim();
+  const temMaiuscula = /\p{Lu}/u.test(base);
+  const temMinuscula = /\p{Ll}/u.test(base);
+  if (temMaiuscula && temMinuscula) return base;
+  // toLowerCase antes: maiusculizar o início sem baixar o resto deixa "LIMITE MUNICIPAL"
+  // em vez de "Limite Municipal".
+  return base.toLowerCase().replace(/(^|[^\p{L}\p{N}])(\p{L})/gu, (m, antes, letra) => antes + letra.toUpperCase());
 }
 
 function tamanhoLegivel(bytes) {
@@ -918,6 +935,7 @@ function lerArgumentos(argv) {
     else if (a === '--sem-simplificar') args.semSimplificar = true;
     else if (a === '--forcar') args.forcar = true;
     else if (a === '--simular') args.simular = true;
+    else if (a === '--remover-exemplos') args.removerExemplos = true;
     else if (a === '--ajuda' || a === '-h') args.ajuda = true;
     else args._.push(a);
   }
@@ -944,6 +962,7 @@ function ajuda() {
     '  --casas <n>         casas decimais da coordenada (padrão 6, ~11 cm).',
     '  --sem-simplificar   publica a geometria como veio.',
     '  --forcar            reimporta mesmo se o destino estiver atualizado.',
+    '  --remover-exemplos  tira do catálogo as camadas "EXEMPLO SINTÉTICO" (e os arquivos).',
     '  --simular           mostra o que faria, sem escrever nada.',
   ].join('\n'));
 }
@@ -998,6 +1017,19 @@ function executar(argv) {
       const faltando = manifesto.camadas.filter((c) => !c.meio).length;
       console.log('\nAgora edite o arquivo e ' + (faltando ? 'preencha o "meio" das ' + faltando + ' camada(s) sem meio' : 'confira fonte e data_ref') + '. Depois rode:');
       console.log('  node tools/importar_camadas.js');
+      return 0;
+    }
+
+    if (args.removerExemplos) {
+      const r = removerExemplos();
+      if (!r.removidas.length) {
+        console.log('Nenhuma camada de exemplo no catálogo — nada a remover.');
+        return 0;
+      }
+      console.log('Removidas do catálogo ' + r.removidas.length + ' camada(s) de exemplo:');
+      for (const c of r.removidas) console.log('  · ' + c.nome);
+      console.log('arquivos apagados: ' + r.arquivos);
+      console.log('\nPara publicar: git add -A && git commit -m "Base do projeto" && git push');
       return 0;
     }
 
@@ -1075,6 +1107,44 @@ function executar(argv) {
   }
 }
 
+/**
+ * Tira do catálogo as camadas de exemplo e apaga os arquivos delas.
+ *
+ * POR QUE ISSO EXISTE: quando a base real entra, os exemplos passam a ATRAPALHAR. Eles
+ * duplicam as camadas do projeto (havia "Hidrografia" de exemplo ao lado da hidrografia
+ * real) e, pior, dado sintético marcado como "EXEMPLO SINTÉTICO" pode ser baixado e
+ * levado para um estudo por quem não repara na fonte. Base curada é base sem exemplo.
+ *
+ * O que NÃO é exemplo fica: só sai a camada cuja fonte é declaradamente sintética.
+ */
+function removerExemplos(caminhoCatalogo) {
+  const caminho = caminhoCatalogo || path.join(raiz, 'data', 'catalogo.json');
+  if (!fs.existsSync(caminho)) return { removidas: [], arquivos: 0 };
+  const catalogo = JSON.parse(fs.readFileSync(caminho, 'utf8'));
+  const fica = [];
+  const removidas = [];
+  for (const c of catalogo.camadas) {
+    const ehExemplo = c.origem !== 'importado' && /EXEMPLO SINT[ÉE]TICO/i.test(String(c.fonte || ''));
+    if (ehExemplo) removidas.push(c); else fica.push(c);
+  }
+  if (!removidas.length) return { removidas: [], arquivos: 0 };
+
+  catalogo.camadas = fica;
+  catalogo.gerado_em = new Date().toISOString();
+  fs.writeFileSync(caminho, JSON.stringify(catalogo, null, 2));
+
+  // apaga os .geojson dos exemplos, para não sobrar arquivo órfão publicado
+  let arquivos = 0;
+  for (const c of removidas) {
+    if (!c.arquivo) continue;
+    const p = path.join(raiz, c.arquivo);
+    if (fs.existsSync(p)) {
+      try { fs.unlinkSync(p); arquivos++; } catch (e) { /* segue */ }
+    }
+  }
+  return { removidas: removidas, arquivos: arquivos };
+}
+
 module.exports = {
   executar: executar,
   inspecionar: inspecionar,
@@ -1091,6 +1161,8 @@ module.exports = {
   escreverGeoJson: escreverGeoJson,
   lerShapefile: lerShapefile,
   camposInferidos: camposInferidos,
+  removerExemplos: removerExemplos,
+  tituloDe: tituloDe,
   slug: slug,
   tamanhoLegivel: tamanhoLegivel,
 };

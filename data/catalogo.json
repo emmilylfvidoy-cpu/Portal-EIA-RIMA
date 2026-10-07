@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "gerado_em": "2026-10-07T13:08:10.297Z",
+  "gerado_em": "2026-10-07T15:21:46.254Z",
   "aviso": "As camadas marcadas com fonte \"EXEMPLO SINTÉTICO\" servem para demonstrar o fluxo. Substitua por dado oficial antes de usar no estudo.",
   "meios": [
     {
@@ -26,14 +26,299 @@
       "meio": "fisico",
       "tipo": "poligono",
       "arquivo": "data/geologia.geojson",
-      "campo_classe": "unidade",
+      "campo_classe": "ERA_MAXIMA",
       "estilo": {
-        "cor": "#c8a165",
-        "opacidade": 0.35
+        "cor": "#8a6d3b",
+        "opacidade": 0.3,
+        "cores": {
+          "Neoproterozóico": "#2f6b3a",
+          "Cenozóico": "#8a6d3b",
+          "Mesozóico": "#2f5b8a",
+          "Paleozóico": "#b98645",
+          "Mesoproterozóico": "#7a4f8a",
+          "Paleoproterozóico": "#a33f3f",
+          "Neoarqueano": "#3f8a8a",
+          "Mesoarqueano": "#6b8a2f",
+          "Sem classe": "#8a2f6b"
+        }
       },
-      "fonte": "EXEMPLO SINTÉTICO",
-      "data_ref": "exemplo",
-      "obs": "Substituir por carta geológica oficial (CPRM)."
+      "fonte": "Litologia do Estado de São Paulo (spaulo_lito)",
+      "data_ref": "",
+      "obs": "Classe = ERA_MAXIMA (8 eras). As 306 unidades litológicas seguem nas colunas SIGLA_UNID e NOME_UNIDA do dado exportado. CONFIRMAR a citação oficial da fonte.",
+      "campos": [
+        {
+          "nome": "ERA_MAXIMA",
+          "tipo": "C",
+          "rotulo": "ERA_MAXIMA"
+        },
+        {
+          "nome": "SIGLA_UNID",
+          "tipo": "C",
+          "rotulo": "SIGLA_UNID"
+        },
+        {
+          "nome": "SIGLAS_ANT",
+          "tipo": "C",
+          "rotulo": "SIGLAS_ANT"
+        },
+        {
+          "nome": "NOME_UNIDA",
+          "tipo": "C",
+          "rotulo": "NOME_UNIDA"
+        },
+        {
+          "nome": "HIERARQUIA",
+          "tipo": "C",
+          "rotulo": "HIERARQUIA"
+        },
+        {
+          "nome": "IDADE_MAX",
+          "tipo": "N",
+          "rotulo": "IDADE_MAX"
+        },
+        {
+          "nome": "ERRO_MAX",
+          "tipo": "N",
+          "rotulo": "ERRO_MAX"
+        },
+        {
+          "nome": "EON_IDAD_M",
+          "tipo": "C",
+          "rotulo": "EON_IDAD_M"
+        },
+        {
+          "nome": "PERIODO_MA",
+          "tipo": "C",
+          "rotulo": "PERIODO_MA"
+        },
+        {
+          "nome": "EPOCA_MAX",
+          "tipo": "C",
+          "rotulo": "EPOCA_MAX"
+        },
+        {
+          "nome": "SISTEMA_GE",
+          "tipo": "C",
+          "rotulo": "SISTEMA_GE"
+        },
+        {
+          "nome": "METODO_GEO",
+          "tipo": "C",
+          "rotulo": "METODO_GEO"
+        },
+        {
+          "nome": "QLDE_INFER",
+          "tipo": "C",
+          "rotulo": "QLDE_INFER"
+        },
+        {
+          "nome": "IDADE_MIN",
+          "tipo": "N",
+          "rotulo": "IDADE_MIN"
+        },
+        {
+          "nome": "ERRO_MIN",
+          "tipo": "N",
+          "rotulo": "ERRO_MIN"
+        },
+        {
+          "nome": "EON_IDAD_1",
+          "tipo": "C",
+          "rotulo": "EON_IDAD_1"
+        },
+        {
+          "nome": "ERA_MINIMA",
+          "tipo": "C",
+          "rotulo": "ERA_MINIMA"
+        },
+        {
+          "nome": "PERIODO_MI",
+          "tipo": "C",
+          "rotulo": "PERIODO_MI"
+        },
+        {
+          "nome": "EPOCA_MIN",
+          "tipo": "C",
+          "rotulo": "EPOCA_MIN"
+        },
+        {
+          "nome": "SISTEMA__1",
+          "tipo": "C",
+          "rotulo": "SISTEMA__1"
+        },
+        {
+          "nome": "METODO_G_1",
+          "tipo": "C",
+          "rotulo": "METODO_G_1"
+        },
+        {
+          "nome": "QLDE_INF_1",
+          "tipo": "C",
+          "rotulo": "QLDE_INF_1"
+        },
+        {
+          "nome": "AMBSEDIMEN",
+          "tipo": "C",
+          "rotulo": "AMBSEDIMEN"
+        },
+        {
+          "nome": "SISTSEDIME",
+          "tipo": "C",
+          "rotulo": "SISTSEDIME"
+        },
+        {
+          "nome": "TIPO_DEPOS",
+          "tipo": "C",
+          "rotulo": "TIPO_DEPOS"
+        },
+        {
+          "nome": "ASSOC_MAGM",
+          "tipo": "C",
+          "rotulo": "ASSOC_MAGM"
+        },
+        {
+          "nome": "NIVEL_CRUS",
+          "tipo": "C",
+          "rotulo": "NIVEL_CRUS"
+        },
+        {
+          "nome": "TEXTURA_IG",
+          "tipo": "C",
+          "rotulo": "TEXTURA_IG"
+        },
+        {
+          "nome": "FONTE_MAGM",
+          "tipo": "C",
+          "rotulo": "FONTE_MAGM"
+        },
+        {
+          "nome": "MORFOLOGIA",
+          "tipo": "C",
+          "rotulo": "MORFOLOGIA"
+        },
+        {
+          "nome": "AMBIENTE_T",
+          "tipo": "C",
+          "rotulo": "AMBIENTE_T"
+        },
+        {
+          "nome": "METAMORFIS",
+          "tipo": "C",
+          "rotulo": "METAMORFIS"
+        },
+        {
+          "nome": "METODO_G_2",
+          "tipo": "C",
+          "rotulo": "METODO_G_2"
+        },
+        {
+          "nome": "TEMP_PICO",
+          "tipo": "N",
+          "rotulo": "TEMP_PICO"
+        },
+        {
+          "nome": "ERRO_TEMP_",
+          "tipo": "N",
+          "rotulo": "ERRO_TEMP_"
+        },
+        {
+          "nome": "PRESSAO_PI",
+          "tipo": "F",
+          "rotulo": "PRESSAO_PI"
+        },
+        {
+          "nome": "ERRO_PRESS",
+          "tipo": "N",
+          "rotulo": "ERRO_PRESS"
+        },
+        {
+          "nome": "TIPO_BARIC",
+          "tipo": "C",
+          "rotulo": "TIPO_BARIC"
+        },
+        {
+          "nome": "TRAJETORIA",
+          "tipo": "C",
+          "rotulo": "TRAJETORIA"
+        },
+        {
+          "nome": "AMBIENTE_1",
+          "tipo": "C",
+          "rotulo": "AMBIENTE_1"
+        },
+        {
+          "nome": "LITOTIPO1",
+          "tipo": "C",
+          "rotulo": "LITOTIPO1"
+        },
+        {
+          "nome": "LITOTIPO2",
+          "tipo": "C",
+          "rotulo": "LITOTIPO2"
+        },
+        {
+          "nome": "CLASSE_ROC",
+          "tipo": "C",
+          "rotulo": "CLASSE_ROC"
+        },
+        {
+          "nome": "CLASSE_R_1",
+          "tipo": "C",
+          "rotulo": "CLASSE_R_1"
+        },
+        {
+          "nome": "BB_SUBCLAS",
+          "tipo": "C",
+          "rotulo": "BB_SUBCLAS"
+        },
+        {
+          "nome": "BB_SUBCL_1",
+          "tipo": "C",
+          "rotulo": "BB_SUBCL_1"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "Neoproterozóico",
+          "feicoes": 656
+        },
+        {
+          "classe": "Cenozóico",
+          "feicoes": 528
+        },
+        {
+          "classe": "Mesozóico",
+          "feicoes": 493
+        },
+        {
+          "classe": "Paleozóico",
+          "feicoes": 257
+        },
+        {
+          "classe": "Mesoproterozóico",
+          "feicoes": 88
+        },
+        {
+          "classe": "Paleoproterozóico",
+          "feicoes": 67
+        },
+        {
+          "classe": "Neoarqueano",
+          "feicoes": 11
+        },
+        {
+          "classe": "Mesoarqueano",
+          "feicoes": 7
+        },
+        {
+          "classe": "Sem classe",
+          "feicoes": 1
+        }
+      ],
+      "origem": "importado",
+      "feicoes": 2108,
+      "cores_origem": "auto",
+      "estilo_arquivo": "Geologia.lyr"
     },
     {
       "id": "geomorfologia",

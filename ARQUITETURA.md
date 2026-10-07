@@ -384,6 +384,7 @@ Os defeitos que os testes pegaram e que estão registrados no código, por serem
 
 | Defeito | Onde estava | Como apareceu |
 |---|---|---|
+| **Área geodésica com 31% de erro em anel recortado** (soma de três ângulos internos; erro explode com vértice colinear, que o recorte produz em massa) | `math.js` | a conferência UTM × geodésica acusava divergência de área onde não havia nenhuma; trocado por Van Oosterom–Strackee, e os três motores (UTM, geodésica, Turf) passaram a concordar em 0,14% |
 | **Layout do registro de polígono errado em 4 bytes** (`NumParts` gravado em `+32`, dentro do `double` do `Ymax`) | `shapelib.js` | o shapefile exportado saía com a caixa envolvente corrompida e inválido para QGIS/ArcGIS; só apareceu ao ler um shapefile real do ArcGIS, porque o teste de ida e volta tinha o erro simétrico no leitor |
 | `getInt32` com 4 bytes de deslocamento errado no `.shp` | `shapelib.js` | o shapefile lido voltava sem geometria |
 | Leitura do bbox antes de checar o tipo de registro | `shapelib.js` | registro de Point (20 bytes) estourava o DataView |

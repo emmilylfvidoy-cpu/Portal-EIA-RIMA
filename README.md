@@ -1,6 +1,6 @@
 # Portal EIA/RIMA
 
-**Versão atual: v1.4** (a versão aparece no rodapé do mapa, sobre a área de coordenadas).
+**Versão atual: v1.5** (a versão aparece no rodapé do mapa, sobre a área de coordenadas).
 
 | Versão | O que entrou |
 |---|---|
@@ -8,7 +8,8 @@
 | v1.1 | Importador de camadas: leva a base de shapefiles para dentro do portal, com simplificação por escala |
 | v1.2 | Leitura de simbologia (`.qml`, `.sld`, `.lyrx`) e **correção do layout do shapefile**, que estava inválido para QGIS/ArcGIS |
 | v1.3 | Escolha do campo de classe corrigida, com lista de alternativas no `--inspecionar` |
-| v1.4 | Cache: `/js` e `/style.css` revalidam sempre (antes ficavam 1 ano em cache e a atualização não aparecia); versão visível no rodapé |
+| v1.4 | Cache: `/js` e `/style.css` revalidam sempre; versão visível no rodapé |
+| v1.5 | **Correção do cálculo de área geodésica** (errava 31% em anel recortado) e base do projeto: Geologia real no lugar do exemplo |
 
 Portal estático para estudo de impacto ambiental: carrega as **áreas de influência** (SHP, KMZ,
 GeoJSON ou desenho na tela), **recorta** as camadas de caracterização dos meios físico, biótico e

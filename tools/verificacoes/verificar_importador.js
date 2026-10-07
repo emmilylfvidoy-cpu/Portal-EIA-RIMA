@@ -240,6 +240,29 @@ function executar() {
       String(importador.adivinharCampoClasse(camposQ, regQ)));
   }
 
+  // ---------------------------------------------------------- nome da camada
+  console.log('\n== Nome de exibição da camada ==');
+  {
+    // Com fronteira ASCII (\b\w), o acento conta como fim de palavra e a letra
+    // seguinte vira maiúscula: "Malha RodoviáRia". Em português isso atinge quase tudo.
+    const casos = [
+      ['2.2.a1. Malha rodoviária', '2.2.a1. Malha rodoviária'],
+      ['3.1. Uso do solo, ocupação e cobertura da terra', '3.1. Uso do solo, ocupação e cobertura da terra'],
+      ['3.4 Recursos Hídricos', '3.4 Recursos Hídricos'],
+      ['LIMITE_MUNICIPAL', 'Limite Municipal'],
+      ['geologia teste', 'Geologia Teste'],
+      ['uso_do_solo', 'Uso Do Solo'],
+      ['ÁREA_INDÍGENA', 'Área Indígena'],
+    ];
+    for (const [entrada, esperado] of casos) {
+      const obtido = importador.tituloDe(entrada);
+      ok('nome: ' + entrada.slice(0, 32), obtido === esperado, obtido === esperado ? undefined : 'saiu "' + obtido + '"');
+    }
+    ok('nome nao produz maiuscula depois de acento',
+      !/á[A-Z]|ã[A-Z]|é[A-Z]|í[A-Z]|ó[A-Z]|ú[A-Z]/.test(importador.tituloDe('malha rodoviária e marcação quilométrica')),
+      importador.tituloDe('malha rodoviária e marcação quilométrica'));
+  }
+
   // ---------------------------------------------------------- limpeza
   fs.rmSync(destinoTeste, { recursive: true, force: true });
   fs.rmSync(tmp, { recursive: true, force: true });

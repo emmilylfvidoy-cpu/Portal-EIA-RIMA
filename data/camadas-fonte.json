@@ -1,0 +1,30 @@
+{
+  "_instrucoes": [
+    "Preencha \"meio\" em todas as camadas: fisico, biotico ou socioeconomico. Sem isso o importador não roda.",
+    "\"campo_classe\" é o campo que agrupa as feições (uso do solo, unidade geológica...).",
+    "\"cor\" é a cor da camada, e \"cores_classe\" é a cor de CADA classe (classe -> cor em hexadecimal).",
+    "  Se o shapefile veio com arquivo de estilo (.qml do QGIS, .sld, .lyrx do ArcGIS Pro), isso já vem preenchido.",
+    "  No ArcGIS Desktop o estilo é .lyr (binário) e as cores NÃO são lidas — nesse caso ajuste as cores aqui à mão.",
+    "\"fonte\" e \"data_ref\" aparecem na tela, no relatório e no mapa. Vêm do .shp.xml quando existe; confira.",
+    "\"epsg_origem\" aceita \"auto\" (lê o .prj) ou o código, tipo \"EPSG:31983\".",
+    "\"simplificar_graus\" é opcional: sem ele a tolerância vem da escala (--escala).",
+    "Rode: node tools/importar_camadas.js"
+  ],
+  "destino": "data",
+  "camadas": [
+    {
+      "origem": "D:\\Geoportal\\Portal EIA\\Geologia.shp",
+      "id": "geologia",
+      "arquivo": "data/geologia.geojson",
+      "nome": "Geologia",
+      "meio": "fisico",
+      "campo_classe": "ERA_MAXIMA",
+      "fonte": "Litologia do Estado de São Paulo (spaulo_lito)",
+      "data_ref": "",
+      "cor": "#8a6d3b",
+      "opacidade": 0.3,
+      "epsg_origem": "auto",
+      "obs": "Classe = ERA_MAXIMA (8 eras). As 306 unidades litológicas seguem nas colunas SIGLA_UNID e NOME_UNIDA do dado exportado. CONFIRMAR a citação oficial da fonte."
+    }
+  ]
+}

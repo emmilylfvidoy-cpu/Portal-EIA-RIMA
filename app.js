@@ -18,8 +18,8 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v1.4';
-  const VERSAO_DATA = '2026-03-15';
+  const VERSAO = 'v1.5';
+  const VERSAO_DATA = '2026-10-07';
 
   const estado = {
     catalogo: null,
