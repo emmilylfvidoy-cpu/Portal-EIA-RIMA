@@ -207,6 +207,39 @@ function executar() {
     ok('.kmz explica a alternativa', /KML|KMZ/.test(msg2), msg2.slice(0, 70));
   }
 
+  // ---------------------------------------------------------- campo de classe
+  console.log('\n== Escolha do campo de classe ==');
+  {
+    // Caso real: camada de uso do solo do cliente. "Rodovia" tem 2 valores (a rodovia do
+    // trecho) e "Nível_II" tem 11 (a classe de uso). A heurística antiga escolhia Rodovia
+    // só por ter menos valores — e a tabela do EIA sairia agrupada por rodovia.
+    const campos = [
+      { nome: 'Rodovia', tipo: 'C' }, { nome: 'Área', tipo: 'F' },
+      { nome: 'Nível_I', tipo: 'C' }, { nome: 'Nível_II', tipo: 'C' },
+    ];
+    const registros = [];
+    const nivel1 = ['Antrópico', 'Vegetação'];
+    const nivel2 = ['Pastagem', 'Cana', 'Mata', 'Cerrado', 'Urbano', 'Água', 'Silvicultura', 'Cultura', 'Solo exposto', 'Campo', 'Várzea'];
+    for (let k = 0; k < 120; k++) {
+      registros.push({ Rodovia: k % 2 === 0 ? 'SP-160' : 'SP-55', Área: 1.5, 'Nível_I': nivel1[k % 2], 'Nível_II': nivel2[k % 11] });
+    }
+    const melhor = importador.adivinharCampoClasse(campos, registros);
+    ok('nao escolhe a coluna de identificador (Rodovia)', melhor !== 'Rodovia', String(melhor));
+    ok('escolhe um campo de classe de verdade', /Nível/.test(String(melhor)), String(melhor));
+    ok('nao escolhe campo numerico de medida (Área)', melhor !== 'Área');
+    const cands = importador.candidatosCampoClasse(campos, registros, 4);
+    ok('lista alternativas em ordem', cands.length >= 2 && cands[0].nota >= cands[1].nota,
+      cands.map((c) => c.campo + '(' + c.distintos + ')').join(' > '));
+    ok('a alternativa inclui o outro nível', cands.some((c) => c.campo === 'Nível_II'),
+      cands.map((c) => c.campo).join(','));
+
+    // Nome próprio: numa camada pequena ele É a classe (o nome do quilombo)
+    const camposQ = [{ nome: 'Rodovia', tipo: 'C' }, { nome: 'km', tipo: 'C' }, { nome: 'Denominaç', tipo: 'C' }];
+    const regQ = [{ Rodovia: 'SP-55', km: '10', 'Denominaç': 'Quilombo A' }, { Rodovia: 'SP-55', km: '20', 'Denominaç': 'Quilombo B' }];
+    ok('camada pequena: nome proprio vira classe', importador.adivinharCampoClasse(camposQ, regQ) === 'Denominaç',
+      String(importador.adivinharCampoClasse(camposQ, regQ)));
+  }
+
   // ---------------------------------------------------------- limpeza
   fs.rmSync(destinoTeste, { recursive: true, force: true });
   fs.rmSync(tmp, { recursive: true, force: true });

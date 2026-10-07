@@ -278,18 +278,28 @@ function toleranciaParaEscala(escala) {
 }
 
 // ============================================================ classes e cor
-const PALAVRAS_CLASSE = /classe|class|uso|tipo|tipolog|unidade|solo|geomorf|veget|zona|litolog|forma|fitofis|estagio|estágio|grupo|nome|descri|categoria|fase|dominio|domínio/i;
+const PALAVRAS_CLASSE = /classe|class|uso|cobert|ocupac|ocupaç|tipo|tipolog|nivel|nível|nvl|unidade|solo|geomorf|veget|zona|litolog|forma|fitofis|estagio|estágio|grupo|categoria|subclasse|dominio|domínio|fase|padrao|padrão|hierarquia|sistema|era|periodo|período/i;
 
 /**
- * Descobre qual campo do .dbf serve de classe: o que tem entre 2 e 40 valores
- * distintos e cujo nome combina com classe/uso/tipo/unidade. Menos valores = melhor
- * (classe serve para agrupar e colorir, não para identificar feição).
+ * Identificador técnico ou medida: NUNCA é classe. Excluído da disputa.
+ * Poucos valores distintos, sozinho, não diz nada — "Rodovia" tem 2 valores e não é a
+ * classe de uso do solo; "km" tem 2 e não é classe de nada.
  */
-function adivinharCampoClasse(campos, registros) {
-  let melhor = null;
-  let melhorNota = -Infinity;
+const PALAVRAS_NAO_CLASSE = /^(id|fid|objectid|oid|codigo|código|cod|gid|uuid|guid|km|km_|_km|x|y|z|lon|lat|longitude|latitude|area|área|comprimento|perimetro|perímetro|shape|shape_leng|shape_area|distancia|distância|data|datum|etapa|fonte|obs|observac)/i;
+
+/**
+ * Nome próprio: normalmente identifica a feição, não a agrupa — mas pode ser a classe
+ * legítima em camada pequena (a classe de "Áreas Quilombolas" É o nome do quilombo; a
+ * de "Áreas urbanizadas" É a localidade). Por isso entra com desconto, não excluído.
+ */
+const PALAVRAS_NOME_PROPRIO = /^(rodovia|municipio|município|localidade|nome|denominac|denominaç|legislac|legislaç)/i;
+
+/** Todos os campos candidatos a classe, do melhor para o pior, com a nota. */
+function candidatosCampoClasse(campos, registros, limite) {
+  const saida = [];
   for (const c of campos) {
     if (c.tipo !== 'C' && c.tipo !== 'N') continue;
+    if (PALAVRAS_NAO_CLASSE.test(c.nome)) continue;
     const valores = new Set();
     for (let i = 0; i < registros.length && i < 400; i++) {
       const r = registros[i];
@@ -300,13 +310,26 @@ function adivinharCampoClasse(campos, registros) {
     }
     const n = valores.size;
     if (n < 2 || n > 40) continue;
-    let nota = 100 - n;
+
+    let nota = 100 - Math.abs(n - 8);        // o ponto doce é ~8 classes, não 2
     if (PALAVRAS_CLASSE.test(c.nome)) nota += 60;
     if (c.tipo === 'C') nota += 10;
-    if (n > 20) nota -= 30;
-    if (nota > melhorNota) { melhorNota = nota; melhor = c.nome; }
+    if (PALAVRAS_NOME_PROPRIO.test(c.nome)) nota -= 25;
+    if (n > 25) nota -= 25;
+    if (n === 2) nota -= 15;                 // dois valores costuma ser binário/identificador
+    saida.push({ campo: c.nome, distintos: n, nota: nota });
   }
-  return melhor;
+  saida.sort((a, b) => b.nota - a.nota);
+  return limite ? saida.slice(0, limite) : saida;
+}
+
+/**
+ * Descobre qual campo do .dbf serve de classe: nome que combina com classe/uso/tipo/
+ * nível e uma quantidade plausível de valores distintos.
+ */
+function adivinharCampoClasse(campos, registros) {
+  const lista = candidatosCampoClasse(campos, registros, 1);
+  return lista.length ? lista[0].campo : null;
 }
 
 const PALAVRAS_MEIO = {
@@ -436,6 +459,7 @@ function inspecionar(origem) {
       campos: campos.map((c) => ({ nome: c.nome, tipo: c.tipo, tamanho: c.tamanho, distintos: distintos[c.nome], vazios: nulos[c.nome] || 0 })),
       campo_classe_sugerido: (infoEstilo.estilo && infoEstilo.estilo.campo) || adivinharCampoClasse(campos, registros),
       campo_classe_origem: infoEstilo.estilo && infoEstilo.estilo.campo ? 'arquivo de estilo' : 'heurística',
+      campos_candidatos: candidatosCampoClasse(campos, registros, 4),
       meio_sugerido: adivinharMeio(path.basename(origem)),
       estilo_arquivo: infoEstilo.arquivo ? path.basename(infoEstilo.arquivo) : null,
       estilo: infoEstilo.estilo || null,
@@ -777,6 +801,14 @@ function imprimirInspecao(rel) {
     if (c.bbox) console.log('  extensão: ' + c.bbox.map((v) => v.toFixed(5)).join(', '));
     console.log('  campo de classe sugerido: ' + (c.campo_classe_sugerido || '(nenhum — a camada fica sem classe)')
       + (c.campo_classe_sugerido ? '   (' + c.campo_classe_origem + ')' : ''));
+    // Alternativas: um palpite só esconde o caso em que a classe certa é outro campo.
+    // Foi assim que a camada de uso do solo veio classificada por "Rodovia" (2 valores)
+    // em vez de "Nível_II" (11 valores — a classe de uso de verdade).
+    if (c.campos_candidatos && c.campos_candidatos.length > 1 && c.campo_classe_origem !== 'arquivo de estilo') {
+      const outros = c.campos_candidatos.slice(1, 4)
+        .map((x) => x.campo + ' (' + x.distintos + ')');
+      if (outros.length) console.log('  outros candidatos a classe: ' + outros.join(', '));
+    }
     console.log('  meio sugerido: ' + (c.meio_sugerido || '(preencha no manifesto)'));
     if (c.estilo_arquivo) {
       const cores = c.estilo && c.estilo.cores ? Object.keys(c.estilo.cores).length : 0;
@@ -1053,6 +1085,7 @@ module.exports = {
   prepararGeometria: prepararGeometria,
   toleranciaParaEscala: toleranciaParaEscala,
   adivinharCampoClasse: adivinharCampoClasse,
+  candidatosCampoClasse: candidatosCampoClasse,
   adivinharMeio: adivinharMeio,
   classesECores: classesECores,
   escreverGeoJson: escreverGeoJson,
