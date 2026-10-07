@@ -109,6 +109,40 @@ console.log('\n== Módulos em js/ ==');
   ok('todo módulo carregado registra em window.EIA', semRegistro.length === 0, semRegistro.join(', ') || 'todos');
 }
 
+console.log('\n== vercel.json ==');
+{
+  /* A Vercel valida este arquivo contra um schema RÍGIDO: qualquer chave que ela não
+   * conhece derruba a publicação com "should NOT have additional property". Aconteceu:
+   * uma chave de anotação (`_nota_cache`) entrou aqui e TODO deploy a partir daquele
+   * commit falhou — o site ficou congelado numa versão antiga sem ninguém entender por
+   * quê. Anotação vai na documentação, não em arquivo que validador lê. */
+  const PERMITIDAS = ['$schema', 'framework', 'outputDirectory', 'buildCommand', 'installCommand',
+    'devCommand', 'ignoreCommand', 'headers', 'redirects', 'rewrites', 'routes', 'cleanUrls',
+    'trailingSlash', 'regions', 'functions', 'builds', 'public', 'git', 'github', 'crons',
+    'images', 'fluid', 'bulkRedirectsPath', 'version'];
+  let cfg = null;
+  let erroParse = null;
+  const texto = fs.readFileSync(path.join(raiz, 'vercel.json'), 'utf8');
+  try { cfg = JSON.parse(texto); } catch (e) { erroParse = e.message; }
+  ok('vercel.json é JSON válido', !!cfg, erroParse || 'ok');
+  if (cfg) {
+    const desconhecidas = Object.keys(cfg).filter((k) => PERMITIDAS.indexOf(k) < 0);
+    ok('vercel.json só tem chaves que a Vercel aceita', desconhecidas.length === 0,
+      desconhecidas.length ? 'chave(s) inválida(s): ' + desconhecidas.join(', ') + '  → a publicação vai falhar'
+        : Object.keys(cfg).join(', '));
+    // cada bloco de header precisa de source e de uma lista de {key,value}
+    const mauFormado = (cfg.headers || []).filter((h) => !h || typeof h.source !== 'string'
+      || !Array.isArray(h.headers) || !h.headers.length
+      || h.headers.some((x) => !x || typeof x.key !== 'string' || typeof x.value !== 'string'));
+    ok('blocos de headers bem formados', mauFormado.length === 0, mauFormado.length + ' com problema');
+    // o que não pode voltar a acontecer: cache imutável no código do site
+    const imutavelEmJs = (cfg.headers || []).some((h) => /^\/(js|app\.js|style\.css)/.test(h.source || '')
+      && (h.headers || []).some((x) => /immutable/.test(String(x.value))));
+    ok('código do site não fica em cache imutável', !imutavelEmJs,
+      imutavelEmJs ? 'sem versionamento por query string, o visitante veria a versão antiga' : 'ok');
+  }
+}
+
 console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
 return falhas ? 1 : 0;
 }

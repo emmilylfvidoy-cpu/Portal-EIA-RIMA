@@ -2,7 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "outputDirectory": ".",
-  "_nota_cache": "Só /vendor/ é imutável (Leaflet e Turf não mudam). /js/, /style.css e /app.js revalidam sempre: sem versionamento por query string, cache longo faria o visitante ficar com o código antigo depois de uma atualização — foi o defeito apontado na auditoria do outro portal.",
   "headers": [
     {
       "source": "/vendor/(.*)",
