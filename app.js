@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v1.9';
+  const VERSAO = 'v2.0';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -32,6 +32,12 @@
     // Agrupamento escolhido pelo usuário: { idDaCamada: [colunas] }. Vazio = usa o
     // campo de classe de cada camada, que é o padrão.
     agrupamento: {},
+    // Aparência escolhida pelo usuário, por camada: transparência (0..1) e coluna do rótulo.
+    transparencia: {},
+    rotulos: {},
+    grupoRotulos: null,
+    rotulosPostos: 0,
+    rotulosCortados: 0,
     logos: [],
     desenhando: false,
     desenho: null,
@@ -110,13 +116,19 @@
     estado.grupoCamadas = L.layerGroup().addTo(mapa);
     estado.grupoAreas = L.layerGroup().addTo(mapa);
     estado.grupoResultado = L.layerGroup().addTo(mapa);
+    // Rótulos por cima de tudo: são texto, e texto embaixo de polígono não se lê.
+    estado.grupoRotulos = L.layerGroup().addTo(mapa);
 
     mapa.on('mousemove', (ev) => {
       $('coordenadas').textContent = 'WGS 84 · ' + EIA.math.dms(ev.latlng.lng, 'lon') + ' · ' + EIA.math.dms(ev.latlng.lat, 'lat');
     });
     mapa.on('zoomend', () => {
       if ($('articulado').checked) atualizarInfoArticulacao();
+      atualizarRotulos();
     });
+    // Ao mover o mapa, os rótulos são refeitos: rotula só o que está na tela, senão
+    // 2.102 feições viram 2.102 elementos no DOM.
+    mapa.on('moveend', () => atualizarRotulos());
     mapa.on('click', aoClicarNoMapa);
 
     $('zoom-mais').onclick = () => mapa.zoomIn();
@@ -233,8 +245,100 @@
         linha.appendChild(nome);
         linha.appendChild(estadoTxt);
         alvo.appendChild(linha);
+        // Transparência e rótulo: controles da CAMADA, logo abaixo dela. Ficam fora do
+        // <label> da linha porque um clique no controle não pode ligar/desligar a camada.
+        alvo.appendChild(controlesDaCamada(camada));
       }
     }
+  }
+
+  /**
+   * Controles de aparência da camada: transparência e coluna do rótulo.
+   *
+   * A transparência é o que permite ver a imagem de satélite (ou a camada de baixo) por
+   * baixo de uma camada densa — sem ela, uma camada de 306 unidades cobre o mapa inteiro.
+   * O rótulo é a coluna que o analista quer LER no mapa (sigla da unidade, nome, classe),
+   * escolhida entre os campos da própria camada.
+   */
+  function controlesDaCamada(camada) {
+    const bloco = document.createElement('div');
+    bloco.className = 'camada-controles';
+
+    // ---- transparência
+    const etiquetaOp = document.createElement('span');
+    etiquetaOp.className = 'controle-rotulo';
+    etiquetaOp.textContent = 'Transparência';
+    const atual = opacidadeEfetiva(camada);
+    const faixa = document.createElement('input');
+    faixa.type = 'range';
+    faixa.min = '0';
+    faixa.max = '100';
+    faixa.step = '5';
+    faixa.value = String(Math.round((1 - atual) * 100));
+    faixa.title = '0% = opaca · 100% = transparente';
+    const valor = document.createElement('span');
+    valor.className = 'controle-valor';
+    valor.textContent = faixa.value + '%';
+    faixa.oninput = () => {
+      valor.textContent = faixa.value + '%';
+      estado.transparencia[camada.id] = 1 - Number(faixa.value) / 100;
+      desenharCamadas();
+    };
+    bloco.appendChild(etiquetaOp);
+    bloco.appendChild(faixa);
+    bloco.appendChild(valor);
+
+    // ---- rótulo
+    const etiquetaRot = document.createElement('span');
+    etiquetaRot.className = 'controle-rotulo';
+    etiquetaRot.textContent = 'Rótulo';
+    const seletor = document.createElement('select');
+    seletor.className = 'seletor-rotulo';
+    const nenhum = document.createElement('option');
+    nenhum.value = '';
+    nenhum.textContent = '(sem rótulo)';
+    seletor.appendChild(nenhum);
+    for (const campo of camposParaRotulo(camada)) {
+      const op = document.createElement('option');
+      op.value = campo;
+      op.textContent = campo + (campo === camada.campo_classe ? '  (classe do mapa)' : '');
+      seletor.appendChild(op);
+    }
+    seletor.value = estado.rotulos[camada.id] || '';
+    seletor.onchange = () => {
+      if (seletor.value) estado.rotulos[camada.id] = seletor.value;
+      else delete estado.rotulos[camada.id];
+      desenharCamadas();
+      atualizarRotulos();
+    };
+    bloco.appendChild(etiquetaRot);
+    bloco.appendChild(seletor);
+
+    return bloco;
+  }
+
+  /** Campos que podem virar rótulo: os atributos da camada, sem as colunas de resultado. */
+  function camposParaRotulo(camada) {
+    const campos = (camada.campos || []).map((c) => c.nome).filter((n) => n && !/^eia_/.test(n));
+    if (campos.length) {
+      // a coluna de classe primeiro: é a que o analista quer ler no mapa
+      return campos.slice().sort((a, b) => (a === camada.campo_classe ? -1 : b === camada.campo_classe ? 1 : 0));
+    }
+    // camada vinda do catálogo sem lista de campos: descobre pelas feições já carregadas
+    const carregada = estado.camadas.find((c) => c.id === camada.id);
+    if (!carregada || !carregada.geojson) return [];
+    const vistos = new Set();
+    for (const f of carregada.geojson.features.slice(0, 50)) {
+      for (const k of Object.keys(f.properties || {})) if (!/^eia_/.test(k)) vistos.add(k);
+    }
+    return Array.from(vistos).sort();
+  }
+
+  /** Opacidade de preenchimento em uso: o que o usuário escolheu, ou o padrão do catálogo. */
+  function opacidadeEfetiva(camada) {
+    if (estado.transparencia[camada.id] !== undefined) return estado.transparencia[camada.id];
+    const e = camada.estilo || {};
+    return e.opacidade === undefined ? 0.35 : e.opacidade;
   }
 
   async function alternarCamada(camada, ligar) {
@@ -324,7 +428,7 @@
             weight: temContorno ? 0.5 : 0.9,
             opacity: 0.9,
             fillColor: c,
-            fillOpacity: estilo.opacidade === undefined ? 0.35 : estilo.opacidade,
+            fillOpacity: opacidadeEfetiva(camada),
           };
         },
         pointToLayer: (f, latlng) => {
@@ -335,6 +439,61 @@
           layer.bindPopup(popupAtributos(camada.nome, f.properties));
         },
       }).addTo(estado.grupoCamadas);
+    }
+    atualizarRotulos();
+  }
+
+  /**
+   * Desenha os rótulos das camadas que têm coluna escolhida.
+   *
+   * Duas decisões que vêm do tamanho do dado real (a Geologia tem 2.102 feições):
+   *
+   * 1. Só rotula o que está NA TELA. Rotular 2.102 feições criaria 2.102 elementos no DOM
+   *    e travaria o navegador — e seria ilegível de qualquer forma, porque num estado
+   *    inteiro os polígonos têm poucos pixels. A legenda de um mapa não escreve 306 nomes
+   *    num mapa de 900 km.
+   * 2. Teto de 220 rótulos por vez, com aviso do que ficou de fora, para o mapa nunca
+   *    ficar mais lento do que útil.
+   *
+   * A posição sai de `posicaoRotulo`, que garante ponto DENTRO da feição — média de
+   * vértice cai fora em forma côncava e escreveria a sigla sobre a unidade vizinha.
+   */
+  const TETO_ROTULOS = 220;
+
+  function atualizarRotulos() {
+    if (!estado.grupoRotulos || !estado.mapa) return;
+    estado.grupoRotulos.clearLayers();
+    if (!Object.keys(estado.rotulos).length) return;
+    const bb = estado.mapa.getBounds();
+    const caixa = [bb.getWest(), bb.getSouth(), bb.getEast(), bb.getNorth()];
+    let postos = 0, cortados = 0;
+
+    for (const camada of estado.camadas) {
+      const coluna = estado.rotulos[camada.id];
+      if (!coluna || !camada.geojson) continue;
+      for (const f of camada.geojson.features) {
+        if (postos >= TETO_ROTULOS) { cortados++; continue; }
+        const bruto = (f.properties || {})[coluna];
+        if (bruto === null || bruto === undefined || String(bruto).trim() === '') continue;
+        const pos = EIA.vetorial.posicaoRotulo(f.geometry);
+        if (!pos) continue;
+        if (pos[0] < caixa[0] || pos[0] > caixa[2] || pos[1] < caixa[1] || pos[1] > caixa[3]) continue;
+        L.marker([pos[1], pos[0]], {
+          interactive: false,
+          keyboard: false,
+          icon: L.divIcon({
+            className: 'rotulo-mapa',
+            html: '<span>' + escapar(String(bruto)) + '</span>',
+            iconSize: null,
+          }),
+        }).addTo(estado.grupoRotulos);
+        postos++;
+      }
+    }
+    estado.rotulosPostos = postos;
+    estado.rotulosCortados = cortados;
+    if (cortados) {
+      status(postos + ' rótulos no mapa · ' + cortados + ' fora do teto ou da tela. Aproxime o zoom para ver os outros.');
     }
   }
 
@@ -1439,6 +1598,12 @@
       projeto: dadosProjeto(),
       areas: estado.areas.map((a) => ({ id: a.id, nome: a.nome, sigla: a.sigla, cor: a.cor, geometry: a.geometry })),
       camadas_ligadas: Array.from(estado.camadasLigadas),
+      // Aparência escolhida na tela: transparência e coluna de rótulo por camada. Sem
+      // isso, reabrir o projeto perderia o ajuste de leitura do mapa — que é trabalho.
+      aparencia: {
+        transparencia: Object.assign({}, estado.transparencia),
+        rotulos: Object.assign({}, estado.rotulos),
+      },
       recortes: estado.resultados.map((r) => ({
         ai: r.relatorio.ai, camada: r.camada.id,
         relatorio: r.relatorio,
@@ -1465,6 +1630,10 @@
           area_ha: EIA.recorte.areaHectares(a.geometry) / 10000,
         }));
         estado.camadasLigadas = new Set(p.camadas_ligadas || []);
+        if (p.aparencia) {
+          estado.transparencia = p.aparencia.transparencia || {};
+          estado.rotulos = p.aparencia.rotulos || {};
+        }
         estado.resultados = (p.recortes || []).map((r) => {
           const camada = (estado.catalogo ? estado.catalogo.camadas.find((c) => c.id === r.camada) : null)
             || { id: r.camada, nome: r.camada, meio: '' };

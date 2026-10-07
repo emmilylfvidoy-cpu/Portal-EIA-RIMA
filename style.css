@@ -137,7 +137,30 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   white-space: nowrap;
 }
 
-/* ------------------------------------------------------------------ agrupamento */
+/* ------------------------------------------------------------------ camada: controles */
+/* Transparência e coluna do rótulo, logo abaixo da camada na lista. */
+.camada-controles {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 1px 0 5px 22px; font-size: 10.5px; color: var(--tinta-clara);
+}
+.camada-controles .controle-rotulo { flex: 0 0 auto; }
+.camada-controles input[type="range"] { flex: 0 0 84px; height: 14px; }
+.camada-controles .controle-valor {
+  flex: 0 0 30px; font-variant-numeric: tabular-nums; color: var(--acento-escuro); font-weight: 600;
+}
+.camada-controles .seletor-rotulo {
+  flex: 1 1 90px; min-width: 0; font-size: 10.5px; padding: 1px 2px;
+}
+
+/* Rótulo desenhado sobre o mapa: texto pequeno com contorno branco, para ler tanto sobre
+ * a imagem de satélite quanto sobre polígono escuro. `pointer-events: none` é essencial:
+ * sem isso o rótulo captura o clique e o popup da feição nunca abre. */
+.rotulo-mapa { background: none; border: none; pointer-events: none; }
+.rotulo-mapa span {
+  display: inline-block; transform: translate(-50%, -50%); white-space: nowrap;
+  font: 600 10px/1.15 "Segoe UI", Arial, sans-serif; color: #16232b;
+  text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 3px #fff, 1px 1px 0 #fff, -1px -1px 0 #fff;
+}
 /* Escolha das colunas de agrupamento da tabela, do gráfico e do relatório. */
 #bloco-agrupamento {
   margin: 8px 0; padding: 8px 10px; border: 1px solid var(--borda);

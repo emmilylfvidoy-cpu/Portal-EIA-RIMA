@@ -14,6 +14,39 @@
 | v1.7 | **Cores do mapa do projeto** na Geologia: leitura de `<camada>.xml` (estilo com símbolos nomeados pela classe) — 306 de 306 unidades com a cor do cliente |
 | v1.8 | **Correção do cache do dado**: a camada era buscada com `force-cache`, que nunca revalida — quem já tinha aberto o portal continuava recebendo a geometria antiga (e o mapa pintava de uma cor só, como se as cores não tivessem sido publicadas) |
 | v1.9 | **Contorno das unidades** lido do arquivo de estilo: é a divisa que separa as unidades no mapa do projeto (sem ela, 306 manchas de cor viram uma aquarela) |
+| v2.0 | **Transparência e rótulo por camada**, escolhidos na tela: o analista decide quanto a camada deixa ver do fundo e qual coluna quer ler no mapa |
+
+## Transparência e rótulo por camada (v2.0)
+
+Na lista de camadas, cada uma ganha dois controles:
+
+```
+☑ 🟫 Geologia     2102 feições · 306 classes
+   Transparência [====|-----] 40%    Rótulo [ SIGLA_UNID ▾ ]
+```
+
+**Transparência** é o que permite ver a imagem de satélite (ou a camada de baixo) por baixo
+de uma camada densa — sem ela, uma camada de 306 unidades cobre o mapa inteiro. O padrão de
+cada camada vem do catálogo (`estilo.opacidade`); o ajuste da tela manda enquanto durar a
+sessão e vai junto no projeto salvo.
+
+**Rótulo** escolhe qual coluna escrever no mapa — a sigla da unidade, o nome, a classe. As
+opções são os atributos da própria camada, com a coluna de classe primeiro. Três decisões
+que vêm do tamanho do dado real:
+
+1. **A posição do texto é calculada com `posicaoRotulo`, que garante ponto DENTRO da
+   feição.** A média dos vértices cai fora em forma côncava (num "L", o centroide fica no
+   quadrante que não existe) e o texto sairia sobre a unidade vizinha — num mapa geológico
+   isso é pior que não ter rótulo, porque afirma a unidade errada no lugar errado.
+2. **Só rotula o que está na tela.** A Geologia tem 2.102 feições: rotular todas criaria
+   2.102 elementos no DOM e travaria o navegador — e seria ilegível, porque num estado
+   inteiro os polígonos têm poucos pixels. A lista se refaz ao mover e ao ampliar.
+3. **Teto de 220 rótulos por vez**, com aviso do que ficou de fora. Aproximar o zoom mostra
+   os outros.
+
+O texto sai com contorno branco (legível sobre satélite e sobre polígono escuro) e é
+desenhado por cima de tudo — texto embaixo de polígono não se lê. Os rótulos não capturam
+clique: o popup da feição continua abrindo.
 
 ## Escolher as colunas de agrupamento (v1.6)
 
