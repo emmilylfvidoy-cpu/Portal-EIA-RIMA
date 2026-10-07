@@ -7,6 +7,7 @@ async function executar() {
 const fs = require('fs');
 const path = require('path');
 const raiz = path.resolve(__dirname, '..', '..');
+const ajudanteCamadas = require(path.join(__dirname, '_camadas.js'));
 const EIA = {
   math: require(path.join(raiz, 'js', 'math.js')),
   vetorial: require(path.join(raiz, 'js', 'vetorial.js')),
@@ -37,12 +38,13 @@ console.log('\n== Catálogo e arquivos ==');
   // completa — contar camadas foi o que fez este teste falhar sem nada estar errado.
   ok('catálogo tem camadas', catalogo.camadas.length >= 2, catalogo.camadas.length + ' camadas');
   ok('toda camada tem arquivo, classe e meio',
-    catalogo.camadas.every((c) => c.arquivo && c.campo_classe && c.meio && c.classes && c.classes.length),
+    catalogo.camadas.every((c) => (c.arquivo || c.tiles) && c.campo_classe && c.meio && c.classes && c.classes.length),
     catalogo.camadas.map((c) => c.id).join(', '));
   const faltando = [];
   for (const c of catalogo.camadas) {
-    const arq = path.join(raiz, c.arquivo);
-    if (!fs.existsSync(arq)) faltando.push(c.arquivo);
+    for (const rel of ajudanteCamadas.arquivos(raiz, c)) {
+      if (!fs.existsSync(path.join(raiz, rel))) faltando.push(rel);
+    }
   }
   ok('todos os arquivos do catálogo existem', faltando.length === 0, faltando.join(', ') || 'ok');
   const ids = catalogo.camadas.map((c) => c.id);
@@ -54,7 +56,7 @@ console.log('\n== Catálogo e arquivos ==');
   const campoInexistente = [];
   for (const c of catalogo.camadas) {
     if (!c.campo_classe) continue;
-    const g = JSON.parse(fs.readFileSync(path.join(raiz, c.arquivo), 'utf8'));
+    const g = ajudanteCamadas.carregar(raiz, c);
     const props = (g.features[0] && g.features[0].properties) || {};
     if (!(c.campo_classe in props)) campoInexistente.push(c.nome + ' → ' + c.campo_classe);
   }
@@ -102,7 +104,7 @@ const areas = areasGeojson.features.map((f, i) => ({
 console.log('\n== Recorte de todas as camadas pelas áreas ==');
 const camadas = [];
 for (const c of catalogo.camadas) {
-  const geojson = JSON.parse(fs.readFileSync(path.join(raiz, c.arquivo), 'utf8'));
+  const geojson = ajudanteCamadas.carregar(raiz, c);
   camadas.push(Object.assign({}, c, { geojson: geojson }));
 }
 const inicio = Date.now();

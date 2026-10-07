@@ -14,6 +14,7 @@ async function executar() {
 const fs = require('fs');
 const path = require('path');
 const raiz = path.resolve(__dirname, '..', '..');
+const camadas = require(path.join(__dirname, '_camadas.js'));
 
 let falhas = 0, testes = 0;
 const ok = (nome, cond, det) => {
@@ -103,11 +104,15 @@ console.log('\n== Camadas do catálogo ==');
   const catalogo = JSON.parse(fs.readFileSync(path.join(raiz, 'data', 'catalogo.json'), 'utf8'));
   const erros = [];
   for (const c of catalogo.camadas) {
-    const erro = conferirGrafia(c.arquivo);
-    if (erro) erros.push(c.arquivo + ' (' + c.nome + ') → ' + erro);
-    else if (!fs.statSync(path.join(raiz, c.arquivo)).isFile()) erros.push(c.arquivo + ' não é arquivo');
+    /* Camada em tiles: o que tem de existir é o ÍNDICE e cada tile que ele lista. Conferir
+     * só `c.arquivo` deixaria as duas camadas grandes sem verificação nenhuma. */
+    for (const arq of camadas.arquivos(raiz, c)) {
+      const erro = conferirGrafia(arq);
+      if (erro) { erros.push(arq + ' (' + c.nome + ') → ' + erro); continue; }
+      if (!fs.statSync(path.join(raiz, arq)).isFile()) erros.push(arq + ' não é arquivo');
+    }
   }
-  ok('toda camada do catálogo tem arquivo, grafia exata', erros.length === 0,
+  ok('toda camada do catálogo tem arquivo (ou índice + tiles), grafia exata', erros.length === 0,
     erros.join('; ') || catalogo.camadas.length + ' camadas conferidas');
 
   // .geojson em data/ que o catálogo não lista é dado publicado e invisível — ou lixo
@@ -115,7 +120,14 @@ console.log('\n== Camadas do catálogo ==');
   // exemplo: ele NÃO é camada de caracterização, é o molde de recorte usado nos testes
   // e na demonstração, e por isso não aparece no catálogo.
   const PERMITIDOS = ['areas-influencia-exemplo.geojson'];
-  const listados = new Set(catalogo.camadas.map((c) => path.basename(c.arquivo)));
+  const listados = new Set();
+  for (const c of catalogo.camadas) {
+    for (const arq of camadas.arquivos(raiz, c)) {
+      listados.add(path.basename(arq));
+      // camada em tile: o diretório dela também é dado publicado
+      listados.add(path.basename(path.dirname(arq)));
+    }
+  }
   const orfaos = fs.readdirSync(path.join(raiz, 'data'))
     .filter((f) => /\.geojson$/i.test(f) && !listados.has(f) && PERMITIDOS.indexOf(f) < 0);
   ok('nenhum .geojson órfão em data/', orfaos.length === 0,

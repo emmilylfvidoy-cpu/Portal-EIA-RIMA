@@ -24,6 +24,66 @@
 | v2.7 | **Quilometragem**: o usuário sobe a camada de km (marcos ou traçado) e **digita o km** para o mapa ir até lá. Entende `70`, `70,5`, `70,500`, `70+500` e `KM 70+500` |
 | v2.8 | **A base do portal é o Estado de São Paulo inteiro**: as 8 camadas de exemplo de Piracicaba saíram e entraram as 6 camadas reais (Geologia, Geomorfologia, Pedologia, Aquíferos, Biomas, Unidades de Conservação), cada uma com **as cores do seu arquivo de estilo** |
 | v2.9 | **Faixa fina não é mais apagada pela simplificação**: a tolerância passou a ser limitada pela espessura do próprio anel. A Pedologia perdia **2,38% da área em fendas** (listras vazias onde havia solo de vale) — caiu para **0,44%** |
+| v3.0 | **Geometria EXATA nas 4 camadas leves** (Geologia, Geomorfologia, Aquíferos, Biomas): o importador passou a publicar sem simplificar nada, com etiqueta na tela quando a camada é generalizada |
+| v3.1 | **Formato binário de tiles** (quantizado + delta): a geometria volta idêntica ao shapefile e o arquivo é **11,7× menor** que o GeoJSON equivalente |
+| v3.2 | **As seis camadas ficaram EXATAS.** Pedologia e Unidades de Conservação passaram a ser publicadas em **tiles binários** — nenhum vértice movido, nenhuma fenda — e o portal carrega só as partes que a tela mostra; para recortar, busca a camada inteira |
+
+## As camadas em tiles (v3.2)
+
+O cliente foi direto: *"não pode alterar a feição"*. E a Pedologia tem **10,83 milhões de
+pontos** — em GeoJSON exato são **431 MB**, que não carregam num navegador. Simplificar
+resolvia o peso e destruía a feição: o contorno ficava **serrilhado** (tolerância de 100 m) e
+abria **fenda entre manchas vizinhas** (a simplificação não é topológica — cada polígono é
+simplificado por conta própria e a borda comum se afasta).
+
+**A saída foi o formato, não a geometria.** As duas camadas são publicadas em tiles binários:
+
+| | GeoJSON exato | Tiles | Ganho |
+|---|---|---|---|
+| Pedologia (10,83M pontos) | 431 MB | **34,05 MB** (30 tiles) | 12,7× |
+| Unidades de Conservação (3,22M pontos) | 74 MB | **11,44 MB** (9 tiles) | 6,5× |
+
+**Nada é simplificado.** Cada vértice do shapefile está no tile, quantizado em 6 casas
+decimais (~11 cm) — a mesma precisão com que o portal já publicava GeoJSON. O que muda é a
+codificação: a coordenada vira inteiro, guarda-se a **diferença** entre vértices vizinhos
+(delta + varint: 8 bytes viram 1 a 3) e o nome de cada campo aparece **uma vez por tile**, não
+repetido em cada feição (era um dos pesos do GeoJSON).
+
+### A verificação (o que prova que não há fenda)
+
+| Medida | Pedologia | Unidades de Conservação |
+|---|---|---|
+| Feições (origem → tiles) | 17.030 → **17.030** | 2.742 → **2.742** |
+| Vértices (origem → tiles) | 10.833.016 → **10.833.016** | 3.219.661 → **3.219.661** |
+| Área total (diferença) | **0,0000%** | **0,0000%** |
+| Caixa envolvente | **idêntica** | **idêntica** |
+| Área preenchida em janela de 1 km, contra o shapefile | **0,0000%** de diferença e **0,0000%** de fenda | **0,0000%** / **0,0000%** |
+
+A última linha é a mesma medida que provou o defeito da generalização: rasterizar a mesma
+região da origem e do publicado e comparar **área preenchida** — fenda é área que sumiu.
+
+### Duas leituras diferentes no portal, e a diferença importa
+
+| Para | O que carrega | Custo |
+|---|---|---|
+| **Desenhar** | só os tiles que aparecem na janela | 1 a 3 tiles, ~1,5 MB cada |
+| **Recortar** | **TODOS** os tiles que cruzam a área de influência | 34 MB (Pedologia), com aviso na tela |
+
+O recorte **não pode** usar só o que está na tela: a interseção com a área de influência sairia
+incompleta e o relatório entregaria área menor que a real. Se o carregamento completo falhar, o
+recorte **não é feito** e a tela diz por quê — dado parcial não vira número.
+
+### O gerador de tiles, e o erro que ele corrigiu
+
+`tools/gerar_tiles.js` agrupa as feições por região (cada feição **inteira** no tile do seu
+centro: nada é cortado). A primeira versão crescia por **vizinhança** e produziu **1.831 tiles
+de 1 KB** nas Unidades de Conservação: numa camada esparsa quase nenhuma célula tem vizinha, e
+o portal faria 1.831 requisições para desenhar. A correção foi ordenar por **curva de Morton**
+(ordem espacial) e cortar a lista pelo tamanho-alvo — resultado: 9 tiles equilibrados, média
+1,27 MB.
+
+**Achado de origem:** o shapefile de Unidades de Conservação **não é de São Paulo** — a caixa
+envolvente vai do Amapá ao Rio Grande do Sul (longitude -74 a -25). É uma base nacional.
 
 ## O defeito da faixa fina (v2.9)
 

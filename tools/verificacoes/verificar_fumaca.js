@@ -15,6 +15,7 @@ const path = require('path');
 
 async function executar() {
   const raiz = path.resolve(__dirname, '..', '..');
+const ajudanteCamadas = require(path.join(__dirname, '_camadas.js'));
   let falhas = 0, testes = 0;
   const ok = (nome, cond, det) => {
     testes++;
@@ -107,7 +108,7 @@ async function executar() {
       id: f.properties.sigla, nome: f.properties.nome, sigla: f.properties.sigla, geometry: f.geometry,
     }));
     const camadas = catalogo.camadas.map((c) => Object.assign({}, c, {
-      geojson: JSON.parse(fs.readFileSync(path.join(raiz, c.arquivo), 'utf8')),
+      geojson: ajudanteCamadas.carregar(raiz, c),
     }));
 
     const resultado = EIA.recorte.recortarTudo(areas, camadas, {});

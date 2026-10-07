@@ -2400,7 +2400,6 @@
       "nome": "Pedologia",
       "meio": "fisico",
       "tipo": "poligono",
-      "arquivo": "data/pedologia.geojson",
       "campo_classe": "Subordem",
       "campos": [
         {
@@ -2664,8 +2663,9 @@
       "feicoes": 17026,
       "cores_origem": "estilo",
       "estilo_arquivo": "Pedologia.xml",
-      "obs": "Classe = Subordem (subordem de solo: Argissolos Vermelhos, Cambissolos Háplicos...), o agrupamento do Pedologia.xml: 27/27 valores têm cor. O campo area_ha da origem serve para conferir a área calculada pelo portal. CONFIRMAR a citação oficial. GEOMETRIA GENERALIZADA: o shapefile da origem é grande demais para o navegador (ver a tabela no README); o portal avisa na tela que esta camada é generalizada, para ninguém confundir com o dado exato.",
-      "geometria": "generalizada"
+      "obs": "Classe = Subordem (subordem de solo: Argissolos Vermelhos, Cambissolos Háplicos...), o agrupamento do Pedologia.xml: 27/27 valores têm cor. O campo area_ha da origem serve para conferir a área calculada pelo portal. CONFIRMAR a citação oficial. GEOMETRIA EXATA, publicada em tiles binarios (data/pedologia/indice.json): nenhum vertice foi movido, e o portal carrega so as partes que a tela mostra (para recortar, busca a camada inteira).",
+      "geometria": "exata",
+      "tiles": "data/pedologia/indice.json"
     },
     {
       "id": "biomas",
@@ -2713,7 +2713,6 @@
       "nome": "Unidades de Conservação",
       "meio": "socioeconomico",
       "tipo": "poligono",
-      "arquivo": "data/unidades-conservacao.geojson",
       "campo_classe": "grupo",
       "campos": [
         {
@@ -2906,8 +2905,9 @@
       "feicoes": 2742,
       "cores_origem": "estilo",
       "estilo_arquivo": "Unidades de Conservação.xml",
-      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial. GEOMETRIA GENERALIZADA: o shapefile da origem é grande demais para o navegador (ver a tabela no README); o portal avisa na tela que esta camada é generalizada, para ninguém confundir com o dado exato.",
-      "geometria": "generalizada"
+      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial. GEOMETRIA EXATA, publicada em tiles binarios (data/unidades-conservacao/indice.json): nenhum vertice foi movido, e o portal carrega so as partes que a tela mostra (para recortar, busca a camada inteira).",
+      "geometria": "exata",
+      "tiles": "data/unidades-conservacao/indice.json"
     }
   ]
 }

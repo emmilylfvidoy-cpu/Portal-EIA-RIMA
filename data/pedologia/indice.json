@@ -1,0 +1,394 @@
+{
+ "camada": "pedologia",
+ "nome": "Pedologia",
+ "formato": "EIAT1",
+ "casas": 6,
+ "geometria": "exata",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "total": {
+  "tiles": 30,
+  "feicoes": 17030,
+  "pontos": 10833016,
+  "bytes": 35701847
+ },
+ "campos": [
+  "Unidade_de",
+  "Associaç",
+  "Ordem",
+  "Subordem",
+  "DESCRIÇÃ",
+  "trofismo",
+  "profundida",
+  "pedreg_roc",
+  "textura_1",
+  "textura_2",
+  "relevo",
+  "ferro",
+  "hidromorfi",
+  "Relação",
+  "Esp_areia",
+  "area_ha"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/pedologia/t009.bin",
+   "bbox": [
+    -51.314969,
+    -22.509949,
+    -48.360579,
+    -19.757997
+   ],
+   "feicoes": 945,
+   "pontos": 335712,
+   "bytes": 1569407
+  },
+  {
+   "arquivo": "data/pedologia/t000.bin",
+   "bbox": [
+    -53.204193,
+    -23.002013,
+    -50.346547,
+    -19.771854
+   ],
+   "feicoes": 730,
+   "pontos": 360084,
+   "bytes": 1542779
+  },
+  {
+   "arquivo": "data/pedologia/t007.bin",
+   "bbox": [
+    -51.875415,
+    -24.112782,
+    -47.768799,
+    -20.690451
+   ],
+   "feicoes": 1187,
+   "pontos": 308234,
+   "bytes": 1526453
+  },
+  {
+   "arquivo": "data/pedologia/t006.bin",
+   "bbox": [
+    -49.78015,
+    -24.454141,
+    -47.872069,
+    -22.288407
+   ],
+   "feicoes": 962,
+   "pontos": 335839,
+   "bytes": 1504601
+  },
+  {
+   "arquivo": "data/pedologia/t028.bin",
+   "bbox": [
+    -48.187078,
+    -23.371471,
+    -44.377034,
+    -19.967047
+   ],
+   "feicoes": 1424,
+   "pontos": 268296,
+   "bytes": 1485011
+  },
+  {
+   "arquivo": "data/pedologia/t010.bin",
+   "bbox": [
+    -49.677547,
+    -25.208503,
+    -47.552684,
+    -19.916162
+   ],
+   "feicoes": 1474,
+   "pontos": 273672,
+   "bytes": 1477979
+  },
+  {
+   "arquivo": "data/pedologia/t001.bin",
+   "bbox": [
+    -50.827589,
+    -24.703189,
+    -49.000723,
+    -22.304094
+   ],
+   "feicoes": 813,
+   "pontos": 343478,
+   "bytes": 1454566
+  },
+  {
+   "arquivo": "data/pedologia/t008.bin",
+   "bbox": [
+    -51.308026,
+    -22.443409,
+    -48.990721,
+    -20.58075
+   ],
+   "feicoes": 693,
+   "pontos": 312814,
+   "bytes": 1395380
+  },
+  {
+   "arquivo": "data/pedologia/t005.bin",
+   "bbox": [
+    -48.677295,
+    -25.321182,
+    -47.34378,
+    -23.986649
+   ],
+   "feicoes": 249,
+   "pontos": 421834,
+   "bytes": 1340668
+  },
+  {
+   "arquivo": "data/pedologia/t013.bin",
+   "bbox": [
+    -47.733309,
+    -24.775912,
+    -46.962747,
+    -23.948705
+   ],
+   "feicoes": 434,
+   "pontos": 398349,
+   "bytes": 1329764
+  },
+  {
+   "arquivo": "data/pedologia/t011.bin",
+   "bbox": [
+    -48.175407,
+    -25.133608,
+    -47.514157,
+    -24.328509
+   ],
+   "feicoes": 411,
+   "pontos": 397526,
+   "bytes": 1294013
+  },
+  {
+   "arquivo": "data/pedologia/t004.bin",
+   "bbox": [
+    -49.013334,
+    -24.81545,
+    -48.169431,
+    -23.986289
+   ],
+   "feicoes": 405,
+   "pontos": 396767,
+   "bytes": 1268529
+  },
+  {
+   "arquivo": "data/pedologia/t027.bin",
+   "bbox": [
+    -48.101641,
+    -23.828853,
+    -44.651536,
+    -21.510329
+   ],
+   "feicoes": 1121,
+   "pontos": 315391,
+   "bytes": 1263204
+  },
+  {
+   "arquivo": "data/pedologia/t003.bin",
+   "bbox": [
+    -48.956738,
+    -25.250228,
+    -47.896486,
+    -24.295933
+   ],
+   "feicoes": 468,
+   "pontos": 391239,
+   "bytes": 1255398
+  },
+  {
+   "arquivo": "data/pedologia/t012.bin",
+   "bbox": [
+    -48.093932,
+    -24.448321,
+    -47.507374,
+    -23.927303
+   ],
+   "feicoes": 202,
+   "pontos": 415723,
+   "bytes": 1242436
+  },
+  {
+   "arquivo": "data/pedologia/t015.bin",
+   "bbox": [
+    -48.059018,
+    -24.0904,
+    -46.811747,
+    -22.332616
+   ],
+   "feicoes": 1050,
+   "pontos": 322341,
+   "bytes": 1213268
+  },
+  {
+   "arquivo": "data/pedologia/t002.bin",
+   "bbox": [
+    -49.369591,
+    -25.306142,
+    -47.978025,
+    -23.873984
+   ],
+   "feicoes": 394,
+   "pontos": 365946,
+   "bytes": 1207808
+  },
+  {
+   "arquivo": "data/pedologia/t014.bin",
+   "bbox": [
+    -48.187951,
+    -24.492092,
+    -46.378714,
+    -23.183466
+   ],
+   "feicoes": 569,
+   "pontos": 388675,
+   "bytes": 1168875
+  },
+  {
+   "arquivo": "data/pedologia/t021.bin",
+   "bbox": [
+    -47.080449,
+    -24.330816,
+    -45.065805,
+    -22.285782
+   ],
+   "feicoes": 494,
+   "pontos": 384666,
+   "bytes": 1136284
+  },
+  {
+   "arquivo": "data/pedologia/t020.bin",
+   "bbox": [
+    -47.328547,
+    -23.407715,
+    -46.34251,
+    -22.318728
+   ],
+   "feicoes": 733,
+   "pontos": 378343,
+   "bytes": 1110994
+  },
+  {
+   "arquivo": "data/pedologia/t016.bin",
+   "bbox": [
+    -47.253449,
+    -24.010016,
+    -46.744609,
+    -23.193026
+   ],
+   "feicoes": 257,
+   "pontos": 425358,
+   "bytes": 1010660
+  },
+  {
+   "arquivo": "data/pedologia/t018.bin",
+   "bbox": [
+    -46.831253,
+    -24.013387,
+    -46.306909,
+    -23.355084
+   ],
+   "feicoes": 333,
+   "pontos": 412593,
+   "bytes": 994637
+  },
+  {
+   "arquivo": "data/pedologia/t025.bin",
+   "bbox": [
+    -46.445983,
+    -23.967975,
+    -45.222993,
+    -22.573157
+   ],
+   "feicoes": 436,
+   "pontos": 352208,
+   "bytes": 981308
+  },
+  {
+   "arquivo": "data/pedologia/t017.bin",
+   "bbox": [
+    -47.17107,
+    -24.030535,
+    -46.380358,
+    -23.143638
+   ],
+   "feicoes": 155,
+   "pontos": 434928,
+   "bytes": 976239
+  },
+  {
+   "arquivo": "data/pedologia/t024.bin",
+   "bbox": [
+    -46.451177,
+    -23.625559,
+    -45.284378,
+    -22.99253
+   ],
+   "feicoes": 113,
+   "pontos": 437153,
+   "bytes": 973541
+  },
+  {
+   "arquivo": "data/pedologia/t023.bin",
+   "bbox": [
+    -46.39831,
+    -23.871017,
+    -45.601295,
+    -22.989746
+   ],
+   "feicoes": 241,
+   "pontos": 405908,
+   "bytes": 957805
+  },
+  {
+   "arquivo": "data/pedologia/t026.bin",
+   "bbox": [
+    -45.660541,
+    -23.623493,
+    -45.262556,
+    -23.260311
+   ],
+   "feicoes": 50,
+   "pontos": 408797,
+   "bytes": 885369
+  },
+  {
+   "arquivo": "data/pedologia/t022.bin",
+   "bbox": [
+    -46.50693,
+    -23.647184,
+    -45.92623,
+    -23.094582
+   ],
+   "feicoes": 215,
+   "pontos": 376640,
+   "bytes": 863224
+  },
+  {
+   "arquivo": "data/pedologia/t019.bin",
+   "bbox": [
+    -46.872872,
+    -23.804057,
+    -46.361872,
+    -23.076602
+   ],
+   "feicoes": 158,
+   "pontos": 385933,
+   "bytes": 850723
+  },
+  {
+   "arquivo": "data/pedologia/t029.bin",
+   "bbox": [
+    -44.791359,
+    -22.858539,
+    -44.163412,
+    -22.516082
+   ],
+   "feicoes": 314,
+   "pontos": 78569,
+   "bytes": 420924
+  }
+ ]
+}

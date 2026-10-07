@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.1';
+  const VERSAO = 'v3.2';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -50,6 +50,9 @@
     // Quilometragem: a camada que o usuário subiu (marcos de km ou o traçado da rodovia),
     // a coluna do km e o marcador da última busca. Camada de km NÃO entra no recorte: ela
     // serve para localizar, não é caracterização do meio.
+    // Camadas publicadas em tiles binários: índice, tiles já carregados e o que está em voo.
+    indices: {},
+    tilesCarregados: {},
     kmCamada: null,
     kmCampo: null,
     grupoKm: null,
@@ -160,7 +163,13 @@
     });
     // Ao mover o mapa, os rótulos são refeitos: rotula só o que está na tela, senão
     // 2.102 feições viram 2.102 elementos no DOM.
-    mapa.on('moveend', () => atualizarRotulos());
+    mapa.on('moveend', () => {
+      atualizarRotulos();
+      // As camadas em tile buscam o que entrou na tela (com uma espera, para não disparar uma
+      // busca a cada arrastão do mouse).
+      clearTimeout(estado.esperaTiles);
+      estado.esperaTiles = setTimeout(() => atualizarTilesLigados(), 350);
+    });
     mapa.on('click', aoClicarNoMapa);
 
     $('zoom-mais').onclick = () => mapa.zoomIn();
@@ -611,6 +620,28 @@
     estado.camadasLigadas.add(camada.id);
     const jaTem = estado.camadas.find((c) => c.id === camada.id);
     if (!jaTem) {
+      /* Camada em TILES: cria a feição vazia, busca o índice e carrega o que a janela mostra.
+       * O desenho e o recorte seguem iguais ao resto do portal — a diferença é só de onde os
+       * dados vêm e de quanto se busca de cada vez. */
+      if (camada.tiles) {
+        const elT = document.querySelector('.estado[data-camada="' + camada.id + '"]');
+        if (elT) elT.textContent = 'carregando…';
+        try {
+          estado.camadas.push(Object.assign({}, camada, { geojson: { type: 'FeatureCollection', features: [] } }));
+          await carregarTilesDaJanela(camada);
+        } catch (e) {
+          estado.camadasLigadas.delete(camada.id);
+          estado.camadas = estado.camadas.filter((c) => c.id !== camada.id);
+          if (elT) elT.textContent = 'falhou';
+          status('Não carreguei ' + camada.nome + ': ' + e.message, true);
+          return;
+        }
+        const carregada = estado.camadas.find((c) => c.id === camada.id);
+        desenharCamadas();
+        status(camada.nome + ' — ' + (carregada ? carregada.geojson.features.length.toLocaleString('pt-BR') : 0)
+          + ' feições carregadas (as partes que a tela mostra; aproxime para carregar mais).');
+        return;
+      }
       const el = document.querySelector('.estado[data-camada="' + camada.id + '"]');
       if (el) el.textContent = 'carregando…';
       try {
@@ -1077,6 +1108,26 @@
     };
     $('progresso').hidden = false;
     document.body.classList.add('carregando');
+    /* ANTES DE RECORTAR: camada em tiles precisa estar INTEIRA. Recortar contra as partes que
+     * a tela mostrava daria área menor que a real e o relatório sairia errado. */
+    try {
+      for (const camada of estado.camadas) {
+        if (!camada.tiles) continue;
+        const indice = await indiceDaCamada(camada);
+        if ((estado.tilesCarregados[camada.id] || new Set()).size < indice.tiles.length) {
+          status('Buscando ' + camada.nome + ' inteira para o recorte ('
+            + (indice.total.bytes / 1048576).toFixed(0) + ' MB, ' + indice.tiles.length + ' partes)…');
+          await garantirCamadaCompleta(camada);
+        }
+      }
+      status('Dados completos. Recortando…');
+    } catch (e) {
+      $('progresso').hidden = true;
+      document.body.classList.remove('carregando');
+      alert('Não consegui carregar a camada inteira para o recorte: ' + e.message
+        + '\n\nO recorte NÃO foi feito — com dados parciais a área sairia menor que a real.');
+      return;
+    }
     status('Recortando…');
     await new Promise((r) => setTimeout(r, 30));
 
@@ -1316,6 +1367,103 @@
     mostrar(linhas + (achado.aviso ? '<div class="aviso-km">' + escapar(achado.aviso) + '</div>' : ''),
       !!achado.aviso);
     status(achado.rotulo + ' · ' + coords);
+  }
+
+
+  // =========================================================== camadas em tiles
+  /*
+   * Pedologia (10,83 milhões de pontos) e Unidades de Conservação (3,22 milhões) não cabem
+   * exatas em GeoJSON: 431 MB e 74 MB. Em tile binário quantizado elas ficam em 34 MB e 11 MB,
+   * com TODOS os vértices (verificado: mesmos vértices, mesma área, 0,0000% de diferença).
+   *
+   * Duas leituras diferentes, e a diferença importa:
+   *  - para DESENHAR, carrega só os tiles que aparecem na janela (1 a 3 tiles, ~1,5 MB cada);
+   *  - para RECORTAR, carrega TODOS os tiles que cruzam a área de influência. Sem isso o
+   *    recorte sairia incompleto e o relatório mentiria — erro muito pior que uma camada
+   *    generalizada e avisada.
+   */
+  function bboxDaJanela(margem) {
+    const bb = estado.mapa.getBounds();
+    const m = margem === undefined ? 0.02 : margem;
+    return [bb.getWest() - m, bb.getSouth() - m, bb.getEast() + m, bb.getNorth() + m];
+  }
+
+  function tileCruza(tile, caixa) {
+    const b = tile.bbox;
+    return !(b[2] < caixa[0] || b[0] > caixa[2] || b[3] < caixa[1] || b[1] > caixa[3]);
+  }
+
+  /** Índice de tiles da camada, buscado uma vez e guardado. */
+  async function indiceDaCamada(camada) {
+    if (!estado.indices[camada.id]) {
+      const resposta = await fetch(camada.tiles, { cache: 'no-cache' });
+      if (!resposta.ok) throw new Error('HTTP ' + resposta.status + ' no índice de tiles');
+      estado.indices[camada.id] = await resposta.json();
+    }
+    return estado.indices[camada.id];
+  }
+
+  /** Busca os tiles pedidos (os que ainda não estão na memória) e junta nas feições. */
+  async function buscarTiles(camada, tiles, avisar) {
+    if (!estado.tilesCarregados[camada.id]) estado.tilesCarregados[camada.id] = new Set();
+    const jaTem = estado.tilesCarregados[camada.id];
+    const faltam = tiles.filter((x) => !jaTem.has(x.arquivo));
+    if (!faltam.length) return 0;
+    let feicoes = 0;
+    for (let i = 0; i < faltam.length; i++) {
+      const x = faltam[i];
+      if (avisar) {
+        status('Carregando ' + camada.nome + '… (' + (i + 1) + '/' + faltam.length + ' partes)');
+      }
+      const resposta = await fetch(x.arquivo, { cache: 'no-cache' });
+      if (!resposta.ok) throw new Error('HTTP ' + resposta.status + ' em ' + x.arquivo);
+      const fc = EIA.tiles.decodificar(new Uint8Array(await resposta.arrayBuffer()));
+      const alvo = estado.camadas.find((c) => c.id === camada.id);
+      if (!alvo) return feicoes;              // desligaram a camada no meio do carregamento
+      for (const f of fc.features) {
+        alvo.geojson.features.push(f);
+        feicoes++;
+      }
+      jaTem.add(x.arquivo);
+    }
+    return feicoes;
+  }
+
+  /** Carrega o que a janela atual mostra e redesenha. */
+  async function carregarTilesDaJanela(camada) {
+    const indice = await indiceDaCamada(camada);
+    if (!estado.tilesCarregados[camada.id]) estado.tilesCarregados[camada.id] = new Set();
+    const caixa = bboxDaJanela(0.02);
+    const visiveis = indice.tiles.filter((x) => tileCruza(x, caixa));
+    const carregados = await buscarTiles(camada, visiveis, false);
+    if (carregados) {
+      desenharCamadas();
+      atualizarRotulos();
+      const total = estado.camadas.find((c) => c.id === camada.id);
+      const el = document.querySelector('.estado[data-camada="' + camada.id + '"]');
+      if (el && total) el.textContent = total.geojson.features.length.toLocaleString('pt-BR')
+        + ' feições' + (camada.classes && camada.classes.length > 1 ? ' · ' + camada.classes.length + ' classes' : '')
+        + ' · ' + estado.tilesCarregados[camada.id].size + '/' + indice.tiles.length + ' partes';
+    }
+  }
+
+  /** Para RECORTAR: garante a camada inteira em memória (todos os tiles). */
+  async function garantirCamadaCompleta(camada) {
+    if (!camada.tiles) return;
+    const indice = await indiceDaCamada(camada);
+    const antes = (estado.tilesCarregados[camada.id] || new Set()).size;
+    if (antes >= indice.tiles.length) return;
+    await buscarTiles(camada, indice.tiles, true);
+    desenharCamadas();
+  }
+
+  /** Redesenha as camadas em tile que estão ligadas (ao mover o mapa). */
+  async function atualizarTilesLigados() {
+    const ligadas = estado.camadas.filter((c) => c.tiles);
+    for (const camada of ligadas) {
+      try { await carregarTilesDaJanela(camada); }
+      catch (e) { status('Não carreguei uma parte de ' + camada.nome + ': ' + e.message, true); }
+    }
   }
 
   // =========================================================== ordem das camadas

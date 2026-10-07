@@ -1,0 +1,158 @@
+{
+ "camada": "unidades-conservacao",
+ "nome": "Unidades de Conservação",
+ "formato": "EIAT1",
+ "casas": 6,
+ "geometria": "exata",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal.",
+ "total": {
+  "tiles": 9,
+  "feicoes": 2742,
+  "pontos": 3219661,
+  "bytes": 11994409
+ },
+ "campos": [
+  "gml_id",
+  "uc_id",
+  "cd_cnuc",
+  "wdpa_pid",
+  "nome_uc",
+  "cria_ano",
+  "cria_ato",
+  "outro_ato",
+  "pl_manejo",
+  "co_gestor",
+  "quali_pol",
+  "ppgr",
+  "ha_total",
+  "ha_ato",
+  "esfera",
+  "uf",
+  "municipio",
+  "org_gestor",
+  "grupo",
+  "categoria",
+  "cat_iucn",
+  "amazonia",
+  "caatinga",
+  "cerrado",
+  "matlantica",
+  "pampa",
+  "pantanal",
+  "marinho",
+  "situacao",
+  "limite",
+  "area_ha",
+  "NomeAbrev"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/unidades-conservacao/t001.bin",
+   "bbox": [
+    -69.876917,
+    -25.695476,
+    -51.207786,
+    1.209277
+   ],
+   "feicoes": 291,
+   "pontos": 394375,
+   "bytes": 1552910
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t007.bin",
+   "bbox": [
+    -51.433856,
+    -20.318251,
+    -38.425142,
+    0.746527
+   ],
+   "feicoes": 397,
+   "pontos": 373370,
+   "bytes": 1528148
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t002.bin",
+   "bbox": [
+    -61.516029,
+    -12.533101,
+    -51.96472,
+    0.817207
+   ],
+   "feicoes": 81,
+   "pontos": 442615,
+   "bytes": 1437033
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t004.bin",
+   "bbox": [
+    -51.140494,
+    -24.353333,
+    -44.187848,
+    -12.394823
+   ],
+   "feicoes": 367,
+   "pontos": 379229,
+   "bytes": 1428771
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t003.bin",
+   "bbox": [
+    -53.385103,
+    -31.491238,
+    -45.800145,
+    -0.280245
+   ],
+   "feicoes": 398,
+   "pontos": 361281,
+   "bytes": 1371846
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t006.bin",
+   "bbox": [
+    -44.880704,
+    -23.066666,
+    -40.272037,
+    -19.05225
+   ],
+   "feicoes": 444,
+   "pontos": 361563,
+   "bytes": 1354651
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t000.bin",
+   "bbox": [
+    -73.991207,
+    -32.930311,
+    -26.014472,
+    5.27191
+   ],
+   "feicoes": 144,
+   "pontos": 380378,
+   "bytes": 1320121
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t005.bin",
+   "bbox": [
+    -46.467395,
+    -23.378072,
+    -42.645798,
+    -13.456626
+   ],
+   "feicoes": 213,
+   "pontos": 319716,
+   "bytes": 1089144
+  },
+  {
+   "arquivo": "data/unidades-conservacao/t008.bin",
+   "bbox": [
+    -44.780316,
+    -23.872113,
+    -25.290947,
+    0.966303
+   ],
+   "feicoes": 407,
+   "pontos": 207134,
+   "bytes": 911785
+  }
+ ]
+}
