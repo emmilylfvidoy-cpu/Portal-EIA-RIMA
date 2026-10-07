@@ -13,6 +13,14 @@
 
 (function () {
   const EIA = window.EIA;
+
+  /* Versão do portal — aparece no rodapé do mapa.
+   * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
+   * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
+   * número, e a lista completa fica no README. */
+  const VERSAO = 'v1.4';
+  const VERSAO_DATA = '2026-03-15';
+
   const estado = {
     catalogo: null,
     areas: [],
@@ -49,6 +57,11 @@
     ligarEventos();
     carregarCatalogo();
     atualizarPreviaMapa();
+    // Versão no rodapé + no console: é a primeira coisa a conferir quando alguém
+    // pergunta "o site já está com a atualização?".
+    const elVersao = $('versao');
+    if (elVersao) elVersao.textContent = VERSAO + ' · ' + VERSAO_DATA;
+    console.info('Portal EIA/RIMA ' + VERSAO + ' (' + VERSAO_DATA + ')');
   }
 
   function montarMapa() {

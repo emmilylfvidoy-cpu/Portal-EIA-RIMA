@@ -131,6 +131,11 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   display: flex; justify-content: space-between; gap: 10px; padding: 4px 10px;
   background: rgba(255,255,255,.92); border-top: 1px solid var(--borda); font-size: 11px; color: var(--tinta-clara);
 }
+/* Versão visível: é como se confere, sem dúvida, se o site publicado é o atual. */
+.versao {
+  font-variant-numeric: tabular-nums; color: var(--acento-escuro); font-weight: 600;
+  white-space: nowrap;
+}
 
 /* ------------------------------------------------------------- abas */
 .abas { display: flex; gap: 2px; border-bottom: 1px solid var(--borda); margin-bottom: 8px; }
