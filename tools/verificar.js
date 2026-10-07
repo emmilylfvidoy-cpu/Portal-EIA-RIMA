@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 /* Roda todas as verificaÃ§Ãµes do portal no MESMO processo.
  * Uso: node tools/verificar.js [n_oraculo]
  *
@@ -14,6 +14,7 @@ const suites = [
   ['vetorial', path.join(raiz, 'verificacoes', 'verificar_vetorial.js')],
   ['formatos', path.join(raiz, 'verificacoes', 'verificar_formatos.js')],
   ['saidas', path.join(raiz, 'verificacoes', 'verificar_saidas.js')],
+  ['importador', path.join(raiz, 'verificacoes', 'verificar_importador.js')],
   ['sintaxe', path.join(raiz, 'verificacoes', 'verificar_sintaxe.js')],
   ['integracao', path.join(raiz, 'verificacoes', 'verificar_integracao.js')],
   ['fumaca', path.join(raiz, 'verificacoes', 'verificar_fumaca.js')],

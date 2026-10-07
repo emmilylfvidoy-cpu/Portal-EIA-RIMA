@@ -27,6 +27,29 @@ const vetorial = require(path.join(raiz, 'js', 'vetorial.js'));
 
 fs.mkdirSync(destino, { recursive: true });
 
+/* GUARDA — fica no TOPO, antes de escrever qualquer arquivo.
+ *
+ * Este script reescreve as camadas de exemplo E o catalogo.json. Se você já importou
+ * a sua base (tools/importar_camadas.js marca as entradas com origem: "importado"),
+ * rodar isto tiraria as suas camadas da lista. Na primeira versão o guarda estava no
+ * fim do arquivo: ele abortava antes de sobrescrever o catálogo, mas DEPOIS de já ter
+ * reescrito os GeoJSON. Agora ele barra antes de tocar em qualquer coisa. */
+const caminhoCatalogo = path.join(destino, 'catalogo.json');
+if (fs.existsSync(caminhoCatalogo) && process.argv.indexOf('--forcar') < 0) {
+  try {
+    const atual = JSON.parse(fs.readFileSync(caminhoCatalogo, 'utf8'));
+    const importadas = (atual.camadas || []).filter((c) => c.origem === 'importado');
+    if (importadas.length) {
+      console.error('\nABORTADO: o data/catalogo.json tem ' + importadas.length + ' camada(s) importada(s) por você:');
+      importadas.forEach((c) => console.error('  · ' + c.nome + '  (' + c.arquivo + ')'));
+      console.error('\nEste script reescreveria o catálogo e as camadas de exemplo, e as suas sairiam da lista.');
+      console.error('Nada foi alterado. Para voltar às camadas de exemplo mesmo assim:');
+      console.error('  node tools/gerar_amostra.js --forcar');
+      process.exit(1);
+    }
+  } catch (e) { /* catálogo ilegível: segue */ }
+}
+
 // --------------------------------------------------------------- fonte real
 const limite = lerJson(path.join(origem, 'Limite Municipal.geojson'));
 const zoneamento = lerJson(path.join(origem, 'zoneamento.geojson'));
@@ -331,6 +354,7 @@ const catalogo = {
     { id: 'zoneamento', nome: 'Zoneamento municipal', meio: 'socioeconomico', tipo: 'poligono', arquivo: 'data/zoneamento.geojson', campo_classe: 'sigla', estilo: { cor: '#8a5fd9', opacidade: 0.28 }, fonte: 'Zoneamento fornecido ao projeto', data_ref: '2024', obs: '' },
   ],
 };
-fs.writeFileSync(path.join(destino, 'catalogo.json'), JSON.stringify(catalogo, null, 2));
+fs.writeFileSync(caminhoCatalogo, JSON.stringify(catalogo, null, 2));
 console.log('\n  catalogo.json          ' + catalogo.camadas.length + ' camadas');
 console.log('\nPronto. Camadas de exemplo em data/.');
+console.log('Para colocar a SUA base no lugar: node tools/importar_camadas.js --rascunho "C:\\sua\\pasta"');

@@ -180,28 +180,43 @@
    * Aviso honesto para a tela quando o CRS não veio declarado.
    * A extensão serve de conferência: coordenada em grau cai entre -180..180;
    * coordenada UTM tem valores da ordem de 10^5..10^7.
+   *
+   * @param {object} geojson
+   * @param {string} epsgDeclarado
+   * @param {object} [opcoes] `{ declarado: true }` quando o EPSG veio de arquivo (.prj)
+   *   e não de suposição — sem isso o aviso dizia "sem .prj declarado" mesmo com o
+   *   .prj em mãos, o que faz o analista desconfiar do dado sem motivo.
    */
-  function diagnosticar(geojson, epsgDeclarado) {
+  function diagnosticar(geojson, epsgDeclarado, opcoes) {
+    const o = opcoes || {};
     const bbox = math.bbox(geojson);
     if (!bbox) return { epsg: 'EPSG:4326', aviso: 'Não encontrei geometria para conferir o sistema de referência.' };
     const pareceGrau = Math.abs(bbox[0]) <= 180 && Math.abs(bbox[2]) <= 180
       && Math.abs(bbox[1]) <= 90 && Math.abs(bbox[3]) <= 90;
 
-    if (epsgDeclarado && normalizarEpsg(epsgDeclarado) !== 'EPSG:4326') {
-      const d = definicao(epsgDeclarado);
-      if (d && eGeografica(epsgDeclarado)) {
+    if (epsgDeclarado) {
+      const e = normalizarEpsg(epsgDeclarado);
+      const d = definicao(e);
+      const fuso = math.fusoUTM((bbox[0] + bbox[2]) / 2);
+      const origem = o.declarado ? 'declarado no .prj' : 'assumido';
+      if (d && eGeografica(e)) {
         return {
-          epsg: normalizarEpsg(epsgDeclarado),
-          aviso: 'Coordenadas em graus (' + d.nome + '). Área e comprimento serão calculados em UTM ' + math.fusoUTM((bbox[0] + bbox[2]) / 2) + 'S.',
+          epsg: e,
+          aviso: 'Coordenadas em graus — ' + (d.nome || e) + ' (' + origem + '). '
+            + 'Área e comprimento são calculados em UTM ' + fuso + 'S.',
         };
       }
-      return { epsg: normalizarEpsg(epsgDeclarado), aviso: 'Sistema declarado: ' + (d ? d.nome : epsgDeclarado) + '. Reprojetado para WGS 84 no carregamento.' };
+      if (d) {
+        return { epsg: e, aviso: 'Sistema ' + (d.nome || e) + ' (' + origem + '); reprojetado para WGS 84 no carregamento.' };
+      }
+      return { epsg: e, aviso: 'Sistema declarado: ' + e + ' (' + origem + '). Reprojetado para WGS 84.' };
     }
 
     if (pareceGrau) {
       return {
         epsg: 'EPSG:4326',
-        aviso: 'Coordenadas em graus, sem .prj declarado. Tratei como WGS 84 — confira no mapa antes de usar os números.',
+        aviso: 'Coordenadas em graus e nenhum .prj junto do arquivo. Assumi WGS 84 — '
+          + 'confira no mapa antes de usar os números.',
       };
     }
     return {

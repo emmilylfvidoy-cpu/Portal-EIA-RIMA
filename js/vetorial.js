@@ -1031,9 +1031,20 @@
   }
 
   // ------------------------------------------------------------ simplificação
-  /** Douglas–Peucker (para aliviar camada pesada antes do recorte). */
-  function simplificar(pontos, tolerancia) {
+  /**
+   * Douglas–Peucker (para aliviar camada pesada antes de publicar/recortar).
+   *
+   * @param {number[][]} pontos
+   * @param {number} tolerancia em unidades do plano
+   * @param {number} [escalaX] fator aplicado ao eixo X ao medir distância.
+   *   Existe porque em coordenada geográfica 1 grau de longitude mede menos que
+   *   1 grau de latitude (a −22° são ~103 km contra ~111 km): sem compensar, a
+   *   simplificação corta demais na direção leste–oeste. Quem chama passa
+   *   cos(latitude) — ou projeta antes.
+   */
+  function simplificar(pontos, tolerancia, escalaX) {
     if (pontos.length <= 2) return pontos.slice();
+    const ex = Number.isFinite(escalaX) && escalaX > 0 ? escalaX : 1;
     const tol2 = tolerancia * tolerancia;
     const manter = new Uint8Array(pontos.length);
     manter[0] = 1; manter[pontos.length - 1] = 1;
@@ -1042,18 +1053,20 @@
       const [i0, i1] = pilha.pop();
       let maxD = -1, idx = -1;
       const a = pontos[i0], b = pontos[i1];
-      const dx = b[0] - a[0], dy = b[1] - a[1];
+      const dx = (b[0] - a[0]) * ex, dy = b[1] - a[1];
       const den = dx * dx + dy * dy;
       for (let i = i0 + 1; i < i1; i++) {
         const p = pontos[i];
         let d;
         if (den === 0) {
-          d = (p[0] - a[0]) ** 2 + (p[1] - a[1]) ** 2;
+          const qx = (p[0] - a[0]) * ex;
+          d = qx * qx + (p[1] - a[1]) ** 2;
         } else {
-          let t = ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / den;
+          let t = ((p[0] - a[0]) * ex * dx + (p[1] - a[1]) * dy) / den;
           t = Math.max(0, Math.min(1, t));
-          const qx = a[0] + t * dx - p[0], qy = a[1] + t * dy - p[1];
-          d = qx * qx + qy * qy;
+          const qx = (a[0] + t * dx / ex) - p[0];
+          const qy = (a[1] + t * dy) - p[1];
+          d = (qx * ex) * (qx * ex) + qy * qy;
         }
         if (d > maxD) { maxD = d; idx = i; }
       }

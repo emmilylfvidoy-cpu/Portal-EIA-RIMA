@@ -314,13 +314,37 @@ A articulação divide a extensão do projeto nessa grade, com sobreposição co
 | **F2** | Recorte + exportação GeoJSON/SHP/KMZ | **entregue e verificado** |
 | **F3** | Tabela + gráficos + mini-relatório PDF | **entregue e verificado** |
 | **F4** | Compositor de mapa + articulação | **entregue e verificado** |
-| **F5** | Projeto salvar/abrir, Worker para camadas gigantes, DOCX do relatório, cache de tiles | próxima |
-| **F6** | Raster (declividade real, uso do solo por pixel), perfis topográficos | v2 |
-| **F7** | Repositório de processos, multiusuário, banco | se houver demanda |
+| **F5** | **Curadoria da base**: importador de shapefile com simplificação por escala, cores por classe, catálogo gerado | **entregue e verificado** |
+| **F6** | Projeto salvar/abrir (feito) · Worker para camadas gigantes · DOCX do relatório · cache de tiles | próxima |
+| **F7** | Raster (declividade real, uso do solo por pixel), perfis topográficos | v2 |
+| **F8** | Repositório de processos, multiusuário, banco, edição da base pela tela | se houver demanda |
+
+### 9.0 Curadoria da base (F5) — a decisão que mudou o produto
+
+O portal foi pedido com "camadas que eu alimentaria". A primeira entrega deixou isso como
+substituição manual de arquivo: editar `data/catalogo.json` na mão. Ficou claro que **o valor do
+portal está na base já reunida** — o usuário final não deveria subir nada. Por isso a F5 virou uma
+ferramenta de curadoria (`tools/importar_camadas.js`), com quatro decisões que valem registro:
+
+1. **A base é arquivo, não banco.** `data/*.geojson` + `data/catalogo.json`, versionados no Git.
+   O importador é o único que escreve no catálogo, e preserva o que não é dele.
+2. **A importação simplifica.** Um SHP de 100 MB vira GeoJSON de centenas de MB e trava o
+   navegador — é o defeito nº 1 da auditoria do portal atual (camada de 53 MB). A tolerância sai
+   de 0,2 mm no papel na escala pretendida: 1:5.000 → ~1 m, 1:50.000 → ~10 m, 1:250.000 → ~50 m.
+   Medido no teste: 19.320 → 6.000 vértices (−69%) com 1,5% de erro de área.
+3. **Cor por classe, não por camada.** Uma camada de 12 classes de uma cor só não comunica nada.
+   O importador grava `estilo.cores` (classe → cor) e a interface usa na feição e na legenda.
+4. **Rastreabilidade no próprio arquivo.** Cada `.geojson` publicado carrega `metadados` com
+   fonte, data de referência, CRS de origem, tolerância aplicada e contagem de vértices antes e
+   depois. É o que permite responder "de onde veio este número" meses depois.
+
+O importador **não** lê File Geodatabase nem GeoPackage (pede exportação para shapefile no QGIS) e
+não lê KML/KMZ (o navegador lê, no upload). Está declarado na ferramenta e no README, com o
+caminho alternativo — não é limitação silenciosa.
 
 ### 9.1 Estado da verificação
 
-`node tools/verificar.js` roda 7 suítes — **337 verificações, todas passando**:
+`node tools/verificar.js` roda 9 suítes — **384 verificações, todas passando**:
 
 | Suíte | Verificações |
 |---|---|
@@ -328,10 +352,22 @@ A articulação divide a extensão do projeto nessa grade, com sobreposição co
 | `vetorial` — recorte, linhas, pontos, validação | 41 |
 | `formatos` — SHP/DBF/KML/KMZ ida e volta | 38 |
 | `saidas` — tabela, CSV, XLSX, PDF, escala, articulação | 57 |
-| `sintaxe` — compilação de todo arquivo servido + referências do HTML | 102 |
+| `importador` — curadoria da base | 45 |
+| `sintaxe` — compilação de todo arquivo servido + referências do HTML | 104 |
 | `integracao` — fluxo completo sobre os dados reais de `data/` | 38 |
 | `fumaca` — módulos no `window` falso + fluxo completo | 38 |
 | `oraculo` — comparação com o Turf em polígonos aleatórios | centenas de casos |
+
+Os defeitos que os testes pegaram e que estão registrados no código, por serem fáceis de repetir:
+
+| Defeito | Onde estava | Como apareceu |
+|---|---|---|
+| `getInt32` com 4 bytes de deslocamento errado no `.shp` | `shapelib.js` | o shapefile lido voltava sem geometria |
+| Leitura do bbox antes de checar o tipo de registro | `shapelib.js` | registro de Point (20 bytes) estourava o DataView |
+| Campo de texto do `.dbf` dimensionado em caracteres, não bytes | `shapelib.js` | "Área A" chegava como "Área" |
+| CRS declarado no `.prj` avisado como "sem .prj" | `crs.js` | faria desconfiar do dado sem motivo |
+| Campos procurados em `lido.campos` em vez de `geojson.campos` | `importar_camadas.js` | a sugestão de campo de classe nunca funcionava |
+| Guarda de proteção do catálogo no fim do script | `gerar_amostra.js` | abortava depois de já ter reescrito os arquivos |
 
 **Limitação de verificação declarada:** o teste de navegador (`tools/_fumaca.html`) está escrito,
 mas **não pôde ser executado neste ambiente** — o Chrome não inicia sob o sandbox

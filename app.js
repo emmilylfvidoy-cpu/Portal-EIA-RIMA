@@ -214,7 +214,10 @@
         if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
         const geojson = await resposta.json();
         estado.camadas.push(Object.assign({}, camada, { geojson: geojson }));
-        if (el) el.textContent = geojson.features.length + ' feições';
+        if (el) {
+          const nClasses = (camada.classes && camada.classes.length) || 0;
+          el.textContent = geojson.features.length + ' feições' + (nClasses > 1 ? ' · ' + nClasses + ' classes' : '');
+        }
       } catch (e) {
         estado.camadasLigadas.delete(camada.id);
         if (el) el.textContent = 'falhou';
@@ -230,12 +233,29 @@
     for (const camada of estado.camadas) {
       const estilo = camada.estilo || {};
       const cor = estilo.cor || CORES_MEIO[camada.meio] || '#7d8b93';
+      // Cor por classe: o importador grava `estilo.cores` (classe -> cor) para as
+      // camadas de uso do solo, geologia, solos... Sem isso, uma camada de 12 classes
+      // apareceria de uma cor só — e a base perde justamente o que a torna legível.
+      const corDaFeicao = (f) => {
+        if (estilo.cores && camada.campo_classe && f && f.properties) {
+          const bruto = f.properties[camada.campo_classe];
+          const chave = (bruto === undefined || bruto === null || bruto === '') ? 'Sem classe' : String(bruto);
+          if (estilo.cores[chave]) return estilo.cores[chave];
+        }
+        return cor;
+      };
       L.geoJSON(camada.geojson, {
-        style: () => ({
-          color: cor, weight: 1.2, opacity: 0.9,
-          fillColor: cor, fillOpacity: estilo.opacidade === undefined ? 0.25 : estilo.opacidade,
-        }),
-        pointToLayer: (f, latlng) => L.circleMarker(latlng, { radius: 4, color: cor, fillColor: cor, fillOpacity: 0.8 }),
+        style: (f) => {
+          const c = corDaFeicao(f);
+          return {
+            color: c, weight: 0.9, opacity: 0.85,
+            fillColor: c, fillOpacity: estilo.opacidade === undefined ? 0.35 : estilo.opacidade,
+          };
+        },
+        pointToLayer: (f, latlng) => {
+          const c = corDaFeicao(f);
+          return L.circleMarker(latlng, { radius: 4, color: c, fillColor: c, fillOpacity: 0.8 });
+        },
         onEachFeature: (f, layer) => {
           layer.bindPopup(popupAtributos(camada.nome, f.properties));
         },
@@ -811,7 +831,17 @@
     const itens = [];
     for (const a of estado.areas) itens.push({ rotulo: a.sigla + ' — ' + a.nome, cor: a.cor, forma: 'poligono' });
     for (const c of estado.camadas) {
-      itens.push({ rotulo: c.nome, cor: (c.estilo && c.estilo.cor) || CORES_MEIO[c.meio] || '#7d8b93', forma: 'poligono' });
+      const estilo = c.estilo || {};
+      const classes = estilo.cores ? Object.keys(estilo.cores) : [];
+      // Camada com classes entra na legenda classe a classe (até um teto, para o
+      // rodapé da folha não estourar): é o que o leitor do mapa precisa ver.
+      if (classes.length > 1 && classes.length <= 10) {
+        for (const classe of classes) {
+          itens.push({ rotulo: c.nome + ': ' + classe, cor: estilo.cores[classe], forma: 'poligono' });
+        }
+      } else {
+        itens.push({ rotulo: c.nome, cor: estilo.cor || CORES_MEIO[c.meio] || '#7d8b93', forma: 'poligono' });
+      }
     }
     return itens.slice(0, 18);
   }

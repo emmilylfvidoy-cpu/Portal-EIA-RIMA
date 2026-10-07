@@ -27,6 +27,189 @@ para baixar. O que não é cálculo geométrico é interface.
 
 ---
 
+## Colocar a SUA base no portal (base fixa)
+
+Este é o ponto que faz o portal ter valor: a base de caracterização fica **dentro do portal**,
+reunida e pronta. Quem abre a página já encontra as camadas, sem precisar subir nada.
+
+A base não é um banco de dados — é o conteúdo de `data/`:
+
+```
+data/
+├─ catalogo.json          ← lista das camadas que a tela mostra (o portal lê este arquivo)
+├─ camadas-fonte.json     ← manifesto: de qual shapefile cada camada veio
+├─ geologia.geojson       ← as camadas em si
+└─ uso-do-solo.geojson
+```
+
+Ou seja: para a camada ficar fixa, ela precisa **existir em `data/`** e **estar declarada no
+`catalogo.json`**. O `tools/importar_camadas.js` faz os dois a partir dos seus shapefiles.
+
+### O fluxo, em 3 comandos
+
+**1. Gerar o rascunho do manifesto** a partir da sua pasta de shapefiles:
+
+```bash
+node tools/importar_camadas.js --rascunho "C:\minha\base"
+```
+
+Ele varre a pasta (e as subpastas), acha cada `.shp` e cria o `data/camadas-fonte.json` com uma
+entrada por camada, já adivinhando o nome, o meio (físico/biótico/socioeconômico) pelo nome do
+arquivo e o campo de classe pelo `.dbf`:
+
+```
+Rascunho do manifesto em data\camadas-fonte.json
+2 camada(s) encontrada(s):
+  Geomorfologia Teste             meio: fisico   classe: FORMA
+  Uso Teste                       meio: biotico   classe: CLASSE
+```
+
+**2. Abrir o `data/camadas-fonte.json` e conferir.** O arquivo tem as instruções no topo. O que
+importa preencher:
+
+```json
+{
+  "destino": "data",
+  "camadas": [
+    {
+      "origem": "C:/minha/base/geologia.shp",
+      "id": "geologia",
+      "arquivo": "data/geologia.geojson",
+      "nome": "Geologia",
+      "meio": "fisico",
+      "campo_classe": "UNIDADE",
+      "fonte": "CPRM — carta geológica 1:50.000",
+      "data_ref": "2024",
+      "epsg_origem": "auto"
+    }
+  ]
+}
+```
+
+- **`meio`** é obrigatório: `fisico`, `biotico` ou `socioeconomico`. É o que agrupa as camadas na tela.
+- **`campo_classe`** é o campo que agrupa as feições (uso do solo, unidade geológica...). É por ele
+  que a tabela, os gráficos e as cores do mapa são montados. Em dúvida, use o `--inspecionar`.
+- **`fonte`** e **`data_ref`** aparecem na tela, no relatório e no mapa. Preencha com a fonte real —
+  é o que sustenta o número no estudo.
+- **`epsg_origem`**: `"auto"` lê o `.prj`. Se o shapefile não tiver `.prj`, informe o código
+  (ex.: `"EPSG:31983"`), senão o importador se recusa a converter — e está certo em se recusar.
+
+**3. Importar:**
+
+```bash
+node tools/importar_camadas.js                      # escala padrão: 1:50.000
+node tools/importar_camadas.js --escala 10000       # mais detalhe
+node tools/importar_camadas.js --simular            # mostra o que faria, sem escrever
+```
+
+Saída:
+
+```
+Importando 2 camada(s) — escala alvo 1:10.000, tolerância 2 m no terreno
+  · Geomorfologia Teste … 120 feições, 6.000 vértices, 151 KB (0.1 s)
+
+camada                      meio               feições   vértices (antes→depois)       SHP    GeoJSON
+-----------------------------------------------------------------------------------------------------
+Geomorfologia Teste         fisico                 120            19.320 → 6.000    308 KB     151 KB
+-----------------------------------------------------------------------------------------------------
+publicado em data/: 301 KB   ·   vértices: −69%
+catálogo: 0 camada(s) nova(s), 2 atualizada(s), 9 preservada(s)
+```
+
+**4. Publicar** (a base vira fixa no portal):
+
+```bash
+git add data/
+git commit -m "Base de caracterizacao: 2 camadas"
+git push
+```
+
+A Vercel republica sozinha em ~30 segundos.
+
+### O que o importador resolve por você
+
+| Problema | O que ele faz |
+|---|---|
+| `.shp` + `.dbf` + `.prj` + `.cpg` separados | Junta os quatro, lê a codificação do `.cpg` (acento não vira "JoÃ£o") |
+| Coordenada em UTM (metros) | Lê o `.prj` e reprojeta para graus (WGS 84), que é o que o portal usa |
+| **Camada pesada** | **Simplifica a geometria** — 30–100 MB viram alguns MB |
+| Coordenada com 15 decimais | Arredonda para 6 casas (~11 cm) e remove vértice repetido |
+| Muitas classes sem cor | Sorteia uma cor por classe, para o mapa não ficar de uma cor só |
+| Não sei qual campo é a classe | Sugere o campo com menos valores distintos cujo nome combina com classe/uso/tipo/unidade |
+
+### A simplificação: por que e quanto
+
+Um shapefile de 100 MB vira GeoJSON de centenas de MB e **trava qualquer navegador** — foi
+exatamente o defeito nº 1 apontado na auditoria do portal atual (uma camada de hidrografia de
+53 MB). Então a importação simplifica por padrão, com um critério técnico e não um chute:
+
+> **0,2 mm no papel** — abaixo disso o olho não distingue no impresso.
+
+| `--escala` | Tolerância no terreno | Para que serve |
+|---|---|---|
+| `--escala 5000` | ~1 m | mapa articulado em 1:5.000 |
+| `--escala 10000` | ~2 m | mapa em 1:10.000 |
+| `--escala 50000` | ~10 m | **padrão** — mapa em 1:50.000 |
+| `--escala 250000` | ~50 m | mapa de contexto regional |
+
+Se precisar do dado intacto (para calcular, não para desenhar), use `--sem-simplificar` — ele
+ainda arredonda e limpa, mas não remove vértice. E `--tolerancia 0.0001` força um valor exato.
+
+A simplificação compensa a distorção da longitude (`cos(latitude)`): a −22°, 1 grau de longitude
+mede ~103 km contra ~111 km de latitude, e sem essa correção o traço cortaria demais no sentido
+leste–oeste.
+
+### Antes de importar: o `--inspecionar`
+
+Para decidir o campo de classe e conferir o que veio:
+
+```bash
+node tools/importar_camadas.js --inspecionar "C:\minha\base\geologia.shp"
+```
+
+```
+geologia.shp  (poligono)
+  feições: 120   vértices: 19.320
+  geometrias: Polygon (120)
+  CRS: EPSG:4326   codificação: utf-8
+  aviso: Coordenadas em graus — WGS 84 (graus) (declarado no .prj).
+  extensão: -47.75265, -22.85270, -47.61535, -22.73951
+  campo de classe sugerido: FORMA
+  meio sugerido: fisico
+  campos:
+    ID                N   distintos: >40
+    FORMA             C   distintos: 3
+```
+
+Aceita também uma pasta inteira (inspeciona todos os `.shp` de uma vez).
+
+### O que o importador NÃO lê
+
+| Formato | O que fazer |
+|---|---|
+| File Geodatabase (`.gdb`) | QGIS → botão direito na camada → Exportar → Salvar feições como → **ESRI Shapefile** |
+| GeoPackage (`.gpkg`) | Mesmo caminho: exportar para shapefile |
+| KML / KMZ | QGIS converte para shapefile; ou use o botão de upload do portal, que lê KMZ no navegador |
+| GeoTIFF / raster | Fora do escopo: o portal trabalha com camada vetorial (polígono, linha, ponto) |
+
+### Dois avisos
+
+**Tamanho do repositório.** Base grande dentro do Git faz o clone ficar pesado (o GitHub reclama
+acima de ~1 GB, e cada `git push` reenvia o histórico). Se a sua base passar de ~300 MB publicada,
+vale considerar Git LFS ou servir os `.geojson` de outro lugar. O importador avisa quando uma
+camada passa de 8 MB depois de simplificada.
+
+**O manifesto guarda caminhos da sua máquina.** O `data/camadas-fonte.json` aponta para
+`C:\minha\base\...`. Isso é o que torna a base reprodutível (você roda de novo e ele refaz), mas
+significa que outra pessoa não consegue reimportar sem os shapefiles originais. Os `.geojson` já
+publicados em `data/` são o que o portal usa — o manifesto é só para você.
+
+**O `gerar_amostra.js` fica bloqueado depois que você importar.** Ele reescreveria o catálogo com
+as camadas de exemplo e tiraria as suas da lista; por isso ele aborta e avisa. Se quiser mesmo
+voltar para as camadas de exemplo, rode com `--forcar`.
+
+---
+
 ## Como rodar localmente
 
 O portal precisa de um servidor HTTP (usa `fetch` para o catálogo). Qualquer um serve:
@@ -95,9 +278,11 @@ portal-eia-rima/
 │  └─ xlsx.js            planilha .xlsx e CSV
 ├─ data/                 catálogo e camadas (troque pelo seu dado)
 ├─ tools/
-│  ├─ gerar_amostra.js   monta as camadas de exemplo a partir do dado real
-│  ├─ verificar.js       roda todas as verificações
-│  └─ verificacoes/      testes (Node, sem navegador)
+│  ├─ importar_camadas.js  ← leva a SUA base de shapefiles para data/
+│  ├─ gerar_amostra.js     monta as camadas de exemplo a partir do dado real
+│  ├─ servidor.js          servidor estático para testar localmente
+│  ├─ verificar.js         roda todas as verificações
+│  └─ verificacoes/        testes (Node, sem navegador)
 └─ vendor/               Leaflet e Turf (locais, sem CDN)
 ```
 
@@ -117,8 +302,10 @@ node tools/verificacoes/verificar_math.js   # uma suíte só
 | `vetorial` | Interseção, diferença, contenção, furo, côncavo, rotacionado, linhas, pontos |
 | `formatos` | Shapefile/DBF ida e volta (com acento, furo e booleano), KML, KMZ |
 | `saidas` | Tabela, conferência de fechamento, CSV, XLSX, relatório, PDF, escala e articulação |
+| `importador` | Simplificação de camada pesada, detecção de campo de classe, catálogo, erros explicados |
 | `sintaxe` | Compila todo arquivo servido e confere as referências do HTML e os ids usados |
 | `integracao` | Fluxo completo sobre os arquivos reais de `data/`, com PDF de amostra |
+| `fumaca` | Módulos no `window` falso, na mesma ordem do HTML, com o fluxo completo |
 | `oraculo` | Compara o recorte com o Turf em polígonos aleatórios (área a área) |
 
 O PDF de amostra sai em `tools/verificacoes/_amostra-mapa.pdf`.
