@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.2';
+  const VERSAO = 'v2.3';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -38,6 +38,12 @@
     grupoRotulos: null,
     rotulosPostos: 0,
     rotulosCortados: 0,
+    // Ordem de desenho das camadas, do FUNDO para o TOPO (o último desenha por cima).
+    // É estado, não a ordem em que o Leaflet recebeu as camadas: ver js/mapa.js.
+    ordemCamadas: [],
+    // As áreas de influência do usuário desenham por cima das camadas de caracterização
+    // por padrão — é o que ele acabou de inserir e quer conferir sobre o mapa.
+    areasAcima: true,
     logos: [],
     desenhando: false,
     desenho: null,
@@ -113,11 +119,22 @@
       $('aviso-mapa').textContent = 'Sem acesso ao mapa de fundo (offline?). As camadas do projeto continuam funcionando.';
     });
 
+    /* PAINÉIS COM z-index EXPLÍCITO.
+     *
+     * O Leaflet desenha por cima quem foi adicionado por último, e `desenharCamadas()` limpa e
+     * readiciona as camadas a cada ajuste de transparência ou ao ligar outra camada. Com isso
+     * as camadas de caracterização subiam por cima das áreas de influência do usuário, e as
+     * áreas "sumiam" sem ninguém pedir. Painel próprio com número resolve: a ordem passa a ser
+     * ESTADO, não efeito de quem foi adicionado por último. */
+    mapa.createPane('pane-areas');
+    mapa.createPane('pane-resultado');
     estado.grupoCamadas = L.layerGroup().addTo(mapa);
     estado.grupoAreas = L.layerGroup().addTo(mapa);
     estado.grupoResultado = L.layerGroup().addTo(mapa);
     // Rótulos por cima de tudo: são texto, e texto embaixo de polígono não se lê.
     estado.grupoRotulos = L.layerGroup().addTo(mapa);
+    estado.ordemCamadas = EIA.mapa.ordemInicial([]);
+    aplicarOrdemDasCamadas();
 
     mapa.on('mousemove', (ev) => {
       $('coordenadas').textContent = 'WGS 84 · ' + EIA.math.dms(ev.latlng.lng, 'lon') + ' · ' + EIA.math.dms(ev.latlng.lat, 'lat');
@@ -143,6 +160,7 @@
 
   function ligarEventos() {
     $('upload-areas').onchange = (ev) => carregarArquivos(Array.from(ev.target.files || []));
+    $('areas-acima').onchange = (ev) => alternarAreasAcima(ev.target.checked);
     $('btn-desenhar').onclick = alternarDesenho;
     $('btn-recortar').onclick = executarRecorte;
     $('btn-export-geojson').onclick = () => exportar('geojson');
@@ -218,6 +236,12 @@
     if (!estado.catalogo) return;
     $('vazio-camadas').hidden = true;
 
+    // A ordem de desenho segue a lista. Camada nova entra no TOPO (é o que a pessoa espera
+    // ao ligar algo: ver o que acabou de ligar), e camada que saiu do catálogo sai da ordem.
+    const ids = estado.catalogo.camadas.map((c) => c.id);
+    estado.ordemCamadas = (estado.ordemCamadas || []).filter((id) => ids.indexOf(id) >= 0);
+    for (const id of ids) if (estado.ordemCamadas.indexOf(id) < 0) estado.ordemCamadas.push(id);
+
     for (const meio of estado.catalogo.meios) {
       const titulo = document.createElement('div');
       titulo.className = 'meio ' + meio.id;
@@ -244,25 +268,98 @@
         linha.appendChild(amostra);
         linha.appendChild(nome);
         linha.appendChild(estadoTxt);
+
+        // Setas de ordem, DENTRO da linha mas fora do <label>: subir/descer camada é ação
+        // frequente no mapa, então fica à vista. Os ajustes (transparência e rótulo) ficam
+        // recolhidos no botão de engrenagem, porque abertos os dois em cada camada poluíam
+        // a página inteira.
+        const setas = document.createElement('span');
+        setas.className = 'ordem-setas';
+        const cima = document.createElement('button');
+        cima.type = 'button';
+        cima.className = 'seta';
+        cima.textContent = '▲';
+        cima.title = 'Subir a camada (desenhar por cima das de baixo)';
+        cima.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); moverCamada(camada.id, -1); };
+        const baixo = document.createElement('button');
+        baixo.type = 'button';
+        baixo.className = 'seta';
+        baixo.textContent = '▼';
+        baixo.title = 'Descer a camada (desenhar por baixo das de cima)';
+        baixo.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); moverCamada(camada.id, +1); };
+        setas.appendChild(cima);
+        setas.appendChild(baixo);
+        linha.appendChild(setas);
+
+        const engrenagem = document.createElement('button');
+        engrenagem.type = 'button';
+        engrenagem.className = 'engrenagem';
+        engrenagem.textContent = '⚙';
+        engrenagem.title = 'Transparência e rótulo desta camada';
+        engrenagem.setAttribute('aria-expanded', 'false');
+        linha.appendChild(engrenagem);
+
         alvo.appendChild(linha);
-        // Transparência e rótulo: controles da CAMADA, logo abaixo dela. Ficam fora do
-        // <label> da linha porque um clique no controle não pode ligar/desligar a camada.
-        alvo.appendChild(controlesDaCamada(camada));
+
+        const ajustes = controlesDaCamada(camada);
+        ajustes.hidden = true;
+        engrenagem.onclick = (ev) => {
+          ev.preventDefault();
+          ev.stopPropagation();
+          ajustes.hidden = !ajustes.hidden;
+          engrenagem.setAttribute('aria-expanded', ajustes.hidden ? 'false' : 'true');
+          engrenagem.classList.toggle('aberta', !ajustes.hidden);
+        };
+        alvo.appendChild(ajustes);
       }
     }
   }
 
   /**
-   * Controles de aparência da camada: transparência e coluna do rótulo.
+   * Ajustes da camada, recolhidos numa abinha: transparência e rótulo.
    *
    * A transparência é o que permite ver a imagem de satélite (ou a camada de baixo) por
    * baixo de uma camada densa — sem ela, uma camada de 306 unidades cobre o mapa inteiro.
    * O rótulo é a coluna que o analista quer LER no mapa (sigla da unidade, nome, classe),
    * escolhida entre os campos da própria camada.
+   *
+   * Ficam DENTRO de uma aba fechada porque, abertos em cada uma das 9 camadas, viravam 18
+   * controles empilhados na lateral e escondiam a própria lista de camadas. Aqui a lista
+   * fica legível e o ajuste aparece quando é pedido.
    */
   function controlesDaCamada(camada) {
     const bloco = document.createElement('div');
     bloco.className = 'camada-controles';
+
+    // Duas abinhas: cada assunto no seu lugar, sem empilhar rótulo e controle na mesma linha.
+    const abas = document.createElement('div');
+    abas.className = 'abas-camada';
+    const paineis = {};
+    const nomes = [['transparencia', 'Transparência'], ['rotulo', 'Rótulo']];
+    for (const [chave, texto] of nomes) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'aba-camada' + (chave === 'transparencia' ? ' ativa' : '');
+      b.textContent = texto;
+      const painel = document.createElement('div');
+      painel.className = 'painel-camada';
+      painel.hidden = chave !== 'transparencia';
+      b.onclick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        for (const [k, botao] of Object.entries(abas.botoes || {})) {
+          botao.classList.toggle('ativa', k === chave);
+          paineis[k].hidden = k !== chave;
+        }
+      };
+      abas.botoes = abas.botoes || {};
+      abas.botoes[chave] = b;
+      paineis[chave] = painel;
+      abas.appendChild(b);
+    }
+    bloco.appendChild(abas);
+    bloco.appendChild(paineis.transparencia);
+    bloco.appendChild(paineis.rotulo);
 
     // ---- transparência
     const etiquetaOp = document.createElement('span');
@@ -284,14 +381,14 @@
       estado.transparencia[camada.id] = 1 - Number(faixa.value) / 100;
       desenharCamadas();
     };
-    bloco.appendChild(etiquetaOp);
-    bloco.appendChild(faixa);
-    bloco.appendChild(valor);
+    paineis.transparencia.appendChild(faixa);
+    paineis.transparencia.appendChild(valor);
+    paineis.transparencia.appendChild(etiquetaOp);
 
     // ---- rótulo
     const etiquetaRot = document.createElement('span');
     etiquetaRot.className = 'controle-rotulo';
-    etiquetaRot.textContent = 'Rótulo';
+    etiquetaRot.textContent = 'Coluna a escrever no mapa';
     const seletor = document.createElement('select');
     seletor.className = 'seletor-rotulo';
     const nenhum = document.createElement('option');
@@ -311,8 +408,8 @@
       desenharCamadas();
       atualizarRotulos();
     };
-    bloco.appendChild(etiquetaRot);
-    bloco.appendChild(seletor);
+    paineis.rotulo.appendChild(etiquetaRot);
+    paineis.rotulo.appendChild(seletor);
 
     return bloco;
   }
@@ -418,6 +515,7 @@
       };
 
       L.geoJSON(camada.geojson, {
+        pane: painelDaCamada(camada.id),
         style: (f) => {
           const c = corDaFeicao(f);
           return {
@@ -590,6 +688,9 @@
     estado.grupoAreas.clearLayers();
     for (const area of estado.areas) {
       L.geoJSON(area.geometry, {
+        // painel próprio: é o que permite pôr as áreas por cima (ou por baixo) das camadas
+        // de caracterização, de forma estável, sem depender da ordem de inserção
+        pane: 'pane-areas',
         style: () => ({ color: area.cor, weight: 2.4, fillColor: area.cor, fillOpacity: 0.06, dashArray: '6 4' }),
         onEachFeature: (f, layer) => {
           layer.bindTooltip(area.sigla + ' — ' + area.nome, { sticky: true });
@@ -743,6 +844,64 @@
         },
       }).addTo(estado.grupoResultado);
     }
+  }
+
+  // =========================================================== ordem das camadas
+  /**
+   * Aplica a ordem escolhida, criando um painel por camada.
+   *
+   * Cada camada de caracterização ganha o SEU painel (`pane-cam-<id>`), com z-index vindo da
+   * posição na lista. Assim a ordem não depende de quem foi desenhado por último — e o
+   * usuário pode subir e descer camadas com as setas, que é o que a lista mostra.
+   * O grupo das áreas recebe um número calculado: acima de todas ou abaixo de todas.
+   */
+  function aplicarOrdemDasCamadas() {
+    if (!estado.mapa) return;
+    const ordem = estado.ordemCamadas || [];
+    for (const id of ordem) {
+      const nome = 'pane-cam-' + id;
+      if (!estado.mapa.getPane(nome)) estado.mapa.createPane(nome);
+      estado.mapa.getPane(nome).style.zIndex = EIA.mapa.zIndexDaCamada(ordem, id);
+    }
+    if (estado.mapa.getPane('pane-areas')) {
+      estado.mapa.getPane('pane-areas').style.zIndex = EIA.mapa.zIndexDasAreas(ordem, estado.areasAcima !== false);
+    }
+    if (estado.mapa.getPane('pane-resultado')) {
+      estado.mapa.getPane('pane-resultado').style.zIndex = EIA.mapa.zIndexDoResultado(ordem);
+    }
+  }
+
+  /** Painel onde desenhar a camada (cria na hora se a lista mudou depois do mapa). */
+  function painelDaCamada(id) {
+    const nome = 'pane-cam-' + id;
+    if (!estado.mapa.getPane(nome)) {
+      estado.mapa.createPane(nome);
+      estado.mapa.getPane(nome).style.zIndex = EIA.mapa.zIndexDaCamada(estado.ordemCamadas || [], id);
+    }
+    return nome;
+  }
+
+  /** Sobe (-1) ou desce (+1) a camada na ordem de desenho. */
+  function moverCamada(id, direcao) {
+    const nova = EIA.mapa.moverNaOrdem(estado.ordemCamadas || [], id, direcao);
+    if (!nova) {
+      status(direcao < 0 ? 'Esta camada já é a de baixo.' : 'Esta camada já é a de cima.');
+      return;
+    }
+    estado.ordemCamadas = nova;
+    aplicarOrdemDasCamadas();
+    renderizarCatalogo();
+    const camada = (estado.catalogo ? estado.catalogo.camadas.find((c) => c.id === id) : null);
+    status('Ordem: ' + (camada ? camada.nome : id) + (direcao < 0 ? ' subiu' : ' desceu') + '.');
+  }
+
+  /** Liga/desliga "minhas áreas por cima das camadas". */
+  function alternarAreasAcima(acima) {
+    estado.areasAcima = !!acima;
+    aplicarOrdemDasCamadas();
+    status(estado.areasAcima
+      ? 'Suas áreas ficam por cima das camadas de caracterização.'
+      : 'Suas áreas ficam por baixo das camadas de caracterização.');
   }
 
   // =========================================================== agrupamento
@@ -1493,6 +1652,10 @@
       projeto: dadosProjeto(),
       areas: estado.areas.map((a) => ({ id: a.id, nome: a.nome, sigla: a.sigla, cor: a.cor, geometry: a.geometry })),
       camadas_ligadas: Array.from(estado.camadasLigadas),
+      // Ordem de desenho e posição das áreas: é trabalho do usuário (subir a geologia,
+      // pôr a área por cima) e se perderia ao reabrir o projeto se não fosse salvo.
+      ordem_camadas: (estado.ordemCamadas || []).slice(),
+      areas_acima: estado.areasAcima !== false,
       // Aparência escolhida na tela: transparência e coluna de rótulo por camada. Sem
       // isso, reabrir o projeto perderia o ajuste de leitura do mapa — que é trabalho.
       aparencia: {
@@ -1529,6 +1692,10 @@
           estado.transparencia = p.aparencia.transparencia || {};
           estado.rotulos = p.aparencia.rotulos || {};
         }
+        if (p.ordem_camadas && p.ordem_camadas.length) estado.ordemCamadas = p.ordem_camadas.slice();
+        estado.areasAcima = p.areas_acima !== false;
+        $('areas-acima').checked = estado.areasAcima;
+        aplicarOrdemDasCamadas();
         estado.resultados = (p.recortes || []).map((r) => {
           const camada = (estado.catalogo ? estado.catalogo.camadas.find((c) => c.id === r.camada) : null)
             || { id: r.camada, nome: r.camada, meio: '' };

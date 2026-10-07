@@ -17,6 +17,41 @@
 | v2.0 | **Transparência e rótulo por camada**, escolhidos na tela: o analista decide quanto a camada deixa ver do fundo e qual coluna quer ler no mapa |
 | v2.1 | **Versão na URL de cada arquivo do site** (`app.js?v=2.1`): um arquivo já guardado como "imutável" pelo navegador nunca é revalidado, e foi assim que os controles novos apareceram sem os rótulos funcionarem. Se a função de posição faltar, o rótulo cai no centro da caixa e **avisa**, em vez de sumir em silêncio |
 | v2.2 | **Carregar a área de influência virou confiável**: o despacho de entrada saiu do `app.js` para `js/entrada.js` (sem DOM, testável) e passou a olhar **todos** os arquivos enviados — antes olhava só o primeiro, então selecionar `.shp` + `.dbf` + `.prj` era recusado como "formato não reconhecido" |
+| v2.3 | **Ordem das camadas é do usuário**: setas ▲▼ para subir e descer cada camada, opção "minhas áreas por cima das camadas", e os ajustes de transparência e rótulo passaram a viver numa **abinha recolhida** dentro de cada camada |
+
+## Ordem no mapa (v2.3)
+
+```
+☑ 🟫 Geologia    2102 feições · 306 classes   ▲ ▼ ⚙
+   ☑ ⬛ Minhas áreas por cima das camadas
+```
+
+**Setas ▲▼** em cada camada: a de cima na lista desenha por cima. **⚙** abre os ajustes
+(transparência e rótulo) daquela camada, recolhidos — abertos nas 9 camadas viravam 18
+controles empilhados que escondiam a própria lista.
+
+**"Minhas áreas por cima das camadas"** decide se as áreas de influência que você carrega
+ficam acima de todas as camadas de caracterização ou abaixo de todas. E o recorte sai sempre
+acima das camadas (é a resposta da análise) e abaixo dos rótulos.
+
+### Por que isso virou número, e não ordem de inserção
+
+No Leaflet, quem desenha por cima é **quem foi adicionado por último** — e `desenharCamadas()`
+limpa o grupo e readiciona tudo a cada ajuste de transparência ou ao ligar outra camada. Com
+isso, as camadas de caracterização subiam por cima das áreas de influência do usuário, e as
+áreas "sumiam" sem ninguém ter pedido. Dependia de qual controle foi mexido antes.
+
+Agora cada camada tem **o seu painel** (`pane-cam-<id>`) com z-index tirado da posição na
+lista, calculado em `js/mapa.js` e testado. As faixas são calculadas a partir do número de
+camadas para não colidir com os painéis do Leaflet:
+
+| Faixa | z-index | O quê |
+|---|---|---|
+| `tilePane` | 200 | imagem de satélite |
+| `pane-cam-*` | 400 + posição | camadas de caracterização (a última da lista por cima) |
+| `pane-resultado` | 400 + n + 1 | o recorte |
+| `pane-areas` | 400 + n + 2 | as áreas do usuário, se "por cima" (senão 399) |
+| `markerPane` | 600 | os rótulos — texto tem de ficar acima de polígono |
 
 ## Carregar a área de influência (v2.2)
 

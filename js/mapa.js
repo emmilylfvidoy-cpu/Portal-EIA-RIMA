@@ -428,8 +428,86 @@
     return p.join('');
   }
 
+  // ============================================================ ordem de desenho
+  /*
+   * POR QUE ISTO É CÁLCULO E NÃO ORDEM DE INSERÇÃO
+   *
+   * No Leaflet, quem desenha por cima é quem foi ADICIONADO por último — e isso é frágil:
+   * `desenharCamadas()` limpa o grupo e adiciona tudo de novo quando alguém mexe em
+   * transparência ou liga outra camada. A cada redesenho, as camadas de caracterização
+   * pulavam para cima das áreas de influência do usuário, que "sumiam" sem ninguém ter
+   * pedido. Ordem de desenho tem de ser ESTADO, não efeito colateral de quem foi
+   * adicionado por último: aqui ela vira número, e o número vai para o z-index do painel.
+   */
+
+  /** z-index do painel das camadas de caracterização (o "overlayPane" do Leaflet é 400). */
+  const Z_CAMADAS = 400;
+
+  /** Ordem inicial: a mesma do catálogo. */
+  function ordemInicial(ids) {
+    return (ids || []).slice();
+  }
+
+  /**
+   * Move uma camada uma posição na ordem (direcao -1 sobe, +1 desce).
+   * A ordem vai do FUNDO para o TOPO — o último da lista é o que aparece por cima.
+   * @returns {Array|null} nova ordem, ou null se não havia para onde mover
+   */
+  function moverNaOrdem(ordem, id, direcao) {
+    const lista = (ordem || []).slice();
+    const i = lista.indexOf(id);
+    if (i < 0) return null;
+    const j = i + (direcao < 0 ? -1 : 1);
+    if (j < 0 || j >= lista.length) return null;
+    lista[i] = lista[j];
+    lista[j] = id;
+    return lista;
+  }
+
+  /** z-index de uma camada de caracterização, conforme a posição na ordem. */
+  function zIndexDaCamada(ordem, id, base) {
+    const i = (ordem || []).indexOf(id);
+    return (base === undefined ? Z_CAMADAS : base) + (i < 0 ? 0 : i);
+  }
+
+  /**
+   * z-index do recorte (o resultado da análise).
+   *
+   * Fica logo acima de todas as camadas de caracterização — é a resposta que o usuário
+   * pediu, então não pode ficar escondida atrás de nenhuma delas.
+   *
+   * As faixas são CALCULADAS a partir do número de camadas, para não colidir com os painéis
+   * do próprio Leaflet: tilePane 200 (satélite), overlayPane 400 (vetores), shadowPane 500,
+   * markerPane 600 (é onde ficam os rótulos), tooltipPane 650, popupPane 700. Tudo o que é
+   * deste portal vive entre 400 e 400+n+2 — abaixo, portanto, dos rótulos.
+   */
+  function zIndexDoResultado(ordem, base) {
+    const b = base === undefined ? Z_CAMADAS : base;
+    return b + (ordem || []).length + 1;
+  }
+
+  /**
+   * z-index do grupo das áreas de influência do usuário.
+   *
+   * `acima` verdadeiro põe as áreas por cima de TODAS as camadas (e por cima do recorte,
+   * para a divisa tracejada da área continuar visível sobre o resultado); falso, por baixo
+   * de todas. Nos dois casos o número sai da ordem, então continua certo quando o usuário
+   * reordena ou liga uma camada nova.
+   */
+  function zIndexDasAreas(ordem, acima, base) {
+    const b = base === undefined ? Z_CAMADAS : base;
+    const n = (ordem || []).length;
+    return acima ? b + n + 2 : b - 1;
+  }
+
   return {
     ESCALAS: ESCALAS,
+    Z_CAMADAS: Z_CAMADAS,
+    ordemInicial: ordemInicial,
+    moverNaOrdem: moverNaOrdem,
+    zIndexDaCamada: zIndexDaCamada,
+    zIndexDoResultado: zIndexDoResultado,
+    zIndexDasAreas: zIndexDasAreas,
     cobertura: cobertura,
     escalaQueCabe: escalaQueCabe,
     grausDaFolha: grausDaFolha,

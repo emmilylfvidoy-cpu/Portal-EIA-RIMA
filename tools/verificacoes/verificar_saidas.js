@@ -238,6 +238,70 @@ console.log('\n== Previas de layout ==');
   ok('previa contem o numero da folha', previa.indexOf('FOLHA 01/12') > 0);
 }
 
+  console.log('\n== Ordem de desenho das camadas (quem fica por cima) ==');
+  {
+    /* O DEFEITO QUE ISTO COBRE: no Leaflet, quem desenha por cima é quem foi adicionado por
+     * último — e `desenharCamadas()` limpa e readiciona as camadas a cada ajuste de
+     * transparência. Resultado: as camadas de caracterização subiam por cima das áreas de
+     * influência do usuário, que "sumiam" sem ninguém ter pedido. Ordem de desenho tem de
+     * ser ESTADO (um número), não efeito colateral de quem foi adicionado por último. */
+    const m = EIA.mapa;
+    ok('a ordem inicial é a do catálogo', JSON.stringify(m.ordemInicial(['a', 'b', 'c'])) === '["a","b","c"]');
+
+    const sobe = m.moverNaOrdem(['a', 'b', 'c'], 'b', -1);
+    ok('subir troca com o de baixo', JSON.stringify(sobe) === '["b","a","c"]', JSON.stringify(sobe));
+    const desce = m.moverNaOrdem(['a', 'b', 'c'], 'b', +1);
+    ok('descer troca com o de cima', JSON.stringify(desce) === '["a","c","b"]', JSON.stringify(desce));
+    ok('a lista original não é alterada', JSON.stringify(['a', 'b', 'c']) === '["a","b","c"]');
+    ok('subir o de baixo não faz nada', m.moverNaOrdem(['a', 'b'], 'a', -1) === null);
+    ok('descer o de cima não faz nada', m.moverNaOrdem(['a', 'b'], 'b', +1) === null);
+    ok('camada fora da ordem não faz nada', m.moverNaOrdem(['a', 'b'], 'z', -1) === null);
+
+    // O ÚLTIMO da lista desenha POR CIMA: é a convenção que as setas da tela mostram
+    const ordem = ['geologia', 'hidrografia', 'uso'];
+    ok('o último da ordem tem o maior z-index',
+      m.zIndexDaCamada(ordem, 'uso') > m.zIndexDaCamada(ordem, 'hidrografia')
+      && m.zIndexDaCamada(ordem, 'hidrografia') > m.zIndexDaCamada(ordem, 'geologia'),
+      [m.zIndexDaCamada(ordem, 'geologia'), m.zIndexDaCamada(ordem, 'hidrografia'),
+        m.zIndexDaCamada(ordem, 'uso')].join(' < '));
+
+    // A OPÇÃO DO USUÁRIO: as áreas dele por cima de TODAS as camadas, ou por baixo de todas
+    const zAcima = m.zIndexDasAreas(ordem, true);
+    const zBaixo = m.zIndexDasAreas(ordem, false);
+    const zTopo = m.zIndexDaCamada(ordem, 'uso');
+    const zFundo = m.zIndexDaCamada(ordem, 'geologia');
+    ok('com "por cima", as áreas ficam acima de todas as camadas', zAcima > zTopo, zAcima + ' > ' + zTopo);
+    ok('com "por baixo", as áreas ficam abaixo de todas', zBaixo < zFundo, zBaixo + ' < ' + zFundo);
+    ok('nenhuma das opções colide com o z-index de uma camada',
+      zAcima !== zTopo && zBaixo !== zFundo
+      && [zTopo, zFundo].indexOf(zAcima) < 0 && [zTopo, zFundo].indexOf(zBaixo) < 0);
+
+    // O RECORTE é a resposta da análise: acima de todas as camadas, e abaixo dos RÓTULOS
+    // (markerPane = 600), senão o texto do rótulo ficaria escondido atrás do polígono.
+    const zResultado = m.zIndexDoResultado(ordem);
+    ok('o recorte fica acima de todas as camadas', zResultado > zTopo, zResultado + ' > ' + zTopo);
+    ok('o recorte fica abaixo dos rótulos (markerPane = 600)', zResultado < 600, zResultado + ' < 600');
+    ok('a área "por cima" fica acima do recorte (a divisa continua visível)',
+      m.zIndexDasAreas(ordem, true) > zResultado, m.zIndexDasAreas(ordem, true) + ' > ' + zResultado);
+    ok('o recorte não colide com o z-index de nenhuma camada',
+      ordem.every((id) => m.zIndexDaCamada(ordem, id) !== zResultado), 'z ' + zResultado);
+
+    const virada = m.moverNaOrdem(ordem, 'geologia', +1);
+    ok('depois de reordenar, o z-index acompanha a nova ordem',
+      m.zIndexDaCamada(virada, 'geologia') === m.zIndexDaCamada(ordem, 'hidrografia'),
+      JSON.stringify(virada));
+    ok('e a área "por cima" continua acima do novo topo',
+      m.zIndexDasAreas(virada, true) > m.zIndexDaCamada(virada, 'uso'));
+
+    // a base é o overlayPane do Leaflet (400): as camadas ficam na faixa dos vetores,
+    // acima da imagem de satélite (tilePane = 200)
+    ok('as camadas ficam acima da imagem de satélite', m.Z_CAMADAS >= 400, 'base ' + m.Z_CAMADAS);
+
+    // ordem vazia não quebra (o mapa é montado antes de o catálogo chegar)
+    ok('ordem vazia não quebra', m.zIndexDaCamada([], 'nada') === m.Z_CAMADAS
+      && m.zIndexDasAreas([], true) > m.Z_CAMADAS && m.zIndexDasAreas([], false) < m.Z_CAMADAS);
+  }
+
 console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
 return falhas ? 1 : 0;
 }

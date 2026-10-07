@@ -137,19 +137,46 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   white-space: nowrap;
 }
 
-/* ------------------------------------------------------------------ camada: controles */
-/* Transparência e coluna do rótulo, logo abaixo da camada na lista. */
+/* ------------------------------------------------------------------ camada: linha e ajustes */
+/* Setas de ordem e engrenagem ficam DENTRO da linha, à direita. O clique não pode passar
+ * para o <label> da linha (ligaria/desligaria a camada), por isso são <button> com
+ * stopPropagation no handler. */
+.camada-item .ordem-setas { display: inline-flex; gap: 1px; margin-left: auto; flex: 0 0 auto; }
+.camada-item .seta,
+.camada-item .engrenagem {
+  border: 1px solid transparent; background: none; color: var(--tinta-clara);
+  font-size: 9px; line-height: 1; padding: 2px 3px; border-radius: 3px; cursor: pointer;
+}
+.camada-item .engrenagem { font-size: 11px; }
+.camada-item .seta:hover,
+.camada-item .engrenagem:hover { background: #e6edf1; color: var(--acento-escuro); border-color: #cfdae1; }
+.camada-item .engrenagem.aberta { background: var(--acento-escuro); color: #fff; border-color: var(--acento-escuro); }
+
+/* Ajustes da camada: abinha recolhida, com uma aba por assunto. Abertos em cada uma das 9
+ * camadas, os controles viravam 18 linhas empilhadas e escondiam a própria lista. */
 .camada-controles {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  padding: 1px 0 5px 22px; font-size: 10.5px; color: var(--tinta-clara);
+  margin: 0 0 4px 22px; padding: 6px 8px 7px;
+  background: #f4f7f9; border: 1px solid #dde6eb; border-radius: 5px;
 }
-.camada-controles .controle-rotulo { flex: 0 0 auto; }
-.camada-controles input[type="range"] { flex: 0 0 84px; height: 14px; }
+.camada-controles .abas-camada { display: flex; gap: 3px; margin-bottom: 6px; }
+.camada-controles .aba-camada {
+  border: 1px solid #d3dee4; border-bottom: none; background: #e8eef2; color: var(--tinta-clara);
+  font-size: 10px; font-weight: 600; padding: 3px 7px; border-radius: 4px 4px 0 0; cursor: pointer;
+}
+.camada-controles .aba-camada.ativa { background: #fff; color: var(--acento-escuro); border-color: #c3d1d9; }
+.camada-controles .painel-camada { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.camada-controles .controle-rotulo { flex: 0 0 auto; font-size: 10.5px; color: var(--tinta-clara); }
+.camada-controles input[type="range"] { flex: 1 1 90px; height: 14px; }
 .camada-controles .controle-valor {
-  flex: 0 0 30px; font-variant-numeric: tabular-nums; color: var(--acento-escuro); font-weight: 600;
+  flex: 0 0 32px; font-size: 10.5px; font-variant-numeric: tabular-nums;
+  color: var(--acento-escuro); font-weight: 600; text-align: right;
 }
-.camada-controles .seletor-rotulo {
-  flex: 1 1 90px; min-width: 0; font-size: 10.5px; padding: 1px 2px;
+.camada-controles .seletor-rotulo { flex: 1 1 120px; min-width: 0; font-size: 10.5px; padding: 2px 3px; }
+
+/* Opção de uma linha só (checkbox + texto), usada no painel das áreas. */
+.opcao-linha {
+  display: flex; align-items: center; gap: 6px; margin-top: 6px;
+  font-size: 11px; color: var(--tinta-clara); cursor: pointer;
 }
 
 /* Rótulo desenhado sobre o mapa: texto pequeno com contorno branco, para ler tanto sobre
