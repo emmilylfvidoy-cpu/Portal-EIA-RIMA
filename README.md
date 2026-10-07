@@ -16,6 +16,27 @@
 | v1.9 | **Contorno das unidades** lido do arquivo de estilo: é a divisa que separa as unidades no mapa do projeto (sem ela, 306 manchas de cor viram uma aquarela) |
 | v2.0 | **Transparência e rótulo por camada**, escolhidos na tela: o analista decide quanto a camada deixa ver do fundo e qual coluna quer ler no mapa |
 | v2.1 | **Versão na URL de cada arquivo do site** (`app.js?v=2.1`): um arquivo já guardado como "imutável" pelo navegador nunca é revalidado, e foi assim que os controles novos apareceram sem os rótulos funcionarem. Se a função de posição faltar, o rótulo cai no centro da caixa e **avisa**, em vez de sumir em silêncio |
+| v2.2 | **Carregar a área de influência virou confiável**: o despacho de entrada saiu do `app.js` para `js/entrada.js` (sem DOM, testável) e passou a olhar **todos** os arquivos enviados — antes olhava só o primeiro, então selecionar `.shp` + `.dbf` + `.prj` era recusado como "formato não reconhecido" |
+
+## Carregar a área de influência (v2.2)
+
+O botão **Carregar arquivos** aceita, em qualquer combinação:
+
+| Envio | Como |
+|---|---|
+| **Shapefile** | selecione o `.shp` **junto** com o `.dbf` (e o `.prj`, `.cpg`) — um shapefile é um conjunto, não um arquivo |
+| **ZIP** | compacte o conjunto; pode ter uma pasta dentro (é o que o Windows faz ao compactar) |
+| **KMZ / KML / GeoJSON** | um arquivo só |
+
+Três coisas que passaram a ser ditas em vez de acontecerem em silêncio:
+
+1. **Só o `.shp` é aceito**, mas com aviso: a geometria entra e a **tabela de atributos fica vazia** — falta o `.dbf`. Para uma área de influência (que serve de molde de recorte) isso funciona; para conferir atributo, não.
+2. **Sem o `.prj`**, o sistema de referência é **deduzido** das coordenadas e a tela diz que deduziu.
+3. **Formato desconhecido** devolve o nome do arquivo recebido e o que fazer (selecionar o conjunto, ou compactar num `.zip`).
+
+> O defeito que originou a v2.2: a função olhava só `arquivos[0]`. Quem selecionava o `.shp` com os companheiros — o gesto natural — tinha o `.shp` recusado como "formato não reconhecido": o portal recusava o formato que ele mesmo aceita.
+>
+> O despacho morava no `app.js`, que depende do DOM e do Leaflet para carregar, e por isso **não podia ser exercitado por teste nenhum**. Agora mora em `js/entrada.js` (entra arquivo, sai GeoJSON, sem DOM) e a suíte de fumaça cobre os seis casos: conjunto solto, `.shp` sozinho, ZIP, ZIP com subpasta, formato desconhecido e o `.prj` presente. De quebra, o ZIP da **exportação** de shapefile passou a ser testado na ida e na volta — o escritor de ZIP era uma cópia dentro do `app.js`, e a do módulo corrompia binário em silêncio.
 
 > **Ao publicar uma versão nova, troque o `?v=` das tags do `index.html`** para o mesmo
 > número do `VERSAO` do `app.js`. O teste de referências reprova a publicação se os dois

@@ -19,13 +19,17 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (kml) {
 
   /** Junta várias entradas num ZIP (usa o montador do kml.js). */
+  /**
+   * ZIP com várias entradas.
+   *
+   * Cada entrada traz `texto` (string) OU `bytes` (binário). Aceitar os dois é o que
+   * permite usar o MESMO escritor para a planilha (XML, texto) e para o shapefile
+   * (.shp/.dbf/.prj, binário). Antes ele só entendia `texto`: passar bytes virava
+   * `encode(undefined)` — o ZIP saía com o texto "undefined" no lugar do arquivo, e o erro
+   * só aparecia depois, ao LER o ZIP de volta ("Offset is outside the bounds of the
+   * DataView"). Falha longe da causa.
+   */
   async function zipar(arquivos) {
-    // Reaproveita a mesma estrutura de ZIP do KMZ, uma entrada por arquivo.
-    const partes = [];
-    for (const a of arquivos) {
-      partes.push(await kml.gerarKmzComprimido(a.texto, a.nome));
-    }
-    // Aqui é preciso um ZIP com várias entradas: monta na mão com o helper interno.
     return montarZipMultiplo(arquivos);
   }
 
@@ -35,7 +39,9 @@
     let deslocamento = 0;
 
     for (const a of arquivos) {
-      const dados = new TextEncoder().encode(a.texto);
+      const dados = a.bytes !== undefined
+        ? (a.bytes instanceof Uint8Array ? a.bytes : new Uint8Array(a.bytes))
+        : new TextEncoder().encode(a.texto);
       let corpo = dados, metodo = 0;
       if (typeof CompressionStream !== 'undefined') {
         const fluxo = new Blob([dados]).stream().pipeThrough(new CompressionStream('deflate-raw'));

@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.1';
+  const VERSAO = 'v2.2';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -533,7 +533,7 @@
     if (!arquivos.length) return;
     status('Lendo ' + arquivos.length + ' arquivo(s)…');
     try {
-      const geo = await interpretarArquivos(arquivos);
+      const geo = await EIA.entrada.interpretar(arquivos);
       adicionarArea(geo.geojson, geo.nome, geo.crs, geo.aviso);
       status('Área "' + geo.nome + '" carregada com ' + geo.geojson.features.length + ' feição(ões).');
     } catch (e) {
@@ -542,77 +542,6 @@
     }
   }
 
-  async function interpretarArquivos(arquivos) {
-    const um = arquivos[0];
-    const nome = um.name.replace(/\.[^.]+$/, '');
-    const ext = (um.name.match(/\.([^.]+)$/) || [])[1].toLowerCase();
-
-    if (ext === 'zip') {
-      const buffer = await um.arrayBuffer();
-      const entradas = await EIA.shapelib.abrirZip(buffer);
-      const temShp = entradas.some((e) => /\.shp$/i.test(e.nome));
-      if (temShp) {
-        const lido = EIA.shapelib.abrirShapefile(entradas);
-        return finalizarArea(lido, nome);
-      }
-      const kml = entradas.find((e) => /\.kml$/i.test(e.nome));
-      if (kml) {
-        const geojson = EIA.kml.interpretarKml(new TextDecoder('utf-8').decode(kml.bytes));
-        return { nome: nome, geojson: geojson, crs: 'EPSG:4326', aviso: 'KMZ interpretado como WGS 84.' };
-      }
-      throw new Error('O ZIP não tem shapefile (.shp) nem KML dentro.');
-    }
-
-    if (ext === 'kmz') {
-      const buffer = await um.arrayBuffer();
-      const geojson = await EIA.kml.interpretarKmz(buffer);
-      return { nome: nome, geojson: geojson, crs: 'EPSG:4326', aviso: 'KMZ interpretado como WGS 84 (padrão do formato).' };
-    }
-
-    if (ext === 'kml') {
-      const texto = await um.text();
-      const geojson = EIA.kml.interpretarKml(texto);
-      return { nome: nome, geojson: geojson, crs: 'EPSG:4326', aviso: 'KML interpretado como WGS 84 (padrão do formato).' };
-    }
-
-    if (ext === 'geojson' || ext === 'json') {
-      const texto = await um.text();
-      const geojson = JSON.parse(texto);
-      const epsg = (geojson.crs && geojson.crs.properties && /EPSG[:]{0,1}(\d+)/.exec(geojson.crs.properties.name) || [])[1];
-      if (epsg && epsg !== '4326') {
-        const convertido = EIA.crs.transformarGeoJson(geojson, 'EPSG:' + epsg, 'EPSG:4326');
-        return {
-          nome: nome, geojson: convertido, crs: 'EPSG:' + epsg,
-          aviso: 'GeoJSON declarado em EPSG:' + epsg + '; reprojetado para WGS 84.',
-        };
-      }
-      const diag = EIA.crs.diagnosticar(geojson, 'EPSG:4326');
-      return { nome: nome, geojson: geojson, crs: 'EPSG:4326', aviso: diag.aviso };
-    }
-
-    throw new Error('Formato não reconhecido. Use shapefile (.shp com .dbf, ou .zip), KMZ, KML ou GeoJSON.');
-  }
-
-  function finalizarArea(lido, nome) {
-    let geojson = lido.geojson;
-    let crs = 'EPSG:4326';
-    let aviso = lido.aviso || '';
-    if (lido.prj) {
-      const epsg = EIA.crs.epsgDoPrj(lido.prj);
-      if (epsg && epsg !== 'EPSG:4326') {
-        geojson = EIA.crs.transformarGeoJson(geojson, epsg, 'EPSG:4326');
-        crs = epsg;
-        const d = EIA.crs.definicao(epsg);
-        aviso = 'Shapefile em ' + (d ? d.nome : epsg) + ' (.prj lido); reprojetado para WGS 84.';
-      }
-    } else {
-      const diag = EIA.crs.diagnosticar(geojson, null);
-      if (!diag.epsg) throw new Error(diag.aviso);
-      crs = diag.epsg;
-      aviso = diag.aviso;
-    }
-    return { nome: nome, geojson: geojson, crs: crs, aviso: aviso };
-  }
 
   function adicionarArea(geojson, nome, crs, aviso) {
     const aneis = EIA.recorte.aneisDaGeometria(geojson.type === 'FeatureCollection' ? geojson.features[0].geometry : geojson);
@@ -1550,70 +1479,11 @@
     return ((r.relatorio.ai || 'AI') + '_' + (r.camada.id || 'camada')).replace(/[^\w\-]+/g, '_');
   }
 
-  /** ZIP com vários arquivos (usa o mesmo montador do KMZ, uma entrada por arquivo). */
+  /* O escritor de ZIP mora em js/xlsx.js e aceita texto (planilha) e binário (shapefile).
+   * Aqui havia uma CÓPIA dele, com a diferença de aceitar binário — duas implementações do
+   * mesmo formato, e a do módulo corrompia binário em silêncio. */
   async function ziparArquivos(arquivos) {
-    const entradas = [];
-    for (const a of arquivos) {
-      const bytes = a.bytes instanceof Uint8Array ? a.bytes : new Uint8Array(a.bytes);
-      entradas.push({ nome: a.nome, bytes: bytes });
-    }
-    return montarZipMulti(entradas);
-  }
-
-  async function montarZipMulti(entradas) {
-    const locais = [];
-    const centrais = [];
-    let deslocamento = 0;
-    for (const e of entradas) {
-      const dados = e.bytes;
-      let corpo = dados, metodo = 0;
-      if (typeof CompressionStream !== 'undefined') {
-        const fluxo = new Blob([dados]).stream().pipeThrough(new CompressionStream('deflate-raw'));
-        corpo = new Uint8Array(await new Response(fluxo).arrayBuffer());
-        metodo = 8;
-      }
-      const crc = EIA.kml.crc32(dados);
-      const nomeBytes = new TextEncoder().encode(e.nome);
-      const local = new ArrayBuffer(30 + nomeBytes.length);
-      const lv = new DataView(local);
-      lv.setUint32(0, 0x04034b50, true);
-      lv.setUint16(4, 20, true);
-      lv.setUint16(8, metodo, true);
-      lv.setUint32(14, crc, true);
-      lv.setUint32(18, corpo.length, true);
-      lv.setUint32(22, dados.length, true);
-      lv.setUint16(26, nomeBytes.length, true);
-      new Uint8Array(local, 30).set(nomeBytes);
-      locais.push(new Uint8Array(local), corpo);
-
-      const central = new ArrayBuffer(46 + nomeBytes.length);
-      const cv = new DataView(central);
-      cv.setUint32(0, 0x02014b50, true);
-      cv.setUint16(4, 20, true); cv.setUint16(6, 20, true);
-      cv.setUint16(10, metodo, true);
-      cv.setUint32(16, crc, true);
-      cv.setUint32(20, corpo.length, true);
-      cv.setUint32(24, dados.length, true);
-      cv.setUint16(28, nomeBytes.length, true);
-      cv.setUint32(42, deslocamento, true);
-      new Uint8Array(central, 46).set(nomeBytes);
-      centrais.push(new Uint8Array(central));
-      deslocamento += local.byteLength + corpo.length;
-    }
-    const tamCentral = centrais.reduce((s, c) => s + c.length, 0);
-    const fim = new ArrayBuffer(22);
-    const fv = new DataView(fim);
-    fv.setUint32(0, 0x06054b50, true);
-    fv.setUint16(8, entradas.length, true);
-    fv.setUint16(10, entradas.length, true);
-    fv.setUint32(12, tamCentral, true);
-    fv.setUint32(16, deslocamento, true);
-    const todas = locais.concat(centrais, [new Uint8Array(fim)]);
-    const total = todas.reduce((s, p) => s + p.length, 0);
-    const saida = new Uint8Array(total);
-    let p = 0;
-    for (const parte of todas) { saida.set(parte, p); p += parte.length; }
-    return saida;
+    return EIA.xlsx.zipar(arquivos);
   }
 
   // =========================================================== projeto
@@ -1715,6 +1585,7 @@
     return String(v === null || v === undefined ? '' : v)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);
   else iniciar();

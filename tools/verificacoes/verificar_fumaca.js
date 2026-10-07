@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function executar() {
+async function executar() {
   const raiz = path.resolve(__dirname, '..', '..');
   let falhas = 0, testes = 0;
   const ok = (nome, cond, det) => {
@@ -133,6 +133,96 @@ function executar() {
     ok('fluxo completo sem navegador', false, e.message + ' | ' + (e.stack || '').split('\n')[1]);
   }
 
+  console.log('\n== Entrada: o que a pessoa envia em "Carregar arquivos" ==');
+  if (!EIA.entrada) {
+    ok('módulo de entrada disponível', false, 'EIA.entrada ausente');
+  } else {
+    /* O DEFEITO QUE ISTO COBRE: `interpretarArquivos` olhava só `arquivos[0]`. Quem
+     * selecionava o .shp junto com o .dbf e o .prj (o gesto natural) tinha o .shp lido como
+     * "formato não reconhecido" — o portal recusava o formato que ele mesmo aceita. */
+    const shapelib = EIA.shapelib;
+    const feicoes = [{
+      type: 'Feature',
+      properties: { nome: 'Área teste' },
+      geometry: { type: 'Polygon', coordinates: [[[-47.7, -22.7], [-47.6, -22.7], [-47.6, -22.6], [-47.7, -22.6], [-47.7, -22.7]]] },
+    }];
+    const e = shapelib.escreverShapefile(feicoes, {
+      prj: 'GEOGCS["GCS_SIRGAS_2000",DATUM["D_SIRGAS_2000",SPHEROID["GRS_1980",6378137.0,298.257222101]],'
+        + 'PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433],AUTHORITY["EPSG",4674]]',
+    });
+    // objetos no formato do navegador: .name e .arrayBuffer()
+    const comoArquivo = (nome, bytes) => ({
+      name: nome,
+      arrayBuffer: async () => (bytes.buffer ? bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) : bytes),
+      text: async () => Buffer.from(bytes).toString('utf8'),
+    });
+    const conjunto = [
+      comoArquivo('area.shp', e.shp),
+      comoArquivo('area.dbf', e.dbf),
+      comoArquivo('area.prj', new TextEncoder().encode(e.prj)),
+    ];
+
+    try {
+      const r = await EIA.entrada.interpretar(conjunto);
+      ok('conjunto .shp + .dbf + .prj é aceito', !!r && !!r.geojson, r ? r.geojson.type : 'nada');
+      const props = r.geojson.features[0].properties;
+      ok('os atributos vieram (o .dbf foi lido junto)', props.nome === 'Área teste', JSON.stringify(props));
+      // O .prj existe e foi reconhecido: o portal NÃO precisou deduzir o CRS. (WGS 84 e
+      // SIRGAS 2000 são compatíveis, então não há reprojeção nem aviso — e isso é correto.)
+      ok('o .prj foi lido (não caiu no "sem .prj")',
+        r.crs === 'EPSG:4326' && !/nenhum \.prj/i.test(r.aviso || ''),
+        r.crs + ' · aviso: ' + (r.aviso || '(nenhum)'));
+    } catch (err) {
+      ok('conjunto .shp + .dbf + .prj é aceito', false, err.message);
+    }
+
+    try {
+      const so = await EIA.entrada.interpretar([comoArquivo('sozinho.shp', e.shp)]);
+      ok('só o .shp é aceito, com aviso', !!so.geojson && /\.dbf/.test(so.aviso || ''),
+        (so.aviso || '').slice(0, 90));
+    } catch (err) {
+      ok('só o .shp é aceito, com aviso', false, err.message);
+    }
+
+    // ida e volta pelo ZIP: o portal escreve o ZIP da exportação e lê de volta na entrada
+    try {
+      const zip = await EIA.xlsx.zipar([
+        { nome: 'area.shp', bytes: e.shp },
+        { nome: 'area.dbf', bytes: e.dbf },
+        { nome: 'area.prj', bytes: new TextEncoder().encode(e.prj) },
+      ]);
+      ok('ZIP do shapefile gerado', zip.length > 100, zip.length + ' bytes');
+      const viaZip = await EIA.entrada.interpretar([comoArquivo('conjunto.zip', zip)]);
+      ok('ZIP com o shapefile é aceito na entrada', !!viaZip.geojson
+        && viaZip.geojson.features[0].properties.nome === 'Área teste',
+        JSON.stringify(viaZip.geojson.features[0].properties));
+    } catch (err) {
+      ok('ZIP com o shapefile é aceito na entrada', false, err.message);
+    }
+
+    // ZIP com os arquivos DENTRO de uma pasta — é o que sai do Windows ao compactar
+    try {
+      const zipPasta = await EIA.xlsx.zipar([
+        { nome: 'base/area.shp', bytes: e.shp },
+        { nome: 'base/area.dbf', bytes: e.dbf },
+      ]);
+      const daPasta = await EIA.entrada.interpretar([comoArquivo('pasta.zip', zipPasta)]);
+      ok('ZIP com os arquivos numa subpasta também é aceito',
+        !!daPasta.geojson && daPasta.geojson.features.length === 1,
+        daPasta.geojson ? daPasta.geojson.features.length + ' feição' : 'nada');
+    } catch (err) {
+      ok('ZIP com os arquivos numa subpasta também é aceito', false, err.message);
+    }
+    try {
+      await EIA.entrada.interpretar([comoArquivo('leiame.txt', new TextEncoder().encode('oi'))]);
+      ok('formato desconhecido é recusado com instrução', false, 'aceitou um .txt');
+    } catch (err) {
+      ok('formato desconhecido é recusado com instrução',
+        /zip/i.test(err.message) && /\.dbf/.test(err.message) && /leiame\.txt/.test(err.message),
+        err.message.slice(0, 110));
+    }
+  }
+
   console.log('\n== Aviso honesto sem navegador ==');
   {
     // O que o portal faz quando falta API do navegador: avisa, não finge que funciona
@@ -153,4 +243,6 @@ function executar() {
 }
 
 module.exports = { executar };
-if (require.main === module) process.exit(executar());
+// `executar` é async (o fluxo de entrada é assíncrono: ler arquivo, abrir ZIP), então o
+// valor de saída vem numa Promise — passar a Promise para process.exit() estoura.
+if (require.main === module) executar().then((c) => process.exit(c));
