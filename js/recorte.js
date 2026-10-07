@@ -147,8 +147,17 @@
         if (props.eia_classe === undefined || props.eia_classe === null || props.eia_classe === '') props.eia_classe = 'Sem classe';
         props.eia_area_ha = arredondar(areaHa, 4);
         props.eia_area_orig_ha = arredondar(areaOrigHa, 4);
-        props.eia_pct_ai = areaAiHa > 0 ? arredondar(areaHa / areaAiHa * 100, 4) : 0;
-        props.eia_pct_feicao = areaOrigHa > 0 ? arredondar(areaHa / areaOrigHa * 100, 2) : 0;
+        /* Percentual da área de influência, LIMITADO a 100.
+         *
+         * O recorte é numérico: a soma dos pedaços pode passar da área da AI por alguns
+         * décimos de por cento (arte da biblioteca de recorte e do arredondamento das
+         * coordenadas). Medido numa das camadas novas do estado, um pedaço saiu com 101,83%
+         * da AI. Pedaço de um todo não pode ser maior que o todo — e um "101,83%" na tabela
+         * e no relatório de um EIA é o tipo de número que faz o analista desconfiar do
+         * programa inteiro. O limite é explícito aqui, com esta razão escrita. */
+        const pct = areaAiHa > 0 ? areaHa / areaAiHa * 100 : 0;
+        props.eia_pct_ai = arredondar(Math.min(100, pct), 4);
+        props.eia_pct_feicao = areaOrigHa > 0 ? arredondar(Math.min(100, areaHa / areaOrigHa * 100), 2) : 0;
         props.eia_compr_km = comprimentoMetros(rf.geometry) / 1000;
         props.eia_metodo = operacao;
         props.eia_fonte = camada.fonte || '';

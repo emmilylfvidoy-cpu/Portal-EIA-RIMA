@@ -320,6 +320,69 @@ function executar() {
   fs.rmSync(destinoTeste, { recursive: true, force: true });
   fs.rmSync(tmp, { recursive: true, force: true });
 
+
+  console.log('\n== Faixa fina não pode ser apagada pela simplificação ==');
+  {
+    /* O DEFEITO QUE ISTO COBRE: numa camada de solos, as faixas finas (solo de vale) têm
+     * 100-300 m de largura. Aplicar 400 m de tolerância APAGA a faixa — o anel vira um
+     * sliver de área zero e o mapa fica com FENDAS, listras vazias onde a origem tinha solo.
+     * O cliente viu isso como "feição estranha", e era: a Pedologia perdia 2,4% da área.
+     *
+     * A regra: nenhum anel é simplificado além de 1/4 da sua espessura aparente
+     * (2·área/perímetro). Faixa fina sobrevive; anel grande continua com a tolerância global,
+     * então o arquivo não engorda. */
+    const GRAU_M = 111320;
+
+    // retângulo de 200 m x 5 km: a faixa fina que estava sendo apagada
+    const larg = 200 / GRAU_M, comp = 5000 / GRAU_M;
+    const pontos = [];
+    const passos = 200;
+    for (let i = 0; i <= passos; i++) pontos.push([-47 + comp * i / passos, -22]);
+    for (let i = passos; i >= 0; i--) pontos.push([-47 + comp * i / passos, -22 + larg]);
+    pontos.push(pontos[0].slice());
+    const anel = pontos;
+
+    const areaGraus = (a) => {
+      let s = 0;
+      for (let i = 0, j = a.length - 1; i < a.length; j = i++) s += (a[j][0] * a[i][1]) - (a[i][0] * a[j][1]);
+      return Math.abs(s / 2);
+    };
+    const antes = areaGraus(anel);
+
+    // tolerância de 400 m (1:2.000.000), a que apagava a faixa
+    const r = importador.prepararGeometria(
+      { type: 'Polygon', coordinates: [anel] },
+      { tolerancia: 400 / GRAU_M, casas: 7 }
+    );
+    const depois = r.geometria ? areaGraus(r.geometria.coordinates[0]) : 0;
+    const perda = antes > 0 ? (1 - depois / antes) * 100 : 100;
+    ok('a faixa fina NÃO é apagada (perda de área < 5%)', perda < 5,
+      perda.toFixed(2) + '% de perda   (' + Math.round(depois * GRAU_M * GRAU_M / 10000) + ' ha de '
+      + Math.round(antes * GRAU_M * GRAU_M / 10000) + ' ha)');
+    ok('a faixa mantém pontos suficientes para ser desenhada',
+      r.geometria && r.geometria.coordinates[0].length >= 4,
+      r.geometria ? r.geometria.coordinates[0].length + ' pontos' : 'geometria descartada');
+
+    // um quadrado GRANDE (20 km) tem de continuar sendo simplificado pela tolerância global
+    const grande = [];
+    const l = 20000 / GRAU_M;
+    for (let i = 0; i <= 400; i++) grande.push([-48 + l * i / 400, -22]);
+    for (let i = 0; i <= 400; i++) grande.push([-48 + l, -22 + l * i / 400]);
+    for (let i = 400; i >= 0; i--) grande.push([-48 + l * i / 400, -22 + l]);
+    for (let i = 400; i >= 0; i--) grande.push([-48, -22 + l * i / 400]);
+    grande.push(grande[0].slice());
+    const rg = importador.prepararGeometria(
+      { type: 'Polygon', coordinates: [grande] },
+      { tolerancia: 400 / GRAU_M, casas: 7 }
+    );
+    const nGrande = rg.geometria ? rg.geometria.coordinates[0].length : 0;
+    ok('anel grande continua simplificado pela tolerância global (não engorda)',
+      nGrande > 0 && nGrande < 40, nGrande + ' pontos de 1604');
+    ok('e o anel grande não perde área de forma relevante',
+      rg.geometria && Math.abs(1 - areaGraus(rg.geometria.coordinates[0]) / areaGraus(grande)) < 0.02,
+      rg.geometria ? ((1 - areaGraus(rg.geometria.coordinates[0]) / areaGraus(grande)) * 100).toFixed(3) + '%' : 'sem geometria');
+  }
+
   console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
   return falhas ? 1 : 0;
 }

@@ -378,7 +378,7 @@
       "arquivo": "data/pedologia.geojson",
       "nome": "Pedologia",
       "meio": "fisico",
-      "escala": 2000000,
+      "escala": 500000,
       "campo_classe": "Subordem",
       "fonte": "Pedologia do Estado de São Paulo",
       "data_ref": "",

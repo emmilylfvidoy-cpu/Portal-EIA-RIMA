@@ -23,6 +23,75 @@
 | v2.6 | Área carregada vem com **linha contínua** (o tracejado virou escolha, não padrão) e **transparência do preenchimento** ajustável; o ⚙ virou **✏ (lápis)**, que é o que a ação faz — editar |
 | v2.7 | **Quilometragem**: o usuário sobe a camada de km (marcos ou traçado) e **digita o km** para o mapa ir até lá. Entende `70`, `70,5`, `70,500`, `70+500` e `KM 70+500` |
 | v2.8 | **A base do portal é o Estado de São Paulo inteiro**: as 8 camadas de exemplo de Piracicaba saíram e entraram as 6 camadas reais (Geologia, Geomorfologia, Pedologia, Aquíferos, Biomas, Unidades de Conservação), cada uma com **as cores do seu arquivo de estilo** |
+| v2.9 | **Faixa fina não é mais apagada pela simplificação**: a tolerância passou a ser limitada pela espessura do próprio anel. A Pedologia perdia **2,38% da área em fendas** (listras vazias onde havia solo de vale) — caiu para **0,44%** |
+
+## O defeito da faixa fina (v2.9)
+
+O cliente olhou o mapa da Pedologia e disse: *"a feição do shp está estranha"*. Estava. O que
+se via eram **listras vazias** onde o mapa de origem tinha solo.
+
+**O caminho até a causa** — vale registrar, porque a primeira leitura foi errada:
+
+1. A geometria publicada estava **bem formada**: 0 anéis abertos, 23.500 anéis, e a área
+   batendo com o campo `area_ha` da origem em **−0,33%**. Nada disso apontava defeito.
+2. A checagem "os pontos do publicado são um subconjunto ordenado da origem?" acusou
+   **todos os 6 layers** — inclusive a Geologia, que estava visivelmente certa. Quando um
+   teste acusa tudo, o teste está errado: anel invertido (sentido anti-horário → horário) e o
+   ponto de fechamento apareciam como "fora de ordem", e polígonos vizinhos compartilham
+   vértices, o que estraga o casamento ponto a ponto.
+3. A medida **objetiva** resolveu: rasterizar a mesma região da origem e do publicado e
+   comparar. Não a diferença de pixels (que inclui o deslocamento legítimo de borda), mas a
+   **área preenchida** — fenda é área que sumiu.
+
+| Camada | Área preenchida (origem → publicado) | Veredito |
+|---|---|---|
+| Geologia | 98,1% → 98,0% | −0,06% ✅ |
+| Geomorfologia | 68,4% → 68,4% | −0,02% ✅ |
+| Aquíferos | 100% → 99,9% | −0,08% ✅ |
+| Unidades de Conservação | 66,9% → 66,8% | −0,13% ✅ (os 3,58% de pixels são só borda) |
+| Biomas | 2,4% → 2,4% | +0,96% ✅ |
+| **Pedologia** | **100% → 97,6%** | **−2,38%** ❌ |
+
+**5 das 6 estavam corretas.** Só a Pedologia perdia área.
+
+**A causa:** numa camada de solos, as faixas finas (solo de vale, inclusão estreita) têm
+100–300 m de largura. Aplicar 400 m de tolerância **apaga a faixa** — o anel vira um sliver de
+área zero, e o mapa fica com a fenda. Não era erro de leitura nem de simplificação: era a
+tolerância escolhida, que num mapa de solos é grande demais.
+
+**A correção:** nenhum anel é simplificado além de **1/4 da sua espessura aparente**
+(`2·área/perímetro`). Faixa fina sobrevive; anel grande tem espessura grande e continua com a
+tolerância global, então o arquivo não engorda por causa disso. Está travado por teste: uma
+faixa de 200 m × 5 km simplificada a 400 m mantém **100% da área**.
+
+**O preço, medido** (a escolha da Pedologia foi essa):
+
+| Pedologia | Vértices | Arquivo | Perda de área |
+|---|---|---|---|
+| 400 m, sem o limite | 444 mil | 19,5 MB | −3,45% ❌ |
+| 400 m, com o limite | 671 mil | 24,7 MB | −2,38% ❌ |
+| **100 m, com o limite** (escolhido) | **920 mil** | **30,3 MB** | **−0,44%** ✅ |
+
+Medi também onde está o peso: **73% do arquivo são os 7.677 polígonos acima de 100 ha**, que
+têm 98,84% da área. Os menores de 20 ha são 9.271 feições (12,6% do arquivo) e **0,15% da
+área** — se um dia for preciso emagrecer o arquivo, é ali, com perda de área desprezível.
+
+> **O que ainda não é feito:** a simplificação não é *topológica*. Polígonos vizinhos são
+> simplificados de forma independente, então a borda comum pode afastar-se e abrir uma fenda
+> da ordem da tolerância. É por isso que a Pedologia — a camada com mais contatos finos —
+> precisa de tolerância fina, e é por isso que o arquivo dela é o mais pesado. Corrigir de
+> verdade exige simplificação com topologia compartilhada, que é outro trabalho.
+
+### Como conferir uma camada publicada (o método)
+
+O que provou o defeito e a correção, e que serve para qualquer camada futura:
+
+1. Escolher uma região e extrair **os anéis da origem e do publicado** nos mesmos pixels.
+2. Preencher os dois em máscaras separadas.
+3. Comparar **área preenchida** (fenda) e **pixels diferentes** (deslocamento de borda).
+   Fenda é área que sumiu; deslocamento de borda é diferença de pixels com a área preservada.
+4. Se a área preenchida cair mais que ~0,5%, a tolerância está grande demais para aquela
+   camada.
 
 ## A base de camadas (v2.8)
 

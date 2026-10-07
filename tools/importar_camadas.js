@@ -234,6 +234,23 @@ function mesmoPonto(a, b, tol) {
  * e achatar o meio. E, se a simplificação deixar o anel com menos de 4 pontos, ele
  * volta ao original — geometria inválida é pior que arquivo grande.
  */
+/** Area assinada de um anel em graus² (shoelace). Serve para medir a ESPESSURA aparente. */
+function areaAssinadaGraus(anel) {
+  let s = 0;
+  for (let i = 0, j = anel.length - 1; i < anel.length; j = i++) {
+    s += (anel[j][0] * anel[i][1]) - (anel[i][0] * anel[j][1]);
+  }
+  return s / 2;
+}
+
+/** Perimetro de um anel em graus (comprimento euclidiano, suficiente para a espessura). */
+function perimetroGraus(anel) {
+  let s = 0;
+  for (let i = 1; i < anel.length; i++) s += Math.hypot(anel[i][0] - anel[i - 1][0], anel[i][1] - anel[i - 1][1]);
+  s += Math.hypot(anel[0][0] - anel[anel.length - 1][0], anel[0][1] - anel[anel.length - 1][1]);
+  return s;
+}
+
 function prepararGeometria(geometria, opcoes) {
   const o = opcoes || {};
   const fator = Math.pow(10, o.casas === undefined ? CASAS_PADRAO : o.casas);
@@ -242,6 +259,7 @@ function prepararGeometria(geometria, opcoes) {
   let antes = 0;
   let depois = 0;
   let descartados = 0;
+  let ajustados = 0;   // aneis em que a tolerancia foi limitada pela espessura
 
   const processar = (pontos, fechado) => {
     antes += pontos.length;
@@ -259,9 +277,30 @@ function prepararGeometria(geometria, opcoes) {
     }
     if (fechado && limpos.length > 1 && mesmoPonto(limpos[0], limpos[limpos.length - 1], 1e-12)) limpos.pop();
 
+    /* TOLERÂNCIA ADAPTADA À ESPESSURA DO ANEL — o defeito que isto corrige é de cartografia,
+     * não de leitura: numa camada de solos, as faixas finas (solo de vale, inclusão estreita)
+     * têm 100-300 m de largura. Aplicar 400 m de tolerância APAGA a faixa: o anel vira um
+     * sliver de área zero e o mapa fica com FENDAS — listras vazias onde a origem tinha solo.
+     * O cliente viu isso como "feição estranha", e era.
+     *
+     * A espessura aparente de um anel é 2·área/perímetro (o "diâmetro" da região). Nenhum
+     * anel é simplificado além de 1/4 dela: o polígono mantém a forma e a faixa fina
+     * sobrevive. Anel grande tem espessura grande, então continua valendo a tolerância
+     * global — o arquivo não engorda por causa disso.
+     */
+    let tolAnel = tolerancia;
+    if (fechado && tolerancia > 0 && limpos.length >= 4) {
+      const area = Math.abs(areaAssinadaGraus(limpos));
+      const per = perimetroGraus(limpos);
+      const espessura = per > 0 ? (2 * area) / per : Infinity;
+      if (isFinite(espessura) && espessura > 0) {
+        tolAnel = Math.min(tolerancia, espessura / 4);
+        ajustados++;
+      }
+    }
     let resultado = limpos;
     if (tolerancia > 0 && limpos.length > 2) {
-      const simplificado = EIA.vetorial.simplificar(limpos, tolerancia, escalaX);
+      const simplificado = EIA.vetorial.simplificar(limpos, tolAnel, escalaX);
       const minimo = fechado ? 3 : 2;
       if (simplificado.length >= minimo) resultado = simplificado;
     }

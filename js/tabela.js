@@ -138,7 +138,12 @@
           feicoes: g.n,
           area_ha: arredondar(g.area, 4),
           comprimento_km: arredondar(g.comprimento, 4),
-          pct_ai: areaAiHa > 0 ? arredondar(g.area / areaAiHa * 100, 3) : 0,
+          /* SEM limite em 100, de propósito: aqui é SOMA de classes, e os polígonos da camada
+         * de origem se sobrepõem (associação de solos, unidade geológica sobre unidade
+         * geológica). A soma pode passar da área da AI legitimamente — limitar esconderia um
+         * número verdadeiro. O limite de 100 existe só POR FEIÇÃO, no recorte, onde um pedaço
+         * não pode ser maior que o todo. */
+        pct_ai: areaAiHa > 0 ? arredondar(g.area / areaAiHa * 100, 3) : 0,
           pct_camada: somaAreas > 0 ? arredondar(g.area / somaAreas * 100, 3) : 0,
           fonte: r.camada.fonte || '',
           data_ref: r.camada.data_ref || '',
