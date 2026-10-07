@@ -138,19 +138,19 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 }
 
 /* ------------------------------------------------------------------ camada: linha e ajustes */
-/* Setas de ordem e engrenagem ficam DENTRO da linha, à direita. O clique não pode passar
+/* Setas de ordem e o LÁPIS ficam DENTRO da linha, à direita. O clique não pode passar
  * para o <label> da linha (ligaria/desligaria a camada), por isso são <button> com
  * stopPropagation no handler. */
 .camada-item .ordem-setas { display: inline-flex; gap: 1px; margin-left: auto; flex: 0 0 auto; }
 .camada-item .seta,
-.camada-item .engrenagem {
+.camada-item .lapis {
   border: 1px solid transparent; background: none; color: var(--tinta-clara);
   font-size: 9px; line-height: 1; padding: 2px 3px; border-radius: 3px; cursor: pointer;
 }
-.camada-item .engrenagem { font-size: 11px; }
+.camada-item .lapis { font-size: 11px; padding: 2px 4px; }
 .camada-item .seta:hover,
-.camada-item .engrenagem:hover { background: #e6edf1; color: var(--acento-escuro); border-color: #cfdae1; }
-.camada-item .engrenagem.aberta { background: var(--acento-escuro); color: #fff; border-color: var(--acento-escuro); }
+.camada-item .lapis:hover { background: #e6edf1; color: var(--acento-escuro); border-color: #cfdae1; }
+.camada-item .lapis.aberta { background: var(--acento-escuro); color: #fff; border-color: var(--acento-escuro); }
 
 /* Ajustes da camada: abinha recolhida, com uma aba por assunto. Abertos em cada uma das 9
  * camadas, os controles viravam 18 linhas empilhadas e escondiam a própria lista. */

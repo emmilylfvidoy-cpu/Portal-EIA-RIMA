@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.5';
+  const VERSAO = 'v2.6';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -274,7 +274,7 @@
 
         // Setas de ordem, DENTRO da linha mas fora do <label>: subir/descer camada é ação
         // frequente no mapa, então fica à vista. Os ajustes (transparência e rótulo) ficam
-        // recolhidos no botão de engrenagem, porque abertos os dois em cada camada poluíam
+        // recolhidos no botão de lapis, porque abertos os dois em cada camada poluíam
         // a página inteira.
         const setas = document.createElement('span');
         setas.className = 'ordem-setas';
@@ -294,24 +294,24 @@
         setas.appendChild(baixo);
         linha.appendChild(setas);
 
-        const engrenagem = document.createElement('button');
-        engrenagem.type = 'button';
-        engrenagem.className = 'engrenagem';
-        engrenagem.textContent = '⚙';
-        engrenagem.title = 'Transparência e rótulo desta camada';
-        engrenagem.setAttribute('aria-expanded', 'false');
-        linha.appendChild(engrenagem);
+        const lapis = document.createElement('button');   // lápis: abre os ajustes de aparência
+        lapis.type = 'button';
+        lapis.className = 'lapis';
+        lapis.textContent = '✏\uFE0E';
+        lapis.title = 'Editar transparência, rótulo e linha desta camada';
+        lapis.setAttribute('aria-expanded', 'false');
+        linha.appendChild(lapis);
 
         alvo.appendChild(linha);
 
         const ajustes = controlesDaCamada(camada);
         ajustes.hidden = true;
-        engrenagem.onclick = (ev) => {
+        lapis.onclick = (ev) => {
           ev.preventDefault();
           ev.stopPropagation();
           ajustes.hidden = !ajustes.hidden;
-          engrenagem.setAttribute('aria-expanded', ajustes.hidden ? 'false' : 'true');
-          engrenagem.classList.toggle('aberta', !ajustes.hidden);
+          lapis.setAttribute('aria-expanded', ajustes.hidden ? 'false' : 'true');
+          lapis.classList.toggle('aberta', !ajustes.hidden);
         };
         alvo.appendChild(ajustes);
       }
@@ -854,7 +854,18 @@
 
   /** O que o portal desenha numa área quando o usuário não mexeu na linha. */
   function linhaPadraoDaArea(area) {
-    return { cor: area.cor, estilo: 'tracejado', grossura: 2.4 };
+    // Linha CONTÍNUA por padrão: a área chega do arquivo e o usuário espera ver o limite
+    // como ele é, não já estilizado pelo portal. O tracejado continua a um clique de
+    // distância, para quem quer diferenciar o limite do dado do mapa por baixo.
+    return { cor: area.cor, estilo: 'linear', grossura: 2.4 };
+  }
+
+  /** Opacidade do preenchimento da área. Quase transparente por padrão (0,06). */
+  const OPACIDADE_AREA_PADRAO = 0.06;
+  function opacidadeDaArea(area) {
+    const v = Number(area && area.opacidade);
+    // Valor estranho (ou ausente) volta ao padrão em vez de deixar a área invisível.
+    return isFinite(v) && v >= 0 && v <= 1 ? v : OPACIDADE_AREA_PADRAO;
   }
 
   function desenharAreas() {
@@ -866,14 +877,14 @@
         // de caracterização, de forma estável, sem depender da ordem de inserção
         pane: 'pane-areas',
         style: () => ({
-          // O traço da área de influência é escolha do usuário: cor, tracejado ou linear,
-          // e grossura. O padrão é tracejado porque a divisa da área é um LIMITE
-          // administrativo do estudo, e não pode competir com o dado do mapa embaixo.
+          // O traço da área de influência é escolha do usuário: cor, linear ou tracejado,
+          // e grossura. O padrão é CONTÍNUO e o preenchimento quase transparente: a área é
+          // um LIMITE do estudo e não pode competir com o dado do mapa embaixo.
           color: linha.color,
           weight: linha.weight,
           dashArray: linha.dashArray,
           fillColor: area.cor,
-          fillOpacity: 0.06,
+          fillOpacity: opacidadeDaArea(area),
         }),
         onEachFeature: (f, layer) => {
           layer.bindTooltip(area.sigla + ' — ' + area.nome, { sticky: true });
@@ -899,11 +910,11 @@
         + (area.partes > 1 ? ' · ' + area.partes + ' polígonos' : '') + '</span>';
 
       // Ajustes da área numa abinha, igual às camadas: o mesmo problema, o mesmo lugar.
-      const engrenagem = document.createElement('button');
-      engrenagem.type = 'button';
-      engrenagem.className = 'engrenagem';
-      engrenagem.textContent = '⚙';
-      engrenagem.title = 'Cor, traço e grossura da linha desta área';
+      const lapis = document.createElement('button');   // lápis: abre os ajustes de aparência
+      lapis.type = 'button';
+      lapis.className = 'lapis';
+      lapis.textContent = '✏\uFE0E';
+      lapis.title = 'Editar transparência, cor, traço e grossura desta área';
 
       const remover = document.createElement('button');
       remover.textContent = 'remover';
@@ -915,7 +926,7 @@
 
       li.appendChild(amostra);
       li.appendChild(nome);
-      li.appendChild(engrenagem);
+      li.appendChild(lapis);
       li.appendChild(remover);
       lista.appendChild(li);
 
@@ -924,17 +935,50 @@
       ajustes.hidden = true;
       const pintar = () => {
         ajustes.innerHTML = '';
+
+        // Transparência do PREENCHIMENTO. O preenchimento da área era fixo em 6%: dava para
+        // ver o mapa por baixo, mas não dava para realçar a área quando ela é o assunto do
+        // mapa — nem para sumir com ela quando atrapalha a leitura das camadas.
+        const blocoOp = document.createElement('div');
+        blocoOp.className = 'linha-controles';
+        const etiquetaOp = document.createElement('span');
+        etiquetaOp.className = 'controle-rotulo';
+        etiquetaOp.textContent = 'Transparência';
+        const faixaOp = document.createElement('input');
+        faixaOp.type = 'range';
+        faixaOp.className = 'linha-grossura';
+        faixaOp.min = '0';
+        faixaOp.max = '100';
+        faixaOp.step = '5';
+        faixaOp.value = String(Math.round((1 - opacidadeDaArea(area)) * 100));
+        faixaOp.title = '0% = preenchimento sólido · 100% = só o contorno';
+        const valorOp = document.createElement('span');
+        valorOp.className = 'controle-valor';
+        valorOp.textContent = faixaOp.value + '%';
+        faixaOp.oninput = () => {
+          valorOp.textContent = faixaOp.value + '%';
+          area.opacidade = 1 - Number(faixaOp.value) / 100;
+          desenharAreas();
+        };
+        blocoOp.appendChild(etiquetaOp);
+        blocoOp.appendChild(faixaOp);
+        blocoOp.appendChild(valorOp);
+        ajustes.appendChild(blocoOp);
+
+        // Linha: cor, tipo de traço e grossura.
         ajustes.appendChild(controlesDeLinha(area.linha, linhaPadraoDaArea(area), (nova) => {
           area.linha = nova;
           desenharAreas();
           amostra.style.background = nova.cor;
         }));
+
         const voltar = document.createElement('button');
         voltar.type = 'button';
         voltar.className = 'botao-mini';
-        voltar.textContent = 'Voltar ao traço padrão';
+        voltar.textContent = 'Voltar ao padrão (linha contínua, 6% de preenchimento)';
         voltar.onclick = () => {
           delete area.linha;
+          delete area.opacidade;
           pintar();
           desenharAreas();
           amostra.style.background = area.cor;
@@ -942,9 +986,9 @@
         ajustes.appendChild(voltar);
       };
       pintar();
-      engrenagem.onclick = () => {
+      lapis.onclick = () => {
         ajustes.hidden = !ajustes.hidden;
-        engrenagem.classList.toggle('aberta', !ajustes.hidden);
+        lapis.classList.toggle('aberta', !ajustes.hidden);
       };
       lista.appendChild(ajustes);
     });
@@ -1878,6 +1922,7 @@
         id: a.id, nome: a.nome, sigla: a.sigla, cor: a.cor, geometry: a.geometry,
         // o traço escolhido para a área vai junto: é trabalho de preparação do mapa
         linha: a.linha || null,
+        opacidade: a.opacidade === undefined ? null : a.opacidade,
       })),
       camadas_ligadas: Array.from(estado.camadasLigadas),
       // Ordem de desenho e posição das áreas: é trabalho do usuário (subir a geologia,

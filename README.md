@@ -20,6 +20,34 @@
 | v2.3 | **Ordem das camadas é do usuário**: setas ▲▼ para subir e descer cada camada, opção "minhas áreas por cima das camadas", e os ajustes de transparência e rótulo passaram a viver numa **abinha recolhida** dentro de cada camada |
 | v2.4 | **Cor, traço e grossura da linha**, nos dois lugares que têm linha: o **contorno das camadas** (aba *Linha*) e o **traço das áreas de influência** (⚙ de cada área). Escolha pelo olho, com amostra do traço ao lado |
 | v2.5 | **A área da área de influência vinda de ARQUIVO era sempre ZERO** (`0,00 ha · 0,00 km²`): a função que lista os anéis ignorava `FeatureCollection`. Corrigido na raiz — e com ela o recorte de arquivo com vários polígonos, que era recusado |
+| v2.6 | Área carregada vem com **linha contínua** (o tracejado virou escolha, não padrão) e **transparência do preenchimento** ajustável; o ⚙ virou **✏ (lápis)**, que é o que a ação faz — editar |
+
+## Editar a aparência (v2.6)
+
+```
+☑ 🟫 Geologia    2102 feições · 306 classes   ▲ ▼ ✏
+   ┌──────────────────────────────────────────┐
+   │ [Transparência] [Rótulo] [Linha]         │
+   └──────────────────────────────────────────┘
+
+🟥 AI-01 Fazenda São José   12.480,00 ha      ✏  remover
+   ┌──────────────────────────────────────────┐
+   │ Transparência  ──────●────  95%          │
+   │ Cor ▉  Traço [Linear ▾]  ──────  2.4     │
+   └──────────────────────────────────────────┘
+```
+
+O ícone é um **lápis** porque a ação é editar: transparência, rótulo e linha na camada;
+transparência do preenchimento, cor, traço e grossura na área. O glifo usa a apresentação de
+texto (`✏\uFE0E`) para não virar o emoji colorido no meio de uma lista densa.
+
+**Área carregada vem com linha contínua.** Antes o portal já desenhava o limite tracejado por
+conta própria; agora o padrão é o limite como ele é, e o tracejado fica a um clique — para
+quem quer diferenciar o limite do estudo do dado do mapa por baixo. O preenchimento segue
+quase transparente (6%), agora **ajustável**: havia caso de precisar realçar a área quando
+ela é o assunto do mapa, e de sumir com ela quando atrapalha a leitura das camadas.
+
+O botão **"Voltar ao padrão"** devolve linha contínua e 6% de preenchimento.
 
 ## A área da área de influência (v2.5)
 
