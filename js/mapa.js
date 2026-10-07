@@ -500,9 +500,65 @@
     return acima ? b + n + 2 : b - 1;
   }
 
+  // ============================================================ estilo de linha
+  /*
+   * Cor, tipo de traço e grossura do contorno — o que se ajusta para IMPRESSÃO. A divisa
+   * entre unidades geológicas, num mapa 1:5.000, precisa de outra grossura do que na tela;
+   * e a área de influência costuma ir tracejada para não competir com o dado do mapa.
+   *
+   * Os traços são escritos como o Leaflet espera (SVG `stroke-dasharray`: números em
+   * sequência, sem unidade) e a grossura é em PIXEL de tela, que é o que o Leaflet aceita.
+   */
+  const ESTILOS_LINHA = [
+    { id: 'linear', nome: 'Linear (contínua)', tracos: null },
+    { id: 'tracejado', nome: 'Tracejado', tracos: '9 5' },
+    { id: 'pontilhado', nome: 'Pontilhado', tracos: '1 5' },
+    { id: 'traco-ponto', nome: 'Traço e ponto', tracos: '12 4 2 4' },
+  ];
+  const GROSSURA_MIN = 0.5;
+  const GROSSURA_MAX = 12;
+
+  /** Estilo de linha por id. Estilo desconhecido cai em linear (nunca em traço invisível). */
+  function estiloDaLinha(id) {
+    for (const e of ESTILOS_LINHA) if (e.id === id) return e;
+    return ESTILOS_LINHA[0];
+  }
+
+  /** Cor no formato que o SVG aceita (`#rrggbb`); qualquer outra coisa volta ao padrão. */
+  function corValida(cor, padrao) {
+    return /^#[0-9a-fA-F]{6}$/.test(String(cor || '')) ? String(cor).toLowerCase() : padrao;
+  }
+
+  /**
+   * Junta o que o usuário escolheu com o padrão e devolve opções prontas para o Leaflet.
+   * Campo ausente ou inválido cai no padrão — a tela nunca pode ficar sem contorno por
+   * causa de um valor estranho vindo de um projeto salvo antigo.
+   */
+  function estiloDeLinha(escolha, padrao) {
+    const p = padrao || {};
+    const e = escolha || {};
+    const g = Number(e.grossura);
+    const grossura = isFinite(g) && g > 0
+      ? Math.min(GROSSURA_MAX, Math.max(GROSSURA_MIN, g))
+      : (p.grossura === undefined ? 1 : p.grossura);
+    const tracos = e.estilo === undefined ? (p.estilo === undefined ? null : estiloDaLinha(p.estilo).tracos)
+      : estiloDaLinha(e.estilo).tracos;
+    return {
+      color: corValida(e.cor, corValida(p.cor, '#000000')),
+      weight: grossura,
+      dashArray: tracos,
+    };
+  }
+
   return {
     ESCALAS: ESCALAS,
     Z_CAMADAS: Z_CAMADAS,
+    ESTILOS_LINHA: ESTILOS_LINHA,
+    GROSSURA_MIN: GROSSURA_MIN,
+    GROSSURA_MAX: GROSSURA_MAX,
+    estiloDaLinha: estiloDaLinha,
+    corValida: corValida,
+    estiloDeLinha: estiloDeLinha,
     ordemInicial: ordemInicial,
     moverNaOrdem: moverNaOrdem,
     zIndexDaCamada: zIndexDaCamada,

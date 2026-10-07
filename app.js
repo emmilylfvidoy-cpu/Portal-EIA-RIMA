@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v2.3';
+  const VERSAO = 'v2.4';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -35,6 +35,9 @@
     // Aparência escolhida pelo usuário, por camada: transparência (0..1) e coluna do rótulo.
     transparencia: {},
     rotulos: {},
+    // Linha escolhida por camada: { cor, estilo (linear/tracejado/pontilhado/traco-ponto),
+    // grossura }. Vazio = o desenho do arquivo de estilo da camada.
+    linhas: {},
     grupoRotulos: null,
     rotulosPostos: 0,
     rotulosCortados: 0,
@@ -335,7 +338,7 @@
     const abas = document.createElement('div');
     abas.className = 'abas-camada';
     const paineis = {};
-    const nomes = [['transparencia', 'Transparência'], ['rotulo', 'Rótulo']];
+    const nomes = [['transparencia', 'Transparência'], ['rotulo', 'Rótulo'], ['linha', 'Linha']];
     for (const [chave, texto] of nomes) {
       const b = document.createElement('button');
       b.type = 'button';
@@ -411,6 +414,135 @@
     paineis.rotulo.appendChild(etiquetaRot);
     paineis.rotulo.appendChild(seletor);
 
+    // ---- linha: cor, tipo de traço e grossura do CONTORNO da camada
+    // A divisa que se lê bem na tela some num mapa 1:5.000 impresso; e cor única ajuda
+    // quando o arquivo de estilo traz uma cor por classe e se quer tudo igual.
+    const padraoLinha = {
+      cor: (camada.estilo && camada.estilo.contorno_cor) || '#000000',
+      estilo: 'linear',
+      grossura: (camada.estilo && (camada.estilo.contorno_cor || camada.estilo.contornos)) ? 0.5 : 0.9,
+    };
+    const caixa = document.createElement('div');
+    caixa.className = 'linha-bloco';
+    const redesenharLinha = () => {
+      caixa.innerHTML = '';
+      caixa.appendChild(controlesDeLinha(estado.linhas[camada.id], padraoLinha, (nova) => {
+        estado.linhas[camada.id] = nova;
+        desenharCamadas();
+      }));
+      const voltar = document.createElement('button');
+      voltar.type = 'button';
+      voltar.className = 'botao-mini';
+      voltar.textContent = 'Voltar ao desenho do arquivo';
+      voltar.title = 'Descarta a cor, o traço e a grossura escolhidos aqui';
+      voltar.onclick = (ev) => {
+        ev.preventDefault();
+        delete estado.linhas[camada.id];
+        redesenharLinha();
+        desenharCamadas();
+        status('A linha de ' + camada.nome + ' voltou ao desenho do arquivo de estilo.');
+      };
+      caixa.appendChild(voltar);
+    };
+    redesenharLinha();
+    paineis.linha.appendChild(caixa);
+
+    return bloco;
+  }
+
+  /**
+   * Controles de linha: cor, tipo de traço e grossura.
+   *
+   * UM componente para os dois lugares que têm linha — o contorno das camadas de
+   * caracterização e o traço das áreas de influência do usuário. São o mesmo problema
+   * (aparência de contorno, pensada para impressão) e uma implementação só evita que as
+   * duas telas divirjam.
+   *
+   * @param {object} escolha  { cor, estilo, grossura } atual (pode estar vazio)
+   * @param {object} padrao   o que o portal desenha quando o usuário não mexeu
+   * @param {function} aoMudar recebe o novo { cor, estilo, grossura }
+   */
+  function controlesDeLinha(escolha, padrao, aoMudar) {
+    const atual = EIA.mapa.estiloDeLinha(escolha, padrao);
+    const bloco = document.createElement('div');
+    bloco.className = 'linha-controles';
+
+    const estadoAtual = {
+      cor: atual.color,
+      estilo: (escolha && escolha.estilo) || (padrao && padrao.estilo) || 'linear',
+      grossura: atual.weight,
+    };
+    const avisar = () => {
+      const pronto = EIA.mapa.estiloDeLinha(estadoAtual, padrao);
+      aoMudar({ cor: pronto.color, estilo: estadoAtual.estilo, grossura: pronto.weight });
+    };
+
+    // ---- cor
+    const cor = document.createElement('input');
+    cor.type = 'color';
+    cor.className = 'linha-cor';
+    cor.value = atual.color;
+    cor.title = 'Cor da linha';
+    cor.oninput = () => { estadoAtual.cor = cor.value; avisar(); };
+    const etiquetaCor = document.createElement('span');
+    etiquetaCor.className = 'controle-rotulo';
+    etiquetaCor.textContent = 'Cor';
+
+    // ---- tipo de traço
+    const etiquetaEstilo = document.createElement('span');
+    etiquetaEstilo.className = 'controle-rotulo';
+    etiquetaEstilo.textContent = 'Traço';
+    const seletor = document.createElement('select');
+    seletor.className = 'linha-estilo';
+    for (const e of EIA.mapa.ESTILOS_LINHA) {
+      const op = document.createElement('option');
+      op.value = e.id;
+      op.textContent = e.nome;
+      seletor.appendChild(op);
+    }
+    seletor.value = estadoAtual.estilo;
+    // desenha o próprio traço na opção, para escolher pelo olho e não pelo nome
+    seletor.onchange = () => { estadoAtual.estilo = seletor.value; avisar(); };
+
+    // ---- grossura
+    const faixa = document.createElement('input');
+    faixa.type = 'range';
+    faixa.className = 'linha-grossura';
+    faixa.min = String(EIA.mapa.GROSSURA_MIN);
+    faixa.max = String(EIA.mapa.GROSSURA_MAX);
+    faixa.step = '0.1';
+    faixa.value = String(atual.weight);
+    faixa.title = 'Grossura da linha (pixels na tela)';
+    const valor = document.createElement('span');
+    valor.className = 'controle-valor';
+    valor.textContent = atual.weight.toFixed(1);
+    faixa.oninput = () => {
+      estadoAtual.grossura = Number(faixa.value);
+      valor.textContent = estadoAtual.grossura.toFixed(1);
+      avisar();
+    };
+
+    // ---- amostra: o traço desenhado como vai sair
+    const amostra = document.createElement('span');
+    amostra.className = 'linha-amostra';
+    const pintarAmostra = () => {
+      const l = EIA.mapa.estiloDeLinha(estadoAtual, padrao);
+      amostra.style.borderTopColor = l.color;
+      amostra.style.borderTopWidth = Math.max(1, Math.min(4, l.weight)) + 'px';
+      amostra.style.borderTopStyle = l.dashArray ? 'dashed' : 'solid';
+    };
+    pintarAmostra();
+    const avisarComAmostra = () => { pintarAmostra(); avisar(); };
+    cor.oninput = () => { estadoAtual.cor = cor.value; avisarComAmostra(); };
+    seletor.onchange = () => { estadoAtual.estilo = seletor.value; avisarComAmostra(); };
+
+    bloco.appendChild(etiquetaCor);
+    bloco.appendChild(cor);
+    bloco.appendChild(etiquetaEstilo);
+    bloco.appendChild(seletor);
+    bloco.appendChild(amostra);
+    bloco.appendChild(faixa);
+    bloco.appendChild(valor);
     return bloco;
   }
 
@@ -513,17 +645,34 @@
         if (estilo.contorno_cor) return estilo.contorno_cor;
         return corDaFeicao(f);
       };
+      // Escolha do usuário para a LINHA desta camada (cor, traço e grossura). Vazia = o
+      // desenho do arquivo de estilo, que é o padrão. O ajuste é para impressão: a divisa
+      // que se lê bem na tela some num mapa 1:5.000, e a área de influência costuma ir
+      // tracejada para não competir com o dado do mapa.
+      const linhaEscolhida = (estado.linhas || {})[camada.id];
+      const padraoDaLinha = {
+        cor: estilo.contorno_cor || '#000000',
+        estilo: 'linear',
+        grossura: temContorno ? 0.5 : 0.9,
+      };
 
       L.geoJSON(camada.geojson, {
         pane: painelDaCamada(camada.id),
         style: (f) => {
           const c = corDaFeicao(f);
+          // Sem escolha do usuário, vale o desenho do arquivo de estilo — inclusive a cor
+          // POR CLASSE. Com escolha, a cor dele manda em todas as classes.
+          const linha = EIA.mapa.estiloDeLinha(
+            linhaEscolhida,
+            Object.assign({}, padraoDaLinha, { cor: corDoContorno(f) })
+          );
           return {
             // com contorno do estilo, a divisa é fina (fio de cabelo) e na cor do estilo;
             // sem ele, o traço é a própria cor do preenchimento (evita emenda clara
             // entre polígonos vizinhos, que aparece quando não há traço nenhum).
-            color: corDoContorno(f),
-            weight: temContorno ? 0.5 : 0.9,
+            color: linha.color,
+            weight: linha.weight,
+            dashArray: linha.dashArray,
             opacity: 0.9,
             fillColor: c,
             fillOpacity: opacidadeEfetiva(camada),
@@ -684,14 +833,29 @@
     return nome.slice(0, 8).toUpperCase().replace(/\s+/g, '_');
   }
 
+  /** O que o portal desenha numa área quando o usuário não mexeu na linha. */
+  function linhaPadraoDaArea(area) {
+    return { cor: area.cor, estilo: 'tracejado', grossura: 2.4 };
+  }
+
   function desenharAreas() {
     estado.grupoAreas.clearLayers();
     for (const area of estado.areas) {
+      const linha = EIA.mapa.estiloDeLinha(area.linha, linhaPadraoDaArea(area));
       L.geoJSON(area.geometry, {
         // painel próprio: é o que permite pôr as áreas por cima (ou por baixo) das camadas
         // de caracterização, de forma estável, sem depender da ordem de inserção
         pane: 'pane-areas',
-        style: () => ({ color: area.cor, weight: 2.4, fillColor: area.cor, fillOpacity: 0.06, dashArray: '6 4' }),
+        style: () => ({
+          // O traço da área de influência é escolha do usuário: cor, tracejado ou linear,
+          // e grossura. O padrão é tracejado porque a divisa da área é um LIMITE
+          // administrativo do estudo, e não pode competir com o dado do mapa embaixo.
+          color: linha.color,
+          weight: linha.weight,
+          dashArray: linha.dashArray,
+          fillColor: area.cor,
+          fillOpacity: 0.06,
+        }),
         onEachFeature: (f, layer) => {
           layer.bindTooltip(area.sigla + ' — ' + area.nome, { sticky: true });
         },
@@ -712,6 +876,14 @@
       nome.className = 'nome';
       nome.innerHTML = '<b>' + escapar(area.sigla) + '</b> ' + escapar(area.nome)
         + '<br><span class="meta">' + EIA.math.num(area.area_ha, 2) + ' ha · ' + EIA.math.num(area.area_ha / 100, 2) + ' km²</span>';
+
+      // Ajustes da área numa abinha, igual às camadas: o mesmo problema, o mesmo lugar.
+      const engrenagem = document.createElement('button');
+      engrenagem.type = 'button';
+      engrenagem.className = 'engrenagem';
+      engrenagem.textContent = '⚙';
+      engrenagem.title = 'Cor, traço e grossura da linha desta área';
+
       const remover = document.createElement('button');
       remover.textContent = 'remover';
       remover.onclick = () => {
@@ -719,10 +891,41 @@
         desenharAreas();
         renderizarAreas();
       };
+
       li.appendChild(amostra);
       li.appendChild(nome);
+      li.appendChild(engrenagem);
       li.appendChild(remover);
       lista.appendChild(li);
+
+      const ajustes = document.createElement('div');
+      ajustes.className = 'camada-controles';
+      ajustes.hidden = true;
+      const pintar = () => {
+        ajustes.innerHTML = '';
+        ajustes.appendChild(controlesDeLinha(area.linha, linhaPadraoDaArea(area), (nova) => {
+          area.linha = nova;
+          desenharAreas();
+          amostra.style.background = nova.cor;
+        }));
+        const voltar = document.createElement('button');
+        voltar.type = 'button';
+        voltar.className = 'botao-mini';
+        voltar.textContent = 'Voltar ao traço padrão';
+        voltar.onclick = () => {
+          delete area.linha;
+          pintar();
+          desenharAreas();
+          amostra.style.background = area.cor;
+        };
+        ajustes.appendChild(voltar);
+      };
+      pintar();
+      engrenagem.onclick = () => {
+        ajustes.hidden = !ajustes.hidden;
+        engrenagem.classList.toggle('aberta', !ajustes.hidden);
+      };
+      lista.appendChild(ajustes);
     });
   }
 
@@ -1650,17 +1853,22 @@
     const projeto = {
       formato: 'eiaproj', versao: 1, gerado_em: new Date().toISOString(),
       projeto: dadosProjeto(),
-      areas: estado.areas.map((a) => ({ id: a.id, nome: a.nome, sigla: a.sigla, cor: a.cor, geometry: a.geometry })),
+      areas: estado.areas.map((a) => ({
+        id: a.id, nome: a.nome, sigla: a.sigla, cor: a.cor, geometry: a.geometry,
+        // o traço escolhido para a área vai junto: é trabalho de preparação do mapa
+        linha: a.linha || null,
+      })),
       camadas_ligadas: Array.from(estado.camadasLigadas),
       // Ordem de desenho e posição das áreas: é trabalho do usuário (subir a geologia,
       // pôr a área por cima) e se perderia ao reabrir o projeto se não fosse salvo.
       ordem_camadas: (estado.ordemCamadas || []).slice(),
       areas_acima: estado.areasAcima !== false,
-      // Aparência escolhida na tela: transparência e coluna de rótulo por camada. Sem
-      // isso, reabrir o projeto perderia o ajuste de leitura do mapa — que é trabalho.
+      // Aparência escolhida na tela: transparência, coluna de rótulo e linha por camada.
+      // Sem isso, reabrir o projeto perderia o ajuste de leitura do mapa — que é trabalho.
       aparencia: {
         transparencia: Object.assign({}, estado.transparencia),
         rotulos: Object.assign({}, estado.rotulos),
+        linhas: Object.assign({}, estado.linhas),
       },
       recortes: estado.resultados.map((r) => ({
         ai: r.relatorio.ai, camada: r.camada.id,
@@ -1691,6 +1899,7 @@
         if (p.aparencia) {
           estado.transparencia = p.aparencia.transparencia || {};
           estado.rotulos = p.aparencia.rotulos || {};
+          estado.linhas = p.aparencia.linhas || {};
         }
         if (p.ordem_camadas && p.ordem_camadas.length) estado.ordemCamadas = p.ordem_camadas.slice();
         estado.areasAcima = p.areas_acima !== false;

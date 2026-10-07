@@ -18,6 +18,39 @@
 | v2.1 | **Versão na URL de cada arquivo do site** (`app.js?v=2.1`): um arquivo já guardado como "imutável" pelo navegador nunca é revalidado, e foi assim que os controles novos apareceram sem os rótulos funcionarem. Se a função de posição faltar, o rótulo cai no centro da caixa e **avisa**, em vez de sumir em silêncio |
 | v2.2 | **Carregar a área de influência virou confiável**: o despacho de entrada saiu do `app.js` para `js/entrada.js` (sem DOM, testável) e passou a olhar **todos** os arquivos enviados — antes olhava só o primeiro, então selecionar `.shp` + `.dbf` + `.prj` era recusado como "formato não reconhecido" |
 | v2.3 | **Ordem das camadas é do usuário**: setas ▲▼ para subir e descer cada camada, opção "minhas áreas por cima das camadas", e os ajustes de transparência e rótulo passaram a viver numa **abinha recolhida** dentro de cada camada |
+| v2.4 | **Cor, traço e grossura da linha**, nos dois lugares que têm linha: o **contorno das camadas** (aba *Linha*) e o **traço das áreas de influência** (⚙ de cada área). Escolha pelo olho, com amostra do traço ao lado |
+
+## Linha: cor, traço e grossura (v2.4)
+
+```
+⚙ Geologia  →  [Transparência] [Rótulo] [Linha]
+               Cor ▉  Traço [Tracejado ▾]  ────  3.0
+```
+
+| Controle | O quê |
+|---|---|
+| **Cor** | a cor do contorno (o arquivo de estilo da Geologia traz preto) |
+| **Traço** | **Linear** (contínua) · **Tracejado** · **Pontilhado** · **Traço e ponto** |
+| **Grossura** | de 0,5 a 12 px, em décimos |
+| **Amostra** | o traço desenhado do jeito que vai sair — escolher pelo olho, não pelo nome |
+
+O mesmo componente serve para o **contorno das camadas** (aba *Linha*) e para o **traço das
+áreas de influência** (o ⚙ de cada área na lista). É o mesmo problema — aparência de
+contorno, pensada para impressão — e uma implementação só evita que as duas telas divirjam.
+
+**Por que existe:** a divisa entre unidades geológicas que se lê bem na tela desaparece num
+mapa 1:5.000 impresso, e o traço da área de influência costuma ir **tracejado** para não
+competir com o dado do mapa por baixo. Antes, as duas coisas eram fixas no código.
+
+Dois detalhes que os testes garantem:
+
+- **Grossura absurda não some com a linha.** Valor fora da faixa é trazido para 0,5–12; texto
+  no lugar de número cai no padrão; cor inválida volta para o preto do arquivo. Um projeto
+  salvo estranho não pode deixar o mapa sem contorno.
+- **Trocar o traço não apaga a cor nem a grossura** — são três escolhas independentes.
+
+O botão **"Voltar ao desenho do arquivo"** descarta a escolha e devolve o que veio no `.qml` /
+`.xml` do shapefile. A escolha vai junto no projeto salvo.
 
 ## Ordem no mapa (v2.3)
 

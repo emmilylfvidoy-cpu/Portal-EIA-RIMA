@@ -302,6 +302,62 @@ console.log('\n== Previas de layout ==');
       && m.zIndexDasAreas([], true) > m.Z_CAMADAS && m.zIndexDasAreas([], false) < m.Z_CAMADAS);
   }
 
+  console.log('\n== Estilo de linha: cor, traço e grossura ==');
+  {
+    /* O que se ajusta aqui é IMPRESSÃO: a divisa entre unidades que se lê bem na tela some
+     * num mapa 1:5.000, e a área de influência costuma ir tracejada para não competir com o
+     * dado do mapa. O mesmo cálculo serve para o contorno da camada e para o traço da área. */
+    const m = EIA.mapa;
+    ok('há 4 tipos de traço, com o linear primeiro',
+      m.ESTILOS_LINHA.length === 4 && m.ESTILOS_LINHA[0].id === 'linear',
+      m.ESTILOS_LINHA.map((e) => e.id).join(', '));
+    ok('linear não tem traços (linha contínua)', m.ESTILOS_LINHA[0].tracos === null);
+    ok('tracejado tem traços', /^[0-9 ]+$/.test(m.estiloDaLinha('tracejado').tracos || ''),
+      JSON.stringify(m.estiloDaLinha('tracejado').tracos));
+    ok('estilo desconhecido cai em linear, nunca em traço invisível',
+      m.estiloDaLinha('coisa-que-nao-existe').id === 'linear');
+
+    // ---- sem escolha do usuário: vale o padrão (o desenho do arquivo de estilo)
+    const padrao = { cor: '#000000', estilo: 'linear', grossura: 0.5 };
+    const semEscolha = m.estiloDeLinha(undefined, padrao);
+    ok('sem escolha, usa o padrão',
+      semEscolha.color === '#000000' && semEscolha.weight === 0.5 && semEscolha.dashArray === null,
+      JSON.stringify(semEscolha));
+
+    // ---- com escolha: a do usuário manda
+    const escolhida = m.estiloDeLinha({ cor: '#d94f3d', estilo: 'tracejado', grossura: 3.2 }, padrao);
+    ok('com escolha, a cor do usuário manda', escolhida.color === '#d94f3d', escolhida.color);
+    ok('com escolha, a grossura do usuário manda', escolhida.weight === 3.2, String(escolhida.weight));
+    ok('com escolha, o traço do usuário manda', !!escolhida.dashArray, JSON.stringify(escolhida.dashArray));
+
+    // ---- o traço muda o desenho, não a cor: trocar de traço não pode apagar a grossura
+    const so = m.estiloDeLinha({ cor: '#123456', estilo: 'pontilhado', grossura: 5 }, padrao);
+    ok('pontilhado mantém cor e grossura', so.color === '#123456' && so.weight === 5 && !!so.dashArray);
+
+    // ---- valores absurdos não podem deixar o mapa sem contorno
+    ok('grossura abaixo do mínimo é elevada ao mínimo',
+      m.estiloDeLinha({ grossura: 0 }, padrao).weight === m.GROSSURA_MIN,
+      String(m.estiloDeLinha({ grossura: 0 }, padrao).weight));
+    ok('grossura negativa é elevada ao mínimo', m.estiloDeLinha({ grossura: -9 }, padrao).weight === m.GROSSURA_MIN);
+    ok('grossura absurda é limitada ao máximo',
+      m.estiloDeLinha({ grossura: 9999 }, padrao).weight === m.GROSSURA_MAX, String(m.GROSSURA_MAX));
+    ok('grossura não numérica cai no padrão', m.estiloDeLinha({ grossura: 'grosso' }, padrao).weight === 0.5);
+
+    ok('cor inválida cai no padrão (não deixa o contorno sem cor)',
+      m.estiloDeLinha({ cor: 'vermelho' }, padrao).color === '#000000',
+      m.estiloDeLinha({ cor: 'vermelho' }, padrao).color);
+    ok('cor em maiúsculas é aceita e normalizada',
+      m.estiloDeLinha({ cor: '#AABBCC' }, padrao).color === '#aabbcc');
+    ok('cor de 3 dígitos é recusada (o SVG pede 6)', m.corValida('#abc', '#000000') === '#000000');
+    ok('cor válida passa', m.corValida('#8a6d3b', '#000000') === '#8a6d3b');
+
+    // ---- projeto salvo antigo, sem o campo de linha, não pode quebrar o desenho
+    ok('objeto vazio não quebra', !!m.estiloDeLinha({}, padrao).color);
+    ok('padrão ausente não quebra', m.estiloDeLinha({ cor: '#ff0000' }, undefined).color === '#ff0000');
+    ok('escolha nula com padrão nulo devolve algo desenhável',
+      m.estiloDeLinha(null, null).weight > 0 && !!m.estiloDeLinha(null, null).color);
+  }
+
 console.log('\n' + (falhas ? 'FALHAS: ' + falhas + '/' + testes : 'TODOS OS ' + testes + ' TESTES PASSARAM'));
 return falhas ? 1 : 0;
 }

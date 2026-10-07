@@ -179,6 +179,33 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   font-size: 11px; color: var(--tinta-clara); cursor: pointer;
 }
 
+/* ------------------------------------------------------------------ linha: cor, traço, grossura */
+/* Um componente só, usado no contorno das camadas e no traço das áreas. */
+.linha-controles { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.linha-controles .controle-rotulo { font-size: 10.5px; color: var(--tinta-clara); }
+.linha-controles .linha-cor {
+  width: 28px; height: 18px; padding: 0; border: 1px solid #c3d1d9; border-radius: 3px;
+  background: none; cursor: pointer; flex: 0 0 auto;
+}
+.linha-controles .linha-estilo { flex: 1 1 104px; min-width: 0; font-size: 10.5px; padding: 2px 3px; }
+.linha-controles .linha-grossura { flex: 1 1 80px; height: 14px; }
+.linha-controles .controle-valor {
+  flex: 0 0 24px; font-size: 10.5px; font-variant-numeric: tabular-nums;
+  color: var(--acento-escuro); font-weight: 600; text-align: right;
+}
+/* A amostra mostra o traço como vai sair — escolher pelo olho, não pelo nome da opção. */
+.linha-controles .linha-amostra {
+  flex: 0 0 34px; height: 0; border-top: 2px solid #16232b; margin: 0 2px;
+}
+.linha-bloco { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.botao-mini {
+  align-self: flex-start; border: 1px solid #cfdae1; background: #fff; color: var(--tinta-clara);
+  font-size: 10px; padding: 2px 6px; border-radius: 3px; cursor: pointer;
+}
+.botao-mini:hover { background: #e6edf1; color: var(--acento-escuro); }
+/* Os ajustes de linha de cada área ficam como um item da própria lista. */
+#lista-areas .camada-controles { margin: 0 0 4px 0; }
+
 /* Rótulo desenhado sobre o mapa: texto pequeno com contorno branco, para ler tanto sobre
  * a imagem de satélite quanto sobre polígono escuro. `pointer-events: none` é essencial:
  * sem isso o rótulo captura o clique e o popup da feição nunca abre. */
