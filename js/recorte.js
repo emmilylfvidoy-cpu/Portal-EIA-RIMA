@@ -105,6 +105,15 @@
     if (!aneisArea.length) throw new Error('A área de influência "' + (area.nome || area.id) + '" não tem polígono válido.');
 
     const bboxArea = vetorial.bboxDeAneis(aneisArea);
+    /* A CAIXA DE CADA POLÍGONO DA ÁREA, calculada UMA VEZ.
+     *
+     * O recorte passou a ir polígono por polígono (correção do defeito dos anéis), e com isso uma
+     * área de muitas partes custaria caro: a "Alternativa 2" do cliente tem 198 polígonos e os
+     * "Dissolve" têm centenas de milhares. Sem este filtro seriam N recortes completos por feição.
+     * Com a caixa, o polígono que nem encosta na feição é descartado por comparação de números. */
+    const poligonosArea = math.aneisDe(area.geometry)
+      .filter((p) => p.length && p[0] && p[0].length)
+      .map((p) => ({ aneis: p, bbox: vetorial.bboxDeAneis([p[0]]) }));
     const areaAiHa = areaHectares(area.geometry) / 10000;
     const classeCampo = camada.campo_classe || o.campo_classe;
     const resultado = [];
@@ -133,10 +142,12 @@
        * Agora vai polígono por polígono: intersecta pelo anel EXTERNO e SUBTRAI cada FURO. Os
        * pedaços dos vários polígonos são somados (as partes de uma área válida não se sobrepõem).
        */
-      const poligonosArea = math.aneisDe(area.geometry);
       let recortado = { type: 'FeatureCollection', features: [] };
       try {
-        for (const poligono of poligonosArea) {
+        for (const pol of poligonosArea) {
+          // polígono da área que nem encosta na feição: não vale um recorte
+          if (!math.bboxIntersecta(bb, pol.bbox)) continue;
+          const poligono = pol.aneis;
           if (!poligono.length) continue;
           let pedacos = vetorial.recortarFeatures(
             [{ type: 'Feature', properties: f.properties, geometry: geo }],

@@ -1188,29 +1188,27 @@
     };
     $('progresso').hidden = false;
     document.body.classList.add('carregando');
-    /* ANTES DE RECORTAR: camada em tiles precisa estar INTEIRA. Recortar contra as partes que
-     * a tela mostrava daria área menor que a real e o relatório sairia errado. */
+    /* ANTES DE RECORTAR: monta a camada do recorte com SÓ OS TILES QUE CRUZAM AS ÁREAS.
+     * Carregar a camada inteira era o gargalo (medido: 186 MB contra 5,65 MB necessários), e
+     * ainda trocava, no mapa, o que a tela mostrava por tudo. Agora é uma cópia à parte. */
+    const camadasDoRecorte = [];
     try {
       for (const camada of estado.camadas) {
+        // camada AO VIVO: busca no serviço tudo que cruza as áreas (a consulta da tela não serve)
         if (camada.servico) {
-          status('Buscando ' + camada.nome + ' no serviço da CETESB, para as áreas de influência…');
+          status('Buscando ' + camada.nome + ' no serviço, para as áreas de influência…');
           await garantirServicoCompleto(camada);
+          const atual = estado.camadas.find((c) => c.id === camada.id);
+          camadasDoRecorte.push(Object.assign({}, camada, { geojson: atual ? atual.geojson : { type: 'FeatureCollection', features: [] } }));
           continue;
         }
-        if (!camada.tiles) continue;
-        const indice = await indiceDaCamada(camada, 'exato');
-        if (estado.nivelCarregado[camada.id] !== 'exato'
-          || (estado.tilesCarregados[camada.id] || new Set()).size < indice.tiles.length) {
-          status('Buscando ' + camada.nome + ' inteira para o recorte ('
-            + (indice.total.bytes / 1048576).toFixed(0) + ' MB, ' + indice.tiles.length + ' partes)…');
-          await garantirCamadaCompleta(camada);
-        }
+        camadasDoRecorte.push(await camadaParaRecorte(camada));
       }
       status('Dados completos. Recortando…');
     } catch (e) {
       $('progresso').hidden = true;
       document.body.classList.remove('carregando');
-      alert('Não consegui carregar a camada inteira para o recorte: ' + e.message
+      alert('Não consegui carregar a camada para o recorte: ' + e.message
         + '\n\nO recorte NÃO foi feito — com dados parciais a área sairia menor que a real.');
       return;
     }
@@ -1218,7 +1216,7 @@
     await new Promise((r) => setTimeout(r, 30));
 
     try {
-      const r = EIA.recorte.recortarTudo(estado.areas, estado.camadas, opcoes);
+      const r = EIA.recorte.recortarTudo(estado.areas, camadasDoRecorte, opcoes);
       estado.resultados = r.resultados;
       estado.resumo = r.resumo;
       estado.salvo = false;
@@ -1602,6 +1600,39 @@
     manifesto.geojson = { type: 'FeatureCollection', features: feicoes };
     deduzirColunasEClasses(manifesto, feicoes);
     desenharCamadas();
+  }
+
+  /**
+   * Cópia da camada SÓ COM OS TILES QUE CRUZAM AS ÁREAS DE INFLUÊNCIA — é o que o recorte usa.
+   *
+   * Antes o recorte carregava TODOS os tiles da camada, e isso era o gargalo: medido com a área
+   * de exemplo, o portal baixava e decodificava 1.533 tiles / 186 MB quando bastavam 52 tiles /
+   * 5,65 MB (33x menos). Na Pedologia era 227 tiles / 23,3 MB contra 4 tiles / 0,49 MB. Nas 22
+   * UGRHIs do Inventário, 21 delas não têm NENHUM tile naquela área — e eram carregadas inteiras.
+   *
+   * A cópia é SEPARADA de propósito: o mapa continua mostrando o que estava na tela, e o recorte
+   * recebe a camada recortada pela caixa. Assim o recorte não mexe mais no que o usuário vê.
+   */
+  async function camadaParaRecorte(camada) {
+    const copia = Object.assign({}, camada, { geojson: { type: 'FeatureCollection', features: [] } });
+    if (!camada.tiles) {
+      // camada de arquivo: já está inteira em memória
+      const atual = estado.camadas.find((c) => c.id === camada.id);
+      if (atual && atual.geojson) copia.geojson = atual.geojson;
+      return copia;
+    }
+    const indice = await indiceDaCamada(camada, 'exato');
+    const caixa = caixaDasAreas();
+    const precisam = indice.tiles.filter((t) => tileCruza(t, caixa));
+    for (let i = 0; i < precisam.length; i++) {
+      status('Buscando ' + camada.nome + ' para o recorte… (' + (i + 1) + '/' + precisam.length + ' partes)');
+      const resposta = await fetch(precisam[i].arquivo, { cache: 'no-cache' });
+      if (!resposta.ok) throw new Error('HTTP ' + resposta.status + ' em ' + precisam[i].arquivo);
+      const bytes = await descomprimirSePreciso(await resposta.arrayBuffer());
+      const fc = EIA.tiles.decodificar(bytes);
+      for (const f of fc.features) copia.geojson.features.push(f);
+    }
+    return copia;
   }
 
   async function garantirCamadaCompleta(camada) {
