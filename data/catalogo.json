@@ -3900,12 +3900,21 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Refúgio Ecológico": "#ffbebe",
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Floresta Ombrófila Mista estágio avançado": "#446589",
+              "Floresta Ombrófila Densa estágio avançado": "#267300",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-1/exato/indice.json",
           "niveis": [
             {
@@ -3996,12 +4005,26 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Refúgio Ecológico": "#ffbebe",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Savana Arborizada": "#e69800",
+              "Floresta Ombrófila Densa estágio avançado": "#267300",
+              "Floresta Ombrófila Mista estágio avançado": "#446589",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66",
+              "Floresta Estacional Decidual": "#73b273",
+              "Floresta Ombrófila Densa de terras baixas": "#55ff00"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-2/exato/indice.json",
           "niveis": [
             {
@@ -4112,12 +4135,20 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Ombrófila Densa de terras baixas": "#55ff00",
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Refúgio Ecológico": "#ffbebe",
+              "Formação Pioneira com Influência Fluviomarinha": "#00c5ff",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Floresta Ombrófila Densa estágio avançado": "#267300"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-3/exato/indice.json",
           "niveis": [
             {
@@ -4204,12 +4235,20 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Arborizada": "#e69800",
+              "Floresta Estacional Decidual": "#73b273",
+              "Savana Florestada": "#e64c00",
+              "Savana Gramíneo-lenhosa": "#ffd37f"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-4/exato/indice.json",
           "niveis": [
             {
@@ -4296,12 +4335,22 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Savana Arborizada": "#e69800",
+              "Savana Florestada": "#e64c00",
+              "Refúgio Ecológico": "#ffbebe",
+              "Floresta Ombrófila Densa estágio avançado": "#267300"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-5/exato/indice.json",
           "niveis": [
             {
@@ -4396,12 +4445,21 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Floresta Ombrófila Densa estágio avançado": "#267300",
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Savana Arborizada": "#e69800",
+              "Savana Gramíneo-lenhosa": "#ffd37f",
+              "Floresta Ombrófila Mista estágio avançado": "#446589"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-6/exato/indice.json",
           "niveis": [
             {
@@ -4492,12 +4550,19 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Ombrófila Densa de terras baixas": "#55ff00",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Formação Pioneira com Influência Fluviomarinha": "#00c5ff",
+              "Floresta Ombrófila Densa estágio avançado": "#267300"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-7/exato/indice.json",
           "niveis": [
             {
@@ -4580,12 +4645,20 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Arborizada": "#e69800",
+              "Savana Florestada": "#e64c00",
+              "Floresta Estacional Decidual": "#73b273",
+              "Savana Gramíneo-lenhosa": "#ffd37f"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-8/exato/indice.json",
           "niveis": [
             {
@@ -4672,12 +4745,21 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800",
+              "Refúgio Ecológico": "#ffbebe",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-9/exato/indice.json",
           "niveis": [
             {
@@ -4768,12 +4850,22 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800",
+              "Floresta Ombrófila Densa estágio avançado": "#267300",
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Floresta Estacional Decidual": "#73b273"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-10/exato/indice.json",
           "niveis": [
             {
@@ -4868,12 +4960,21 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Floresta Ombrófila Densa de terras baixas": "#55ff00",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Formação Pioneira com Influência Fluviomarinha": "#00c5ff",
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Floresta Ombrófila Densa estágio avançado": "#267300",
+              "Floresta Ombrófila Mista estágio avançado": "#446589"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-11/exato/indice.json",
           "niveis": [
             {
@@ -4964,12 +5065,19 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Arborizada": "#e69800",
+              "Savana Florestada": "#e64c00",
+              "Floresta Estacional Decidual": "#73b273"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-12/exato/indice.json",
           "niveis": [
             {
@@ -5052,12 +5160,20 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800",
+              "Savana Gramíneo-lenhosa": "#ffd37f",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-13/exato/indice.json",
           "niveis": [
             {
@@ -5144,12 +5260,22 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Floresta Ombrófila Densa estágio médio": "#267300",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800",
+              "Floresta Ombrófila Densa estágio avançado": "#267300",
+              "Floresta Ombrófila Mista estágio avançado": "#446589"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-14/exato/indice.json",
           "niveis": [
             {
@@ -5244,12 +5370,18 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-15/exato/indice.json",
           "niveis": [
             {
@@ -5328,12 +5460,19 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Arborizada": "#e69800",
+              "Savana Florestada": "#e64c00",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-16/exato/indice.json",
           "niveis": [
             {
@@ -5416,12 +5555,21 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800",
+              "Savana Gramíneo-lenhosa": "#ffd37f",
+              "Floresta Ombrófila Mista estágio médio": "#446589",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-17/exato/indice.json",
           "niveis": [
             {
@@ -5512,12 +5660,18 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-18/exato/indice.json",
           "niveis": [
             {
@@ -5596,12 +5750,20 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Arborizada": "#e69800",
+              "Savana Florestada": "#e64c00",
+              "Floresta Estacional Decidual": "#73b273",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-19/exato/indice.json",
           "niveis": [
             {
@@ -5688,12 +5850,19 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66",
+              "Savana Arborizada": "#e69800"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-20/exato/indice.json",
           "niveis": [
             {
@@ -5776,12 +5945,18 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-21/exato/indice.json",
           "niveis": [
             {
@@ -5860,12 +6035,19 @@
           "estilo": {
             "cor": "#4e7a3a",
             "opacidade": 1,
-            "cores": {},
-            "cores_origem": "paleta do portal",
+            "cores": {
+              "Floresta Estacional Semidecidual estágio médio": "#89cd66",
+              "Formação Pioneira com Influência Fluvial": "#7ab6f5",
+              "Savana Florestada": "#e64c00",
+              "Savana Arborizada": "#e69800",
+              "Floresta Estacional Semidecidual estágio avançad": "#89cd66"
+            },
+            "cores_origem": "estilo",
             "contorno_cor": "#5d5d5d",
-            "contornos": null
+            "contornos": null,
+            "estilo_arquivo": "renderer do serviço da SEMIL (TEMATICOS/InventarioFlorestal_2020), do IPA"
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. Cores copiadas do renderer do serviço da SEMIL (o mesmo mapa do IPA): o shapefile não traz paleta, e os nomes das classes não são idênticos — o casamento é por nome normalizado.",
           "tiles": "data/inventario-ugrhi-22/exato/indice.json",
           "niveis": [
             {
