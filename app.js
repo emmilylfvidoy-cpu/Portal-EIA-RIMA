@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.5';
+  const VERSAO = 'v3.6';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -1592,20 +1592,11 @@
    * A consulta é sempre por CAIXA (o que está na tela, ou a área de influência no recorte),
    * com paginação — o serviço limita 1000 feições por resposta.
    */
+  /* A montagem da URL e a decisão de paginar moram em js/servicos.js: são as duas coisas que
+   * quebram em silêncio (caixa trocada no WFS, página que nunca termina) e lá podem ser
+   * verificadas sem navegador. Aqui ficam só como ponte. */
   function urlDaConsulta(camada, caixa, offset) {
-    const p = new URLSearchParams();
-    p.set('where', '1=1');
-    p.set('geometry', caixa.map((v) => v.toFixed(6)).join(','));
-    p.set('geometryType', 'esriGeometryEnvelope');
-    p.set('inSR', '4326');
-    p.set('spatialRel', 'esriSpatialRelIntersects');
-    p.set('outFields', '*');
-    p.set('returnGeometry', 'true');
-    p.set('outSR', '4326');
-    p.set('f', 'geojson');
-    p.set('resultOffset', String(offset || 0));
-    p.set('resultRecordCount', '1000');
-    return camada.servico.url + '/query?' + p.toString();
+    return EIA.servicos.urlDaPagina(camada, caixa, offset);
   }
 
   /** Data em milissegundos (como o serviço devolve) vira data legível na tabela. */
@@ -1659,20 +1650,17 @@
       const resposta = await fetch(urlDaConsulta(camada, caixa, offset), { cache: 'no-cache' });
       if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
       const dados = await resposta.json();
-      if (dados.error) throw new Error(dados.error.message || 'erro no serviço');
-      const vieram = dados.features || [];
+      const vieram = EIA.servicos.feicoesDe(dados);   // lança se o serviço devolver erro
       for (const f of vieram) feicoes.push(arrumarAtributos(f));
       if (avisar) status('Carregando ' + camada.nome + '… ' + feicoes.length.toLocaleString('pt-BR') + ' feições');
-      if (!dados.exceededTransferLimit || !vieram.length) break;
+      if (!EIA.servicos.temMais(EIA.servicos.tipoDe(camada), dados, vieram.length)) break;
       offset += vieram.length;
     }
     return feicoes;
   }
 
   function mensagemDoServico(camada, e) {
-    return 'Não carreguei ' + camada.nome + ' do serviço da CETESB: ' + e.message
-      + '. Se for bloqueio do navegador (CORS), o servidor deles não libera consulta de outro '
-      + 'site — nesse caso a saída é publicar uma foto da camada na base.';
+    return EIA.servicos.explicarFalha(camada, e.message);
   }
 
   /** Carrega o que a janela mostra (consulta por caixa: substitui, não acumula). */

@@ -10,7 +10,8 @@ const raiz = path.resolve(__dirname);
 const oraculoN = process.argv[2] || 500;
 
 const suites = [
-  ['math', path.join(raiz, 'verificacoes', 'verificar_math.js')],
+  ['math', path.join(raiz, 'verificacoes', 'verificar_math.js'),
+    'verificar_servicos'],
   ['vetorial', path.join(raiz, 'verificacoes', 'verificar_vetorial.js')],
   ['formatos', path.join(raiz, 'verificacoes', 'verificar_formatos.js')],
   ['saidas', path.join(raiz, 'verificacoes', 'verificar_saidas.js')],

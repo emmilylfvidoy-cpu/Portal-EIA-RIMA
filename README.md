@@ -30,6 +30,63 @@
 | v3.3 | **Camada em tile ficou rápida**: dois níveis — a **visão de longe** (generalizada, 4,65 MB) quando o zoom está longe e o **dado exato** quando aproxima, com o recorte sempre no exato. O estado inteiro caiu de 34 MB / 10,8 milhões de pontos para **4,65 MB / 167 mil** |
 | v3.4 | **A camada em tile ficou rápida de verdade**: três níveis de detalhe escolhidos pelo zoom (visão de longe, médio, exato) e **tiles em gzip** que o navegador descomprime. O estado inteiro caiu de 34,05 MB para **1,09 MB** (31× menos) e nenhuma janela passa de 2,4 MB |
 | v3.5 | **Camadas ao vivo da CETESB/SEMIL**: Áreas Contaminadas (polígonos e pontos), Restrição de Uso das Águas Subterrâneas, Jurubatuba (CBH-AT 139/2021) e Portaria DAEE 2653/2011. O portal consulta o serviço público a cada uso, por caixa (só o que está na tela) e com paginação |
+| v3.6 | **Integração com GeoServer (WFS)**: o portal passou a falar o padrão OGC Web Feature Service, com consulta por caixa, GeoJSON e paginação. Os montadores de URL ficaram num módulo testável (`js/servicos.js`), com o teste que pega a armadilha de eixo do WFS 2.0 |
+
+## Integrar com o GeoServer (v3.6)
+
+Resposta curta: **sim, e de quatro formas** — mas só duas servem para o que o portal faz.
+
+| Forma | Serve? | Por quê |
+|---|---|---|
+| **WFS** (Web Feature Service) | **Sim** ✓ | Devolve **geometria e atributos** em GeoJSON. É o que o recorte e a tabela precisam. **Implementado.** |
+| **WMS / WMTS** (imagem) | Só como pano de fundo | Devolve **figura**, não dado: não dá para recortar por área de influência, medir área nem montar tabela |
+| **Vector tiles (MVT)** | Possível, não feito | Tiles vetoriais do GeoServer; exigem um leitor de protobuf que o portal ainda não tem — e o GeoServer generaliza por zoom, o que contraria a regra "não alterar a feição" no zoom de perto |
+| **Hospedar o GeoServer dentro do portal** | **Não** ✗ | GeoServer é servidor Java; o portal é 100% estático no Vercel. Não roda dentro dele |
+
+### O que foi verificado num GeoServer de verdade
+
+Testado contra o GeoServer público do **INDE** (`geoservicos.inde.gov.br`), que está no ar com
+WFS 2.0.0 e milhares de camadas de ICMBio, INEA, Marinha, MMA, DNIT, prefeituras:
+
+- `GetCapabilities` responde ✓ (é GeoServer mesmo);
+- `GetFeature` com `outputFormat=application/json` devolve **GeoJSON padrão**, com
+  `numberMatched` / `numberReturned` / `totalFeatures` — que é exatamente o que a paginação
+  precisa ✓.
+
+### A armadilha que o teste tranca
+
+Em **WFS 2.0**, `EPSG:4326` segue a definição do EPSG, que é **latitude, longitude**. Pedir a
+caixa em lon,lat dizendo `EPSG:4326` devolve o **retângulo trocado**, sem erro nenhum — falha
+silenciosa clássica. O portal usa **CRS84** (`urn:ogc:def:crs:OGC:1.3:CRS84`), que é
+longitude,latitude por definição. Há teste para isso (`verificar_servicos.js`, 30 verificações).
+
+### Como plugar uma camada de GeoServer
+
+Uma entrada no `data/catalogo.json`, como as da CETESB:
+
+```json
+{
+  "id": "minha-camada",
+  "nome": "Minha camada",
+  "meio": "fisico",
+  "servico": {
+    "tipo": "wfs",
+    "url": "https://servidor/geoserver/wfs",
+    "camada": "workspace:nome_da_camada"
+  },
+  "campo_classe": "NOME_DO_CAMPO_DE_CLASSE",
+  "fonte": "Órgão — nome do dado"
+}
+```
+
+O portal consulta por caixa (só o que a tela mostra), pagina de 1000 em 1000 e, **no recorte**,
+busca todas as feições que cruzam as áreas de influência.
+
+### O mesmo risco das camadas ao vivo, e vale repetir
+
+Depende de o servidor estar no ar e de **liberar consulta de outro site (CORS)**. Não consigo
+testar CORS daqui. Se o navegador bloquear, o portal diz com todas as letras e o caminho é
+publicar uma foto da camada na base (como as 6 camadas fixas).
 
 ## Camadas ao vivo do serviço da CETESB/SEMIL (v3.5)
 
