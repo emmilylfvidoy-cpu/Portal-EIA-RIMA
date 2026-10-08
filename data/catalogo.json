@@ -3234,7 +3234,7 @@
     },
     {
       "id": "inventario-florestal",
-      "nome": "Inventário Florestal 2020",
+      "nome": "Inventário Florestal 2020 (São Paulo)",
       "meio": "biotico",
       "servico": {
         "tipo": "arcgis",
@@ -3255,8 +3255,14 @@
         "contorno_cor": "#5d5d5d",
         "contornos": null
       },
-      "obs": "CAMADA GRANDE: 386.014 polígonos. Publicada em tiles (não em GeoJSON), como a Pedologia e as Unidades de Conservação — o coletor recusa publicar GeoJSON acima do limite. Classe: FITOFISION. A fonte é o serviço do SIGAM/SEMIL, que por sua vez veio de shapefile do DataGEO; o serviço declara que os valores de FITOFISION foram tratados por comparação com a legenda, exceto \"Floresta Ombr\", tratado por comparação visual em escala pequena.",
-      "geometria": "exata"
+      "obs": "014 polígonos. Publicada em tiles (não em GeoJSON), como a Pedologia e as Unidades de Conservação — o coletor recusa publicar GeoJSON acima do limite. Classe: FITOFISION. A fonte é o serviço do SIGAM/SEMIL, que por sua vez veio de shapefile do DataGEO; o serviço declara que os valores de FITOFISION foram tratados por comparação com a legenda, exceto \"Floresta Ombr\", tratado por comparação visual em escala pequena. SELEÇÃO pela caixa de São Paulo, como as camadas do IPHAN: a feição entra inteira. O serviço derruba a consulta (HTTP 500) com deslocamento profundo, então a camada é baixada limitada pela caixa — não se aprofunda o deslocamento.",
+      "geometria": "exata",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ]
     },
     {
       "id": "iphan-sitios-arqueologicos",

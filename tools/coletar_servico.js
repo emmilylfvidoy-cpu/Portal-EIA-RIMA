@@ -67,10 +67,8 @@ function urlDaPagina(camada, offset, base) {
   /* POR FAIXA, NÃO POR OFFSET PROFUNDO: medido no Inventário Florestal — com resultOffset
    * chegando a 177.000 o serviço responde HTTP 500. Com a faixa, o deslocamento fica entre 0 e
    * FAIXA e a consulta passa. Faixa esgotada (página incompleta) salta para a próxima. */
-  p.set('where', base === undefined
-    ? '1=1'
-    : 'OBJECTID>' + base + ' AND OBJECTID<=' + (base + FAIXA));
-  p.set('orderByFields', 'OBJECTID ASC');
+  p.set('where', '1=1');
+
   if (caixa) {
     p.set('geometry', caixa.join(','));
     p.set('geometryType', 'esriGeometryEnvelope');
@@ -133,7 +131,7 @@ function arrumarGeometria(g) {
 
 async function baixar(camada) {
   const feicoes = [];
-  let offset = 0, zerado = 0, base = 0;
+  let offset = 0, zerado = 0, base = 0, vazias = 0;
   const S = require(path.join(raiz, 'js', 'servicos.js'));   // declarado aqui: era usado antes
   // teto alto de proposito: o Inventário Florestal tem 386 páginas de 1000. O que impede
   // publicar dado pela metade é a conferência de contagem no fim, não este teto.
@@ -160,12 +158,17 @@ async function baixar(camada) {
     // S já vem declarado no topo de baixar: redeclarar aqui sombreava o de fora e deixava a
     // linha que monta a URL na zona morta da declaração ('Cannot access S before initialization')
     const porFaixa = S.tipoDe(camada) !== 'wfs';
-    if (porFaixa && vieram.length < 1000) {
-      // a faixa acabou (página incompleta): salta para a próxima, sem offset profundo
-      base += FAIXA;
-      offset = 0;
-      continue;
-    }
+    /* PAGINAÇÃO POR DESLOCAMENTO, com a consulta já limitada pela caixa.
+     *
+     * Histórico medido nesta camada: offset crescente funcionou até 177.000 feições e então o
+     * serviço respondeu HTTP 500 (deslocamento profundo). Tentei paginar por faixa de OBJECTID
+     * e o filtro devolveu zero na primeira faixa — a segunda tentativa foi pior que a primeira.
+     * A saída é não chegar perto do deslocamento profundo: baixar a camada LIMITADA pela caixa
+     * de São Paulo (filtro_bbox no catálogo), que mantém o deslocamento raso por construção. Se
+     * um dia for preciso o Brasil inteiro, dividir a caixa em quadrantes — não aprofundar o
+     * deslocamento.
+     */
+    if (porFaixa && vieram.length < 1000 && !vieram.length) break;
     if (!S.temMais(S.tipoDe(camada), d, vieram.length)) break;
     offset += vieram.length;
   }
