@@ -8,6 +8,10 @@ const path = require('path');
 
 /** Arquivos que compõem a camada (o geojson, ou o índice + os tiles). */
 function arquivos(raiz, camada) {
+  // camada-PAI (grupo, como o Inventário por UGRHI): ela não tem dado próprio — quem tem são as filhas
+  if (camada.filhos) {
+    return camada.filhos.reduce((todos, f) => todos.concat(arquivos(raiz, f)), []);
+  }
   if (camada.servico) return [];   // camada ao vivo: os dados vêm do serviço, não do repositório
   if (camada.tiles) {
     const indice = JSON.parse(fs.readFileSync(path.join(raiz, camada.tiles), 'utf8'));
@@ -18,6 +22,11 @@ function arquivos(raiz, camada) {
 
 /** Carrega a camada inteira como FeatureCollection (lê todos os tiles, quando for o caso). */
 function carregar(raiz, camada) {
+  if (camada.filhos) {
+    const feicoes = [];
+    for (const f of camada.filhos) for (const x of carregar(raiz, f).features) feicoes.push(x);
+    return { type: 'FeatureCollection', features: feicoes, grupo: true, filhos: camada.filhos.length };
+  }
   if (camada.servico) {
     // não há o que carregar de arquivo: a camada é consultada no serviço a cada uso
     return { type: 'FeatureCollection', features: [], ao_vivo: true };

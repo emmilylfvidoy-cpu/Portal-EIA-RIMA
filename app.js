@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.8';
+  const VERSAO = 'v3.9';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -284,9 +284,58 @@
       titulo.textContent = meio.nome;
       alvo.appendChild(titulo);
 
-      for (const camada of estado.catalogo.camadas.filter((c) => c.meio === meio.id)) {
+      /* Lista do meio, ACHATADA: camada-pai (grupo, como o Inventário Florestal por UGRHI) entra
+       * como uma linha com SETA, e as filhas entram logo abaixo, recolhidas. A filha é uma camada
+       * comum: liga, desliga, entra no recorte e no relatório como qualquer outra — o grupo é só
+       * organização da lista, para não encher a página com 22 UGRHIs abertas. */
+      const itens = [];
+      for (const c of estado.catalogo.camadas.filter((x) => x.meio === meio.id)) {
+        if (c.grupo) {
+          itens.push({ grupo: c });
+          for (const f of (c.filhos || [])) itens.push({ camada: f, pai: c.id });
+        } else {
+          itens.push({ camada: c });
+        }
+      }
+
+      for (const item of itens) {
+        if (item.grupo) {
+          const gc = item.grupo;
+          estado.gruposAbertos = estado.gruposAbertos || {};
+          const aberto = !!estado.gruposAbertos[gc.id];
+          const cabeca = document.createElement('div');
+          cabeca.className = 'camada-grupo' + (aberto ? ' aberto' : '');
+          const seta = document.createElement('button');
+          seta.type = 'button';
+          seta.className = 'seta-grupo';
+          seta.textContent = aberto ? '▾' : '▸';
+          seta.title = 'Abrir a lista para escolher a unidade';
+          seta.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+          seta.onclick = () => {
+            estado.gruposAbertos[gc.id] = !estado.gruposAbertos[gc.id];
+            renderizarCatalogo();
+          };
+          const tituloGrupo = document.createElement('span');
+          tituloGrupo.className = 'nome-grupo';
+          tituloGrupo.textContent = gc.nome;
+          const quantos = document.createElement('span');
+          quantos.className = 'estado';
+          quantos.textContent = (gc.filhos || []).length + ' unidade(s)';
+          cabeca.appendChild(seta);
+          cabeca.appendChild(tituloGrupo);
+          cabeca.appendChild(quantos);
+          if (gc.fonte) cabeca.title = gc.fonte;
+          alvo.appendChild(cabeca);
+          continue;
+        }
+
+        const camada = item.camada;
         const linha = document.createElement('label');
-        linha.className = 'camada-item';
+        linha.className = 'camada-item' + (item.pai ? ' camada-filha' : '');
+        if (item.pai) {
+          linha.dataset.pai = item.pai;
+          linha.hidden = !(estado.gruposAbertos && estado.gruposAbertos[item.pai]);
+        }
         const caixa = document.createElement('input');
         caixa.type = 'checkbox';
         caixa.checked = estado.camadasLigadas.has(camada.id);

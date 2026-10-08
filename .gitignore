@@ -25,3 +25,5 @@ tools/_*.log
 
 # GeoJSON grande de trabalho (baixado para gerar tiles): nunca vai para o repositorio
 tools/_*.geojsontools/_*.js
+tools/_*.zip
+tools/_ugrhi*/

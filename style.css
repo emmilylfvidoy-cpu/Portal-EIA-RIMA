@@ -357,3 +357,37 @@ dialog::backdrop { background: rgba(16, 32, 40, .55); }
   border: 1px solid #e8a49c;
   white-space: nowrap;
 }
+
+/* ============================================================ camada-pai (grupo)
+   A setinha abre a lista de unidades. O grupo é só organização: cada filha é uma camada comum,
+   com caixa própria, que entra no recorte e no relatório como qualquer outra. Existe porque 22
+   UGRHIs abertas na lista empurrariam todas as outras camadas para fora da tela. */
+.camada-grupo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  margin-top: 6px;
+  border-radius: 4px;
+  background: #eef2f5;
+  border: 1px solid #d3dde4;
+  font-weight: 600;
+  font-size: 13px;
+}
+.camada-grupo.aberto { background: #e3ebf1; }
+.seta-grupo {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 2px 4px;
+  color: #2c3e50;
+}
+.seta-grupo:hover { background: #d3dde4; border-radius: 3px; }
+.camada-grupo .nome-grupo { flex: 1 1 auto; }
+.camada-filha {
+  margin-left: 16px;
+  border-left: 3px solid #d3dde4;
+  padding-left: 8px;
+}

@@ -38,10 +38,17 @@ console.log('\n== Catálogo e arquivos ==');
   // completa — contar camadas foi o que fez este teste falhar sem nada estar errado.
   ok('catálogo tem camadas', catalogo.camadas.length >= 2, catalogo.camadas.length + ' camadas');
   ok('toda camada tem arquivo, classe e meio',
-    catalogo.camadas.every((c) => (c.arquivo || c.tiles || c.servico) && c.meio
-    && (c.campo_classe ? (c.servico || (c.classes && c.classes.length)) : !!c.estilo.cor)
-    && (c.arquivo || c.tiles || c.servico.url)),
-    catalogo.camadas.map((c) => c.id).join(', '));
+    /* Camada-PAI (grupo, como o Inventário por UGRHI) não tem dado próprio: quem tem são as
+     * filhas. O que se exige dela é que traga filhas, e que cada filha seja uma camada válida —
+     * senão o grupo apareceria vazio na lista. */
+    catalogo.camadas.every((c) => c.grupo
+      ? c.meio && (c.filhos || []).length > 0
+        && c.filhos.every((f) => (f.tiles || f.arquivo || f.servico) && f.meio && f.campo_classe
+          && (f.servico || (f.classes && f.classes.length)))
+      : ((c.arquivo || c.tiles || c.servico) && c.meio
+        && (c.campo_classe ? (c.servico || (c.classes && c.classes.length)) : !!c.estilo.cor)
+        && (c.arquivo || c.tiles || c.servico.url))),
+    catalogo.camadas.map((c) => c.id + (c.grupo ? '(' + (c.filhos || []).length + ')' : '')).join(', '));
   const faltando = [];
   for (const c of catalogo.camadas) {
     for (const rel of ajudanteCamadas.arquivos(raiz, c)) {
