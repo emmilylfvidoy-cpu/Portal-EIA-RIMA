@@ -6118,6 +6118,439 @@
           ]
         }
       ]
+    },
+    {
+      "id": "terras-indigenas",
+      "nome": "Terras Indígenas",
+      "meio": "socioeconomico",
+      "campo_classe": "fase_ti",
+      "data_ref": "",
+      "data_coleta": "2026-10-08",
+      "fonte": "Arquivo fornecido pelo interessado (a pasta não traz .shp.xml com a citação oficial) — CONFIRMAR a fonte e a data de referência antes de usar no relatório.",
+      "cor": "#a05a25",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#a05a25",
+        "opacidade": 1,
+        "cores": {
+          "Regularizada": "#6b3f1d",
+          "Homologada": "#a05a25",
+          "Declarada": "#c77f3e",
+          "Delimitada": "#e0a468",
+          "Encaminhada RI": "#efc79b",
+          "Em Estudo": "#f7e3cb"
+        },
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#4a4a4a",
+        "contornos": null
+      },
+      "obs": "Fase de regularização (Regularizada, Homologada, Declarada, Delimitada, Encaminhada RI, Em Estudo) é a classe da legenda, e a cor acompanha a fase: do mais consolidado ao em estudo. GEOMETRIA EXATA: shapefile convertido sem simplificar nada, arredondado em 6 casas (~11 cm).",
+      "geometria": "exata",
+      "classes": [
+        {
+          "classe": "Regularizada",
+          "feicoes": 494
+        },
+        {
+          "classe": "Declarada",
+          "feicoes": 73
+        },
+        {
+          "classe": "Delimitada",
+          "feicoes": 45
+        },
+        {
+          "classe": "Encaminhada RI",
+          "feicoes": 28
+        },
+        {
+          "classe": "Homologada",
+          "feicoes": 17
+        },
+        {
+          "classe": "Em Estudo",
+          "feicoes": 8
+        }
+      ],
+      "campos": [
+        {
+          "nome": "gid",
+          "tipo": "C",
+          "rotulo": "gid"
+        },
+        {
+          "nome": "terrai_cod",
+          "tipo": "C",
+          "rotulo": "terrai_cod"
+        },
+        {
+          "nome": "terrai_nom",
+          "tipo": "C",
+          "rotulo": "terrai_nom"
+        },
+        {
+          "nome": "etnia_nome",
+          "tipo": "C",
+          "rotulo": "etnia_nome"
+        },
+        {
+          "nome": "municipio_",
+          "tipo": "C",
+          "rotulo": "municipio_"
+        },
+        {
+          "nome": "uf_sigla",
+          "tipo": "C",
+          "rotulo": "uf_sigla"
+        },
+        {
+          "nome": "superficie",
+          "tipo": "C",
+          "rotulo": "superficie"
+        },
+        {
+          "nome": "fase_ti",
+          "tipo": "C",
+          "rotulo": "fase_ti"
+        },
+        {
+          "nome": "modalidade",
+          "tipo": "C",
+          "rotulo": "modalidade"
+        },
+        {
+          "nome": "reestudo_t",
+          "tipo": "C",
+          "rotulo": "reestudo_t"
+        },
+        {
+          "nome": "cr",
+          "tipo": "C",
+          "rotulo": "cr"
+        },
+        {
+          "nome": "faixa_fron",
+          "tipo": "C",
+          "rotulo": "faixa_fron"
+        },
+        {
+          "nome": "undadm_cod",
+          "tipo": "C",
+          "rotulo": "undadm_cod"
+        },
+        {
+          "nome": "undadm_nom",
+          "tipo": "C",
+          "rotulo": "undadm_nom"
+        },
+        {
+          "nome": "undadm_sig",
+          "tipo": "C",
+          "rotulo": "undadm_sig"
+        },
+        {
+          "nome": "dominio_un",
+          "tipo": "C",
+          "rotulo": "dominio_un"
+        },
+        {
+          "nome": "data_atual",
+          "tipo": "C",
+          "rotulo": "data_atual"
+        },
+        {
+          "nome": "epsg",
+          "tipo": "C",
+          "rotulo": "epsg"
+        }
+      ],
+      "tiles": "data/terras-indigenas/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/terras-indigenas/visao/indice.json",
+          "zoom_max": 9
+        }
+      ]
+    },
+    {
+      "id": "terras-indigenas-estudo",
+      "nome": "Terras Indígenas em estudo",
+      "meio": "socioeconomico",
+      "campo_classe": "fase_ti",
+      "data_ref": "",
+      "data_coleta": "2026-10-08",
+      "fonte": "Arquivo fornecido pelo interessado (a pasta não traz .shp.xml com a citação oficial) — CONFIRMAR a fonte e a data de referência antes de usar no relatório.",
+      "cor": "#f7e3cb",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#f7e3cb",
+        "opacidade": 1,
+        "cores": {
+          "Em Estudo": "#c2410c"
+        },
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#4a4a4a",
+        "contornos": null
+      },
+      "obs": "Camada de PONTOS (125), todos com fase \"Em Estudo\" — por isso cor única, e não legenda por fase. GEOMETRIA EXATA do arquivo, sem simplificar.",
+      "geometria": "exata",
+      "classes": [
+        {
+          "classe": "Em Estudo",
+          "feicoes": 125
+        }
+      ],
+      "campos": [
+        {
+          "nome": "terrai_nom",
+          "tipo": "C",
+          "rotulo": "terrai_nom"
+        },
+        {
+          "nome": "etnia_nome",
+          "tipo": "C",
+          "rotulo": "etnia_nome"
+        },
+        {
+          "nome": "municipio_",
+          "tipo": "C",
+          "rotulo": "municipio_"
+        },
+        {
+          "nome": "uf_sigla",
+          "tipo": "C",
+          "rotulo": "uf_sigla"
+        },
+        {
+          "nome": "superficie",
+          "tipo": "C",
+          "rotulo": "superficie"
+        },
+        {
+          "nome": "fase_ti",
+          "tipo": "C",
+          "rotulo": "fase_ti"
+        },
+        {
+          "nome": "modalidade",
+          "tipo": "C",
+          "rotulo": "modalidade"
+        },
+        {
+          "nome": "reestudo_t",
+          "tipo": "C",
+          "rotulo": "reestudo_t"
+        },
+        {
+          "nome": "superfici0",
+          "tipo": "C",
+          "rotulo": "superfici0"
+        },
+        {
+          "nome": "terrai_cod",
+          "tipo": "C",
+          "rotulo": "terrai_cod"
+        },
+        {
+          "nome": "gid",
+          "tipo": "C",
+          "rotulo": "gid"
+        },
+        {
+          "nome": "faixa_fron",
+          "tipo": "C",
+          "rotulo": "faixa_fron"
+        },
+        {
+          "nome": "undadm_cod",
+          "tipo": "C",
+          "rotulo": "undadm_cod"
+        },
+        {
+          "nome": "undadm_nom",
+          "tipo": "C",
+          "rotulo": "undadm_nom"
+        },
+        {
+          "nome": "undadm_sig",
+          "tipo": "C",
+          "rotulo": "undadm_sig"
+        }
+      ],
+      "arquivo": "data/terras-indigenas-estudo.geojson"
+    },
+    {
+      "id": "quilombolas",
+      "nome": "Áreas de Quilombolas",
+      "meio": "socioeconomico",
+      "campo_classe": "esfera",
+      "data_ref": "",
+      "data_coleta": "2026-10-08",
+      "fonte": "Arquivo fornecido pelo interessado (a pasta não traz .shp.xml com a citação oficial) — CONFIRMAR a fonte e a data de referência antes de usar no relatório.",
+      "cor": "#7c3aed",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#7c3aed",
+        "opacidade": 1,
+        "cores": {
+          "FEDERAL": "#5b21b6",
+          "FEDEERAL": "#5b21b6",
+          "Federal": "#5b21b6",
+          "ESTADUAL": "#a78bfa",
+          "Estadual": "#a78bfa",
+          "MUNICIPAL": "#ddd6fe",
+          "Municipal": "#ddd6fe"
+        },
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#4a4a4a",
+        "contornos": null
+      },
+      "obs": "Esfera administrativa (Federal, Estadual, Municipal) é a classe. A origem grafa a mesma esfera de mais de um jeito (\"FEDEERAL\", \"Federal\") e a cor acompanha o SIGNIFICADO — o dado não foi alterado. GEOMETRIA EXATA, arredondada em 6 casas (~11 cm).",
+      "geometria": "exata",
+      "classes": [
+        {
+          "classe": "FEDERAL",
+          "feicoes": 345
+        },
+        {
+          "classe": "ESTADUAL",
+          "feicoes": 76
+        },
+        {
+          "classe": "Federal",
+          "feicoes": 11
+        },
+        {
+          "classe": "FEDEERAL",
+          "feicoes": 1
+        }
+      ],
+      "campos": [
+        {
+          "nome": "cd_quilomb",
+          "tipo": "C",
+          "rotulo": "cd_quilomb"
+        },
+        {
+          "nome": "cd_sr",
+          "tipo": "C",
+          "rotulo": "cd_sr"
+        },
+        {
+          "nome": "nr_process",
+          "tipo": "C",
+          "rotulo": "nr_process"
+        },
+        {
+          "nome": "nm_comunid",
+          "tipo": "C",
+          "rotulo": "nm_comunid"
+        },
+        {
+          "nome": "nm_municip",
+          "tipo": "C",
+          "rotulo": "nm_municip"
+        },
+        {
+          "nome": "cd_uf",
+          "tipo": "C",
+          "rotulo": "cd_uf"
+        },
+        {
+          "nome": "dt_publica",
+          "tipo": "C",
+          "rotulo": "dt_publica"
+        },
+        {
+          "nome": "dt_public1",
+          "tipo": "C",
+          "rotulo": "dt_public1"
+        },
+        {
+          "nome": "nr_familia",
+          "tipo": "C",
+          "rotulo": "nr_familia"
+        },
+        {
+          "nome": "dt_titulac",
+          "tipo": "C",
+          "rotulo": "dt_titulac"
+        },
+        {
+          "nome": "nr_area_ha",
+          "tipo": "C",
+          "rotulo": "nr_area_ha"
+        },
+        {
+          "nome": "nr_perimet",
+          "tipo": "C",
+          "rotulo": "nr_perimet"
+        },
+        {
+          "nome": "cd_sipra",
+          "tipo": "C",
+          "rotulo": "cd_sipra"
+        },
+        {
+          "nome": "ob_descric",
+          "tipo": "C",
+          "rotulo": "ob_descric"
+        },
+        {
+          "nome": "st_titulad",
+          "tipo": "C",
+          "rotulo": "st_titulad"
+        },
+        {
+          "nome": "dt_decreto",
+          "tipo": "C",
+          "rotulo": "dt_decreto"
+        },
+        {
+          "nome": "tp_levanta",
+          "tipo": "C",
+          "rotulo": "tp_levanta"
+        },
+        {
+          "nome": "nr_escalao",
+          "tipo": "C",
+          "rotulo": "nr_escalao"
+        },
+        {
+          "nome": "area_calc_",
+          "tipo": "C",
+          "rotulo": "area_calc_"
+        },
+        {
+          "nome": "perimetro_",
+          "tipo": "C",
+          "rotulo": "perimetro_"
+        },
+        {
+          "nome": "esfera",
+          "tipo": "C",
+          "rotulo": "esfera"
+        },
+        {
+          "nome": "fase",
+          "tipo": "C",
+          "rotulo": "fase"
+        },
+        {
+          "nome": "responsave",
+          "tipo": "C",
+          "rotulo": "responsave"
+        }
+      ],
+      "tiles": "data/quilombolas/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/quilombolas/visao/indice.json",
+          "zoom_max": 9
+        }
+      ]
     }
   ]
 }

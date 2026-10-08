@@ -6,13 +6,13 @@
  "nivel": "exato",
  "geometria": "exata",
  "escala": null,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.38 MB crus -> 0.82 MB na rede (41% menor).",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.38 MB crus -> 0.82 MB na rede (41% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.82 MB crus -> 0.82 MB na rede (0% menor).",
  "total": {
   "tiles": 6,
   "feicoes": 1215,
   "pontos": 428368,
   "bytes": 857675,
-  "bytes_bruto": 1451554,
+  "bytes_bruto": 857675,
   "comprimido": true
  },
  "campos": [
@@ -36,7 +36,7 @@
    "feicoes": 230,
    "pontos": 78140,
    "bytes": 163047,
-   "bytes_bruto": 269508,
+   "bytes_bruto": 163047,
    "comprimido": true
   },
   {
@@ -50,7 +50,7 @@
    "feicoes": 36,
    "pontos": 86885,
    "bytes": 169872,
-   "bytes_bruto": 267495,
+   "bytes_bruto": 169872,
    "comprimido": true
   },
   {
@@ -64,7 +64,7 @@
    "feicoes": 297,
    "pontos": 73876,
    "bytes": 140804,
-   "bytes_bruto": 264305,
+   "bytes_bruto": 140804,
    "comprimido": true
   },
   {
@@ -78,7 +78,7 @@
    "feicoes": 274,
    "pontos": 72593,
    "bytes": 149996,
-   "bytes_bruto": 257471,
+   "bytes_bruto": 149996,
    "comprimido": true
   },
   {
@@ -92,7 +92,7 @@
    "feicoes": 243,
    "pontos": 70193,
    "bytes": 140611,
-   "bytes_bruto": 244227,
+   "bytes_bruto": 140611,
    "comprimido": true
   },
   {
@@ -106,7 +106,7 @@
    "feicoes": 135,
    "pontos": 46681,
    "bytes": 93345,
-   "bytes_bruto": 148548,
+   "bytes_bruto": 93345,
    "comprimido": true
   }
  ]

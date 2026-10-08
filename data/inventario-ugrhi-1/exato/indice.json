@@ -6,13 +6,13 @@
  "nivel": "exato",
  "geometria": "exata",
  "escala": null,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.33 MB crus -> 0.83 MB na rede (37% menor).",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.33 MB crus -> 0.83 MB na rede (37% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.83 MB crus -> 0.83 MB na rede (0% menor).",
  "total": {
   "tiles": 7,
   "feicoes": 1084,
   "pontos": 417828,
   "bytes": 874964,
-  "bytes_bruto": 1392630,
+  "bytes_bruto": 874964,
   "comprimido": true
  },
  "campos": [
@@ -36,7 +36,7 @@
    "feicoes": 131,
    "pontos": 85974,
    "bytes": 189524,
-   "bytes_bruto": 274034,
+   "bytes_bruto": 189524,
    "comprimido": true
   },
   {
@@ -50,7 +50,7 @@
    "feicoes": 173,
    "pontos": 78797,
    "bytes": 158958,
-   "bytes_bruto": 259665,
+   "bytes_bruto": 158958,
    "comprimido": true
   },
   {
@@ -64,7 +64,7 @@
    "feicoes": 379,
    "pontos": 66658,
    "bytes": 148807,
-   "bytes_bruto": 247950,
+   "bytes_bruto": 148807,
    "comprimido": true
   },
   {
@@ -78,7 +78,7 @@
    "feicoes": 136,
    "pontos": 72745,
    "bytes": 140289,
-   "bytes_bruto": 238102,
+   "bytes_bruto": 140289,
    "comprimido": true
   },
   {
@@ -92,7 +92,7 @@
    "feicoes": 123,
    "pontos": 70749,
    "bytes": 144308,
-   "bytes_bruto": 228787,
+   "bytes_bruto": 144308,
    "comprimido": true
   },
   {
@@ -106,7 +106,7 @@
    "feicoes": 130,
    "pontos": 42279,
    "bytes": 90861,
-   "bytes_bruto": 140833,
+   "bytes_bruto": 90861,
    "comprimido": true
   },
   {
@@ -120,7 +120,7 @@
    "feicoes": 12,
    "pontos": 626,
    "bytes": 2217,
-   "bytes_bruto": 3259,
+   "bytes_bruto": 2217,
    "comprimido": true
   }
  ]

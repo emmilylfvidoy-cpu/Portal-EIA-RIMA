@@ -1,0 +1,54 @@
+{
+ "camada": "terras-indigenas",
+ "nome": "terras-indigenas",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.27 MB crus -> 0.14 MB na rede (48% menor).",
+ "total": {
+  "tiles": 1,
+  "feicoes": 650,
+  "pontos": 21967,
+  "bytes": 148775,
+  "bytes_bruto": 286159,
+  "comprimido": true
+ },
+ "campos": [
+  "gid",
+  "terrai_cod",
+  "terrai_nom",
+  "etnia_nome",
+  "municipio_",
+  "uf_sigla",
+  "superficie",
+  "fase_ti",
+  "modalidade",
+  "reestudo_t",
+  "cr",
+  "faixa_fron",
+  "undadm_cod",
+  "undadm_nom",
+  "undadm_sig",
+  "dominio_un",
+  "data_atual",
+  "epsg"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/terras-indigenas/visao/t000.bin.gz",
+   "bbox": [
+    -73.72519,
+    -31.20521,
+    -34.92897,
+    5.26862
+   ],
+   "feicoes": 650,
+   "pontos": 21967,
+   "bytes": 148775,
+   "bytes_bruto": 286159,
+   "comprimido": true
+  }
+ ]
+}

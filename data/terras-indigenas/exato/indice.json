@@ -1,0 +1,376 @@
+{
+ "camada": "terras-indigenas",
+ "nome": "terras-indigenas",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 5.76 MB crus -> 4.52 MB na rede (21% menor).",
+ "total": {
+  "tiles": 24,
+  "feicoes": 665,
+  "pontos": 1820370,
+  "bytes": 4740829,
+  "bytes_bruto": 6035341,
+  "comprimido": true
+ },
+ "campos": [
+  "gid",
+  "terrai_cod",
+  "terrai_nom",
+  "etnia_nome",
+  "municipio_",
+  "uf_sigla",
+  "superficie",
+  "fase_ti",
+  "modalidade",
+  "reestudo_t",
+  "cr",
+  "faixa_fron",
+  "undadm_cod",
+  "undadm_nom",
+  "undadm_sig",
+  "dominio_un",
+  "data_atual",
+  "epsg"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/terras-indigenas/exato/t002.bin.gz",
+   "bbox": [
+    -73.212469,
+    -10.000025,
+    -51.200836,
+    5.26962
+   ],
+   "feicoes": 33,
+   "pontos": 87269,
+   "bytes": 269436,
+   "bytes_bruto": 323951,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t007.bin.gz",
+   "bbox": [
+    -69.152814,
+    -4.077112,
+    -65.446431,
+    0.116287
+   ],
+   "feicoes": 7,
+   "pontos": 90520,
+   "bytes": 251734,
+   "bytes_bruto": 314704,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t003.bin.gz",
+   "bbox": [
+    -73.725189,
+    -11.045193,
+    -69.318308,
+    -4.187164
+   ],
+   "feicoes": 28,
+   "pontos": 88595,
+   "bytes": 262352,
+   "bytes_bruto": 312887,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t014.bin.gz",
+   "bbox": [
+    -61.61067,
+    -15.11141,
+    -53.626822,
+    0.410199
+   ],
+   "feicoes": 40,
+   "pontos": 87276,
+   "bytes": 242582,
+   "bytes_bruto": 308018,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t008.bin.gz",
+   "bbox": [
+    -67.497278,
+    -7.857767,
+    -61.315981,
+    0.000201
+   ],
+   "feicoes": 39,
+   "pontos": 85971,
+   "bytes": 235574,
+   "bytes_bruto": 307739,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t019.bin.gz",
+   "bbox": [
+    -53.363539,
+    -13.958408,
+    -47.136447,
+    -3.724423
+   ],
+   "feicoes": 25,
+   "pontos": 85202,
+   "bytes": 250275,
+   "bytes_bruto": 306125,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t001.bin.gz",
+   "bbox": [
+    -66.476944,
+    -0.323219,
+    -59.271841,
+    4.539636
+   ],
+   "feicoes": 23,
+   "pontos": 87907,
+   "bytes": 255373,
+   "bytes_bruto": 305865,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t005.bin.gz",
+   "bbox": [
+    -69.73691,
+    -10.848868,
+    -61.461702,
+    -3.851777
+   ],
+   "feicoes": 14,
+   "pontos": 86910,
+   "bytes": 243299,
+   "bytes_bruto": 303502,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t022.bin.gz",
+   "bbox": [
+    -53.502544,
+    -23.756597,
+    -38.571134,
+    -1.764835
+   ],
+   "feicoes": 82,
+   "pontos": 81407,
+   "bytes": 246916,
+   "bytes_bruto": 299880,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t009.bin.gz",
+   "bbox": [
+    -65.855594,
+    -31.205346,
+    -51.60501,
+    -0.427496
+   ],
+   "feicoes": 69,
+   "pontos": 83801,
+   "bytes": 243726,
+   "bytes_bruto": 299535,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t004.bin.gz",
+   "bbox": [
+    -69.907914,
+    -12.880973,
+    -61.54598,
+    -0.951966
+   ],
+   "feicoes": 32,
+   "pontos": 78976,
+   "bytes": 245257,
+   "bytes_bruto": 291560,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t018.bin.gz",
+   "bbox": [
+    -56.174682,
+    -15.473923,
+    -49.883494,
+    0.3959
+   ],
+   "feicoes": 24,
+   "pontos": 82878,
+   "bytes": 237595,
+   "bytes_bruto": 290943,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t011.bin.gz",
+   "bbox": [
+    -61.471162,
+    -25.547858,
+    -46.326667,
+    -10.720086
+   ],
+   "feicoes": 52,
+   "pontos": 83788,
+   "bytes": 226771,
+   "bytes_bruto": 282352,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t017.bin.gz",
+   "bbox": [
+    -58.003619,
+    -8.183391,
+    -53.259386,
+    0.816129
+   ],
+   "feicoes": 10,
+   "pontos": 88256,
+   "bytes": 217086,
+   "bytes_bruto": 281688,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t013.bin.gz",
+   "bbox": [
+    -61.431208,
+    -12.983017,
+    -57.384288,
+    -8.290393
+   ],
+   "feicoes": 14,
+   "pontos": 88291,
+   "bytes": 137849,
+   "bytes_bruto": 246139,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t021.bin.gz",
+   "bbox": [
+    -51.174997,
+    -6.72274,
+    -50.468265,
+    -5.953609
+   ],
+   "feicoes": 1,
+   "pontos": 110270,
+   "bytes": 161486,
+   "bytes_bruto": 229072,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t015.bin.gz",
+   "bbox": [
+    -59.989001,
+    -8.670146,
+    -56.666673,
+    0.938838
+   ],
+   "feicoes": 16,
+   "pontos": 66089,
+   "bytes": 183204,
+   "bytes_bruto": 221131,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t010.bin.gz",
+   "bbox": [
+    -53.456507,
+    -30.364215,
+    -48.429691,
+    -23.273901
+   ],
+   "feicoes": 70,
+   "pontos": 72237,
+   "bytes": 148072,
+   "bytes_bruto": 220841,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t000.bin.gz",
+   "bbox": [
+    -70.065024,
+    -1.085724,
+    -62.457586,
+    2.235334
+   ],
+   "feicoes": 4,
+   "pontos": 56628,
+   "bytes": 175692,
+   "bytes_bruto": 209541,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t016.bin.gz",
+   "bbox": [
+    -56.833681,
+    -5.242279,
+    -56.337504,
+    -4.684575
+   ],
+   "feicoes": 1,
+   "pontos": 91866,
+   "bytes": 116424,
+   "bytes_bruto": 188242,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t012.bin.gz",
+   "bbox": [
+    -60.016641,
+    -14.000445,
+    -57.848987,
+    -11.686644
+   ],
+   "feicoes": 5,
+   "pontos": 51210,
+   "bytes": 139750,
+   "bytes_bruto": 173093,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t006.bin.gz",
+   "bbox": [
+    -69.104116,
+    -7.715372,
+    -64.899705,
+    -1.885678
+   ],
+   "feicoes": 20,
+   "pontos": 46378,
+   "bytes": 139195,
+   "bytes_bruto": 169878,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t023.bin.gz",
+   "bbox": [
+    -46.028441,
+    -10.190876,
+    -34.928956,
+    -2.931008
+   ],
+   "feicoes": 55,
+   "pontos": 32911,
+   "bytes": 97885,
+   "bytes_bruto": 131372,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/terras-indigenas/exato/t020.bin.gz",
+   "bbox": [
+    -52.232157,
+    -4.36724,
+    -51.739147,
+    -3.86576
+   ],
+   "feicoes": 1,
+   "pontos": 5734,
+   "bytes": 13296,
+   "bytes_bruto": 17283,
+   "comprimido": true
+  }
+ ]
+}

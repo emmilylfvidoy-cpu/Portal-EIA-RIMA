@@ -6,13 +6,13 @@
  "nivel": "visao",
  "geometria": "generalizada para o desenho de longe",
  "escala": 4000000,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.31 MB crus -> 0.08 MB na rede (73% menor).",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.31 MB crus -> 0.08 MB na rede (73% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.08 MB crus -> 0.08 MB na rede (0% menor).",
  "total": {
   "tiles": 1,
   "feicoes": 2404,
   "pontos": 11926,
   "bytes": 88786,
-  "bytes_bruto": 325159,
+  "bytes_bruto": 88786,
   "comprimido": true
  },
  "campos": [
@@ -36,7 +36,7 @@
    "feicoes": 2404,
    "pontos": 11926,
    "bytes": 88786,
-   "bytes_bruto": 325159,
+   "bytes_bruto": 88786,
    "comprimido": true
   }
  ]

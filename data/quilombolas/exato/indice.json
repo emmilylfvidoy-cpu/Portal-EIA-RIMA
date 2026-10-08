@@ -1,0 +1,87 @@
+{
+ "camada": "quilombolas",
+ "nome": "quilombolas",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.61 MB crus -> 0.47 MB na rede (23% menor).",
+ "total": {
+  "tiles": 3,
+  "feicoes": 445,
+  "pontos": 170470,
+  "bytes": 492453,
+  "bytes_bruto": 636766,
+  "comprimido": true
+ },
+ "campos": [
+  "cd_quilomb",
+  "cd_sr",
+  "nr_process",
+  "nm_comunid",
+  "nm_municip",
+  "cd_uf",
+  "dt_publica",
+  "dt_public1",
+  "nr_familia",
+  "dt_titulac",
+  "nr_area_ha",
+  "nr_perimet",
+  "cd_sipra",
+  "ob_descric",
+  "st_titulad",
+  "dt_decreto",
+  "tp_levanta",
+  "nr_escalao",
+  "area_calc_",
+  "perimetro_",
+  "esfera",
+  "fase",
+  "responsave"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/quilombolas/exato/t000.bin.gz",
+   "bbox": [
+    -64.497018,
+    -31.600269,
+    -46.462396,
+    2.955133
+   ],
+   "feicoes": 126,
+   "pontos": 74093,
+   "bytes": 206503,
+   "bytes_bruto": 260983,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/quilombolas/exato/t001.bin.gz",
+   "bbox": [
+    -51.991472,
+    -23.593323,
+    -38.37608,
+    -0.746439
+   ],
+   "feicoes": 189,
+   "pontos": 68097,
+   "bytes": 193278,
+   "bytes_bruto": 258782,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/quilombolas/exato/t002.bin.gz",
+   "bbox": [
+    -45.671532,
+    -11.996971,
+    -34.809421,
+    -1.450164
+   ],
+   "feicoes": 130,
+   "pontos": 28280,
+   "bytes": 92672,
+   "bytes_bruto": 117001,
+   "comprimido": true
+  }
+ ]
+}

@@ -6,13 +6,13 @@
  "nivel": "exato",
  "geometria": "exata",
  "escala": null,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 17.68 MB crus -> 11.03 MB na rede (38% menor).",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 17.68 MB crus -> 11.03 MB na rede (38% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 11.03 MB crus -> 11.03 MB na rede (0% menor).",
  "total": {
   "tiles": 82,
   "feicoes": 26895,
   "pontos": 5024228,
   "bytes": 11569853,
-  "bytes_bruto": 18534893,
+  "bytes_bruto": 11569853,
   "comprimido": true
  },
  "campos": [
@@ -36,7 +36,7 @@
    "feicoes": 28,
    "pontos": 121160,
    "bytes": 211444,
-   "bytes_bruto": 381302,
+   "bytes_bruto": 211444,
    "comprimido": true
   },
   {
@@ -50,7 +50,7 @@
    "feicoes": 25,
    "pontos": 90557,
    "bytes": 192583,
-   "bytes_bruto": 279832,
+   "bytes_bruto": 192583,
    "comprimido": true
   },
   {
@@ -64,7 +64,7 @@
    "feicoes": 328,
    "pontos": 73111,
    "bytes": 161346,
-   "bytes_bruto": 266687,
+   "bytes_bruto": 161346,
    "comprimido": true
   },
   {
@@ -78,7 +78,7 @@
    "feicoes": 360,
    "pontos": 73976,
    "bytes": 185258,
-   "bytes_bruto": 265770,
+   "bytes_bruto": 185258,
    "comprimido": true
   },
   {
@@ -92,7 +92,7 @@
    "feicoes": 250,
    "pontos": 74561,
    "bytes": 148148,
-   "bytes_bruto": 265682,
+   "bytes_bruto": 148148,
    "comprimido": true
   },
   {
@@ -106,7 +106,7 @@
    "feicoes": 335,
    "pontos": 73233,
    "bytes": 175144,
-   "bytes_bruto": 264886,
+   "bytes_bruto": 175144,
    "comprimido": true
   },
   {
@@ -120,7 +120,7 @@
    "feicoes": 381,
    "pontos": 69796,
    "bytes": 170431,
-   "bytes_bruto": 262375,
+   "bytes_bruto": 170431,
    "comprimido": true
   },
   {
@@ -134,7 +134,7 @@
    "feicoes": 216,
    "pontos": 73704,
    "bytes": 152775,
-   "bytes_bruto": 260926,
+   "bytes_bruto": 152775,
    "comprimido": true
   },
   {
@@ -148,7 +148,7 @@
    "feicoes": 205,
    "pontos": 76929,
    "bytes": 181368,
-   "bytes_bruto": 258562,
+   "bytes_bruto": 181368,
    "comprimido": true
   },
   {
@@ -162,7 +162,7 @@
    "feicoes": 397,
    "pontos": 70343,
    "bytes": 170453,
-   "bytes_bruto": 257548,
+   "bytes_bruto": 170453,
    "comprimido": true
   },
   {
@@ -176,7 +176,7 @@
    "feicoes": 486,
    "pontos": 64052,
    "bytes": 157632,
-   "bytes_bruto": 255660,
+   "bytes_bruto": 157632,
    "comprimido": true
   },
   {
@@ -190,7 +190,7 @@
    "feicoes": 447,
    "pontos": 67126,
    "bytes": 168827,
-   "bytes_bruto": 253574,
+   "bytes_bruto": 168827,
    "comprimido": true
   },
   {
@@ -204,7 +204,7 @@
    "feicoes": 295,
    "pontos": 70544,
    "bytes": 151688,
-   "bytes_bruto": 253269,
+   "bytes_bruto": 151688,
    "comprimido": true
   },
   {
@@ -218,7 +218,7 @@
    "feicoes": 472,
    "pontos": 62843,
    "bytes": 151602,
-   "bytes_bruto": 252977,
+   "bytes_bruto": 151602,
    "comprimido": true
   },
   {
@@ -232,7 +232,7 @@
    "feicoes": 339,
    "pontos": 72295,
    "bytes": 171304,
-   "bytes_bruto": 251761,
+   "bytes_bruto": 171304,
    "comprimido": true
   },
   {
@@ -246,7 +246,7 @@
    "feicoes": 388,
    "pontos": 66084,
    "bytes": 144455,
-   "bytes_bruto": 251753,
+   "bytes_bruto": 144455,
    "comprimido": true
   },
   {
@@ -260,7 +260,7 @@
    "feicoes": 377,
    "pontos": 65752,
    "bytes": 128088,
-   "bytes_bruto": 250154,
+   "bytes_bruto": 128088,
    "comprimido": true
   },
   {
@@ -274,7 +274,7 @@
    "feicoes": 498,
    "pontos": 62200,
    "bytes": 153881,
-   "bytes_bruto": 249267,
+   "bytes_bruto": 153881,
    "comprimido": true
   },
   {
@@ -288,7 +288,7 @@
    "feicoes": 203,
    "pontos": 74189,
    "bytes": 157440,
-   "bytes_bruto": 248848,
+   "bytes_bruto": 157440,
    "comprimido": true
   },
   {
@@ -302,7 +302,7 @@
    "feicoes": 639,
    "pontos": 56998,
    "bytes": 151859,
-   "bytes_bruto": 248184,
+   "bytes_bruto": 151859,
    "comprimido": true
   },
   {
@@ -316,7 +316,7 @@
    "feicoes": 499,
    "pontos": 62186,
    "bytes": 147076,
-   "bytes_bruto": 247810,
+   "bytes_bruto": 147076,
    "comprimido": true
   },
   {
@@ -330,7 +330,7 @@
    "feicoes": 282,
    "pontos": 73236,
    "bytes": 170278,
-   "bytes_bruto": 246467,
+   "bytes_bruto": 170278,
    "comprimido": true
   },
   {
@@ -344,7 +344,7 @@
    "feicoes": 537,
    "pontos": 58857,
    "bytes": 146930,
-   "bytes_bruto": 244659,
+   "bytes_bruto": 146930,
    "comprimido": true
   },
   {
@@ -358,7 +358,7 @@
    "feicoes": 206,
    "pontos": 71926,
    "bytes": 154250,
-   "bytes_bruto": 243556,
+   "bytes_bruto": 154250,
    "comprimido": true
   },
   {
@@ -372,7 +372,7 @@
    "feicoes": 399,
    "pontos": 62453,
    "bytes": 144981,
-   "bytes_bruto": 242366,
+   "bytes_bruto": 144981,
    "comprimido": true
   },
   {
@@ -386,7 +386,7 @@
    "feicoes": 277,
    "pontos": 67232,
    "bytes": 135150,
-   "bytes_bruto": 240298,
+   "bytes_bruto": 135150,
    "comprimido": true
   },
   {
@@ -400,7 +400,7 @@
    "feicoes": 535,
    "pontos": 56238,
    "bytes": 130813,
-   "bytes_bruto": 239025,
+   "bytes_bruto": 130813,
    "comprimido": true
   },
   {
@@ -414,7 +414,7 @@
    "feicoes": 341,
    "pontos": 64182,
    "bytes": 150672,
-   "bytes_bruto": 238793,
+   "bytes_bruto": 150672,
    "comprimido": true
   },
   {
@@ -428,7 +428,7 @@
    "feicoes": 341,
    "pontos": 65558,
    "bytes": 153286,
-   "bytes_bruto": 237884,
+   "bytes_bruto": 153286,
    "comprimido": true
   },
   {
@@ -442,7 +442,7 @@
    "feicoes": 492,
    "pontos": 57688,
    "bytes": 139639,
-   "bytes_bruto": 237227,
+   "bytes_bruto": 139639,
    "comprimido": true
   },
   {
@@ -456,7 +456,7 @@
    "feicoes": 292,
    "pontos": 67556,
    "bytes": 153725,
-   "bytes_bruto": 235952,
+   "bytes_bruto": 153725,
    "comprimido": true
   },
   {
@@ -470,7 +470,7 @@
    "feicoes": 366,
    "pontos": 63386,
    "bytes": 142178,
-   "bytes_bruto": 234891,
+   "bytes_bruto": 142178,
    "comprimido": true
   },
   {
@@ -484,7 +484,7 @@
    "feicoes": 359,
    "pontos": 61526,
    "bytes": 139118,
-   "bytes_bruto": 233752,
+   "bytes_bruto": 139118,
    "comprimido": true
   },
   {
@@ -498,7 +498,7 @@
    "feicoes": 303,
    "pontos": 63758,
    "bytes": 141745,
-   "bytes_bruto": 233748,
+   "bytes_bruto": 141745,
    "comprimido": true
   },
   {
@@ -512,7 +512,7 @@
    "feicoes": 291,
    "pontos": 63338,
    "bytes": 140933,
-   "bytes_bruto": 232349,
+   "bytes_bruto": 140933,
    "comprimido": true
   },
   {
@@ -526,7 +526,7 @@
    "feicoes": 561,
    "pontos": 53944,
    "bytes": 142356,
-   "bytes_bruto": 231682,
+   "bytes_bruto": 142356,
    "comprimido": true
   },
   {
@@ -540,7 +540,7 @@
    "feicoes": 428,
    "pontos": 57675,
    "bytes": 138208,
-   "bytes_bruto": 230543,
+   "bytes_bruto": 138208,
    "comprimido": true
   },
   {
@@ -554,7 +554,7 @@
    "feicoes": 742,
    "pontos": 46496,
    "bytes": 129228,
-   "bytes_bruto": 230488,
+   "bytes_bruto": 129228,
    "comprimido": true
   },
   {
@@ -568,7 +568,7 @@
    "feicoes": 407,
    "pontos": 60839,
    "bytes": 144506,
-   "bytes_bruto": 230347,
+   "bytes_bruto": 144506,
    "comprimido": true
   },
   {
@@ -582,7 +582,7 @@
    "feicoes": 330,
    "pontos": 63419,
    "bytes": 151661,
-   "bytes_bruto": 230175,
+   "bytes_bruto": 151661,
    "comprimido": true
   },
   {
@@ -596,7 +596,7 @@
    "feicoes": 474,
    "pontos": 53602,
    "bytes": 131323,
-   "bytes_bruto": 228907,
+   "bytes_bruto": 131323,
    "comprimido": true
   },
   {
@@ -610,7 +610,7 @@
    "feicoes": 282,
    "pontos": 66610,
    "bytes": 160895,
-   "bytes_bruto": 228775,
+   "bytes_bruto": 160895,
    "comprimido": true
   },
   {
@@ -624,7 +624,7 @@
    "feicoes": 304,
    "pontos": 62910,
    "bytes": 132908,
-   "bytes_bruto": 228358,
+   "bytes_bruto": 132908,
    "comprimido": true
   },
   {
@@ -638,7 +638,7 @@
    "feicoes": 406,
    "pontos": 57006,
    "bytes": 134914,
-   "bytes_bruto": 228052,
+   "bytes_bruto": 134914,
    "comprimido": true
   },
   {
@@ -652,7 +652,7 @@
    "feicoes": 264,
    "pontos": 62012,
    "bytes": 130203,
-   "bytes_bruto": 227311,
+   "bytes_bruto": 130203,
    "comprimido": true
   },
   {
@@ -666,7 +666,7 @@
    "feicoes": 164,
    "pontos": 69415,
    "bytes": 159253,
-   "bytes_bruto": 227214,
+   "bytes_bruto": 159253,
    "comprimido": true
   },
   {
@@ -680,7 +680,7 @@
    "feicoes": 399,
    "pontos": 56304,
    "bytes": 132728,
-   "bytes_bruto": 225194,
+   "bytes_bruto": 132728,
    "comprimido": true
   },
   {
@@ -694,7 +694,7 @@
    "feicoes": 425,
    "pontos": 55933,
    "bytes": 134962,
-   "bytes_bruto": 224934,
+   "bytes_bruto": 134962,
    "comprimido": true
   },
   {
@@ -708,7 +708,7 @@
    "feicoes": 232,
    "pontos": 64376,
    "bytes": 137857,
-   "bytes_bruto": 223789,
+   "bytes_bruto": 137857,
    "comprimido": true
   },
   {
@@ -722,7 +722,7 @@
    "feicoes": 331,
    "pontos": 58782,
    "bytes": 137025,
-   "bytes_bruto": 223217,
+   "bytes_bruto": 137025,
    "comprimido": true
   },
   {
@@ -736,7 +736,7 @@
    "feicoes": 179,
    "pontos": 67945,
    "bytes": 166470,
-   "bytes_bruto": 221296,
+   "bytes_bruto": 166470,
    "comprimido": true
   },
   {
@@ -750,7 +750,7 @@
    "feicoes": 388,
    "pontos": 59325,
    "bytes": 140051,
-   "bytes_bruto": 221208,
+   "bytes_bruto": 140051,
    "comprimido": true
   },
   {
@@ -764,7 +764,7 @@
    "feicoes": 346,
    "pontos": 58759,
    "bytes": 141583,
-   "bytes_bruto": 217781,
+   "bytes_bruto": 141583,
    "comprimido": true
   },
   {
@@ -778,7 +778,7 @@
    "feicoes": 226,
    "pontos": 63317,
    "bytes": 137928,
-   "bytes_bruto": 217567,
+   "bytes_bruto": 137928,
    "comprimido": true
   },
   {
@@ -792,7 +792,7 @@
    "feicoes": 337,
    "pontos": 57681,
    "bytes": 132030,
-   "bytes_bruto": 217204,
+   "bytes_bruto": 132030,
    "comprimido": true
   },
   {
@@ -806,7 +806,7 @@
    "feicoes": 483,
    "pontos": 52933,
    "bytes": 136529,
-   "bytes_bruto": 216083,
+   "bytes_bruto": 136529,
    "comprimido": true
   },
   {
@@ -820,7 +820,7 @@
    "feicoes": 81,
    "pontos": 66991,
    "bytes": 138921,
-   "bytes_bruto": 215984,
+   "bytes_bruto": 138921,
    "comprimido": true
   },
   {
@@ -834,7 +834,7 @@
    "feicoes": 199,
    "pontos": 65990,
    "bytes": 151078,
-   "bytes_bruto": 214447,
+   "bytes_bruto": 151078,
    "comprimido": true
   },
   {
@@ -848,7 +848,7 @@
    "feicoes": 463,
    "pontos": 50246,
    "bytes": 121189,
-   "bytes_bruto": 213777,
+   "bytes_bruto": 121189,
    "comprimido": true
   },
   {
@@ -862,7 +862,7 @@
    "feicoes": 210,
    "pontos": 63364,
    "bytes": 153979,
-   "bytes_bruto": 213024,
+   "bytes_bruto": 153979,
    "comprimido": true
   },
   {
@@ -876,7 +876,7 @@
    "feicoes": 366,
    "pontos": 56090,
    "bytes": 131236,
-   "bytes_bruto": 212700,
+   "bytes_bruto": 131236,
    "comprimido": true
   },
   {
@@ -890,7 +890,7 @@
    "feicoes": 276,
    "pontos": 61001,
    "bytes": 139393,
-   "bytes_bruto": 211621,
+   "bytes_bruto": 139393,
    "comprimido": true
   },
   {
@@ -904,7 +904,7 @@
    "feicoes": 329,
    "pontos": 54099,
    "bytes": 117864,
-   "bytes_bruto": 211348,
+   "bytes_bruto": 117864,
    "comprimido": true
   },
   {
@@ -918,7 +918,7 @@
    "feicoes": 247,
    "pontos": 58839,
    "bytes": 131728,
-   "bytes_bruto": 210836,
+   "bytes_bruto": 131728,
    "comprimido": true
   },
   {
@@ -932,7 +932,7 @@
    "feicoes": 280,
    "pontos": 57954,
    "bytes": 127416,
-   "bytes_bruto": 210263,
+   "bytes_bruto": 127416,
    "comprimido": true
   },
   {
@@ -946,7 +946,7 @@
    "feicoes": 219,
    "pontos": 59256,
    "bytes": 132668,
-   "bytes_bruto": 208160,
+   "bytes_bruto": 132668,
    "comprimido": true
   },
   {
@@ -960,7 +960,7 @@
    "feicoes": 335,
    "pontos": 54695,
    "bytes": 131549,
-   "bytes_bruto": 204354,
+   "bytes_bruto": 131549,
    "comprimido": true
   },
   {
@@ -974,7 +974,7 @@
    "feicoes": 573,
    "pontos": 43976,
    "bytes": 116571,
-   "bytes_bruto": 200640,
+   "bytes_bruto": 116571,
    "comprimido": true
   },
   {
@@ -988,7 +988,7 @@
    "feicoes": 315,
    "pontos": 54342,
    "bytes": 130842,
-   "bytes_bruto": 198588,
+   "bytes_bruto": 130842,
    "comprimido": true
   },
   {
@@ -1002,7 +1002,7 @@
    "feicoes": 212,
    "pontos": 53931,
    "bytes": 129064,
-   "bytes_bruto": 193261,
+   "bytes_bruto": 129064,
    "comprimido": true
   },
   {
@@ -1016,7 +1016,7 @@
    "feicoes": 244,
    "pontos": 54926,
    "bytes": 128222,
-   "bytes_bruto": 190957,
+   "bytes_bruto": 128222,
    "comprimido": true
   },
   {
@@ -1030,7 +1030,7 @@
    "feicoes": 192,
    "pontos": 54418,
    "bytes": 128829,
-   "bytes_bruto": 185555,
+   "bytes_bruto": 128829,
    "comprimido": true
   },
   {
@@ -1044,7 +1044,7 @@
    "feicoes": 396,
    "pontos": 45985,
    "bytes": 119600,
-   "bytes_bruto": 185334,
+   "bytes_bruto": 119600,
    "comprimido": true
   },
   {
@@ -1058,7 +1058,7 @@
    "feicoes": 143,
    "pontos": 54194,
    "bytes": 108062,
-   "bytes_bruto": 184623,
+   "bytes_bruto": 108062,
    "comprimido": true
   },
   {
@@ -1072,7 +1072,7 @@
    "feicoes": 542,
    "pontos": 37975,
    "bytes": 103575,
-   "bytes_bruto": 179288,
+   "bytes_bruto": 103575,
    "comprimido": true
   },
   {
@@ -1086,7 +1086,7 @@
    "feicoes": 299,
    "pontos": 45147,
    "bytes": 110101,
-   "bytes_bruto": 169692,
+   "bytes_bruto": 110101,
    "comprimido": true
   },
   {
@@ -1100,7 +1100,7 @@
    "feicoes": 248,
    "pontos": 45534,
    "bytes": 111573,
-   "bytes_bruto": 167199,
+   "bytes_bruto": 111573,
    "comprimido": true
   },
   {
@@ -1114,7 +1114,7 @@
    "feicoes": 315,
    "pontos": 43038,
    "bytes": 105128,
-   "bytes_bruto": 166791,
+   "bytes_bruto": 105128,
    "comprimido": true
   },
   {
@@ -1128,7 +1128,7 @@
    "feicoes": 211,
    "pontos": 45660,
    "bytes": 102409,
-   "bytes_bruto": 164492,
+   "bytes_bruto": 102409,
    "comprimido": true
   },
   {
@@ -1142,7 +1142,7 @@
    "feicoes": 150,
    "pontos": 46154,
    "bytes": 96048,
-   "bytes_bruto": 156879,
+   "bytes_bruto": 96048,
    "comprimido": true
   },
   {
@@ -1156,7 +1156,7 @@
    "feicoes": 23,
    "pontos": 45701,
    "bytes": 96466,
-   "bytes_bruto": 139497,
+   "bytes_bruto": 96466,
    "comprimido": true
   },
   {
@@ -1170,7 +1170,7 @@
    "feicoes": 130,
    "pontos": 36866,
    "bytes": 77224,
-   "bytes_bruto": 127664,
+   "bytes_bruto": 77224,
    "comprimido": true
   }
  ]
