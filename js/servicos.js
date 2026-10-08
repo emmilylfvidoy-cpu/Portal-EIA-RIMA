@@ -27,13 +27,43 @@
   const PAGINA = 1000;   // limite dos dois serviços (ArcGIS maxRecordCount, WFS count)
 
   /**
-   * CRS84 = longitude,latitude — a ordem que o GeoJSON usa.
+   * ORDEM DE EIXOS: a armadilha do WFS, medida num servidor real.
    *
-   * Isto não é detalhe: em WFS 2.0, "EPSG:4326" segue a definição do EPSG, que é
-   * LATITUDE,longitude. Passar a caixa em lon,lat dizendo EPSG:4326 devolve o retângulo
-   * errado (trocado) sem erro nenhum — o clássico. CRS84 não tem ambiguidade.
+   * Em WFS 2.0 a caixa segue a definição do CRS, e não a ordem do GeoJSON. No GeoServer do
+   * IPHAN (camada SICG:sitios), com a extensão de São Paulo:
+   *
+   *   bbox=lon,lat (sem CRS)                    -> 0 feições
+   *   bbox=lat,lon,urn:ogc:def:crs:EPSG::4674   -> 4.036 feições   <- certo
+   *   bbox=lon,lat,urn:ogc:def:crs:EPSG::4674   -> 0 feições
+   *   bbox=lon,lat,urn:ogc:def:crs:OGC:1.3:CRS84 -> HTTP 400 (o servidor recusa)
+   *
+   * Ou seja: o erro não é barulhento — devolve ZERO feição e o mapa fica vazio, sem aviso.
+   * Por isso a ordem e o CRS são declarados por camada, com o padrão brasileiro (SIRGAS 2000,
+   * latitude,longitude). CRS84 fica disponível para quem aceitar.
    */
-  const CRS84 = 'urn:ogc:def:crs:OGC:1.3:CRS84';
+  const CRS_PADRAO = 'urn:ogc:def:crs:EPSG::4674';   // SIRGAS 2000, o padrão do Brasil
+  const CRS84 = 'urn:ogc:def:crs:OGC:1.3:CRS84';     // longitude,latitude
+
+  /**
+   * Caixa no formato do WFS: quatro números na ordem do CRS, seguidos do CRS.
+   * eixo: 'latlon' (padrão, SIRGAS/EPSG:4674) ou 'lonlat' (CRS84).
+   */
+  function caixaParaWfs(caixa, crs, eixo) {
+    const [a, b, c, d] = caixa.map((v) => Number(v));
+    const ordem = (eixo === 'lonlat') ? [a, b, c, d] : [b, a, d, c];
+    return ordem.map((v) => v.toFixed(6)).join(',') + ',' + (crs || CRS_PADRAO);
+  }
+
+  /**
+   * Anexa a caixa CRUA na URL. O URLSearchParams codifica a vírgula como %2C e o GeoServer
+   * recusa a consulta (HTTP 400) — medido no IPHAN. O resto dos parâmetros vai codificado
+   * normalmente; a caixa não.
+   */
+  function urlComCaixa(base, parametros, caixa) {
+    const bruto = parametros.toString();
+    if (!caixa) return base + '?' + bruto;
+    return base + '?' + bruto + '&bbox=' + caixa;
+  }
 
   function tipoDe(camada) {
     const s = camada && camada.servico;
@@ -51,11 +81,12 @@
       p.set('request', 'GetFeature');
       p.set('typeNames', camada.servico.camada);
       p.set('outputFormat', 'application/json');
-      p.set('srsName', CRS84);
-      p.set('bbox', caixa.map((v) => Number(v).toFixed(6)).join(',') + ',' + CRS84);
-      p.set('count', String(PAGINA));
-      p.set('startIndex', String(offset || 0));
-      return camada.servico.url + '?' + p.toString();
+      p.set('srsName', camada.servico.eixo === 'lonlat' ? CRS84 : (camada.servico.crs || CRS_PADRAO));
+      /* SEM count/startIndex: o GeoServer do IPHAN recusa paginar camada sem chave primária
+       * ('Cannot do natural order without a primary key'). Sem paginação ele devolve tudo que
+       * cruza a caixa, e o número vem do tamanho da caixa, não de um pedido de página. */
+      // a caixa vai CRUA (vírgula não codificada): ver urlComCaixa
+      return urlComCaixa(camada.servico.url, p, caixaParaWfs(caixa, camada.servico.crs, camada.servico.eixo));
     }
     // arcgis (padrão)
     p.set('where', '1=1');
@@ -114,6 +145,9 @@
   return {
     PAGINA: PAGINA,
     CRS84: CRS84,
+    CRS_PADRAO: CRS_PADRAO,
+    caixaParaWfs: caixaParaWfs,
+    urlComCaixa: urlComCaixa,
     tipoDe: tipoDe,
     urlDaPagina: urlDaPagina,
     temMais: temMais,

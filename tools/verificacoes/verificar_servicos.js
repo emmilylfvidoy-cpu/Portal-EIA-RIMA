@@ -48,15 +48,39 @@ function executar() {
     ok('operação GetFeature', p.get('request') === 'GetFeature' && p.get('service') === 'WFS');
     ok('camada pedida por typeNames', p.get('typeNames') === 'INEA:apa_dos_frades', p.get('typeNames'));
     ok('pede GeoJSON', p.get('outputFormat') === 'application/json');
-    ok('página por count e startIndex', p.get('count') === '1000' && p.get('startIndex') === '0');
+    /* SEM PAGINAÇÃO no WFS: medida no GeoServer do IPHAN: com count/startIndex ele responde
+     * HTTP 400 — 'Cannot do natural order without a primary key' (a camada não tem chave
+     * primária). Sem paginação, devolve tudo que cruza a caixa. */
+    ok('não pede página no WFS (o servidor do IPHAN não pagina sem chave primária)',
+      p.get('count') === null && p.get('startIndex') === null);
 
     /* O ERRO CLÁSSICO DO WFS 2.0: em EPSG:4326 a ordem do EPSG é LATITUDE,longitude. Pedir a
      * caixa em lon,lat dizendo EPSG:4326 devolve o retângulo trocado, sem erro nenhum. Por isso
      * o portal usa CRS84, que é longitude,latitude por definição. */
-    ok('a caixa usa CRS84 (lon,lat), não EPSG:4326 (que no WFS 2.0 é lat,lon)',
-      p.get('bbox') === '-47.500000,-22.500000,-47.000000,-22.000000,' + S.CRS84, p.get('bbox'));
-    ok('o srsName também é CRS84', p.get('srsName') === S.CRS84, p.get('srsName'));
-    ok('a URL não usa EPSG:4326 na caixa', p.get('bbox').indexOf('EPSG:4326') < 0);
+    /* ORDEM DE EIXOS: medida no GeoServer do IPHAN, camada SICG:sitios, extensão de SP:
+     *   lon,lat sem CRS                          -> 0 feições
+     *   lat,lon com urn:ogc:def:crs:EPSG::4674   -> 4.036 feições   (certo)
+     *   lon,lat com o mesmo CRS                  -> 0 feições
+     * O padrão do portal é o brasileiro: SIRGAS 2000, latitude,longitude. */
+    ok('a caixa vai em lat,lon com EPSG:4674 (o padrão do Brasil)',
+      p.get('bbox') === '-22.500000,-47.500000,-22.000000,-47.000000,' + S.CRS_PADRAO, p.get('bbox'));
+    ok('o srsName acompanha o CRS da caixa', p.get('srsName') === S.CRS_PADRAO, p.get('srsName'));
+
+    // e continua dando para pedir lon,lat (CRS84) quando o servidor exigir
+    const camadaLonLat = { nome: 'x', servico: { tipo: 'wfs', url: 'https://exemplo/wfs', camada: 'a:b', eixo: 'lonlat' } };
+    const pl = parametros(S.urlDaPagina(camadaLonLat, CAIXA, 0));
+    ok('camada com eixo lonlat pede CRS84 em lon,lat',
+      pl.get('bbox') === '-47.500000,-22.500000,-47.000000,-22.000000,' + S.CRS84, pl.get('bbox'));
+
+    /* A VÍRGULA NÃO PODE IR CODIFICADA: o GeoServer do IPHAN responde 400 com %2C na caixa.
+     * As consultas que funcionaram levaram vírgula crua. */
+    ok('a caixa vai CRUA na URL, sem %2C',
+      p.get('bbox') === null && url.indexOf('%2C') < 0 && url.indexOf('&bbox=-22.500000,-47.500000') > 0,
+      url.slice(url.indexOf('&bbox='), url.indexOf('&bbox=') + 60));
+
+    ok('caixaParaWfs troca a ordem conforme o eixo',
+      S.caixaParaWfs([1, 2, 3, 4], null, 'latlon').indexOf('2.000000,1.000000,4.000000,3.000000') === 0
+      && S.caixaParaWfs([1, 2, 3, 4], null, 'lonlat').indexOf('1.000000,2.000000,3.000000,4.000000') === 0);
 
     ok('offset entra como startIndex', parametros(S.urlDaPagina(camada, CAIXA, 1000)).get('startIndex') === '1000');
   }

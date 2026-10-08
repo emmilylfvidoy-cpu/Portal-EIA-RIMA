@@ -32,6 +32,49 @@
 | v3.5 | **Camadas ao vivo da CETESB/SEMIL**: Áreas Contaminadas (polígonos e pontos), Restrição de Uso das Águas Subterrâneas, Jurubatuba (CBH-AT 139/2021) e Portaria DAEE 2653/2011. O portal consulta o serviço público a cada uso, por caixa (só o que está na tela) e com paginação |
 | v3.6 | **Integração com GeoServer (WFS)**: o portal passou a falar o padrão OGC Web Feature Service, com consulta por caixa, GeoJSON e paginação. Os montadores de URL ficaram num módulo testável (`js/servicos.js`), com o teste que pega a armadilha de eixo do WFS 2.0 |
 | v3.7 | **Política da base: sempre congelar, atualizar de tempos em tempos** — o coletor (	ools/coletar_servico.js) tira a foto de uma camada de serviço, publica com data do dado e data da coleta, e confere a contagem com o que o serviço declara |
+| v3.8 | **Camadas do IPHAN** (Sítios Arqueológicos, Bens Materiais, bem_zrp), selecionadas pela caixa de São Paulo. No caminho apareceram **duas armadilhas do WFS** que só se resolvem medindo: a **ordem dos eixos** da caixa e a **paginação sem chave primária** |
+
+## Camadas do IPHAN (v3.8)
+
+Escolha do cliente: **só São Paulo**, com Sítios Arqueológicos, Bens Materiais e bem_zrp.
+
+| Camada | Feições | Fonte |
+|---|---|---|
+| Sítios Arqueológicos | 4.036 | `SICG:sitios` |
+| Bens Materiais | 6.580 | `SICG:tg_bem_classificacao` |
+| bem_zrp (Zona de Restauração do Patrimônio) | 248 | `DEPAM:bem_zrp` |
+
+Serviço: `https://geoserver.iphan.gov.br/geoserver/wfs` (público, WFS 2.0.0, EPSG:4674). O
+coletor confere a contagem com o que o serviço declara — e as três fecharam exatamente.
+
+**A seleção é por CAIXA** (a extensão de SP), não por recorte: a feição entra **inteira**,
+inclusive a que cruza a divisa. Nenhuma geometria é alterada; o que muda é **quais** feições
+entram. Isso fica escrito na fonte de cada camada.
+
+### As duas armadilhas do WFS, e como foram encontradas
+
+**1. Ordem dos eixos.** Em WFS 2.0 a caixa segue a definição do CRS, não a ordem do GeoJSON.
+Medido no GeoServer do IPHAN, camada `SICG:sitios`:
+
+| Como a caixa foi enviada | Resultado |
+|---|---|
+| `lon,lat` sem CRS | **0 feições** |
+| `lat,lon` + `urn:ogc:def:crs:EPSG::4674` | **4.036 feições** ✓ |
+| `lon,lat` + o mesmo CRS | **0 feições** |
+| `lon,lat` + `CRS84` | **HTTP 400** |
+
+O erro não é barulhento: devolve **zero feição** e o mapa fica vazio, sem aviso. Por isso a
+ordem e o CRS são **declarados por camada**, com o padrão brasileiro (SIRGAS 2000, lat,lon).
+
+**2. Paginação sem chave primária.** O `HTTP 400` que eu perseguia não era da caixa, do CRS,
+do eixo nem da vírgula codificada. Era isto, na mensagem do próprio servidor:
+
+> *Cannot do natural order without a primary key, please add it or specify a manual sort over
+> existing attributes*
+
+A camada não tem chave primária, então o GeoServer **não consegue paginar**. A consulta sem
+`count`/`startIndex` funciona. **Lição registrada no código:** o coletor agora **mostra a
+mensagem do servidor** quando a resposta não é 200 — eu estava diagnosticando 400 no escuro.
 
 ## Política da base: sempre congelar, atualizar de tempos em tempos (v3.7)
 

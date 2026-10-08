@@ -30,9 +30,11 @@ if (typeof fetch !== 'function') {
 }
 
 function argumentos(argv) {
-  const ids = [], a = { data: '', secar: false };
+  const ids = [], a = { data: '', secar: false, baixarPara: '', limiteMb: 20 };
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === '--data') a.data = argv[++i];
+    else if (argv[i] === '--baixar-para') a.baixarPara = argv[++i];
+    else if (argv[i] === '--limite-mb') a.limiteMb = Number(argv[++i]);
     else if (argv[i] === '--secar') a.secar = true;   // só mostra o que faria
     else ids.push(argv[i]);
   }
@@ -44,6 +46,9 @@ const hoje = () => new Date().toISOString().slice(0, 10);
 /** URL de uma página, por tipo de serviço. Reaproveita o módulo do portal. */
 function urlDaPagina(camada, offset) {
   const S = require(path.join(raiz, 'js', 'servicos.js'));
+  /* filtro_bbox: baixa só o que cruza a caixa (a extensão de SP, no caso das camadas do IPHAN).
+   * É SELEÇÃO, não recorte: a feição entra inteira. */
+  const caixa = camada.filtro_bbox;
   if (S.tipoDe(camada) === 'wfs') {
     const p = new URLSearchParams();
     p.set('service', 'WFS');
@@ -51,13 +56,19 @@ function urlDaPagina(camada, offset) {
     p.set('request', 'GetFeature');
     p.set('typeNames', camada.servico.camada);
     p.set('outputFormat', 'application/json');
-    p.set('srsName', S.CRS84);
-    p.set('count', String(PAGINA));
-    p.set('startIndex', String(offset || 0));
-    return camada.servico.url + '?' + p.toString();
+    p.set('srsName', camada.servico.eixo === 'lonlat' ? S.CRS84 : (camada.servico.crs || S.CRS_PADRAO));
+    // sem count/startIndex: este GeoServer não pagina camada sem chave primária (medido)
+    // caixa CRUA (vírgula não codificada) e na ordem do CRS: as duas coisas medidas no IPHAN
+    return S.urlComCaixa(camada.servico.url, p, caixa ? S.caixaParaWfs(caixa, camada.servico.crs, camada.servico.eixo) : '');
   }
   const p = new URLSearchParams();
   p.set('where', '1=1');
+  if (caixa) {
+    p.set('geometry', caixa.join(','));
+    p.set('geometryType', 'esriGeometryEnvelope');
+    p.set('inSR', '4326');
+    p.set('spatialRel', 'esriSpatialRelIntersects');
+  }
   p.set('outFields', '*');
   p.set('returnGeometry', 'true');
   p.set('outSR', '4326');
@@ -115,10 +126,20 @@ function arrumarGeometria(g) {
 async function baixar(camada) {
   const feicoes = [];
   let offset = 0, zerado = 0;
-  for (let volta = 0; volta < 200; volta++) {
+  // teto alto de proposito: o Inventário Florestal tem 386 páginas de 1000. O que impede
+  // publicar dado pela metade é a conferência de contagem no fim, não este teto.
+  for (let volta = 0; volta < 3000; volta++) {
     const url = urlDaPagina(camada, offset);
     const r = await fetch(url);
-    if (!r.ok) throw new Error('HTTP ' + r.status + ' em ' + url.slice(0, 90));
+    if (!r.ok) {
+      let recado = '';
+      try {
+        const texto = await r.text();
+        const m = texto.match(/ExceptionText>([^<]+)</);
+        recado = m ? ' — ' + m[1].replace(/\s+/g, ' ').slice(0, 200) : '';
+      } catch (e) { /* sem corpo legível */ }
+      throw new Error('HTTP ' + r.status + recado + '  [' + url.slice(0, 150) + ']');
+    }
     const d = await r.json();
     if (d.error) throw new Error(d.error.message || 'erro no serviço');
     const vieram = d.features || [];
@@ -211,7 +232,26 @@ async function principal() {
       if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && v > dataDoDado) dataDoDado = v;
     }
     const fc = { type: 'FeatureCollection', features: feicoes };
+    if (opcoes.baixarPara) {
+      fs.writeFileSync(opcoes.baixarPara, JSON.stringify(fc), 'utf8');
+      const mb = fs.statSync(opcoes.baixarPara).size / 1048576;
+      console.log('    gravado (SEM publicar, só para gerar tiles): ' + opcoes.baixarPara
+        + '  (' + mb.toFixed(1) + ' MB)');
+      console.log('    próximo passo: gerar tiles a partir desse arquivo e apontar o catálogo para eles.');
+      continue;
+    }
     const arquivo = 'data/' + camada.id + '.geojson';
+    const tamanhoMb = JSON.stringify(fc).length / 1048576;
+    if (tamanhoMb > opcoes.limiteMb) {
+      /* Trava de tamanho: publicar um GeoJSON desta ordem deixaria a camada inútil no navegador
+       * (e o erro passaria silencioso, porque o arquivo existe e o catálogo aponta para ele). */
+      console.log('    RECUSEI publicar: o GeoJSON daria ' + tamanhoMb.toFixed(1) + ' MB, acima do '
+        + 'limite de ' + opcoes.limiteMb + ' MB.');
+      console.log('    Camada deste tamanho precisa do caminho dos tiles (como a Pedologia e as UCs).');
+      console.log('    Baixe com:  node tools/coletar_servico.js ' + camada.id
+        + ' --baixar-para tools/_' + camada.id + '.geojson');
+      continue;
+    }
     fs.writeFileSync(path.join(raiz, arquivo), JSON.stringify(fc), 'utf8');
     const { campos, classes } = colunasEClasses(feicoes, camada.campo_classe);
 
@@ -227,6 +267,8 @@ async function principal() {
     nova.fonte = (camada.fonte || '').replace(/\s*\(consulta ao vivo\)\s*/i, ' ')
       .replace(/\s*Camada consultada AO VIVO[^.]*\.\s*/i, ' ')
       .trim()
+      + (camada.filtro_bbox ? ' SELEÇÃO: só as feições que cruzam a caixa '
+        + camada.filtro_bbox.join(', ') + ' (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada.' : '')
       + (dataDoDado
         ? ' — dados atualizados até ' + dataDoDado + '; foto (consulta única ao serviço) de ' + data + '.'
         : ' — foto (consulta única ao serviço) de ' + data + '; a fonte não declara data de atualização por feição.')

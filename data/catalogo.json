@@ -3232,6 +3232,386 @@
       "geometria": "ao vivo",
       "alerta": true,
       "congelar": false
+    },
+    {
+      "id": "inventario-florestal",
+      "nome": "Inventário Florestal 2020",
+      "meio": "biotico",
+      "servico": {
+        "tipo": "arcgis",
+        "url": "https://mapas.semil.sp.gov.br/server/rest/services/TEMATICOS/InventarioFlorestal_2020/MapServer/0",
+        "nome": "Inventario_Florestal"
+      },
+      "congelar": true,
+      "campo_classe": "FITOFISION",
+      "fonte": "IF/SIMA — Inventário Florestal de 2020 (serviço TEMATICOS do SIGAM/SEMIL)",
+      "data_ref": "",
+      "cor": "#4e7a3a",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#4e7a3a",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#5d5d5d",
+        "contornos": null
+      },
+      "obs": "CAMADA GRANDE: 386.014 polígonos. Publicada em tiles (não em GeoJSON), como a Pedologia e as Unidades de Conservação — o coletor recusa publicar GeoJSON acima do limite. Classe: FITOFISION. A fonte é o serviço do SIGAM/SEMIL, que por sua vez veio de shapefile do DataGEO; o serviço declara que os valores de FITOFISION foram tratados por comparação com a legenda, exceto \"Floresta Ombr\", tratado por comparação visual em escala pequena.",
+      "geometria": "exata"
+    },
+    {
+      "id": "iphan-sitios-arqueologicos",
+      "nome": "Sítios Arqueológicos (IPHAN)",
+      "meio": "socioeconomico",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ],
+      "campo_classe": null,
+      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — Sítios Arqueológicos SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
+      "cor": "#8b5a2b",
+      "opacidade": 1,
+      "tipo_geometria": "ponto",
+      "estilo": {
+        "cor": "#8b5a2b",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#4a2f14",
+        "contornos": null
+      },
+      "obs": "Camada nacional do IPHAN, publicada no portal com SELEÇÃO pela caixa de São Paulo (feições inteiras, nenhuma geometria alterada). Existe a versão em polígonos (SICG:sitios_pol) se você quiser a área dos sítios.",
+      "geometria": "exata",
+      "arquivo": "data/iphan-sitios-arqueologicos.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [],
+      "campos": [
+        {
+          "nome": "id_bem",
+          "tipo": "N",
+          "rotulo": "id_bem"
+        },
+        {
+          "nome": "identificacao_bem",
+          "tipo": "C",
+          "rotulo": "identificacao_bem"
+        },
+        {
+          "nome": "co_iphan",
+          "tipo": "C",
+          "rotulo": "co_iphan"
+        },
+        {
+          "nome": "no_logradouro",
+          "tipo": "C",
+          "rotulo": "no_logradouro"
+        },
+        {
+          "nome": "nu_logradouro",
+          "tipo": "C",
+          "rotulo": "nu_logradouro"
+        },
+        {
+          "nome": "id_natureza",
+          "tipo": "N",
+          "rotulo": "id_natureza"
+        },
+        {
+          "nome": "ds_natureza",
+          "tipo": "C",
+          "rotulo": "ds_natureza"
+        },
+        {
+          "nome": "codigo_iphan",
+          "tipo": "C",
+          "rotulo": "codigo_iphan"
+        },
+        {
+          "nome": "id_classificacao",
+          "tipo": "N",
+          "rotulo": "id_classificacao"
+        },
+        {
+          "nome": "ds_classificacao",
+          "tipo": "C",
+          "rotulo": "ds_classificacao"
+        },
+        {
+          "nome": "id_tipo_bem",
+          "tipo": "N",
+          "rotulo": "id_tipo_bem"
+        },
+        {
+          "nome": "ds_tipo_bem",
+          "tipo": "C",
+          "rotulo": "ds_tipo_bem"
+        },
+        {
+          "nome": "sg_tipo_bem",
+          "tipo": "C",
+          "rotulo": "sg_tipo_bem"
+        },
+        {
+          "nome": "sintese_bem",
+          "tipo": "C",
+          "rotulo": "sintese_bem"
+        },
+        {
+          "nome": "dt_cadastro",
+          "tipo": "C",
+          "rotulo": "dt_cadastro"
+        }
+      ]
+    },
+    {
+      "id": "iphan-bens-materiais",
+      "nome": "Bens Materiais (IPHAN)",
+      "meio": "socioeconomico",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ],
+      "campo_classe": null,
+      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — Bens Materiais (classificação, natureza, tipo) SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
+      "cor": "#7a3b8f",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#7a3b8f",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#432153",
+        "contornos": null
+      },
+      "obs": "Bens materiais protegidos (tombamento e outras formas), com classificação, natureza e tipo nos atributos — dá para agrupar por essas colunas na tabela. Seleção pela caixa de São Paulo.",
+      "geometria": "exata",
+      "arquivo": "data/iphan-bens-materiais.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [],
+      "campos": [
+        {
+          "nome": "id_bem",
+          "tipo": "N",
+          "rotulo": "id_bem"
+        },
+        {
+          "nome": "identificacao_bem",
+          "tipo": "C",
+          "rotulo": "identificacao_bem"
+        },
+        {
+          "nome": "co_iphan",
+          "tipo": "C",
+          "rotulo": "co_iphan"
+        },
+        {
+          "nome": "no_logradouro",
+          "tipo": "C",
+          "rotulo": "no_logradouro"
+        },
+        {
+          "nome": "nu_logradouro",
+          "tipo": "C",
+          "rotulo": "nu_logradouro"
+        },
+        {
+          "nome": "id_natureza",
+          "tipo": "N",
+          "rotulo": "id_natureza"
+        },
+        {
+          "nome": "ds_natureza",
+          "tipo": "C",
+          "rotulo": "ds_natureza"
+        },
+        {
+          "nome": "codigo_iphan",
+          "tipo": "C",
+          "rotulo": "codigo_iphan"
+        },
+        {
+          "nome": "id_classificacao",
+          "tipo": "N",
+          "rotulo": "id_classificacao"
+        },
+        {
+          "nome": "ds_classificacao",
+          "tipo": "C",
+          "rotulo": "ds_classificacao"
+        },
+        {
+          "nome": "id_tipo_bem",
+          "tipo": "N",
+          "rotulo": "id_tipo_bem"
+        },
+        {
+          "nome": "ds_tipo_bem",
+          "tipo": "C",
+          "rotulo": "ds_tipo_bem"
+        },
+        {
+          "nome": "sg_tipo_bem",
+          "tipo": "C",
+          "rotulo": "sg_tipo_bem"
+        },
+        {
+          "nome": "sintese_bem",
+          "tipo": "C",
+          "rotulo": "sintese_bem"
+        },
+        {
+          "nome": "dt_cadastro",
+          "tipo": "C",
+          "rotulo": "dt_cadastro"
+        }
+      ]
+    },
+    {
+      "id": "iphan-bem-zrp",
+      "nome": "Zona de Restauração do Patrimônio — bem_zrp (IPHAN)",
+      "meio": "socioeconomico",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ],
+      "campo_classe": null,
+      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — bem_zrp (DEPAM) SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
+      "cor": "#c2410c",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#c2410c",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#7c2d12",
+        "contornos": null
+      },
+      "obs": "Zona de Restauração do Patrimônio. Existem as variantes zrp_especial e zrp_padronizada no mesmo serviço, se fizer falta. Seleção pela caixa de São Paulo.",
+      "geometria": "exata",
+      "arquivo": "data/iphan-bem-zrp.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [],
+      "campos": [
+        {
+          "nome": "id",
+          "tipo": "N",
+          "rotulo": "id"
+        },
+        {
+          "nome": "id_bem",
+          "tipo": "N",
+          "rotulo": "id_bem"
+        },
+        {
+          "nome": "identifica",
+          "tipo": "C",
+          "rotulo": "identifica"
+        },
+        {
+          "nome": "co_iphan",
+          "tipo": "C",
+          "rotulo": "co_iphan"
+        },
+        {
+          "nome": "no_logrado",
+          "tipo": "C",
+          "rotulo": "no_logrado"
+        },
+        {
+          "nome": "nu_logrado",
+          "tipo": "C",
+          "rotulo": "nu_logrado"
+        },
+        {
+          "nome": "id_naturez",
+          "tipo": "N",
+          "rotulo": "id_naturez"
+        },
+        {
+          "nome": "ds_naturez",
+          "tipo": "C",
+          "rotulo": "ds_naturez"
+        },
+        {
+          "nome": "codigo_iph",
+          "tipo": "C",
+          "rotulo": "codigo_iph"
+        },
+        {
+          "nome": "id_classif",
+          "tipo": "N",
+          "rotulo": "id_classif"
+        },
+        {
+          "nome": "ds_classif",
+          "tipo": "C",
+          "rotulo": "ds_classif"
+        },
+        {
+          "nome": "id_tipo_be",
+          "tipo": "N",
+          "rotulo": "id_tipo_be"
+        },
+        {
+          "nome": "ds_tipo_be",
+          "tipo": "C",
+          "rotulo": "ds_tipo_be"
+        },
+        {
+          "nome": "sg_tipo_be",
+          "tipo": "C",
+          "rotulo": "sg_tipo_be"
+        },
+        {
+          "nome": "sintese_be",
+          "tipo": "C",
+          "rotulo": "sintese_be"
+        },
+        {
+          "nome": "dt_cadastr",
+          "tipo": "C",
+          "rotulo": "dt_cadastr"
+        },
+        {
+          "nome": "id_proteca",
+          "tipo": "N",
+          "rotulo": "id_proteca"
+        },
+        {
+          "nome": "id_tipo_pr",
+          "tipo": "N",
+          "rotulo": "id_tipo_pr"
+        },
+        {
+          "nome": "ds_tipo_pr",
+          "tipo": "C",
+          "rotulo": "ds_tipo_pr"
+        },
+        {
+          "nome": "id_condica",
+          "tipo": "N",
+          "rotulo": "id_condica"
+        },
+        {
+          "nome": "ds_condica",
+          "tipo": "C",
+          "rotulo": "ds_condica"
+        },
+        {
+          "nome": "id_zrp",
+          "tipo": "N",
+          "rotulo": "id_zrp"
+        }
+      ]
     }
   ]
 }
