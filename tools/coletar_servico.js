@@ -44,7 +44,9 @@ function argumentos(argv) {
 const hoje = () => new Date().toISOString().slice(0, 10);
 
 /** URL de uma página, por tipo de serviço. Reaproveita o módulo do portal. */
-function urlDaPagina(camada, offset) {
+const FAIXA = 20000;   // tamanho da faixa de OBJECTID: deslocamento sempre raso
+
+function urlDaPagina(camada, offset, base) {
   const S = require(path.join(raiz, 'js', 'servicos.js'));
   /* filtro_bbox: baixa só o que cruza a caixa (a extensão de SP, no caso das camadas do IPHAN).
    * É SELEÇÃO, não recorte: a feição entra inteira. */
@@ -62,7 +64,13 @@ function urlDaPagina(camada, offset) {
     return S.urlComCaixa(camada.servico.url, p, caixa ? S.caixaParaWfs(caixa, camada.servico.crs, camada.servico.eixo) : '');
   }
   const p = new URLSearchParams();
-  p.set('where', '1=1');
+  /* POR FAIXA, NÃO POR OFFSET PROFUNDO: medido no Inventário Florestal — com resultOffset
+   * chegando a 177.000 o serviço responde HTTP 500. Com a faixa, o deslocamento fica entre 0 e
+   * FAIXA e a consulta passa. Faixa esgotada (página incompleta) salta para a próxima. */
+  p.set('where', base === undefined
+    ? '1=1'
+    : 'OBJECTID>' + base + ' AND OBJECTID<=' + (base + FAIXA));
+  p.set('orderByFields', 'OBJECTID ASC');
   if (caixa) {
     p.set('geometry', caixa.join(','));
     p.set('geometryType', 'esriGeometryEnvelope');
@@ -125,11 +133,12 @@ function arrumarGeometria(g) {
 
 async function baixar(camada) {
   const feicoes = [];
-  let offset = 0, zerado = 0;
+  let offset = 0, zerado = 0, base = 0;
+  const S = require(path.join(raiz, 'js', 'servicos.js'));   // declarado aqui: era usado antes
   // teto alto de proposito: o Inventário Florestal tem 386 páginas de 1000. O que impede
   // publicar dado pela metade é a conferência de contagem no fim, não este teto.
   for (let volta = 0; volta < 3000; volta++) {
-    const url = urlDaPagina(camada, offset);
+    const url = urlDaPagina(camada, offset, S.tipoDe(camada) === 'wfs' ? undefined : base);
     const r = await fetch(url);
     if (!r.ok) {
       let recado = '';
@@ -148,7 +157,15 @@ async function baixar(camada) {
       feicoes.push({ type: 'Feature', properties: limparAtributos(f.properties), geometry: arrumarGeometria(f.geometry) });
     }
     process.stdout.write('\r    baixadas ' + feicoes.length.toLocaleString('pt-BR') + ' feições…');
-    const S = require(path.join(raiz, 'js', 'servicos.js'));
+    // S já vem declarado no topo de baixar: redeclarar aqui sombreava o de fora e deixava a
+    // linha que monta a URL na zona morta da declaração ('Cannot access S before initialization')
+    const porFaixa = S.tipoDe(camada) !== 'wfs';
+    if (porFaixa && vieram.length < 1000) {
+      // a faixa acabou (página incompleta): salta para a próxima, sem offset profundo
+      base += FAIXA;
+      offset = 0;
+      continue;
+    }
     if (!S.temMais(S.tipoDe(camada), d, vieram.length)) break;
     offset += vieram.length;
   }

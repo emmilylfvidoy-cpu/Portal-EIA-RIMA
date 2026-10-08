@@ -22,3 +22,6 @@ pnpm-lock.yaml
 *.log
 tools/_*.txt
 tools/_*.log
+
+# GeoJSON grande de trabalho (baixado para gerar tiles): nunca vai para o repositorio
+tools/_*.geojsontools/_*.js

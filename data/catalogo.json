@@ -3228,9 +3228,8 @@
         "contorno_cor": "#6e6e6e",
         "contornos": null
       },
-      "obs": "A cor sai da sigla (Sigla_DG), o mesmo campo e as mesmas 6 cores da camada de polígonos: ACI, ACRe, ACRi, ACRu, AME, AR. O serviço usa o mesmo critério para pintar os pontos dele. A coluna ClassificacaoAtual traz o nome por extenso de cada sigla. Camada AO VIVO: consultada a cada uso.",
+      "obs": "Camada AO VIVO (consulta a cada uso). A cor sai da sigla (Sigla_DG), o mesmo campo e as mesmas 6 cores da camada de polígonos.",
       "geometria": "ao vivo",
-      "alerta": true,
       "congelar": false
     },
     {
