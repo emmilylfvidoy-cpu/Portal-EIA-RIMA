@@ -24,7 +24,15 @@ function alvos(argv) {
   let nivel = null;
   for (let i = 3; i < argv.length; i++) if (argv[i] === '--nivel') nivel = argv[++i];
   const lista = [];
+  /* A varredura precisa OLHAR DENTRO DOS GRUPOS: o Inventário por UGRHI guarda as 22 unidades em
+   * "filhos", e a primeira versão olhava só as camadas com "tiles" — as 22 ficaram sem comprimir,
+   * em silêncio. */
+  const todas = [];
   for (const c of cat.camadas) {
+    if (c.grupo && Array.isArray(c.filhos)) for (const f of c.filhos) todas.push(f);
+    else todas.push(c);
+  }
+  for (const c of todas) {
     if (!c.tiles) continue;
     if (id && c.id !== id) continue;
     // os niveis sao os DIRETORIOS que existem: antes a lista era fixa em exato/visao e o

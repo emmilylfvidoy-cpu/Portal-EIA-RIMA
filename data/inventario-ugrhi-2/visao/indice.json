@@ -1,0 +1,43 @@
+{
+ "camada": "inventario-ugrhi-2",
+ "nome": "inventario-ugrhi-2",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.43 MB crus -> 0.12 MB na rede (72% menor).",
+ "total": {
+  "tiles": 1,
+  "feicoes": 3108,
+  "pontos": 17736,
+  "bytes": 126255,
+  "bytes_bruto": 451436,
+  "comprimido": true
+ },
+ "campos": [
+  "FITOFISIO",
+  "SIGLA",
+  "AREA",
+  "MUNICIPIO",
+  "CODIBGE",
+  "DUGRHI",
+  "NUGRHI"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/inventario-ugrhi-2/visao/t000.bin.gz",
+   "bbox": [
+    -46.36418,
+    -23.65677,
+    -44.18091,
+    -22.40383
+   ],
+   "feicoes": 3108,
+   "pontos": 17736,
+   "bytes": 126255,
+   "bytes_bruto": 451436,
+   "comprimido": true
+  }
+ ]
+}

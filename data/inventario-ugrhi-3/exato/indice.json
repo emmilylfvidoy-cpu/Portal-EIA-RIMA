@@ -1,0 +1,113 @@
+{
+ "camada": "inventario-ugrhi-3",
+ "nome": "inventario-ugrhi-3",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.38 MB crus -> 0.82 MB na rede (41% menor).",
+ "total": {
+  "tiles": 6,
+  "feicoes": 1215,
+  "pontos": 428368,
+  "bytes": 857675,
+  "bytes_bruto": 1451554,
+  "comprimido": true
+ },
+ "campos": [
+  "FITOFISIO",
+  "SIGLA",
+  "AREA",
+  "MUNICIPIO",
+  "CODIBGE",
+  "DUGRHI",
+  "NUGRHI"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/inventario-ugrhi-3/exato/t000.bin.gz",
+   "bbox": [
+    -45.840225,
+    -23.841255,
+    -45.40488,
+    -23.619632
+   ],
+   "feicoes": 230,
+   "pontos": 78140,
+   "bytes": 163047,
+   "bytes_bruto": 269508,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-3/exato/t004.bin.gz",
+   "bbox": [
+    -45.28054,
+    -23.540175,
+    -44.7246,
+    -23.205279
+   ],
+   "feicoes": 36,
+   "pontos": 86885,
+   "bytes": 169872,
+   "bytes_bruto": 267495,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-3/exato/t002.bin.gz",
+   "bbox": [
+    -45.482668,
+    -23.966327,
+    -45.115746,
+    -23.483015
+   ],
+   "feicoes": 297,
+   "pontos": 73876,
+   "bytes": 140804,
+   "bytes_bruto": 264305,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-3/exato/t001.bin.gz",
+   "bbox": [
+    -45.719557,
+    -23.920785,
+    -45.35938,
+    -23.571957
+   ],
+   "feicoes": 274,
+   "pontos": 72593,
+   "bytes": 149996,
+   "bytes_bruto": 257471,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-3/exato/t003.bin.gz",
+   "bbox": [
+    -45.359971,
+    -23.804885,
+    -45.00725,
+    -23.392074
+   ],
+   "feicoes": 243,
+   "pontos": 70193,
+   "bytes": 140611,
+   "bytes_bruto": 244227,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-3/exato/t005.bin.gz",
+   "bbox": [
+    -44.995908,
+    -23.38391,
+    -44.768656,
+    -23.199675
+   ],
+   "feicoes": 135,
+   "pontos": 46681,
+   "bytes": 93345,
+   "bytes_bruto": 148548,
+   "comprimido": true
+  }
+ ]
+}

@@ -1,0 +1,127 @@
+{
+ "camada": "inventario-ugrhi-1",
+ "nome": "inventario-ugrhi-1",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.33 MB crus -> 0.83 MB na rede (37% menor).",
+ "total": {
+  "tiles": 7,
+  "feicoes": 1084,
+  "pontos": 417828,
+  "bytes": 874964,
+  "bytes_bruto": 1392630,
+  "comprimido": true
+ },
+ "campos": [
+  "FITOFISIO",
+  "SIGLA",
+  "AREA",
+  "MUNICIPIO",
+  "CODIBGE",
+  "DUGRHI",
+  "NUGRHI"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/inventario-ugrhi-1/exato/t005.bin.gz",
+   "bbox": [
+    -45.577616,
+    -22.767001,
+    -45.399629,
+    -22.589007
+   ],
+   "feicoes": 131,
+   "pontos": 85974,
+   "bytes": 189524,
+   "bytes_bruto": 274034,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-1/exato/t000.bin.gz",
+   "bbox": [
+    -45.792247,
+    -22.891068,
+    -45.614006,
+    -22.787104
+   ],
+   "feicoes": 173,
+   "pontos": 78797,
+   "bytes": 158958,
+   "bytes_bruto": 259665,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-1/exato/t001.bin.gz",
+   "bbox": [
+    -45.820022,
+    -22.802611,
+    -45.645965,
+    -22.593564
+   ],
+   "feicoes": 379,
+   "pontos": 66658,
+   "bytes": 148807,
+   "bytes_bruto": 247950,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-1/exato/t002.bin.gz",
+   "bbox": [
+    -45.718975,
+    -22.800962,
+    -45.545456,
+    -22.619365
+   ],
+   "feicoes": 136,
+   "pontos": 72745,
+   "bytes": 140289,
+   "bytes_bruto": 238102,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-1/exato/t003.bin.gz",
+   "bbox": [
+    -45.733151,
+    -22.796859,
+    -45.525862,
+    -22.573301
+   ],
+   "feicoes": 123,
+   "pontos": 70749,
+   "bytes": 144308,
+   "bytes_bruto": 228787,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-1/exato/t004.bin.gz",
+   "bbox": [
+    -45.606029,
+    -22.764907,
+    -45.477645,
+    -22.625347
+   ],
+   "feicoes": 130,
+   "pontos": 42279,
+   "bytes": 90861,
+   "bytes_bruto": 140833,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-1/exato/t006.bin.gz",
+   "bbox": [
+    -45.420045,
+    -22.676152,
+    -45.400317,
+    -22.621324
+   ],
+   "feicoes": 12,
+   "pontos": 626,
+   "bytes": 2217,
+   "bytes_bruto": 3259,
+   "comprimido": true
+  }
+ ]
+}

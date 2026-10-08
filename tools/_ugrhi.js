@@ -10,7 +10,11 @@ const path = require('path');
 const raiz = path.resolve(__dirname, '..');
 
 function urlDaUgrhi(n) {
-  const camada = 'INVENTARIO_FLORESTAL_UGRHI' + n + '_IPA_2020_POL';
+  /* AS UGRHIS DE UM DÍGITO SÃO ZERO-À-ESQUERDA no DataGEO: a camada é UGRHI01 … UGRHI09 e
+   * UGRHI10 … UGRHI22. Sem o zero, as nove primeiras davam HTTP 404 — e foi exatamente o que
+   * aconteceu no primeiro lote: 10 a 22 passaram, 1 a 9 caíram. */
+  const numero = String(n).padStart(2, '0');
+  const camada = 'INVENTARIO_FLORESTAL_UGRHI' + numero + '_IPA_2020_POL';
   return 'https://datageo.ambiente.sp.gov.br/geoserver/datageo/' + camada + '/wfs'
     + '?version=1.0.0&request=GetFeature&outputFormat=SHAPE-ZIP&typeName=' + camada;
 }

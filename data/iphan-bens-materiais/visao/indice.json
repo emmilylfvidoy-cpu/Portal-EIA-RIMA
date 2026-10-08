@@ -6,13 +6,13 @@
  "nivel": "visao",
  "geometria": "generalizada para o desenho de longe",
  "escala": 4000000,
- "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 2.59 MB crus -> 0.40 MB na rede (84% menor).",
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 2.59 MB crus -> 0.40 MB na rede (84% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.40 MB crus -> 0.40 MB na rede (0% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.40 MB crus -> 0.40 MB na rede (0% menor).",
  "total": {
   "tiles": 4,
   "feicoes": 6580,
   "pontos": 6580,
   "bytes": 421076,
-  "bytes_bruto": 2712575,
+  "bytes_bruto": 421076,
   "comprimido": true
  },
  "campos": [
@@ -44,7 +44,7 @@
    "feicoes": 1983,
    "pontos": 1983,
    "bytes": 132716,
-   "bytes_bruto": 827090,
+   "bytes_bruto": 132716,
    "comprimido": true
   },
   {
@@ -58,7 +58,7 @@
    "feicoes": 2405,
    "pontos": 2405,
    "bytes": 142936,
-   "bytes_bruto": 810550,
+   "bytes_bruto": 142936,
    "comprimido": true
   },
   {
@@ -72,7 +72,7 @@
    "feicoes": 1533,
    "pontos": 1533,
    "bytes": 102352,
-   "bytes_bruto": 776262,
+   "bytes_bruto": 102352,
    "comprimido": true
   },
   {
@@ -86,7 +86,7 @@
    "feicoes": 659,
    "pontos": 659,
    "bytes": 43072,
-   "bytes_bruto": 298673,
+   "bytes_bruto": 43072,
    "comprimido": true
   }
  ]

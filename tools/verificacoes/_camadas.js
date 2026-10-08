@@ -23,9 +23,17 @@ function arquivos(raiz, camada) {
 /** Carrega a camada inteira como FeatureCollection (lê todos os tiles, quando for o caso). */
 function carregar(raiz, camada) {
   if (camada.filhos) {
+    /* AMOSTRA, de propósito: o grupo do Inventário por UGRHI tem 22 filhas e 404 mil feições —
+     * carregar tudo estourava a memória do Node e derrubava a suíte inteira (crash do V8, sem
+     * mensagem). A suíte confere ESTRUTURA e ATRIBUTOS, e para isso duas unidades bastam; a
+     * exatidão de cada uma é conferida por camada, no verificador próprio. */
+    const escolhidas = camada.filhos.slice(0, 2);
     const feicoes = [];
-    for (const f of camada.filhos) for (const x of carregar(raiz, f).features) feicoes.push(x);
-    return { type: 'FeatureCollection', features: feicoes, grupo: true, filhos: camada.filhos.length };
+    for (const f of escolhidas) for (const x of carregar(raiz, f).features) feicoes.push(x);
+    return {
+      type: 'FeatureCollection', features: feicoes, grupo: true,
+      filhos: camada.filhos.length, amostra: escolhidas.length,
+    };
   }
   if (camada.servico) {
     // não há o que carregar de arquivo: a camada é consultada no serviço a cada uso

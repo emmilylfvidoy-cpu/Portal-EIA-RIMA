@@ -3885,8 +3885,1524 @@
       "grupo": true,
       "meio": "biotico",
       "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020 do Estado de São Paulo",
-      "obs": "Uma camada por UGRHI, como o IPA publica. Clique na seta para abrir a lista e escolher a sua unidade. Área mínima mapeada de 0,1 hectare: é um mapeamento de altíssimo detalhe, então cada UGRHI traz milhares de fragmentos.",
+      "obs": "Uma camada por UGRHI, como o IPA publica. Clique na seta para abrir a lista e escolher a sua unidade. Área mínima mapeada de 0,1 hectare: é um mapeamento de altíssimo detalhe, então cada UGRHI traz milhares de fragmentos. Total: 404.712 feições, 254 MB de tiles.",
       "filhos": [
+        {
+          "id": "inventario-ugrhi-1",
+          "nome": "UGRHI 1 — Mantiqueira",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-1/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-1/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Ombrófila Mista estágio médio",
+              "feicoes": 544
+            },
+            {
+              "classe": "Refúgio Ecológico",
+              "feicoes": 207
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 156
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 136
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio avançado",
+              "feicoes": 28
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 12
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 1
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-2",
+          "nome": "UGRHI 2 — Paraíba do Sul",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-2/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-2/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 25654
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 5706
+            },
+            {
+              "classe": "Refúgio Ecológico",
+              "feicoes": 725
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 722
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 216
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio médio",
+              "feicoes": 214
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 174
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 90
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio avançado",
+              "feicoes": 10
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
+              "feicoes": 9
+            },
+            {
+              "classe": "Floresta Estacional Decidual",
+              "feicoes": 2
+            },
+            {
+              "classe": "Floresta Ombrófila Densa de terras baixas",
+              "feicoes": 1
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-3",
+          "nome": "UGRHI 3 — Litoral Norte",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-3/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-3/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Ombrófila Densa de terras baixas",
+              "feicoes": 889
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 204
+            },
+            {
+              "classe": "Refúgio Ecológico",
+              "feicoes": 47
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluviomarinha",
+              "feicoes": 38
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 23
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 14
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-4",
+          "nome": "UGRHI 4 — Pardo",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-4/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-4/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 15243
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 2179
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 228
+            },
+            {
+              "classe": "Floresta Estacional Decidual",
+              "feicoes": 203
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 75
+            },
+            {
+              "classe": "Savana Gramíneo-lenhosa",
+              "feicoes": 32
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-5",
+          "nome": "UGRHI 5 — Piracicaba/Capivari/Jundiaí",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-5/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-5/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 18308
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 17777
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 3721
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio médio",
+              "feicoes": 87
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 48
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 19
+            },
+            {
+              "classe": "Refúgio Ecológico",
+              "feicoes": 10
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 7
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-6",
+          "nome": "UGRHI 6 — Alto-Tietê",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-6/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-6/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 13089
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 1095
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 130
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio médio",
+              "feicoes": 44
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 35
+            },
+            {
+              "classe": "Savana Gramíneo-lenhosa",
+              "feicoes": 11
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio avançado",
+              "feicoes": 1
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-7",
+          "nome": "UGRHI 7 — Baixada Santista",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-7/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-7/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Ombrófila Densa de terras baixas",
+              "feicoes": 1977
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 361
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 308
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluviomarinha",
+              "feicoes": 278
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 80
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-8",
+          "nome": "UGRHI 8 — Sapucaí/Grande",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-8/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-8/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 11683
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 2572
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 644
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 132
+            },
+            {
+              "classe": "Floresta Estacional Decidual",
+              "feicoes": 37
+            },
+            {
+              "classe": "Savana Gramíneo-lenhosa",
+              "feicoes": 33
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-9",
+          "nome": "UGRHI 9 — Mogi-Guaçú",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-9/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-9/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 11983
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 4989
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 4452
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 107
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 92
+            },
+            {
+              "classe": "Refúgio Ecológico",
+              "feicoes": 20
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
+              "feicoes": 1
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-10",
+          "nome": "UGRHI 10 — Tietê/Sorocaba",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-10/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-10/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 18801
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 5988
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 1997
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 39
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 28
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 25
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio médio",
+              "feicoes": 14
+            },
+            {
+              "classe": "Floresta Estacional Decidual",
+              "feicoes": 3
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-11",
+          "nome": "UGRHI 11 — Ribeira de Iguape/Litoral Sul",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-11/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-11/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 9219
+            },
+            {
+              "classe": "Floresta Ombrófila Densa de terras baixas",
+              "feicoes": 7281
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 810
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluviomarinha",
+              "feicoes": 413
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio médio",
+              "feicoes": 388
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 196
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio avançado",
+              "feicoes": 24
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-12",
+          "nome": "UGRHI 12 — Baixo Pardo/Grande",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-12/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-12/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 4330
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 2458
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 258
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 164
+            },
+            {
+              "classe": "Floresta Estacional Decidual",
+              "feicoes": 50
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-13",
+          "nome": "UGRHI 13 — Tietê/Jacaré",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-13/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-13/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 13740
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 4466
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 1134
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 605
+            },
+            {
+              "classe": "Savana Gramíneo-lenhosa",
+              "feicoes": 3
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
+              "feicoes": 1
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-14",
+          "nome": "UGRHI 14 — Alto Paranapanema",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-14/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-14/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 21911
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio médio",
+              "feicoes": 12337
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 4867
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio médio",
+              "feicoes": 1514
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 214
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 72
+            },
+            {
+              "classe": "Floresta Ombrófila Densa estágio avançado",
+              "feicoes": 13
+            },
+            {
+              "classe": "Floresta Ombrófila Mista estágio avançado",
+              "feicoes": 6
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-15",
+          "nome": "UGRHI 15 — Turvo/Grande",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-15/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-15/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 17689
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 9865
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 730
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 199
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-16",
+          "nome": "UGRHI 16 — Tietê/Batalha",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-16/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-16/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 12361
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 5664
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 183
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 155
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
+              "feicoes": 5
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
         {
           "id": "inventario-ugrhi-17",
           "nome": "UGRHI 17 — Médio Paranapanema",
@@ -3905,7 +5421,7 @@
             "contorno_cor": "#5d5d5d",
             "contornos": null
           },
-          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm), a precisão que o portal publica. O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal, e dá para trocar depois.",
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
           "tiles": "data/inventario-ugrhi-17/exato/indice.json",
           "niveis": [
             {
@@ -3917,11 +5433,11 @@
           "geometria": "exata",
           "classes": [
             {
-              "classe": "Floresta Estacional Semidecidual est�gio m�dio",
+              "classe": "Floresta Estacional Semidecidual estágio médio",
               "feicoes": 13444
             },
             {
-              "classe": "Forma��o Pioneira com Influ�ncia Fluvial",
+              "classe": "Formação Pioneira com Influência Fluvial",
               "feicoes": 6777
             },
             {
@@ -3933,16 +5449,452 @@
               "feicoes": 539
             },
             {
-              "classe": "Savana Gram�neo-lenhosa",
+              "classe": "Savana Gramíneo-lenhosa",
               "feicoes": 7
             },
             {
-              "classe": "Floresta Ombr�fila Mista est�gio m�dio",
+              "classe": "Floresta Ombrófila Mista estágio médio",
               "feicoes": 7
             },
             {
-              "classe": "Floresta Estacional Semidecidual est�gio avan�ad",
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
               "feicoes": 1
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-18",
+          "nome": "UGRHI 18 — São José dos Dourados",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-18/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-18/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 6156
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 3857
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 84
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 31
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-19",
+          "nome": "UGRHI 19 — Baixo Tietê",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-19/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-19/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 15853
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 10518
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 110
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 106
+            },
+            {
+              "classe": "Floresta Estacional Decidual",
+              "feicoes": 76
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
+              "feicoes": 1
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-20",
+          "nome": "UGRHI 20 — Aguapeí",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-20/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-20/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 7837
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 5723
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 9
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
+              "feicoes": 5
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 2
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-21",
+          "nome": "UGRHI 21 — Peixe",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-21/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-21/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 7234
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 4600
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 86
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 59
+            }
+          ],
+          "campos": [
+            {
+              "nome": "FITOFISIO",
+              "tipo": "C",
+              "rotulo": "FITOFISIO"
+            },
+            {
+              "nome": "SIGLA",
+              "tipo": "C",
+              "rotulo": "SIGLA"
+            },
+            {
+              "nome": "AREA",
+              "tipo": "C",
+              "rotulo": "AREA"
+            },
+            {
+              "nome": "MUNICIPIO",
+              "tipo": "C",
+              "rotulo": "MUNICIPIO"
+            },
+            {
+              "nome": "CODIBGE",
+              "tipo": "C",
+              "rotulo": "CODIBGE"
+            },
+            {
+              "nome": "DUGRHI",
+              "tipo": "C",
+              "rotulo": "DUGRHI"
+            },
+            {
+              "nome": "NUGRHI",
+              "tipo": "C",
+              "rotulo": "NUGRHI"
+            }
+          ]
+        },
+        {
+          "id": "inventario-ugrhi-22",
+          "nome": "UGRHI 22 — Pontal do Paranapanema",
+          "meio": "biotico",
+          "campo_classe": "FITOFISIO",
+          "data_ref": "2021-11-25",
+          "data_coleta": "2026-10-08",
+          "fonte": "IPA (Instituto de Pesquisas Ambientais) — Inventário Florestal 2020, publicado por UGRHI no DataGEO. Imagens WorldView/GeoEye/QuickBird de 2017 a 2019, legenda fitofisionômica IBGE 2012, área mínima mapeada de 0,1 ha, Kappa 0,81.",
+          "cor": "#4e7a3a",
+          "opacidade": 1,
+          "estilo": {
+            "cor": "#4e7a3a",
+            "opacidade": 1,
+            "cores": {},
+            "cores_origem": "paleta do portal",
+            "contorno_cor": "#5d5d5d",
+            "contornos": null
+          },
+          "obs": "GEOMETRIA EXATA: shapefile do DataGEO convertido sem simplificar nada, arredondado em 6 casas (~11 cm). O campo AREA do próprio arquivo permite conferir a área calculada pelo portal. As cores do IPA não vêm no shapefile — a paleta é a do portal.",
+          "tiles": "data/inventario-ugrhi-22/exato/indice.json",
+          "niveis": [
+            {
+              "nivel": "visao",
+              "indice": "data/inventario-ugrhi-22/visao/indice.json",
+              "zoom_max": 9
+            }
+          ],
+          "geometria": "exata",
+          "classes": [
+            {
+              "classe": "Floresta Estacional Semidecidual estágio médio",
+              "feicoes": 8353
+            },
+            {
+              "classe": "Formação Pioneira com Influência Fluvial",
+              "feicoes": 4189
+            },
+            {
+              "classe": "Savana Florestada",
+              "feicoes": 76
+            },
+            {
+              "classe": "Savana Arborizada",
+              "feicoes": 26
+            },
+            {
+              "classe": "Floresta Estacional Semidecidual estágio avançad",
+              "feicoes": 3
             }
           ],
           "campos": [

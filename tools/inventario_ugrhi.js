@@ -41,7 +41,16 @@ function converter(n) {
   if (!shp) { console.log('  UGRHI ' + n + ': sem .shp'); return null; }
 
   const lido = shapelib.lerShp(new Uint8Array(fs.readFileSync(shp)).buffer);
-  const tabela = dbf ? shapelib.lerDbf(new Uint8Array(fs.readFileSync(dbf)).buffer) : { registros: [] };
+  /* CODIFICAÇÃO: o ZIP do IPA não traz o arquivo .cpg, que é de onde o leitor deduz a
+   * codificação do .dbf. Sem ele o leitor assume UTF-8 e os acentos das classes saem quebrados
+   * ("est?gio m?dio"). Os shapefiles do IPA são CP1252 (o padrão brasileiro antigo), então a
+   * codificação vai declarada aqui. Se algum dia vier um .cpg, ele manda. */
+  const cpg = achar(pasta, 'cpg');
+  const codificacao = cpg ? fs.readFileSync(cpg, 'utf8').trim() : 'windows-1252';
+  const tabela = dbf
+    ? shapelib.lerDbf(new Uint8Array(fs.readFileSync(dbf)).buffer, codificacao)
+    : { registros: [] };
+  console.log('  .dbf lido como ' + codificacao + (cpg ? ' (do .cpg)' : ' (sem .cpg no ZIP)'));
   const feicoes = [];
   let vertices = 0;
   for (let i = 0; i < lido.registros.length; i++) {

@@ -1,0 +1,659 @@
+{
+ "camada": "inventario-ugrhi-4",
+ "nome": "inventario-ugrhi-4",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 10.30 MB crus -> 6.13 MB na rede (41% menor).",
+ "total": {
+  "tiles": 45,
+  "feicoes": 17960,
+  "pontos": 2854744,
+  "bytes": 6424140,
+  "bytes_bruto": 10797769,
+  "comprimido": true
+ },
+ "campos": [
+  "FITOFISIO",
+  "SIGLA",
+  "AREA",
+  "MUNICIPIO",
+  "CODIBGE",
+  "DUGRHI",
+  "NUGRHI"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t003.bin.gz",
+   "bbox": [
+    -47.762796,
+    -21.366742,
+    -47.514202,
+    -21.110025
+   ],
+   "feicoes": 428,
+   "pontos": 71186,
+   "bytes": 154894,
+   "bytes_bruto": 269742,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t012.bin.gz",
+   "bbox": [
+    -47.532782,
+    -21.369722,
+    -47.379005,
+    -21.114433
+   ],
+   "feicoes": 296,
+   "pontos": 74917,
+   "bytes": 165929,
+   "bytes_bruto": 268031,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t002.bin.gz",
+   "bbox": [
+    -47.760722,
+    -21.541771,
+    -47.512788,
+    -21.237974
+   ],
+   "feicoes": 440,
+   "pontos": 69977,
+   "bytes": 143333,
+   "bytes_bruto": 267778,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t015.bin.gz",
+   "bbox": [
+    -47.308915,
+    -21.602172,
+    -47.099614,
+    -21.342759
+   ],
+   "feicoes": 449,
+   "pontos": 69668,
+   "bytes": 189350,
+   "bytes_bruto": 264516,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t038.bin.gz",
+   "bbox": [
+    -48.001066,
+    -21.121308,
+    -47.752137,
+    -20.872534
+   ],
+   "feicoes": 459,
+   "pontos": 67039,
+   "bytes": 145138,
+   "bytes_bruto": 262262,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t021.bin.gz",
+   "bbox": [
+    -47.043596,
+    -21.981765,
+    -46.79752,
+    -21.699748
+   ],
+   "feicoes": 408,
+   "pontos": 69745,
+   "bytes": 146711,
+   "bytes_bruto": 261889,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t042.bin.gz",
+   "bbox": [
+    -47.404098,
+    -21.133741,
+    -47.27418,
+    -20.880006
+   ],
+   "feicoes": 227,
+   "pontos": 76489,
+   "bytes": 147876,
+   "bytes_bruto": 261662,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t020.bin.gz",
+   "bbox": [
+    -47.163137,
+    -22.010282,
+    -46.926842,
+    -21.185526
+   ],
+   "feicoes": 384,
+   "pontos": 69257,
+   "bytes": 139612,
+   "bytes_bruto": 261395,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t037.bin.gz",
+   "bbox": [
+    -47.969864,
+    -21.65232,
+    -46.499572,
+    -20.993205
+   ],
+   "feicoes": 636,
+   "pontos": 60555,
+   "bytes": 133829,
+   "bytes_bruto": 260260,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t008.bin.gz",
+   "bbox": [
+    -47.535327,
+    -21.659939,
+    -47.039864,
+    -21.414523
+   ],
+   "feicoes": 291,
+   "pontos": 73603,
+   "bytes": 160450,
+   "bytes_bruto": 259683,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t036.bin.gz",
+   "bbox": [
+    -46.686861,
+    -21.597948,
+    -46.559058,
+    -21.363005
+   ],
+   "feicoes": 558,
+   "pontos": 62289,
+   "bytes": 128455,
+   "bytes_bruto": 258249,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t013.bin.gz",
+   "bbox": [
+    -47.410337,
+    -21.364294,
+    -47.261544,
+    -21.177044
+   ],
+   "feicoes": 389,
+   "pontos": 70647,
+   "bytes": 168760,
+   "bytes_bruto": 256346,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t001.bin.gz",
+   "bbox": [
+    -47.881349,
+    -21.591599,
+    -47.519402,
+    -21.115728
+   ],
+   "feicoes": 371,
+   "pontos": 69139,
+   "bytes": 130913,
+   "bytes_bruto": 255916,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t014.bin.gz",
+   "bbox": [
+    -47.404238,
+    -21.602491,
+    -47.193762,
+    -21.116811
+   ],
+   "feicoes": 393,
+   "pontos": 69383,
+   "bytes": 173593,
+   "bytes_bruto": 254725,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t030.bin.gz",
+   "bbox": [
+    -47.056005,
+    -21.604257,
+    -46.914737,
+    -21.348918
+   ],
+   "feicoes": 543,
+   "pontos": 64904,
+   "bytes": 151277,
+   "bytes_bruto": 254473,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t040.bin.gz",
+   "bbox": [
+    -47.756307,
+    -21.15106,
+    -47.55277,
+    -20.935957
+   ],
+   "feicoes": 402,
+   "pontos": 68165,
+   "bytes": 141618,
+   "bytes_bruto": 253208,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t043.bin.gz",
+   "bbox": [
+    -47.418208,
+    -21.098889,
+    -47.230766,
+    -20.808959
+   ],
+   "feicoes": 288,
+   "pontos": 75446,
+   "bytes": 151865,
+   "bytes_bruto": 252341,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t019.bin.gz",
+   "bbox": [
+    -47.22246,
+    -21.37305,
+    -47.036938,
+    -21.191933
+   ],
+   "feicoes": 501,
+   "pontos": 64014,
+   "bytes": 163041,
+   "bytes_bruto": 252050,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t027.bin.gz",
+   "bbox": [
+    -46.832304,
+    -21.815636,
+    -46.655425,
+    -21.56825
+   ],
+   "feicoes": 419,
+   "pontos": 67948,
+   "bytes": 160907,
+   "bytes_bruto": 252010,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t005.bin.gz",
+   "bbox": [
+    -47.28712,
+    -21.992896,
+    -47.039511,
+    -21.594051
+   ],
+   "feicoes": 437,
+   "pontos": 65801,
+   "bytes": 157499,
+   "bytes_bruto": 251412,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t004.bin.gz",
+   "bbox": [
+    -47.63419,
+    -21.987746,
+    -47.099892,
+    -21.108901
+   ],
+   "feicoes": 363,
+   "pontos": 67301,
+   "bytes": 162572,
+   "bytes_bruto": 248310,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t000.bin.gz",
+   "bbox": [
+    -47.989179,
+    -21.450501,
+    -47.754469,
+    -21.120567
+   ],
+   "feicoes": 467,
+   "pontos": 62114,
+   "bytes": 139529,
+   "bytes_bruto": 247822,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t033.bin.gz",
+   "bbox": [
+    -46.803724,
+    -21.622044,
+    -46.673749,
+    -21.479829
+   ],
+   "feicoes": 302,
+   "pontos": 69390,
+   "bytes": 154298,
+   "bytes_bruto": 244566,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t009.bin.gz",
+   "bbox": [
+    -47.521084,
+    -21.60305,
+    -47.338902,
+    -21.353564
+   ],
+   "feicoes": 334,
+   "pontos": 67497,
+   "bytes": 152200,
+   "bytes_bruto": 242954,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t039.bin.gz",
+   "bbox": [
+    -47.985547,
+    -21.123437,
+    -47.698462,
+    -20.739209
+   ],
+   "feicoes": 396,
+   "pontos": 63825,
+   "bytes": 140036,
+   "bytes_bruto": 240730,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t023.bin.gz",
+   "bbox": [
+    -46.988045,
+    -21.841385,
+    -46.857007,
+    -21.598408
+   ],
+   "feicoes": 520,
+   "pontos": 59093,
+   "bytes": 134900,
+   "bytes_bruto": 239130,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t034.bin.gz",
+   "bbox": [
+    -46.803241,
+    -21.54072,
+    -46.663462,
+    -21.361069
+   ],
+   "feicoes": 400,
+   "pontos": 62903,
+   "bytes": 137039,
+   "bytes_bruto": 236768,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t028.bin.gz",
+   "bbox": [
+    -46.681537,
+    -21.779227,
+    -46.617199,
+    -21.599494
+   ],
+   "feicoes": 610,
+   "pontos": 52032,
+   "bytes": 114630,
+   "bytes_bruto": 235754,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t011.bin.gz",
+   "bbox": [
+    -47.535581,
+    -21.489685,
+    -47.263542,
+    -21.21198
+   ],
+   "feicoes": 291,
+   "pontos": 65586,
+   "bytes": 154875,
+   "bytes_bruto": 235545,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t016.bin.gz",
+   "bbox": [
+    -47.186693,
+    -21.602849,
+    -47.03622,
+    -21.35863
+   ],
+   "feicoes": 415,
+   "pontos": 61882,
+   "bytes": 152671,
+   "bytes_bruto": 232780,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t018.bin.gz",
+   "bbox": [
+    -47.292727,
+    -21.384243,
+    -47.154448,
+    -21.138467
+   ],
+   "feicoes": 406,
+   "pontos": 60867,
+   "bytes": 158747,
+   "bytes_bruto": 231233,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t041.bin.gz",
+   "bbox": [
+    -47.774152,
+    -21.125622,
+    -47.399096,
+    -20.780437
+   ],
+   "feicoes": 284,
+   "pontos": 63579,
+   "bytes": 145013,
+   "bytes_bruto": 229553,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t010.bin.gz",
+   "bbox": [
+    -47.410784,
+    -21.608878,
+    -47.274682,
+    -21.345364
+   ],
+   "feicoes": 336,
+   "pontos": 62118,
+   "bytes": 144773,
+   "bytes_bruto": 229269,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t024.bin.gz",
+   "bbox": [
+    -46.922328,
+    -21.84005,
+    -46.796218,
+    -21.598784
+   ],
+   "feicoes": 474,
+   "pontos": 56603,
+   "bytes": 131377,
+   "bytes_bruto": 228913,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t022.bin.gz",
+   "bbox": [
+    -47.045274,
+    -21.842148,
+    -46.917749,
+    -21.59562
+   ],
+   "feicoes": 485,
+   "pontos": 56972,
+   "bytes": 129488,
+   "bytes_bruto": 227241,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t025.bin.gz",
+   "bbox": [
+    -46.864239,
+    -21.858179,
+    -46.734525,
+    -21.59963
+   ],
+   "feicoes": 365,
+   "pontos": 59862,
+   "bytes": 133620,
+   "bytes_bruto": 226450,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t007.bin.gz",
+   "bbox": [
+    -47.181701,
+    -21.781407,
+    -47.032897,
+    -21.539701
+   ],
+   "feicoes": 394,
+   "pontos": 59208,
+   "bytes": 149059,
+   "bytes_bruto": 226050,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t017.bin.gz",
+   "bbox": [
+    -47.298837,
+    -21.482236,
+    -47.035427,
+    -21.232198
+   ],
+   "feicoes": 430,
+   "pontos": 56835,
+   "bytes": 147098,
+   "bytes_bruto": 218220,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t006.bin.gz",
+   "bbox": [
+    -47.225451,
+    -21.862127,
+    -47.025496,
+    -21.59775
+   ],
+   "feicoes": 445,
+   "pontos": 54442,
+   "bytes": 135318,
+   "bytes_bruto": 217941,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t031.bin.gz",
+   "bbox": [
+    -46.921198,
+    -21.599732,
+    -46.793628,
+    -21.475819
+   ],
+   "feicoes": 356,
+   "pontos": 53593,
+   "bytes": 120408,
+   "bytes_bruto": 207547,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t032.bin.gz",
+   "bbox": [
+    -47.042853,
+    -21.48691,
+    -46.794253,
+    -21.291724
+   ],
+   "feicoes": 309,
+   "pontos": 55525,
+   "bytes": 123161,
+   "bytes_bruto": 202870,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t029.bin.gz",
+   "bbox": [
+    -47.041627,
+    -21.68469,
+    -46.558616,
+    -21.478798
+   ],
+   "feicoes": 509,
+   "pontos": 47426,
+   "bytes": 101026,
+   "bytes_bruto": 200732,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t044.bin.gz",
+   "bbox": [
+    -47.324091,
+    -21.001133,
+    -47.182653,
+    -20.835712
+   ],
+   "feicoes": 134,
+   "pontos": 57717,
+   "bytes": 98355,
+   "bytes_bruto": 195704,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t035.bin.gz",
+   "bbox": [
+    -46.742827,
+    -21.609583,
+    -46.614224,
+    -21.375032
+   ],
+   "feicoes": 361,
+   "pontos": 49481,
+   "bytes": 103068,
+   "bytes_bruto": 193803,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/inventario-ugrhi-4/exato/t026.bin.gz",
+   "bbox": [
+    -46.802506,
+    -21.8407,
+    -46.671828,
+    -21.659015
+   ],
+   "feicoes": 255,
+   "pontos": 48721,
+   "bytes": 105829,
+   "bytes_bruto": 179936,
+   "comprimido": true
+  }
+ ]
+}
