@@ -1,0 +1,37 @@
+{
+  "camadas": [
+    {
+      "id": "inventario-florestal",
+      "nome": "Inventário Florestal 2020 (São Paulo)",
+      "meio": "biotico",
+      "servico": {
+        "tipo": "arcgis",
+        "url": "https://mapas.semil.sp.gov.br/server/rest/services/TEMATICOS/InventarioFlorestal_2020/MapServer/0",
+        "nome": "Inventario_Florestal"
+      },
+      "congelar": true,
+      "campo_classe": "FITOFISION",
+      "fonte": "IF/SIMA — Inventário Florestal de 2020 (serviço TEMATICOS do SIGAM/SEMIL)",
+      "data_ref": "",
+      "cor": "#4e7a3a",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#4e7a3a",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#5d5d5d",
+        "contornos": null
+      },
+      "obs": "014 polígonos. Publicada em tiles (não em GeoJSON), como a Pedologia e as Unidades de Conservação — o coletor recusa publicar GeoJSON acima do limite. Classe: FITOFISION. A fonte é o serviço do SIGAM/SEMIL, que por sua vez veio de shapefile do DataGEO; o serviço declara que os valores de FITOFISION foram tratados por comparação com a legenda, exceto \"Floresta Ombr\", tratado por comparação visual em escala pequena. SELEÇÃO pela caixa de São Paulo, como as camadas do IPHAN: a feição entra inteira. O serviço derruba a consulta (HTTP 500) com deslocamento profundo, então a camada é baixada limitada pela caixa — não se aprofunda o deslocamento.",
+      "geometria": "exata",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ],
+      "motivo": "Retirada da lista ao vivo: uma camada de ~300 mil poligonos consultada em tempo real trava o portal. Aguardando download por quadrantes + tiles."
+    }
+  ]
+}

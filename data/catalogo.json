@@ -32,7 +32,6 @@
       "nome": "Geologia",
       "meio": "fisico",
       "tipo": "poligono",
-      "arquivo": "data/geologia.geojson",
       "campo_classe": "SIGLA_UNID",
       "estilo": {
         "cor": "#8a6d3b",
@@ -2120,14 +2119,21 @@
       "feicoes": 2102,
       "cores_origem": "estilo",
       "estilo_arquivo": "Geologia.xml",
-      "geometria": "exata"
+      "geometria": "exata",
+      "tiles": "data/geologia/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/geologia/visao/indice.json",
+          "zoom_max": 9
+        }
+      ]
     },
     {
       "id": "geomorfologia",
       "nome": "Geomorfologia",
       "meio": "fisico",
       "tipo": "poligono",
-      "arquivo": "data/geomorfologia.geojson",
       "campo_classe": "COD_REL",
       "estilo": {
         "cor": "#8a6d3b",
@@ -2287,14 +2293,21 @@
       "feicoes": 2482,
       "cores_origem": "estilo",
       "estilo_arquivo": "Geomorfologia.xml",
-      "geometria": "exata"
+      "geometria": "exata",
+      "tiles": "data/geomorfologia/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/geomorfologia/visao/indice.json",
+          "zoom_max": 9
+        }
+      ]
     },
     {
       "id": "aquiferos",
       "nome": "Aquíferos",
       "meio": "fisico",
       "tipo": "poligono",
-      "arquivo": "data/aquiferos.geojson",
       "campo_classe": "INT_VAZÃO",
       "campos": [
         {
@@ -2393,7 +2406,15 @@
       "cores_origem": "estilo",
       "estilo_arquivo": "Aquíferos.xml",
       "obs": "Classe = INT_VAZÃO (intervalo de vazão específica, em m³/h/m), o agrupamento do Aquíferos.xml: 10/10 valores têm cor. ATENÇÃO: o nome do campo tem acento (Ã) — se a importação reclamar que não achou o campo, é a codificação do .dbf. CONFIRMAR a citação oficial. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
-      "geometria": "exata"
+      "geometria": "exata",
+      "tiles": "data/aquiferos/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/aquiferos/visao/indice.json",
+          "zoom_max": 9
+        }
+      ]
     },
     {
       "id": "pedologia",
@@ -2684,7 +2705,6 @@
       "nome": "Biomas",
       "meio": "biotico",
       "tipo": "poligono",
-      "arquivo": "data/biomas.geojson",
       "campo_classe": "Bioma",
       "campos": [
         {
@@ -2718,7 +2738,15 @@
       "cores_origem": "estilo",
       "estilo_arquivo": "Biomas.xml",
       "obs": "Classe = Bioma (2 valores: Cerrado e Mata Atlântica), o agrupamento do Biomas.xml: 2/2 valores têm cor. São só 2 feições, mas com o contato entre biomas muito detalhado (3,9 MB de .shp). CONFIRMAR a citação oficial. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
-      "geometria": "exata"
+      "geometria": "exata",
+      "tiles": "data/biomas/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/biomas/visao/indice.json",
+          "zoom_max": 9
+        }
+      ]
     },
     {
       "id": "unidades-conservacao",
@@ -3203,14 +3231,9 @@
       "nome": "Áreas Contaminadas — pontos (CETESB)",
       "meio": "socioeconomico",
       "tipo_geometria": "ponto",
-      "servico": {
-        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/1",
-        "tipo": "arcgis",
-        "nome": "Áreas Contaminadas e Reabilitadas - Geral"
-      },
       "campo_classe": "Sigla_DG",
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo) — ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização.",
-      "data_ref": "",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização. SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — dados atualizados até 2026-10-07; foto (consulta única ao serviço) de 2026-10-08. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-07",
       "cor": "#a13854",
       "opacidade": 1,
       "estilo": {
@@ -3229,40 +3252,278 @@
         "contornos": null
       },
       "obs": "Camada AO VIVO (consulta a cada uso). A cor sai da sigla (Sigla_DG), o mesmo campo e as mesmas 6 cores da camada de polígonos.",
-      "geometria": "ao vivo",
-      "congelar": false
-    },
-    {
-      "id": "inventario-florestal",
-      "nome": "Inventário Florestal 2020 (São Paulo)",
-      "meio": "biotico",
-      "servico": {
-        "tipo": "arcgis",
-        "url": "https://mapas.semil.sp.gov.br/server/rest/services/TEMATICOS/InventarioFlorestal_2020/MapServer/0",
-        "nome": "Inventario_Florestal"
-      },
-      "congelar": true,
-      "campo_classe": "FITOFISION",
-      "fonte": "IF/SIMA — Inventário Florestal de 2020 (serviço TEMATICOS do SIGAM/SEMIL)",
-      "data_ref": "",
-      "cor": "#4e7a3a",
-      "opacidade": 1,
-      "estilo": {
-        "cor": "#4e7a3a",
-        "opacidade": 1,
-        "cores": {},
-        "cores_origem": "paleta do portal",
-        "contorno_cor": "#5d5d5d",
-        "contornos": null
-      },
-      "obs": "014 polígonos. Publicada em tiles (não em GeoJSON), como a Pedologia e as Unidades de Conservação — o coletor recusa publicar GeoJSON acima do limite. Classe: FITOFISION. A fonte é o serviço do SIGAM/SEMIL, que por sua vez veio de shapefile do DataGEO; o serviço declara que os valores de FITOFISION foram tratados por comparação com a legenda, exceto \"Floresta Ombr\", tratado por comparação visual em escala pequena. SELEÇÃO pela caixa de São Paulo, como as camadas do IPHAN: a feição entra inteira. O serviço derruba a consulta (HTTP 500) com deslocamento profundo, então a camada é baixada limitada pela caixa — não se aprofunda o deslocamento.",
       "geometria": "exata",
       "filtro_bbox": [
         -53.20419,
         -25.32118,
         -44.16341,
         -19.758
-      ]
+      ],
+      "data_coleta": "2026-10-08",
+      "classes": [
+        {
+          "classe": "AR",
+          "feicoes": 2674
+        },
+        {
+          "classe": "AME",
+          "feicoes": 1499
+        },
+        {
+          "classe": "ACRe",
+          "feicoes": 1062
+        },
+        {
+          "classe": "ACRi",
+          "feicoes": 834
+        },
+        {
+          "classe": "ACI",
+          "feicoes": 823
+        },
+        {
+          "classe": "ACRu",
+          "feicoes": 432
+        }
+      ],
+      "campos": [
+        {
+          "nome": "NIS",
+          "tipo": "N",
+          "rotulo": "NIS"
+        },
+        {
+          "nome": "NumSipol",
+          "tipo": "N",
+          "rotulo": "NumSipol"
+        },
+        {
+          "nome": "IdMunSipol",
+          "tipo": "N",
+          "rotulo": "IdMunSipol"
+        },
+        {
+          "nome": "NumSipolText",
+          "tipo": "C",
+          "rotulo": "NumSipolText"
+        },
+        {
+          "nome": "NomeEmpree",
+          "tipo": "C",
+          "rotulo": "NomeEmpree"
+        },
+        {
+          "nome": "AtividadeSipol",
+          "tipo": "C",
+          "rotulo": "AtividadeSipol"
+        },
+        {
+          "nome": "OrigemSipol",
+          "tipo": "C",
+          "rotulo": "OrigemSipol"
+        },
+        {
+          "nome": "MigradoAccess",
+          "tipo": "C",
+          "rotulo": "MigradoAccess"
+        },
+        {
+          "nome": "TipoEmpree",
+          "tipo": "C",
+          "rotulo": "TipoEmpree"
+        },
+        {
+          "nome": "ClassificacaoAtual",
+          "tipo": "C",
+          "rotulo": "ClassificacaoAtual"
+        },
+        {
+          "nome": "DataClassificacao",
+          "tipo": "C",
+          "rotulo": "DataClassificacao"
+        },
+        {
+          "nome": "NomMunicipio",
+          "tipo": "C",
+          "rotulo": "NomMunicipio"
+        },
+        {
+          "nome": "CodIBGE",
+          "tipo": "C",
+          "rotulo": "CodIBGE"
+        },
+        {
+          "nome": "Latitude",
+          "tipo": "N",
+          "rotulo": "Latitude"
+        },
+        {
+          "nome": "Longitude",
+          "tipo": "N",
+          "rotulo": "Longitude"
+        },
+        {
+          "nome": "GrupoContaminante",
+          "tipo": "C",
+          "rotulo": "GrupoContaminante"
+        },
+        {
+          "nome": "Contaminante",
+          "tipo": "C",
+          "rotulo": "Contaminante"
+        },
+        {
+          "nome": "ContaminanteIngles",
+          "tipo": "C",
+          "rotulo": "ContaminanteIngles"
+        },
+        {
+          "nome": "EtapaGerenciamento",
+          "tipo": "C",
+          "rotulo": "EtapaGerenciamento"
+        },
+        {
+          "nome": "CorrecaoGeorref",
+          "tipo": "C",
+          "rotulo": "CorrecaoGeorref"
+        },
+        {
+          "nome": "LatCorrigida",
+          "tipo": "N",
+          "rotulo": "LatCorrigida"
+        },
+        {
+          "nome": "LonCorrigida",
+          "tipo": "N",
+          "rotulo": "LonCorrigida"
+        },
+        {
+          "nome": "Sede",
+          "tipo": "N",
+          "rotulo": "Sede"
+        },
+        {
+          "nome": "DatAtualiza",
+          "tipo": "C",
+          "rotulo": "DatAtualiza"
+        },
+        {
+          "nome": "FonteContaminacao",
+          "tipo": "C",
+          "rotulo": "FonteContaminacao"
+        },
+        {
+          "nome": "MeiosImpactados",
+          "tipo": "C",
+          "rotulo": "MeiosImpactados"
+        },
+        {
+          "nome": "MedidasEmergenciais",
+          "tipo": "C",
+          "rotulo": "MedidasEmergenciais"
+        },
+        {
+          "nome": "Interv_RUASUB",
+          "tipo": "C",
+          "rotulo": "Interv_RUASUB"
+        },
+        {
+          "nome": "Interv_RUASUP",
+          "tipo": "C",
+          "rotulo": "Interv_RUASUP"
+        },
+        {
+          "nome": "Interv_RCA",
+          "tipo": "C",
+          "rotulo": "Interv_RCA"
+        },
+        {
+          "nome": "Interv_RUE",
+          "tipo": "C",
+          "rotulo": "Interv_RUE"
+        },
+        {
+          "nome": "Interv_RUS",
+          "tipo": "C",
+          "rotulo": "Interv_RUS"
+        },
+        {
+          "nome": "Interv_RETO",
+          "tipo": "C",
+          "rotulo": "Interv_RETO"
+        },
+        {
+          "nome": "Interv_RPAF",
+          "tipo": "C",
+          "rotulo": "Interv_RPAF"
+        },
+        {
+          "nome": "MedidasRemediacao",
+          "tipo": "C",
+          "rotulo": "MedidasRemediacao"
+        },
+        {
+          "nome": "MedidasEngenharia",
+          "tipo": "C",
+          "rotulo": "MedidasEngenharia"
+        },
+        {
+          "nome": "DesEndereco",
+          "tipo": "C",
+          "rotulo": "DesEndereco"
+        },
+        {
+          "nome": "DesLocalizacao",
+          "tipo": "C",
+          "rotulo": "DesLocalizacao"
+        },
+        {
+          "nome": "DesEndeComple",
+          "tipo": "C",
+          "rotulo": "DesEndeComple"
+        },
+        {
+          "nome": "NomBairro",
+          "tipo": "C",
+          "rotulo": "NomBairro"
+        },
+        {
+          "nome": "NomDistrito",
+          "tipo": "C",
+          "rotulo": "NomDistrito"
+        },
+        {
+          "nome": "CEP",
+          "tipo": "C",
+          "rotulo": "CEP"
+        },
+        {
+          "nome": "nomUGRHI",
+          "tipo": "C",
+          "rotulo": "nomUGRHI"
+        },
+        {
+          "nome": "Sigla_DG",
+          "tipo": "C",
+          "rotulo": "Sigla_DG"
+        },
+        {
+          "nome": "flag_postos",
+          "tipo": "N",
+          "rotulo": "flag_postos"
+        },
+        {
+          "nome": "Manifestacao",
+          "tipo": "C",
+          "rotulo": "Manifestacao"
+        },
+        {
+          "nome": "Processos",
+          "tipo": "C",
+          "rotulo": "Processos"
+        }
+      ],
+      "tiles": "data/cetesb-pontos/exato/indice.json"
     },
     {
       "id": "iphan-sitios-arqueologicos",
@@ -3290,7 +3551,6 @@
       },
       "obs": "Camada nacional do IPHAN, publicada no portal com SELEÇÃO pela caixa de São Paulo (feições inteiras, nenhuma geometria alterada). Existe a versão em polígonos (SICG:sitios_pol) se você quiser a área dos sítios.",
       "geometria": "exata",
-      "arquivo": "data/iphan-sitios-arqueologicos.geojson",
       "data_coleta": "2026-10-08",
       "classes": [],
       "campos": [
@@ -3369,7 +3629,8 @@
           "tipo": "C",
           "rotulo": "dt_cadastro"
         }
-      ]
+      ],
+      "tiles": "data/iphan-sitios-arqueologicos/exato/indice.json"
     },
     {
       "id": "iphan-bens-materiais",
@@ -3396,7 +3657,6 @@
       },
       "obs": "Bens materiais protegidos (tombamento e outras formas), com classificação, natureza e tipo nos atributos — dá para agrupar por essas colunas na tabela. Seleção pela caixa de São Paulo.",
       "geometria": "exata",
-      "arquivo": "data/iphan-bens-materiais.geojson",
       "data_coleta": "2026-10-08",
       "classes": [],
       "campos": [
@@ -3475,7 +3735,8 @@
           "tipo": "C",
           "rotulo": "dt_cadastro"
         }
-      ]
+      ],
+      "tiles": "data/iphan-bens-materiais/exato/indice.json"
     },
     {
       "id": "iphan-bem-zrp",

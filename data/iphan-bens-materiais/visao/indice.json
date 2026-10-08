@@ -1,0 +1,93 @@
+{
+ "camada": "iphan-bens-materiais",
+ "nome": "Bens Materiais (IPHAN)",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 2.59 MB crus -> 0.40 MB na rede (84% menor).",
+ "total": {
+  "tiles": 4,
+  "feicoes": 6580,
+  "pontos": 6580,
+  "bytes": 421076,
+  "bytes_bruto": 2712575,
+  "comprimido": true
+ },
+ "campos": [
+  "id_bem",
+  "identificacao_bem",
+  "co_iphan",
+  "no_logradouro",
+  "nu_logradouro",
+  "id_natureza",
+  "ds_natureza",
+  "codigo_iphan",
+  "id_classificacao",
+  "ds_classificacao",
+  "id_tipo_bem",
+  "ds_tipo_bem",
+  "sg_tipo_bem",
+  "sintese_bem",
+  "dt_cadastro"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/iphan-bens-materiais/visao/t002.bin.gz",
+   "bbox": [
+    -47.9995,
+    -23.9973,
+    -44.1672,
+    -19.7708
+   ],
+   "feicoes": 1983,
+   "pontos": 1983,
+   "bytes": 132716,
+   "bytes_bruto": 827090,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/visao/t000.bin.gz",
+   "bbox": [
+    -53.1892,
+    -25.3199,
+    -48.009,
+    -19.7724
+   ],
+   "feicoes": 2405,
+   "pontos": 2405,
+   "bytes": 142936,
+   "bytes_bruto": 810550,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/visao/t001.bin.gz",
+   "bbox": [
+    -50.383,
+    -25.1955,
+    -46.5667,
+    -19.8407
+   ],
+   "feicoes": 1533,
+   "pontos": 1533,
+   "bytes": 102352,
+   "bytes_bruto": 776262,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/visao/t003.bin.gz",
+   "bbox": [
+    -44.3875,
+    -21.1458,
+    -44.1639,
+    -19.919
+   ],
+   "feicoes": 659,
+   "pontos": 659,
+   "bytes": 43072,
+   "bytes_bruto": 298673,
+   "comprimido": true
+  }
+ ]
+}

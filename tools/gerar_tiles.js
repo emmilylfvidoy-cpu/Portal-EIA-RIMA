@@ -22,12 +22,13 @@ const tiles = require(path.join(raiz, 'js', 'tiles.js'));
 const CELULA_GRAUS = 0.05;          // ~5,5 km: célula fina que só agrupa, não define tile
 
 function argumentos(argv) {
-  const a = { id: argv[2], alvoMb: 1.5, contar: false, nivel: 'exato', celula: CELULA_GRAUS, escala: 0 };
+  const a = { id: argv[2], alvoMb: 1.5, contar: false, nivel: 'exato', celula: CELULA_GRAUS, escala: 0, de: '' };
   for (let i = 3; i < argv.length; i++) {
     if (argv[i] === '--alvo-mb') a.alvoMb = Number(argv[++i]);
     else if (argv[i] === '--nivel') a.nivel = argv[++i];
     else if (argv[i] === '--celula') a.celula = Number(argv[++i]);
     else if (argv[i] === '--escala') a.escala = Number(argv[++i]);
+    else if (argv[i] === '--de') a.de = argv[++i];
     else if (argv[i] === '--so-contar') a.contar = true;
   }
   return a;
@@ -54,28 +55,53 @@ async function principal() {
   const args = argumentos(process.argv);
   if (!args.id) { console.error('uso: node tools/gerar_tiles.js <id-da-camada> [--alvo-mb 1.5]'); process.exit(1); }
   const manifesto = JSON.parse(fs.readFileSync(path.join(raiz, 'data', 'camadas-fonte.json'), 'utf8'));
-  const entrada = manifesto.camadas.find((c) => c.id === args.id);
-  if (!entrada) { console.error('Camada "' + args.id + '" não está no manifesto.'); process.exit(1); }
-  const base = entrada.origem.replace(/\.shp$/i, '');
+  let entrada = manifesto.camadas.find((c) => c.id === args.id);
+  /* Camada que NÃO veio de shapefile (as que vieram de serviço, como CETESB e IPHAN, e o
+   * Inventário) não está no manifesto de fontes — ela só precisa existir no catálogo. Sem isto o
+   * gerador saía calado e as camadas ficavam sem tile. */
+  if (!entrada && args.de) {
+    const cat = JSON.parse(fs.readFileSync(path.join(raiz, 'data', 'catalogo.json'), 'utf8'));
+    const doCatalogo = cat.camadas.find((x) => x.id === args.id);
+    entrada = { id: args.id, nome: (doCatalogo && doCatalogo.nome) || args.id, origem: args.de };
+  }
+  if (!entrada) { console.error('Camada "' + args.id + '" não está no manifesto nem no catálogo.'); process.exit(1); }
+  const base = String(entrada.origem).replace(/\.shp$/i, '');
 
   console.log('Lendo ' + path.basename(entrada.origem) + ' …');
   const t0 = Date.now();
-  const lido = shapelib.lerShp(new Uint8Array(fs.readFileSync(entrada.origem)).buffer);
-  const dbf = shapelib.lerDbf(new Uint8Array(fs.readFileSync(base + '.dbf')).buffer);
-  console.log('  ' + lido.registros.length.toLocaleString('pt-BR') + ' registros em '
-    + ((Date.now() - t0) / 1000).toFixed(1) + ' s');
+  /* DUAS ORIGENS: o shapefile de sempre, ou um GeoJSON (--de).
+   *
+   * O GeoJSON entrou por dois motivos: as camadas já publicadas são a fonte natural para virar
+   * tile (é o dado que está no ar, não uma cópia intermediária), e o Inventário Florestal, que
+   * vem de serviço, só existe em GeoJSON. */
+  let pares;
+  if (args.de) {
+    const caminho = path.isAbsolute(args.de) ? args.de : path.join(raiz, args.de);
+    const fc = JSON.parse(fs.readFileSync(caminho, 'utf8'));
+    pares = (fc.features || []).filter((f) => f && f.geometry)
+      .map((f) => ({ geometry: f.geometry, properties: f.properties || {} }));
+    console.log('  ' + pares.length.toLocaleString('pt-BR') + ' feições lidas de ' + args.de
+      + ' em ' + ((Date.now() - t0) / 1000).toFixed(1) + ' s');
+  } else {
+    const lido = shapelib.lerShp(new Uint8Array(fs.readFileSync(entrada.origem)).buffer);
+    const dbf = shapelib.lerDbf(new Uint8Array(fs.readFileSync(base + '.dbf')).buffer);
+    pares = [];
+    for (let i = 0; i < lido.registros.length; i++) {
+      const r = lido.registros[i];
+      if (r && r.geometry && dbf.registros[i]) pares.push({ geometry: r.geometry, properties: dbf.registros[i] });
+    }
+    console.log('  ' + pares.length.toLocaleString('pt-BR') + ' registros em '
+      + ((Date.now() - t0) / 1000).toFixed(1) + ' s');
+  }
 
   const feicoes = [];
   let pontos = 0, bytesEstimados = 0;
-  for (let i = 0; i < lido.registros.length; i++) {
-    const r = lido.registros[i];
-    const props = dbf.registros[i];
-    if (!r || !r.geometry || !props) continue;
-    const bb = bboxDeGeometria(r.geometry);
+  for (const par of pares) {
+    const bb = bboxDeGeometria(par.geometry);
     if (!bb) continue;
-    const f = { geometry: r.geometry, properties: props, bbox: bb };
+    const f = { geometry: par.geometry, properties: par.properties, bbox: bb };
     f.pontos = 0;
-    for (const parte of tiles.aneisDe(r.geometry)) for (const anel of parte) f.pontos += anel.length;
+    for (const parte of tiles.aneisDe(par.geometry)) for (const anel of parte) f.pontos += anel.length;
     f.bytes = estimarBytes(f);
     pontos += f.pontos;
     bytesEstimados += f.bytes;

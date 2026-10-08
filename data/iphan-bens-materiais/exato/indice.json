@@ -1,0 +1,289 @@
+{
+ "camada": "iphan-bens-materiais",
+ "nome": "Bens Materiais (IPHAN)",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 2.59 MB crus -> 0.41 MB na rede (84% menor).",
+ "total": {
+  "tiles": 18,
+  "feicoes": 6580,
+  "pontos": 6580,
+  "bytes": 429135,
+  "bytes_bruto": 2715893,
+  "comprimido": true
+ },
+ "campos": [
+  "id_bem",
+  "identificacao_bem",
+  "co_iphan",
+  "no_logradouro",
+  "nu_logradouro",
+  "id_natureza",
+  "ds_natureza",
+  "codigo_iphan",
+  "id_classificacao",
+  "ds_classificacao",
+  "id_tipo_bem",
+  "ds_tipo_bem",
+  "sg_tipo_bem",
+  "sintese_bem",
+  "dt_cadastro"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t005.bin.gz",
+   "bbox": [
+    -47.5763,
+    -24.7142,
+    -47.5278,
+    -24.6942
+   ],
+   "feicoes": 766,
+   "pontos": 766,
+   "bytes": 51577,
+   "bytes_bruto": 517829,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t007.bin.gz",
+   "bbox": [
+    -46.6744,
+    -23.5782,
+    -46.6289,
+    -23.5258
+   ],
+   "feicoes": 459,
+   "pontos": 459,
+   "bytes": 23312,
+   "bytes_bruto": 215116,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t013.bin.gz",
+   "bbox": [
+    -45.3119,
+    -23.2253,
+    -45.3011,
+    -23.2207
+   ],
+   "feicoes": 384,
+   "pontos": 384,
+   "bytes": 14072,
+   "bytes_bruto": 192183,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t015.bin.gz",
+   "bbox": [
+    -44.2706,
+    -21.1434,
+    -44.222,
+    -21.1272
+   ],
+   "feicoes": 408,
+   "pontos": 408,
+   "bytes": 21089,
+   "bytes_bruto": 180119,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t000.bin.gz",
+   "bbox": [
+    -53.1807,
+    -25.3179,
+    -49.9228,
+    -23.0676
+   ],
+   "feicoes": 366,
+   "pontos": 366,
+   "bytes": 25812,
+   "bytes_bruto": 141956,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t003.bin.gz",
+   "bbox": [
+    -50.1526,
+    -25.3199,
+    -48.009,
+    -23.0537
+   ],
+   "feicoes": 377,
+   "pontos": 377,
+   "bytes": 27658,
+   "bytes_bruto": 139298,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t001.bin.gz",
+   "bbox": [
+    -51.8346,
+    -24.9556,
+    -50.4082,
+    -23.0638
+   ],
+   "feicoes": 389,
+   "pontos": 389,
+   "bytes": 23294,
+   "bytes_bruto": 138170,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t002.bin.gz",
+   "bbox": [
+    -50.8667,
+    -24.795,
+    -49.9219,
+    -23.1452
+   ],
+   "feicoes": 382,
+   "pontos": 382,
+   "bytes": 25386,
+   "bytes_bruto": 138167,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t010.bin.gz",
+   "bbox": [
+    -50.5926,
+    -23.0275,
+    -47.3003,
+    -19.8058
+   ],
+   "feicoes": 404,
+   "pontos": 404,
+   "bytes": 26184,
+   "bytes_bruto": 134888,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t009.bin.gz",
+   "bbox": [
+    -53.1892,
+    -23.0378,
+    -49.9547,
+    -19.7724
+   ],
+   "feicoes": 409,
+   "pontos": 409,
+   "bytes": 23634,
+   "bytes_bruto": 133509,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t011.bin.gz",
+   "bbox": [
+    -47.9995,
+    -23.9519,
+    -45.3632,
+    -19.8169
+   ],
+   "feicoes": 391,
+   "pontos": 391,
+   "bytes": 30298,
+   "bytes_bruto": 133154,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t008.bin.gz",
+   "bbox": [
+    -53.0839,
+    -23.9973,
+    -46.1283,
+    -21.6291
+   ],
+   "feicoes": 421,
+   "pontos": 421,
+   "bytes": 29796,
+   "bytes_bruto": 131594,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t017.bin.gz",
+   "bbox": [
+    -45.1043,
+    -21.1151,
+    -44.1639,
+    -19.7776
+   ],
+   "feicoes": 272,
+   "pontos": 272,
+   "bytes": 21384,
+   "bytes_bruto": 123895,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t014.bin.gz",
+   "bbox": [
+    -46.077,
+    -23.7495,
+    -44.1672,
+    -21.1277
+   ],
+   "feicoes": 365,
+   "pontos": 365,
+   "bytes": 25640,
+   "bytes_bruto": 123797,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t004.bin.gz",
+   "bbox": [
+    -49.7869,
+    -25.1955,
+    -47.5304,
+    -23.0418
+   ],
+   "feicoes": 371,
+   "pontos": 371,
+   "bytes": 16842,
+   "bytes_bruto": 101930,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t016.bin.gz",
+   "bbox": [
+    -46.0409,
+    -21.1458,
+    -44.1732,
+    -19.7708
+   ],
+   "feicoes": 174,
+   "pontos": 174,
+   "bytes": 23379,
+   "bytes_bruto": 88868,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t006.bin.gz",
+   "bbox": [
+    -48,
+    -24.7169,
+    -46.5611,
+    -23.05
+   ],
+   "feicoes": 173,
+   "pontos": 173,
+   "bytes": 15122,
+   "bytes_bruto": 63213,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-bens-materiais/exato/t012.bin.gz",
+   "bbox": [
+    -45.5978,
+    -23.9508,
+    -45.1228,
+    -23.0733
+   ],
+   "feicoes": 69,
+   "pontos": 69,
+   "bytes": 4656,
+   "bytes_bruto": 18207,
+   "comprimido": true
+  }
+ ]
+}

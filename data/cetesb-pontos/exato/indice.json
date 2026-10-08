@@ -1,0 +1,727 @@
+{
+ "camada": "cetesb-pontos",
+ "nome": "Áreas Contaminadas — pontos (CETESB)",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 5.24 MB crus -> 0.96 MB na rede (82% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.96 MB crus -> 0.96 MB na rede (0% menor).",
+ "total": {
+  "tiles": 47,
+  "feicoes": 7324,
+  "pontos": 7324,
+  "bytes": 1005986,
+  "bytes_bruto": 1005986,
+  "comprimido": true
+ },
+ "campos": [
+  "NIS",
+  "NumSipol",
+  "IdMunSipol",
+  "NumSipolText",
+  "NomeEmpree",
+  "AtividadeSipol",
+  "OrigemSipol",
+  "MigradoAccess",
+  "TipoEmpree",
+  "ClassificacaoAtual",
+  "DataClassificacao",
+  "NomMunicipio",
+  "CodIBGE",
+  "Latitude",
+  "Longitude",
+  "GrupoContaminante",
+  "Contaminante",
+  "ContaminanteIngles",
+  "EtapaGerenciamento",
+  "CorrecaoGeorref",
+  "LatCorrigida",
+  "LonCorrigida",
+  "Sede",
+  "DatAtualiza",
+  "FonteContaminacao",
+  "MeiosImpactados",
+  "MedidasEmergenciais",
+  "Interv_RUASUB",
+  "Interv_RUASUP",
+  "Interv_RCA",
+  "Interv_RUE",
+  "Interv_RUS",
+  "Interv_RETO",
+  "Interv_RPAF",
+  "MedidasRemediacao",
+  "MedidasEngenharia",
+  "DesEndereco",
+  "DesLocalizacao",
+  "DesEndeComple",
+  "NomBairro",
+  "NomDistrito",
+  "CEP",
+  "nomUGRHI",
+  "Sigla_DG",
+  "flag_postos",
+  "Manifestacao",
+  "Processos"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/cetesb-pontos/exato/t015.bin.gz",
+   "bbox": [
+    -46.619726,
+    -23.579672,
+    -46.560275,
+    -23.520291
+   ],
+   "feicoes": 303,
+   "pontos": 303,
+   "bytes": 38608,
+   "bytes_bruto": 38608,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t013.bin.gz",
+   "bbox": [
+    -46.679706,
+    -23.579456,
+    -46.620123,
+    -23.520038
+   ],
+   "feicoes": 289,
+   "pontos": 289,
+   "bytes": 35992,
+   "bytes_bruto": 35992,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t014.bin.gz",
+   "bbox": [
+    -46.619965,
+    -23.639879,
+    -46.56017,
+    -23.580243
+   ],
+   "feicoes": 277,
+   "pontos": 277,
+   "bytes": 37548,
+   "bytes_bruto": 37548,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t005.bin.gz",
+   "bbox": [
+    -46.738032,
+    -23.699732,
+    -46.680811,
+    -23.640267
+   ],
+   "feicoes": 208,
+   "pontos": 208,
+   "bytes": 29201,
+   "bytes_bruto": 29201,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t012.bin.gz",
+   "bbox": [
+    -46.679332,
+    -23.63931,
+    -46.620128,
+    -23.58097
+   ],
+   "feicoes": 190,
+   "pontos": 190,
+   "bytes": 23801,
+   "bytes_bruto": 23801,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t009.bin.gz",
+   "bbox": [
+    -46.739849,
+    -23.579735,
+    -46.680317,
+    -23.520037
+   ],
+   "feicoes": 183,
+   "pontos": 183,
+   "bytes": 24294,
+   "bytes_bruto": 24294,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t008.bin.gz",
+   "bbox": [
+    -46.739928,
+    -23.639678,
+    -46.680281,
+    -23.580269
+   ],
+   "feicoes": 164,
+   "pontos": 164,
+   "bytes": 22819,
+   "bytes_bruto": 22819,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t044.bin.gz",
+   "bbox": [
+    -47.795978,
+    -23.78894,
+    -45.619226,
+    -19.990004
+   ],
+   "feicoes": 153,
+   "pontos": 153,
+   "bytes": 22236,
+   "bytes_bruto": 22236,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t011.bin.gz",
+   "bbox": [
+    -46.619333,
+    -23.699953,
+    -46.561949,
+    -23.640153
+   ],
+   "feicoes": 157,
+   "pontos": 157,
+   "bytes": 23542,
+   "bytes_bruto": 23542,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t032.bin.gz",
+   "bbox": [
+    -51.701362,
+    -22.813538,
+    -49.930762,
+    -20.647237
+   ],
+   "feicoes": 155,
+   "pontos": 155,
+   "bytes": 21230,
+   "bytes_bruto": 21230,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t000.bin.gz",
+   "bbox": [
+    -49.638746,
+    -25.058446,
+    -48.000466,
+    -23.060806
+   ],
+   "feicoes": 154,
+   "pontos": 154,
+   "bytes": 20336,
+   "bytes_bruto": 20336,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t001.bin.gz",
+   "bbox": [
+    -48.205373,
+    -25.013988,
+    -47.069892,
+    -23.043474
+   ],
+   "feicoes": 155,
+   "pontos": 155,
+   "bytes": 21673,
+   "bytes_bruto": 21673,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t039.bin.gz",
+   "bbox": [
+    -47.275117,
+    -22.916464,
+    -47.042618,
+    -22.567282
+   ],
+   "feicoes": 154,
+   "pontos": 154,
+   "bytes": 21855,
+   "bytes_bruto": 21855,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t021.bin.gz",
+   "bbox": [
+    -46.798818,
+    -23.997582,
+    -46.320062,
+    -23.040259
+   ],
+   "feicoes": 149,
+   "pontos": 149,
+   "bytes": 21106,
+   "bytes_bruto": 21106,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t035.bin.gz",
+   "bbox": [
+    -49.895328,
+    -21.779032,
+    -48.002173,
+    -19.980423
+   ],
+   "feicoes": 150,
+   "pontos": 150,
+   "bytes": 21020,
+   "bytes_bruto": 21020,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t040.bin.gz",
+   "bbox": [
+    -47.966833,
+    -22.79953,
+    -47.04534,
+    -21.966136
+   ],
+   "feicoes": 153,
+   "pontos": 153,
+   "bytes": 21718,
+   "bytes_bruto": 21718,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t036.bin.gz",
+   "bbox": [
+    -48.914878,
+    -23.037378,
+    -47.522286,
+    -20.178269
+   ],
+   "feicoes": 155,
+   "pontos": 155,
+   "bytes": 20821,
+   "bytes_bruto": 20821,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t018.bin.gz",
+   "bbox": [
+    -46.739252,
+    -23.519818,
+    -46.680109,
+    -23.403874
+   ],
+   "feicoes": 156,
+   "pontos": 156,
+   "bytes": 22165,
+   "bytes_bruto": 22165,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t045.bin.gz",
+   "bbox": [
+    -45.838526,
+    -23.824004,
+    -44.887124,
+    -22.688082
+   ],
+   "feicoes": 153,
+   "pontos": 153,
+   "bytes": 19981,
+   "bytes_bruto": 19981,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t043.bin.gz",
+   "bbox": [
+    -47.968872,
+    -22.961564,
+    -46.278044,
+    -20.220211
+   ],
+   "feicoes": 155,
+   "pontos": 155,
+   "bytes": 20858,
+   "bytes_bruto": 20858,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t031.bin.gz",
+   "bbox": [
+    -52.947103,
+    -23.519254,
+    -46.122167,
+    -21.575061
+   ],
+   "feicoes": 158,
+   "pontos": 158,
+   "bytes": 22210,
+   "bytes_bruto": 22210,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t033.bin.gz",
+   "bbox": [
+    -51.335351,
+    -23.038182,
+    -48.980412,
+    -20.01048
+   ],
+   "feicoes": 148,
+   "pontos": 148,
+   "bytes": 21400,
+   "bytes_bruto": 21400,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t002.bin.gz",
+   "bbox": [
+    -47.517997,
+    -23.555838,
+    -47.06579,
+    -23.040159
+   ],
+   "feicoes": 153,
+   "pontos": 153,
+   "bytes": 21507,
+   "bytes_bruto": 21507,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t041.bin.gz",
+   "bbox": [
+    -47.999875,
+    -23.038554,
+    -46.981418,
+    -21.123835
+   ],
+   "feicoes": 151,
+   "pontos": 151,
+   "bytes": 20655,
+   "bytes_bruto": 20655,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t037.bin.gz",
+   "bbox": [
+    -47.913338,
+    -23.015776,
+    -47.284665,
+    -22.084345
+   ],
+   "feicoes": 151,
+   "pontos": 151,
+   "bytes": 20581,
+   "bytes_bruto": 20581,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t027.bin.gz",
+   "bbox": [
+    -46.499339,
+    -23.750222,
+    -46.323274,
+    -23.520182
+   ],
+   "feicoes": 155,
+   "pontos": 155,
+   "bytes": 19975,
+   "bytes_bruto": 19975,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t003.bin.gz",
+   "bbox": [
+    -47.217692,
+    -24.325227,
+    -46.404909,
+    -23.043367
+   ],
+   "feicoes": 151,
+   "pontos": 151,
+   "bytes": 21588,
+   "bytes_bruto": 21588,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t020.bin.gz",
+   "bbox": [
+    -46.619227,
+    -23.519477,
+    -46.562603,
+    -23.461833
+   ],
+   "feicoes": 152,
+   "pontos": 152,
+   "bytes": 21165,
+   "bytes_bruto": 21165,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t030.bin.gz",
+   "bbox": [
+    -46.49916,
+    -23.516523,
+    -46.381404,
+    -23.414265
+   ],
+   "feicoes": 149,
+   "pontos": 149,
+   "bytes": 19231,
+   "bytes_bruto": 19231,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t010.bin.gz",
+   "bbox": [
+    -46.679494,
+    -23.758822,
+    -46.560553,
+    -23.640302
+   ],
+   "feicoes": 150,
+   "pontos": 150,
+   "bytes": 20724,
+   "bytes_bruto": 20724,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t034.bin.gz",
+   "bbox": [
+    -48.988954,
+    -23.0207,
+    -48.016418,
+    -21.121871
+   ],
+   "feicoes": 148,
+   "pontos": 148,
+   "bytes": 20038,
+   "bytes_bruto": 20038,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t029.bin.gz",
+   "bbox": [
+    -46.558523,
+    -23.64054,
+    -46.122567,
+    -23.403182
+   ],
+   "feicoes": 144,
+   "pontos": 144,
+   "bytes": 19774,
+   "bytes_bruto": 19774,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t042.bin.gz",
+   "bbox": [
+    -47.038102,
+    -23.032816,
+    -46.528416,
+    -22.154765
+   ],
+   "feicoes": 148,
+   "pontos": 148,
+   "bytes": 21979,
+   "bytes_bruto": 21979,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t026.bin.gz",
+   "bbox": [
+    -46.559256,
+    -23.579477,
+    -46.500022,
+    -23.52089
+   ],
+   "feicoes": 147,
+   "pontos": 147,
+   "bytes": 17589,
+   "bytes_bruto": 17589,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t028.bin.gz",
+   "bbox": [
+    -46.438917,
+    -23.998772,
+    -46.083546,
+    -23.520883
+   ],
+   "feicoes": 145,
+   "pontos": 145,
+   "bytes": 20668,
+   "bytes_bruto": 20668,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t038.bin.gz",
+   "bbox": [
+    -47.399968,
+    -23.039079,
+    -47.04008,
+    -22.560153
+   ],
+   "feicoes": 143,
+   "pontos": 143,
+   "bytes": 20064,
+   "bytes_bruto": 20064,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t017.bin.gz",
+   "bbox": [
+    -46.917358,
+    -23.518984,
+    -46.740265,
+    -23.046784
+   ],
+   "feicoes": 137,
+   "pontos": 137,
+   "bytes": 19033,
+   "bytes_bruto": 19033,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t019.bin.gz",
+   "bbox": [
+    -46.796482,
+    -23.519972,
+    -46.620012,
+    -23.280627
+   ],
+   "feicoes": 142,
+   "pontos": 142,
+   "bytes": 19549,
+   "bytes_bruto": 19549,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t023.bin.gz",
+   "bbox": [
+    -46.559673,
+    -23.711936,
+    -46.476047,
+    -23.640346
+   ],
+   "feicoes": 135,
+   "pontos": 135,
+   "bytes": 17963,
+   "bytes_bruto": 17963,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t025.bin.gz",
+   "bbox": [
+    -46.558725,
+    -23.639112,
+    -46.50075,
+    -23.580116
+   ],
+   "feicoes": 137,
+   "pontos": 137,
+   "bytes": 18181,
+   "bytes_bruto": 18181,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t007.bin.gz",
+   "bbox": [
+    -46.799686,
+    -23.579334,
+    -46.740043,
+    -23.520176
+   ],
+   "feicoes": 134,
+   "pontos": 134,
+   "bytes": 18653,
+   "bytes_bruto": 18653,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t022.bin.gz",
+   "bbox": [
+    -46.559434,
+    -23.939709,
+    -46.321197,
+    -23.701155
+   ],
+   "feicoes": 124,
+   "pontos": 124,
+   "bytes": 18183,
+   "bytes_bruto": 18183,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t016.bin.gz",
+   "bbox": [
+    -47.02833,
+    -23.519798,
+    -46.80214,
+    -23.06372
+   ],
+   "feicoes": 130,
+   "pontos": 130,
+   "bytes": 19753,
+   "bytes_bruto": 19753,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t046.bin.gz",
+   "bbox": [
+    -45.591036,
+    -23.036585,
+    -44.324271,
+    -22.529903
+   ],
+   "feicoes": 116,
+   "pontos": 116,
+   "bytes": 15326,
+   "bytes_bruto": 15326,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t004.bin.gz",
+   "bbox": [
+    -46.852519,
+    -23.876137,
+    -46.686635,
+    -23.520259
+   ],
+   "feicoes": 118,
+   "pontos": 118,
+   "bytes": 16071,
+   "bytes_bruto": 16071,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t006.bin.gz",
+   "bbox": [
+    -46.795994,
+    -23.639981,
+    -46.740841,
+    -23.580587
+   ],
+   "feicoes": 84,
+   "pontos": 84,
+   "bytes": 13122,
+   "bytes_bruto": 13122,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/exato/t024.bin.gz",
+   "bbox": [
+    -46.499437,
+    -23.699618,
+    -46.44724,
+    -23.640231
+   ],
+   "feicoes": 61,
+   "pontos": 61,
+   "bytes": 10200,
+   "bytes_bruto": 10200,
+   "comprimido": true
+  }
+ ]
+}

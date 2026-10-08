@@ -1,0 +1,65 @@
+{
+ "camada": "iphan-sitios-arqueologicos",
+ "nome": "Sítios Arqueológicos (IPHAN)",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.29 MB crus -> 0.25 MB na rede (80% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.25 MB crus -> 0.25 MB na rede (0% menor).",
+ "total": {
+  "tiles": 2,
+  "feicoes": 4036,
+  "pontos": 4036,
+  "bytes": 265895,
+  "bytes_bruto": 265895,
+  "comprimido": true
+ },
+ "campos": [
+  "id_bem",
+  "identificacao_bem",
+  "co_iphan",
+  "no_logradouro",
+  "nu_logradouro",
+  "id_natureza",
+  "ds_natureza",
+  "codigo_iphan",
+  "id_classificacao",
+  "ds_classificacao",
+  "id_tipo_bem",
+  "ds_tipo_bem",
+  "sg_tipo_bem",
+  "sintese_bem",
+  "dt_cadastro"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/visao/t000.bin.gz",
+   "bbox": [
+    -53.1892,
+    -25.3199,
+    -48.009,
+    -19.7724
+   ],
+   "feicoes": 2407,
+   "pontos": 2407,
+   "bytes": 143816,
+   "bytes_bruto": 143816,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/visao/t001.bin.gz",
+   "bbox": [
+    -50.383,
+    -25.1955,
+    -44.1639,
+    -19.7708
+   ],
+   "feicoes": 1629,
+   "pontos": 1629,
+   "bytes": 122079,
+   "bytes_bruto": 122079,
+   "comprimido": true
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "camada": "aquiferos",
+ "nome": "Aquíferos",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.79 MB crus -> 0.65 MB na rede (18% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.65 MB crus -> 0.65 MB na rede (0% menor).",
+ "total": {
+  "tiles": 4,
+  "feicoes": 765,
+  "pontos": 175221,
+  "bytes": 677199,
+  "bytes_bruto": 677199,
+  "comprimido": true
+ },
+ "campos": [
+  "SIGLA_AQUI",
+  "NOME_AQUI",
+  "CLASSE",
+  "INT_VAZÃO",
+  "TIPO_CARAC",
+  "ROCHA_PRIN"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/aquiferos/exato/t002.bin.gz",
+   "bbox": [
+    -51.469889,
+    -23.141763,
+    -46.997377,
+    -19.815269
+   ],
+   "feicoes": 155,
+   "pontos": 51017,
+   "bytes": 191185,
+   "bytes_bruto": 191185,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/aquiferos/exato/t000.bin.gz",
+   "bbox": [
+    -49.713297,
+    -25.30832,
+    -45.970723,
+    -22.67495
+   ],
+   "feicoes": 272,
+   "pontos": 41208,
+   "bytes": 164958,
+   "bytes_bruto": 164958,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/aquiferos/exato/t001.bin.gz",
+   "bbox": [
+    -53.105304,
+    -24.205818,
+    -46.026712,
+    -19.794514
+   ],
+   "feicoes": 121,
+   "pontos": 50281,
+   "bytes": 190206,
+   "bytes_bruto": 190206,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/aquiferos/exato/t003.bin.gz",
+   "bbox": [
+    -48.635032,
+    -23.957345,
+    -44.169963,
+    -19.959187
+   ],
+   "feicoes": 217,
+   "pontos": 32715,
+   "bytes": 130850,
+   "bytes_bruto": 130850,
+   "comprimido": true
+  }
+ ]
+}

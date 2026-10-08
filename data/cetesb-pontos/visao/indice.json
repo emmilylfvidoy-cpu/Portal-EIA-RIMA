@@ -1,0 +1,153 @@
+{
+ "camada": "cetesb-pontos",
+ "nome": "Áreas Contaminadas — pontos (CETESB)",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 5.21 MB crus -> 0.94 MB na rede (82% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.94 MB crus -> 0.94 MB na rede (0% menor).",
+ "total": {
+  "tiles": 6,
+  "feicoes": 7324,
+  "pontos": 7324,
+  "bytes": 983572,
+  "bytes_bruto": 983572,
+  "comprimido": true
+ },
+ "campos": [
+  "NIS",
+  "NumSipol",
+  "IdMunSipol",
+  "NumSipolText",
+  "NomeEmpree",
+  "AtividadeSipol",
+  "OrigemSipol",
+  "MigradoAccess",
+  "TipoEmpree",
+  "ClassificacaoAtual",
+  "DataClassificacao",
+  "NomMunicipio",
+  "CodIBGE",
+  "Latitude",
+  "Longitude",
+  "GrupoContaminante",
+  "Contaminante",
+  "ContaminanteIngles",
+  "EtapaGerenciamento",
+  "CorrecaoGeorref",
+  "LatCorrigida",
+  "LonCorrigida",
+  "Sede",
+  "DatAtualiza",
+  "FonteContaminacao",
+  "MeiosImpactados",
+  "MedidasEmergenciais",
+  "Interv_RUASUB",
+  "Interv_RUASUP",
+  "Interv_RCA",
+  "Interv_RUE",
+  "Interv_RUS",
+  "Interv_RETO",
+  "Interv_RPAF",
+  "MedidasRemediacao",
+  "MedidasEngenharia",
+  "DesEndereco",
+  "DesLocalizacao",
+  "DesEndeComple",
+  "NomBairro",
+  "NomDistrito",
+  "CEP",
+  "nomUGRHI",
+  "Sigla_DG",
+  "flag_postos",
+  "Manifestacao",
+  "Processos"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/cetesb-pontos/visao/t004.bin.gz",
+   "bbox": [
+    -46.79969,
+    -23.99877,
+    -46.2008,
+    -23.40066
+   ],
+   "feicoes": 4080,
+   "pontos": 4080,
+   "bytes": 552066,
+   "bytes_bruto": 552066,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/visao/t000.bin.gz",
+   "bbox": [
+    -52.9471,
+    -25.05845,
+    -46.80783,
+    -19.98042
+   ],
+   "feicoes": 914,
+   "pontos": 914,
+   "bytes": 118277,
+   "bytes_bruto": 118277,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/visao/t005.bin.gz",
+   "bbox": [
+    -47.99987,
+    -23.97855,
+    -44.32427,
+    -19.99
+   ],
+   "feicoes": 817,
+   "pontos": 817,
+   "bytes": 104137,
+   "bytes_bruto": 104137,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/visao/t002.bin.gz",
+   "bbox": [
+    -47.96683,
+    -23.3874,
+    -46.80036,
+    -21.60271
+   ],
+   "feicoes": 771,
+   "pontos": 771,
+   "bytes": 106040,
+   "bytes_bruto": 106040,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/visao/t001.bin.gz",
+   "bbox": [
+    -47.99924,
+    -24.18735,
+    -46.40491,
+    -22.8011
+   ],
+   "feicoes": 427,
+   "pontos": 427,
+   "bytes": 58242,
+   "bytes_bruto": 58242,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/cetesb-pontos/visao/t003.bin.gz",
+   "bbox": [
+    -47.39997,
+    -22.79953,
+    -46.80167,
+    -21.60372
+   ],
+   "feicoes": 315,
+   "pontos": 315,
+   "bytes": 44810,
+   "bytes_bruto": 44810,
+   "comprimido": true
+  }
+ ]
+}

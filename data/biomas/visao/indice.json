@@ -1,0 +1,37 @@
+{
+ "camada": "biomas",
+ "nome": "Biomas",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.03 MB crus -> 0.03 MB na rede (15% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.03 MB crus -> 0.03 MB na rede (0% menor).",
+ "total": {
+  "tiles": 1,
+  "feicoes": 2,
+  "pontos": 6530,
+  "bytes": 31049,
+  "bytes_bruto": 31049,
+  "comprimido": true
+ },
+ "campos": [
+  "Bioma"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/biomas/visao/t000.bin.gz",
+   "bbox": [
+    -53.10487,
+    -25.30792,
+    -44.16343,
+    -19.7808
+   ],
+   "feicoes": 2,
+   "pontos": 6530,
+   "bytes": 31049,
+   "bytes_bruto": 31049,
+   "comprimido": true
+  }
+ ]
+}

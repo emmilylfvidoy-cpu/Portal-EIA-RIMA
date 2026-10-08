@@ -1,0 +1,62 @@
+{
+ "camada": "geomorfologia",
+ "nome": "Geomorfologia",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "visao",
+ "geometria": "generalizada para o desenho de longe",
+ "escala": 4000000,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.08 MB crus -> 0.27 MB na rede (75% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.27 MB crus -> 0.27 MB na rede (0% menor).",
+ "total": {
+  "tiles": 2,
+  "feicoes": 2405,
+  "pontos": 46571,
+  "bytes": 277967,
+  "bytes_bruto": 277967,
+  "comprimido": true
+ },
+ "campos": [
+  "SIGLA_UNID",
+  "NOME_UNIDA",
+  "CLASSE_ROC",
+  "COD_DOM",
+  "DOMINIO",
+  "COD_UNIGEO",
+  "UNIGEO",
+  "COD_REL",
+  "RELEVO",
+  "DECLIVIDAD",
+  "AMPL_TOPO",
+  "GEO_REL"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/geomorfologia/visao/t000.bin.gz",
+   "bbox": [
+    -53.09885,
+    -25.30832,
+    -44.39839,
+    -19.79903
+   ],
+   "feicoes": 2321,
+   "pontos": 45734,
+   "bytes": 270902,
+   "bytes_bruto": 270902,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/visao/t001.bin.gz",
+   "bbox": [
+    -45.7061,
+    -22.88841,
+    -44.17146,
+    -22.39865
+   ],
+   "feicoes": 84,
+   "pontos": 837,
+   "bytes": 7065,
+   "bytes_bruto": 7065,
+   "comprimido": true
+  }
+ ]
+}

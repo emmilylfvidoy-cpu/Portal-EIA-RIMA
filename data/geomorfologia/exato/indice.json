@@ -1,0 +1,202 @@
+{
+ "camada": "geomorfologia",
+ "nome": "Geomorfologia",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 2.27 MB crus -> 1.37 MB na rede (40% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.37 MB crus -> 1.37 MB na rede (0% menor).",
+ "total": {
+  "tiles": 12,
+  "feicoes": 2482,
+  "pontos": 362929,
+  "bytes": 1436305,
+  "bytes_bruto": 1436305,
+  "comprimido": true
+ },
+ "campos": [
+  "SIGLA_UNID",
+  "NOME_UNIDA",
+  "CLASSE_ROC",
+  "COD_DOM",
+  "DOMINIO",
+  "COD_UNIGEO",
+  "UNIGEO",
+  "COD_REL",
+  "RELEVO",
+  "DECLIVIDAD",
+  "AMPL_TOPO",
+  "GEO_REL"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/geomorfologia/exato/t005.bin.gz",
+   "bbox": [
+    -50.95046,
+    -23.29483,
+    -47.68651,
+    -20.98439
+   ],
+   "feicoes": 145,
+   "pontos": 38904,
+   "bytes": 149856,
+   "bytes_bruto": 149856,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t004.bin.gz",
+   "bbox": [
+    -52.26842,
+    -22.90063,
+    -48.6793,
+    -19.78756
+   ],
+   "feicoes": 80,
+   "pontos": 44122,
+   "bytes": 170459,
+   "bytes_bruto": 170459,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t006.bin.gz",
+   "bbox": [
+    -51.12167,
+    -23.05476,
+    -47.46173,
+    -19.911511
+   ],
+   "feicoes": 159,
+   "pontos": 34522,
+   "bytes": 134393,
+   "bytes_bruto": 134393,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t007.bin.gz",
+   "bbox": [
+    -48.1162,
+    -23.03443,
+    -46.94357,
+    -21.40388
+   ],
+   "feicoes": 215,
+   "pontos": 29318,
+   "bytes": 111573,
+   "bytes_bruto": 111573,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t008.bin.gz",
+   "bbox": [
+    -48.19072,
+    -23.07651,
+    -46.52601,
+    -20.88663
+   ],
+   "feicoes": 234,
+   "pontos": 28838,
+   "bytes": 113037,
+   "bytes_bruto": 113037,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t001.bin.gz",
+   "bbox": [
+    -49.17596,
+    -25.23428,
+    -46.86037,
+    -22.24488
+   ],
+   "feicoes": 188,
+   "pontos": 32605,
+   "bytes": 129637,
+   "bytes_bruto": 129637,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t010.bin.gz",
+   "bbox": [
+    -48.007416,
+    -23.95735,
+    -44.80366,
+    -19.9592
+   ],
+   "feicoes": 255,
+   "pontos": 27845,
+   "bytes": 115203,
+   "bytes_bruto": 115203,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t002.bin.gz",
+   "bbox": [
+    -48.23659,
+    -24.75784,
+    -46.26155,
+    -22.95518
+   ],
+   "feicoes": 251,
+   "pontos": 27343,
+   "bytes": 113118,
+   "bytes_bruto": 113118,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t003.bin.gz",
+   "bbox": [
+    -53.1053,
+    -24.02231,
+    -45.91539,
+    -21.08438
+   ],
+   "feicoes": 238,
+   "pontos": 28193,
+   "bytes": 113949,
+   "bytes_bruto": 113949,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t000.bin.gz",
+   "bbox": [
+    -49.7133,
+    -25.30832,
+    -47.84821,
+    -23.11377
+   ],
+   "feicoes": 268,
+   "pontos": 25333,
+   "bytes": 106667,
+   "bytes_bruto": 106667,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t009.bin.gz",
+   "bbox": [
+    -48.6048,
+    -23.15989,
+    -45.97236,
+    -20.12333
+   ],
+   "feicoes": 242,
+   "pontos": 26413,
+   "bytes": 106476,
+   "bytes_bruto": 106476,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/geomorfologia/exato/t011.bin.gz",
+   "bbox": [
+    -46.17906,
+    -23.42573,
+    -44.16996,
+    -22.39865
+   ],
+   "feicoes": 207,
+   "pontos": 19493,
+   "bytes": 71937,
+   "bytes_bruto": 71937,
+   "comprimido": true
+  }
+ ]
+}

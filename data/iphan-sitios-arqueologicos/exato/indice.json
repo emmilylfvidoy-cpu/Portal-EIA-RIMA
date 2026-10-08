@@ -1,0 +1,191 @@
+{
+ "camada": "iphan-sitios-arqueologicos",
+ "nome": "Sítios Arqueológicos (IPHAN)",
+ "formato": "EIAT1",
+ "casas": 6,
+ "nivel": "exato",
+ "geometria": "exata",
+ "escala": null,
+ "observacao": "Feições inteiras, agrupadas por região. A geometria NÃO foi simplificada: cada vértice do shapefile está no tile, quantizado em 6 casas decimais (~11 cm), a mesma precisão do GeoJSON do portal. Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 1.29 MB crus -> 0.26 MB na rede (80% menor). Os tiles estão em gzip: o navegador descomprime com DecompressionStream. Medido: 0.26 MB crus -> 0.26 MB na rede (0% menor).",
+ "total": {
+  "tiles": 11,
+  "feicoes": 4036,
+  "pontos": 4036,
+  "bytes": 271971,
+  "bytes_bruto": 271971,
+  "comprimido": true
+ },
+ "campos": [
+  "id_bem",
+  "identificacao_bem",
+  "co_iphan",
+  "no_logradouro",
+  "nu_logradouro",
+  "id_natureza",
+  "ds_natureza",
+  "codigo_iphan",
+  "id_classificacao",
+  "ds_classificacao",
+  "id_tipo_bem",
+  "ds_tipo_bem",
+  "sg_tipo_bem",
+  "sintese_bem",
+  "dt_cadastro"
+ ],
+ "tiles": [
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t009.bin.gz",
+   "bbox": [
+    -46.0409,
+    -23.0346,
+    -44.1639,
+    -19.7708
+   ],
+   "feicoes": 348,
+   "pontos": 348,
+   "bytes": 36500,
+   "bytes_bruto": 36500,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t000.bin.gz",
+   "bbox": [
+    -53.1807,
+    -25.3179,
+    -49.9228,
+    -23.0676
+   ],
+   "feicoes": 368,
+   "pontos": 368,
+   "bytes": 25620,
+   "bytes_bruto": 25620,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t006.bin.gz",
+   "bbox": [
+    -51.8388,
+    -23.0378,
+    -48.4955,
+    -19.7724
+   ],
+   "feicoes": 371,
+   "pontos": 371,
+   "bytes": 26235,
+   "bytes_bruto": 26235,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t002.bin.gz",
+   "bbox": [
+    -50.8667,
+    -25.2902,
+    -49.191,
+    -23.054
+   ],
+   "feicoes": 380,
+   "pontos": 380,
+   "bytes": 25742,
+   "bytes_bruto": 25742,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t003.bin.gz",
+   "bbox": [
+    -49.917,
+    -25.3199,
+    -48.009,
+    -23.069
+   ],
+   "feicoes": 396,
+   "pontos": 396,
+   "bytes": 26022,
+   "bytes_bruto": 26022,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t001.bin.gz",
+   "bbox": [
+    -51.8346,
+    -24.9556,
+    -50.4082,
+    -23.0638
+   ],
+   "feicoes": 395,
+   "pontos": 395,
+   "bytes": 22954,
+   "bytes_bruto": 22954,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t007.bin.gz",
+   "bbox": [
+    -49.7451,
+    -23.0275,
+    -46.7028,
+    -19.8407
+   ],
+   "feicoes": 411,
+   "pontos": 411,
+   "bytes": 26811,
+   "bytes_bruto": 26811,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t008.bin.gz",
+   "bbox": [
+    -47.9813,
+    -23.9519,
+    -44.1672,
+    -19.8169
+   ],
+   "feicoes": 437,
+   "pontos": 437,
+   "bytes": 29409,
+   "bytes_bruto": 29409,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t004.bin.gz",
+   "bbox": [
+    -49.4949,
+    -25.1955,
+    -46.5611,
+    -23.0418
+   ],
+   "feicoes": 440,
+   "pontos": 440,
+   "bytes": 26862,
+   "bytes_bruto": 26862,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t005.bin.gz",
+   "bbox": [
+    -53.1892,
+    -23.9973,
+    -46.1353,
+    -20.0518
+   ],
+   "feicoes": 479,
+   "pontos": 479,
+   "bytes": 24359,
+   "bytes_bruto": 24359,
+   "comprimido": true
+  },
+  {
+   "arquivo": "data/iphan-sitios-arqueologicos/exato/t010.bin.gz",
+   "bbox": [
+    -44.2492,
+    -20.0937,
+    -44.1888,
+    -19.919
+   ],
+   "feicoes": 11,
+   "pontos": 11,
+   "bytes": 1457,
+   "bytes_bruto": 1457,
+   "comprimido": true
+  }
+ ]
+}
