@@ -3208,7 +3208,7 @@
         "tipo": "arcgis",
         "nome": "Áreas Contaminadas e Reabilitadas - Geral"
       },
-      "campo_classe": "ClassificacaoAtual",
+      "campo_classe": "Sigla_DG",
       "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo) — ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização.",
       "data_ref": "",
       "cor": "#a13854",
@@ -3228,7 +3228,7 @@
         "contorno_cor": "#6e6e6e",
         "contornos": null
       },
-      "obs": "ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização. A cor sai da sigla entre parênteses no fim da ClassificacaoAtual (por exemplo \"(ACRe)\"), a mesma paleta do serviço.",
+      "obs": "A cor sai da sigla (Sigla_DG), o mesmo campo e as mesmas 6 cores da camada de polígonos: ACI, ACRe, ACRi, ACRu, AME, AR. O serviço usa o mesmo critério para pintar os pontos dele. A coluna ClassificacaoAtual traz o nome por extenso de cada sigla. Camada AO VIVO: consultada a cada uso.",
       "geometria": "ao vivo",
       "alerta": true,
       "congelar": false
