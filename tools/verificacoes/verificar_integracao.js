@@ -198,9 +198,19 @@ console.log('\n== Tabela e gráficos ==');
   const semNada = porClasse.filter((l) => !(l.area_ha > 0) && !(l.comprimento_km > 0) && !(l.feicoes > 0));
   ok('toda linha tem medida ou feição', semNada.length === 0,
     semNada.length ? JSON.stringify(semNada[0]).slice(0, 140) : 'todas com medida ou feição');
+  /* Classe sem área tem de vir de camada que NÃO é de polígono — linha ou PONTO. A primeira
+   * versão deste teste aceitava só linha e reprovava as camadas de ponto do IPHAN (ponto não
+   * tem área, e isso é o certo). Agora quem responde é o dado. */
+  const tiposDaCamada = {};
+  for (const c of camadas) {
+    const tipos = new Set();
+    for (const f of (c.geojson.features || [])) if (f.geometry && f.geometry.type) tipos.add(f.geometry.type);
+    tiposDaCamada[c.id] = Array.from(tipos);
+  }
   const soLinha = porClasse.filter((l) => !(l.area_ha > 0));
-  ok('as linhas sem área são de camada de linha', soLinha.every((l) => l.camada === 'hidrografia'),
-    soLinha.map((l) => l.camada).join(','));
+  ok('as classes sem área vêm de camada que não é de polígono (linha ou ponto)',
+    soLinha.every((l) => (tiposDaCamada[l.camada] || []).every((tp) => !/Polygon/.test(tp))),
+    soLinha.map((l) => l.camada + ' [' + (tiposDaCamada[l.camada] || []).join('/') + ']').join(', '));
   /* O percentual pode passar de 100 no AGREGADO, e isso NÃO é defeito: os polígonos da camada
    * de origem se sobrepõem (associação de solos, unidade geológica sobre unidade geológica),
    * então a soma dos pedaços de uma classe pode passar da área da AI. O que não pode é passar
