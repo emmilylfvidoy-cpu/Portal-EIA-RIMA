@@ -2937,14 +2937,9 @@
       "id": "cetesb-areas-contaminadas",
       "nome": "Áreas Contaminadas (CETESB)",
       "meio": "socioeconomico",
-      "servico": {
-        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/2",
-        "tipo": "arcgis",
-        "nome": "Áreas Contaminadas e Reabilitadas - Polígonos"
-      },
       "campo_classe": "Sigla_DG",
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
-      "data_ref": "",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — dados atualizados até 2026-09-09; foto (consulta única ao serviço) de 2026-10-08. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-09-09",
       "cor": "#a13854",
       "opacidade": 1,
       "classes_esperadas": [
@@ -2956,6 +2951,8 @@
         "AR"
       ],
       "estilo": {
+        "cor": "#a13854",
+        "opacidade": 1,
         "cores": {
           "ACI": "#425496",
           "ACRe": "#5cf759",
@@ -2970,76 +2967,236 @@
         "contornos": null
       },
       "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Simbologia copiada do renderer do próprio serviço (Sigla_DG: ACI, ACRe, ACRi, ACRu, AME, AR). A coluna ClassificacaoAtual traz o nome por extenso de cada sigla.",
-      "geometria": "ao vivo"
+      "geometria": "exata",
+      "arquivo": "data/cetesb-areas-contaminadas.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [
+        {
+          "classe": "AME",
+          "feicoes": 25
+        },
+        {
+          "classe": "ACI",
+          "feicoes": 24
+        },
+        {
+          "classe": "ACRe",
+          "feicoes": 23
+        },
+        {
+          "classe": "AR",
+          "feicoes": 21
+        },
+        {
+          "classe": "ACRi",
+          "feicoes": 16
+        },
+        {
+          "classe": "ACRu",
+          "feicoes": 6
+        }
+      ],
+      "campos": [
+        {
+          "nome": "NomeEmpree",
+          "tipo": "C",
+          "rotulo": "NomeEmpree"
+        },
+        {
+          "nome": "AtividadeSipol",
+          "tipo": "C",
+          "rotulo": "AtividadeSipol"
+        },
+        {
+          "nome": "ClassificacaoAtual",
+          "tipo": "C",
+          "rotulo": "ClassificacaoAtual"
+        },
+        {
+          "nome": "DataClassificacao",
+          "tipo": "C",
+          "rotulo": "DataClassificacao"
+        },
+        {
+          "nome": "GrupoContaminante",
+          "tipo": "C",
+          "rotulo": "GrupoContaminante"
+        },
+        {
+          "nome": "Contaminante",
+          "tipo": "C",
+          "rotulo": "Contaminante"
+        },
+        {
+          "nome": "DatAtualiza",
+          "tipo": "C",
+          "rotulo": "DatAtualiza"
+        },
+        {
+          "nome": "MeiosImpactados",
+          "tipo": "C",
+          "rotulo": "MeiosImpactados"
+        },
+        {
+          "nome": "DesEndereco",
+          "tipo": "C",
+          "rotulo": "DesEndereco"
+        },
+        {
+          "nome": "DesLocalizacao",
+          "tipo": "C",
+          "rotulo": "DesLocalizacao"
+        },
+        {
+          "nome": "DesEndeComple",
+          "tipo": "C",
+          "rotulo": "DesEndeComple"
+        },
+        {
+          "nome": "NomBairro",
+          "tipo": "C",
+          "rotulo": "NomBairro"
+        },
+        {
+          "nome": "NomDistrito",
+          "tipo": "C",
+          "rotulo": "NomDistrito"
+        },
+        {
+          "nome": "CEP",
+          "tipo": "C",
+          "rotulo": "CEP"
+        },
+        {
+          "nome": "Sigla_DG",
+          "tipo": "C",
+          "rotulo": "Sigla_DG"
+        }
+      ]
     },
     {
       "id": "cetesb-aguas-subterraneas",
       "nome": "Restrição de Uso das Águas Subterrâneas",
       "meio": "fisico",
-      "servico": {
-        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/3",
-        "tipo": "arcgis",
-        "nome": "Áreas de Restrição de Uso das Águas Subterrâneas"
-      },
-      "campo_classe": "Termo_AR",
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
-      "data_ref": "",
+      "campo_classe": null,
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
       "cor": "#ccfcdf",
       "opacidade": 1,
       "estilo": {
+        "cor": "#ccfcdf",
+        "opacidade": 1,
         "cores": {},
         "cores_origem": "estilo",
         "contorno_cor": "#6e6e6e",
         "contornos": null
       },
-      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#ccfcdf). A coluna Termo_AR traz o termo da restrição.",
-      "geometria": "ao vivo"
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#ccfcdf). A coluna Termo_AR traz o termo da restrição. Camada de COR ÚNICA, como no serviço: os campos disponíveis são o número do processo (Termo_AR) e a atividade — e a atividade vem com o acento corrompido na origem (posto de serviXo, com X variando), então não serve para legenda. Agrupe pela coluna que quiser na tabela.",
+      "geometria": "exata",
+      "arquivo": "data/cetesb-aguas-subterraneas.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [],
+      "campos": [
+        {
+          "nome": "NMUNCP",
+          "tipo": "N",
+          "rotulo": "NMUNCP"
+        },
+        {
+          "nome": "NSEQNC",
+          "tipo": "N",
+          "rotulo": "NSEQNC"
+        },
+        {
+          "nome": "RazaoSocia",
+          "tipo": "C",
+          "rotulo": "RazaoSocia"
+        },
+        {
+          "nome": "Termo_AR",
+          "tipo": "C",
+          "rotulo": "Termo_AR"
+        },
+        {
+          "nome": "Atividade",
+          "tipo": "C",
+          "rotulo": "Atividade"
+        }
+      ]
     },
     {
       "id": "cetesb-jurubatuba",
       "nome": "Restrição — Jurubatuba (CBH-AT 139/2021)",
       "meio": "fisico",
-      "servico": {
-        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/4",
-        "tipo": "arcgis",
-        "nome": "Jurubatuba - Deliberação CBH-AT nº 139/2021"
-      },
       "campo_classe": "Nome",
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
-      "data_ref": "",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
       "cor": "#c6c1f5",
       "opacidade": 1,
       "estilo": {
+        "cor": "#c6c1f5",
+        "opacidade": 1,
         "cores": {},
         "cores_origem": "estilo",
         "contorno_cor": "#6e6e6e",
         "contornos": null
       },
       "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#c6c1f5).",
-      "geometria": "ao vivo"
+      "geometria": "exata",
+      "arquivo": "data/cetesb-jurubatuba.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [
+        {
+          "classe": "Jurubatuba - Restricao",
+          "feicoes": 3
+        },
+        {
+          "classe": "Monte Azul Paulista",
+          "feicoes": 1
+        }
+      ],
+      "campos": [
+        {
+          "nome": "Nome",
+          "tipo": "C",
+          "rotulo": "Nome"
+        }
+      ]
     },
     {
       "id": "cetesb-daee-2653",
       "nome": "Restrição — Portaria DAEE 2653/2011",
       "meio": "fisico",
-      "servico": {
-        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/5",
-        "tipo": "arcgis",
-        "nome": "Portaria DAEE nº 2653/2011"
-      },
       "campo_classe": "Nome",
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
-      "data_ref": "",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
       "cor": "#00c5ff",
       "opacidade": 1,
       "estilo": {
+        "cor": "#00c5ff",
+        "opacidade": 1,
         "cores": {},
         "cores_origem": "estilo",
         "contorno_cor": "#6e6e6e",
         "contornos": null
       },
       "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#00c5ff).",
-      "geometria": "ao vivo"
+      "geometria": "exata",
+      "arquivo": "data/cetesb-daee-2653.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [
+        {
+          "classe": "Lagoa de Carapicu",
+          "feicoes": 1
+        }
+      ],
+      "campos": [
+        {
+          "nome": "Nome",
+          "tipo": "C",
+          "rotulo": "Nome"
+        }
+      ]
     },
     {
       "id": "cetesb-pontos",
@@ -3057,6 +3214,8 @@
       "cor": "#a13854",
       "opacidade": 1,
       "estilo": {
+        "cor": "#a13854",
+        "opacidade": 1,
         "cores": {
           "ACI": "#425496",
           "ACRe": "#5cf759",
@@ -3071,7 +3230,8 @@
       },
       "obs": "ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização. A cor sai da sigla entre parênteses no fim da ClassificacaoAtual (por exemplo \"(ACRe)\"), a mesma paleta do serviço.",
       "geometria": "ao vivo",
-      "alerta": true
+      "alerta": true,
+      "congelar": false
     }
   ]
 }

@@ -31,6 +31,55 @@
 | v3.4 | **A camada em tile ficou rápida de verdade**: três níveis de detalhe escolhidos pelo zoom (visão de longe, médio, exato) e **tiles em gzip** que o navegador descomprime. O estado inteiro caiu de 34,05 MB para **1,09 MB** (31× menos) e nenhuma janela passa de 2,4 MB |
 | v3.5 | **Camadas ao vivo da CETESB/SEMIL**: Áreas Contaminadas (polígonos e pontos), Restrição de Uso das Águas Subterrâneas, Jurubatuba (CBH-AT 139/2021) e Portaria DAEE 2653/2011. O portal consulta o serviço público a cada uso, por caixa (só o que está na tela) e com paginação |
 | v3.6 | **Integração com GeoServer (WFS)**: o portal passou a falar o padrão OGC Web Feature Service, com consulta por caixa, GeoJSON e paginação. Os montadores de URL ficaram num módulo testável (`js/servicos.js`), com o teste que pega a armadilha de eixo do WFS 2.0 |
+| v3.7 | **Política da base: sempre congelar, atualizar de tempos em tempos** — o coletor (	ools/coletar_servico.js) tira a foto de uma camada de serviço, publica com data do dado e data da coleta, e confere a contagem com o que o serviço declara |
+
+## Política da base: sempre congelar, atualizar de tempos em tempos (v3.7)
+
+Decisão do cliente, e é a certa para EIA/RIMA: **a base do portal é sempre uma foto com data.**
+Atualizar é um ato deliberado, nunca algo que acontece por baixo — porque o número que foi para
+um relatório precisa se reproduzir depois, para o órgão licenciador e para quem retomar o
+processo.
+
+| Camada | Muda quando | Frequência |
+|---|---|---|
+| Geologia, Geomorfologia, Pedologia, Aquíferos, Biomas | o órgão publica versão nova | quando sair |
+| Unidades de Conservação | criação/recategorização | 1× por ano |
+| Áreas Contaminadas e restrições (CETESB) | continuamente | **no início de cada estudo** |
+
+**O repositório é o arquivo.** Cada foto é um commit, então um relatório antigo se reproduz com
+`git show <commit>:data/<camada>.geojson` — não é preciso guardar cópias.
+
+### O coletor
+
+`node tools/coletar_servico.js` baixa as camadas marcadas com `"congelar": true`, publica como
+dado do portal e **registra as duas datas**:
+
+- **data do dado** — até quando a fonte atualizou aquilo (o serviço da CETESB tem `DatAtualiza`
+  por feição; a data da camada é a mais recente delas);
+- **data da coleta** — o dia em que a foto foi tirada.
+
+O relatório usa a primeira; a auditoria precisa das duas. O coletor **confere a contagem** com o
+que o serviço declara ter e avisa se não fechar.
+
+A geometria não é alterada: o que vem do serviço é o que entra. Só é arredondada em 6 casas
+(~11 cm, a precisão que o portal publica) e a terceira coordenada é descartada quando o serviço
+manda Z constante — área e distância são medidas em 2D de qualquer forma. Isso fica na fonte.
+
+### O que já está congelado
+
+| Camada | Feições | Data do dado | Coleta |
+|---|---|---|---|
+| Áreas Contaminadas (CETESB) | 115 | 2026-09-09 | 2026-10-08 |
+| Restrição de Uso das Águas Subterrâneas | 879 | (a fonte não declara) | 2026-10-08 |
+| Restrição — Jurubatuba (CBH-AT 139/2021) | 4 | (a fonte não declara) | 2026-10-08 |
+| Restrição — Portaria DAEE 2653/2011 | 1 | (a fonte não declara) | 2026-10-08 |
+
+A de **pontos** ficou ao vivo de propósito: o próprio serviço avisa que parte das coordenadas foi
+gerada aleatoriamente dentro do município — não serve para virar área de relatório.
+
+**Achado de origem:** o campo `Atividade` da camada de águas subterrâneas vem com o acento
+corrompido (aparece "posto de serviXo", com o X variando de feição para feição), o que impede
+usá-lo como classe; por isso essa camada é de cor única, como no serviço.
 
 ## Integrar com o GeoServer (v3.6)
 
