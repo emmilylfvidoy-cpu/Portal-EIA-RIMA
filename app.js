@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.4';
+  const VERSAO = 'v3.5';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -302,6 +302,14 @@
         estadoTxt.textContent = camada.presente === false ? 'sem arquivo' : '';
         // Camada de referência generalizada: quem for medir precisa saber que a feição não é
         // a do shapefile original.
+        if (camada.alerta) {
+          // aviso que muda decisão: nesta camada a coordenada de parte das feições é aleatória
+          const al = document.createElement('span');
+          al.className = 'tag-alerta';
+          al.textContent = '⚠ localização não confiável';
+          al.title = camada.fonte || camada.obs || '';
+          linha.appendChild(al);
+        }
         if (camada.geometria === 'generalizada') {
           const aviso = document.createElement('span');
           aviso.className = 'tag-generalizada';
@@ -623,6 +631,26 @@
     estado.camadasLigadas.add(camada.id);
     const jaTem = estado.camadas.find((c) => c.id === camada.id);
     if (!jaTem) {
+      /* Camada AO VIVO (serviço da CETESB): consulta por caixa, só o que a tela mostra. */
+      if (camada.servico) {
+        const elS = document.querySelector('.estado[data-camada="' + camada.id + '"]');
+        if (elS) elS.textContent = 'consultando o serviço…';
+        estado.camadas.push(Object.assign({}, camada, { geojson: { type: 'FeatureCollection', features: [] } }));
+        try {
+          await carregarServicoNaJanela(camada);
+        } catch (e) {
+          estado.camadasLigadas.delete(camada.id);
+          estado.camadas = estado.camadas.filter((c) => c.id !== camada.id);
+          if (elS) elS.textContent = 'falhou';
+          status(mensagemDoServico(camada, e), true);
+          return;
+        }
+        const q = estado.camadas.find((c) => c.id === camada.id);
+        status(camada.nome + ' — ' + (q ? q.geojson.features.length.toLocaleString('pt-BR') : 0)
+          + ' feições carregadas do serviço (ao vivo, conforme a tela).');
+        return;
+      }
+
       /* Camada em TILES: cria a feição vazia, busca o índice e carrega o que a janela mostra.
        * O desenho e o recorte seguem iguais ao resto do portal — a diferença é só de onde os
        * dados vêm e de quanto se busca de cada vez. */
@@ -1115,6 +1143,11 @@
      * a tela mostrava daria área menor que a real e o relatório sairia errado. */
     try {
       for (const camada of estado.camadas) {
+        if (camada.servico) {
+          status('Buscando ' + camada.nome + ' no serviço da CETESB, para as áreas de influência…');
+          await garantirServicoCompleto(camada);
+          continue;
+        }
         if (!camada.tiles) continue;
         const indice = await indiceDaCamada(camada, 'exato');
         if (estado.nivelCarregado[camada.id] !== 'exato'
@@ -1511,6 +1544,17 @@
   }
 
   /** Para RECORTAR: garante a camada inteira em memória (todos os tiles). */
+  /** Para RECORTAR uma camada ao vivo: consulta TODAS as feições que cruzam as áreas de
+   *  influência. A consulta da tela não serve — daria área menor que a real. */
+  async function garantirServicoCompleto(camada) {
+    const manifesto = estado.camadas.find((c) => c.id === camada.id);
+    if (!manifesto) return;
+    const feicoes = await consultarServico(camada, caixaDasAreas(), true);
+    manifesto.geojson = { type: 'FeatureCollection', features: feicoes };
+    deduzirColunasEClasses(manifesto, feicoes);
+    desenharCamadas();
+  }
+
   async function garantirCamadaCompleta(camada) {
     if (!camada.tiles) return;
     /* O RECORTE usa SEMPRE o nível exato, independente do zoom: recortar sobre a visão
@@ -1525,11 +1569,135 @@
 
   /** Redesenha as camadas em tile que estão ligadas (ao mover o mapa). */
   async function atualizarTilesLigados() {
-    const ligadas = estado.camadas.filter((c) => c.tiles);
-    for (const camada of ligadas) {
+    for (const camada of estado.camadas.filter((c) => c.tiles)) {
       try { await carregarTilesDaJanela(camada); }
       catch (e) { status('Não carreguei uma parte de ' + camada.nome + ': ' + e.message, true); }
     }
+    // as camadas ao vivo são reconsultadas a cada parada do mapa: o serviço responde pelo que
+    // está na tela, e a chamada é leve (só a caixa visível)
+    for (const camada of estado.camadas.filter((c) => c.servico)) {
+      try { await carregarServicoNaJanela(camada); }
+      catch (e) { status(mensagemDoServico(camada, e), true); }
+    }
+  }
+
+
+  // =========================================================== camadas ao vivo
+  /*
+   * Escolha do cliente: as camadas da CETESB (áreas contaminadas, restrição de uso das águas
+   * subterrâneas, Jurubatuba, Portaria DAEE 2653) NÃO entram na base fixa — o portal consulta
+   * o serviço público da SEMIL/CETESB a cada uso. A contrapartida está dita na tela: depende do
+   * servidor deles estar no ar, e o que aparece é o que ele responde agora.
+   *
+   * A consulta é sempre por CAIXA (o que está na tela, ou a área de influência no recorte),
+   * com paginação — o serviço limita 1000 feições por resposta.
+   */
+  function urlDaConsulta(camada, caixa, offset) {
+    const p = new URLSearchParams();
+    p.set('where', '1=1');
+    p.set('geometry', caixa.map((v) => v.toFixed(6)).join(','));
+    p.set('geometryType', 'esriGeometryEnvelope');
+    p.set('inSR', '4326');
+    p.set('spatialRel', 'esriSpatialRelIntersects');
+    p.set('outFields', '*');
+    p.set('returnGeometry', 'true');
+    p.set('outSR', '4326');
+    p.set('f', 'geojson');
+    p.set('resultOffset', String(offset || 0));
+    p.set('resultRecordCount', '1000');
+    return camada.servico.url + '/query?' + p.toString();
+  }
+
+  /** Data em milissegundos (como o serviço devolve) vira data legível na tabela. */
+  function comoData(v) {
+    if (typeof v !== 'number' || v < 1e11 || v > 4e12) return null;
+    const d = new Date(v);
+    return isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
+  }
+
+  function arrumarAtributos(f) {
+    for (const k of Object.keys(f.properties || {})) {
+      const d = comoData(f.properties[k]);
+      if (d) f.properties[k] = d;
+    }
+    return f;
+  }
+
+  /**
+   * Colunas e classes saem do PRÓPRIO DADO: a camada é ao vivo, não há catálogo pronto. As
+   * cores vêm do estilo do serviço; classe sem cor declarada cai na paleta do portal.
+   */
+  function deduzirColunasEClasses(camada, feicoes) {
+    const chaves = [];
+    const vistas = new Set();
+    for (const f of feicoes) {
+      for (const k of Object.keys(f.properties || {})) {
+        if (vistas.has(k) || /^(objectid|shape)/i.test(k) || /ST(Area|Length)/i.test(k)) continue;
+        vistas.add(k);
+        chaves.push(k);
+      }
+    }
+    if (chaves.length) camada.campos = chaves.map((k) => ({ nome: k, tipo: 'C', rotulo: k }));
+    const campo = camada.campo_classe;
+    if (!campo) return;
+    const contagem = new Map();
+    for (const f of feicoes) {
+      let v = f.properties[campo];
+      if (v === null || v === undefined || v === '') continue;
+      v = String(v).trim();
+      contagem.set(v, (contagem.get(v) || 0) + 1);
+    }
+    camada.classes = Array.from(contagem.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([classe, n]) => ({ classe: classe, feicoes: n }));
+  }
+
+  async function consultarServico(camada, caixa, avisar) {
+    const feicoes = [];
+    let offset = 0;
+    for (let volta = 0; volta < 40; volta++) {
+      const resposta = await fetch(urlDaConsulta(camada, caixa, offset), { cache: 'no-cache' });
+      if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
+      const dados = await resposta.json();
+      if (dados.error) throw new Error(dados.error.message || 'erro no serviço');
+      const vieram = dados.features || [];
+      for (const f of vieram) feicoes.push(arrumarAtributos(f));
+      if (avisar) status('Carregando ' + camada.nome + '… ' + feicoes.length.toLocaleString('pt-BR') + ' feições');
+      if (!dados.exceededTransferLimit || !vieram.length) break;
+      offset += vieram.length;
+    }
+    return feicoes;
+  }
+
+  function mensagemDoServico(camada, e) {
+    return 'Não carreguei ' + camada.nome + ' do serviço da CETESB: ' + e.message
+      + '. Se for bloqueio do navegador (CORS), o servidor deles não libera consulta de outro '
+      + 'site — nesse caso a saída é publicar uma foto da camada na base.';
+  }
+
+  /** Carrega o que a janela mostra (consulta por caixa: substitui, não acumula). */
+  async function carregarServicoNaJanela(camada) {
+    const dentro = estado.camadas.find((c) => c.id === camada.id);
+    if (!dentro) return 0;
+    const feicoes = await consultarServico(camada, bboxDaJanela(0), false);
+    dentro.geojson = { type: 'FeatureCollection', features: feicoes };
+    deduzirColunasEClasses(dentro, feicoes);
+    desenharCamadas();
+    atualizarRotulos();
+    const el = document.querySelector('.estado[data-camada="' + camada.id + '"]');
+    if (el) el.textContent = feicoes.length.toLocaleString('pt-BR') + ' feições na tela'
+      + (dentro.classes && dentro.classes.length ? ' · ' + dentro.classes.length + ' classes' : '')
+      + ' · ao vivo';
+    return feicoes.length;
+  }
+
+  /** Caixa que cobre TODAS as áreas de influência (para o recorte da camada ao vivo). */
+  function caixaDasAreas() {
+    const fc = {
+      type: 'FeatureCollection',
+      features: estado.areas.map((a) => ({ type: 'Feature', properties: {}, geometry: a.geometry })),
+    };
+    return EIA.math.bbox(fc);
   }
 
   // =========================================================== ordem das camadas

@@ -8,6 +8,7 @@ const path = require('path');
 
 /** Arquivos que compõem a camada (o geojson, ou o índice + os tiles). */
 function arquivos(raiz, camada) {
+  if (camada.servico) return [];   // camada ao vivo: os dados vêm do serviço, não do repositório
   if (camada.tiles) {
     const indice = JSON.parse(fs.readFileSync(path.join(raiz, camada.tiles), 'utf8'));
     return [camada.tiles].concat(indice.tiles.map((t) => t.arquivo));
@@ -17,6 +18,10 @@ function arquivos(raiz, camada) {
 
 /** Carrega a camada inteira como FeatureCollection (lê todos os tiles, quando for o caso). */
 function carregar(raiz, camada) {
+  if (camada.servico) {
+    // não há o que carregar de arquivo: a camada é consultada no serviço a cada uso
+    return { type: 'FeatureCollection', features: [], ao_vivo: true };
+  }
   if (!camada.tiles) {
     return JSON.parse(fs.readFileSync(path.join(raiz, camada.arquivo), 'utf8'));
   }

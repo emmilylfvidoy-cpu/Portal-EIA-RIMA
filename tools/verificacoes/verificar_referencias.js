@@ -112,6 +112,13 @@ console.log('\n== Camadas do catálogo ==');
       if (!fs.statSync(path.join(raiz, arq)).isFile()) erros.push(arq + ' não é arquivo');
     }
   }
+  // Camada AO VIVO não tem arquivo — o que tem de estar declarado é o serviço e a fonte.
+  const semServico = catalogo.camadas
+    .filter((c) => c.servico && (!c.servico.url || !/^https:\/\//.test(c.servico.url) || !c.fonte))
+    .map((c) => c.id);
+  ok('camada ao vivo declara o endereço do serviço e a fonte (crédito)',
+    semServico.length === 0, semServico.join(', ') || catalogo.camadas.filter((c) => c.servico).length + ' camadas ao vivo conferidas');
+
   ok('toda camada do catálogo tem arquivo (ou índice + tiles), grafia exata', erros.length === 0,
     erros.join('; ') || catalogo.camadas.length + ' camadas conferidas');
 

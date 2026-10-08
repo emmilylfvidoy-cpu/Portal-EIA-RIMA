@@ -2932,6 +2932,146 @@
           "zoom_max": 11
         }
       ]
+    },
+    {
+      "id": "cetesb-areas-contaminadas",
+      "nome": "Áreas Contaminadas (CETESB)",
+      "meio": "socioeconomico",
+      "servico": {
+        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/2",
+        "tipo": "arcgis",
+        "nome": "Áreas Contaminadas e Reabilitadas - Polígonos"
+      },
+      "campo_classe": "Sigla_DG",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
+      "data_ref": "",
+      "cor": "#a13854",
+      "opacidade": 1,
+      "classes_esperadas": [
+        "ACI",
+        "ACRe",
+        "ACRi",
+        "ACRu",
+        "AME",
+        "AR"
+      ],
+      "estilo": {
+        "cores": {
+          "ACI": "#425496",
+          "ACRe": "#5cf759",
+          "ACRi": "#a13854",
+          "ACRu": "#fa8e57",
+          "AME": "#43ab86",
+          "AR": "#f261f2"
+        },
+        "cores_origem": "estilo",
+        "estilo_arquivo": "renderer do serviço (uniqueValue por Sigla_DG)",
+        "contorno_cor": "#6e6e6e",
+        "contornos": null
+      },
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Simbologia copiada do renderer do próprio serviço (Sigla_DG: ACI, ACRe, ACRi, ACRu, AME, AR). A coluna ClassificacaoAtual traz o nome por extenso de cada sigla.",
+      "geometria": "ao vivo"
+    },
+    {
+      "id": "cetesb-aguas-subterraneas",
+      "nome": "Restrição de Uso das Águas Subterrâneas",
+      "meio": "fisico",
+      "servico": {
+        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/3",
+        "tipo": "arcgis",
+        "nome": "Áreas de Restrição de Uso das Águas Subterrâneas"
+      },
+      "campo_classe": "Termo_AR",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
+      "data_ref": "",
+      "cor": "#ccfcdf",
+      "opacidade": 1,
+      "estilo": {
+        "cores": {},
+        "cores_origem": "estilo",
+        "contorno_cor": "#6e6e6e",
+        "contornos": null
+      },
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#ccfcdf). A coluna Termo_AR traz o termo da restrição.",
+      "geometria": "ao vivo"
+    },
+    {
+      "id": "cetesb-jurubatuba",
+      "nome": "Restrição — Jurubatuba (CBH-AT 139/2021)",
+      "meio": "fisico",
+      "servico": {
+        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/4",
+        "tipo": "arcgis",
+        "nome": "Jurubatuba - Deliberação CBH-AT nº 139/2021"
+      },
+      "campo_classe": "Nome",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
+      "data_ref": "",
+      "cor": "#c6c1f5",
+      "opacidade": 1,
+      "estilo": {
+        "cores": {},
+        "cores_origem": "estilo",
+        "contorno_cor": "#6e6e6e",
+        "contornos": null
+      },
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#c6c1f5).",
+      "geometria": "ao vivo"
+    },
+    {
+      "id": "cetesb-daee-2653",
+      "nome": "Restrição — Portaria DAEE 2653/2011",
+      "meio": "fisico",
+      "servico": {
+        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/5",
+        "tipo": "arcgis",
+        "nome": "Portaria DAEE nº 2653/2011"
+      },
+      "campo_classe": "Nome",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo)",
+      "data_ref": "",
+      "cor": "#00c5ff",
+      "opacidade": 1,
+      "estilo": {
+        "cores": {},
+        "cores_origem": "estilo",
+        "contorno_cor": "#6e6e6e",
+        "contornos": null
+      },
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#00c5ff).",
+      "geometria": "ao vivo"
+    },
+    {
+      "id": "cetesb-pontos",
+      "nome": "Áreas Contaminadas — pontos (CETESB)",
+      "meio": "socioeconomico",
+      "tipo_geometria": "ponto",
+      "servico": {
+        "url": "https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer/1",
+        "tipo": "arcgis",
+        "nome": "Áreas Contaminadas e Reabilitadas - Geral"
+      },
+      "campo_classe": "ClassificacaoAtual",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas (consulta ao vivo) — ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização.",
+      "data_ref": "",
+      "cor": "#a13854",
+      "opacidade": 1,
+      "estilo": {
+        "cores": {
+          "ACI": "#425496",
+          "ACRe": "#5cf759",
+          "ACRi": "#a13854",
+          "ACRu": "#fa8e57",
+          "AME": "#43ab86",
+          "AR": "#f261f2"
+        },
+        "cores_origem": "estilo",
+        "contorno_cor": "#6e6e6e",
+        "contornos": null
+      },
+      "obs": "ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização. A cor sai da sigla entre parênteses no fim da ClassificacaoAtual (por exemplo \"(ACRe)\"), a mesma paleta do serviço.",
+      "geometria": "ao vivo",
+      "alerta": true
     }
   ]
 }

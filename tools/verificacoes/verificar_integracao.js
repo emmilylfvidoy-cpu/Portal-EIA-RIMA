@@ -38,7 +38,8 @@ console.log('\n== Catálogo e arquivos ==');
   // completa — contar camadas foi o que fez este teste falhar sem nada estar errado.
   ok('catálogo tem camadas', catalogo.camadas.length >= 2, catalogo.camadas.length + ' camadas');
   ok('toda camada tem arquivo, classe e meio',
-    catalogo.camadas.every((c) => (c.arquivo || c.tiles) && c.campo_classe && c.meio && c.classes && c.classes.length),
+    catalogo.camadas.every((c) => (c.arquivo || c.tiles || c.servico) && c.campo_classe && c.meio
+    && (c.servico || (c.classes && c.classes.length)) && (c.arquivo || c.tiles || c.servico.url)),
     catalogo.camadas.map((c) => c.id).join(', '));
   const faltando = [];
   for (const c of catalogo.camadas) {
@@ -56,6 +57,9 @@ console.log('\n== Catálogo e arquivos ==');
   const campoInexistente = [];
   for (const c of catalogo.camadas) {
     if (!c.campo_classe) continue;
+    // camada AO VIVO: o campo de classe foi conferido contra os metadados do próprio serviço
+    // (o nome de cada campo está declarado lá), não contra um arquivo do repositório
+    if (c.servico) continue;
     const g = ajudanteCamadas.carregar(raiz, c);
     const props = (g.features[0] && g.features[0].properties) || {};
     if (!(c.campo_classe in props)) campoInexistente.push(c.nome + ' → ' + c.campo_classe);
@@ -104,6 +108,7 @@ const areas = areasGeojson.features.map((f, i) => ({
 console.log('\n== Recorte de todas as camadas pelas áreas ==');
 const camadas = [];
 for (const c of catalogo.camadas) {
+  if (c.servico) continue;   // sem rede: a camada ao vivo é conferida na suite de referências
   const geojson = ajudanteCamadas.carregar(raiz, c);
   camadas.push(Object.assign({}, c, { geojson: geojson }));
 }

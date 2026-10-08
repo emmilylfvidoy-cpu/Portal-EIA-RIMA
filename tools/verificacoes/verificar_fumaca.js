@@ -107,7 +107,9 @@ const ajudanteCamadas = require(path.join(__dirname, '_camadas.js'));
     const areas = areasG.features.map((f) => ({
       id: f.properties.sigla, nome: f.properties.nome, sigla: f.properties.sigla, geometry: f.geometry,
     }));
-    const camadas = catalogo.camadas.map((c) => Object.assign({}, c, {
+    // camada AO VIVO fica fora do teste de fumaça: sem rede não há o que baixar. Ela é
+  // verificada quanto ao contrato (serviço declarado, fonte declarada) na suite de referências.
+  const camadas = catalogo.camadas.filter((c) => !c.servico).map((c) => Object.assign({}, c, {
       geojson: ajudanteCamadas.carregar(raiz, c),
     }));
 

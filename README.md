@@ -29,6 +29,52 @@
 | v3.2 | **As seis camadas ficaram EXATAS.** Pedologia e Unidades de Conservação passaram a ser publicadas em **tiles binários** — nenhum vértice movido, nenhuma fenda — e o portal carrega só as partes que a tela mostra; para recortar, busca a camada inteira |
 | v3.3 | **Camada em tile ficou rápida**: dois níveis — a **visão de longe** (generalizada, 4,65 MB) quando o zoom está longe e o **dado exato** quando aproxima, com o recorte sempre no exato. O estado inteiro caiu de 34 MB / 10,8 milhões de pontos para **4,65 MB / 167 mil** |
 | v3.4 | **A camada em tile ficou rápida de verdade**: três níveis de detalhe escolhidos pelo zoom (visão de longe, médio, exato) e **tiles em gzip** que o navegador descomprime. O estado inteiro caiu de 34,05 MB para **1,09 MB** (31× menos) e nenhuma janela passa de 2,4 MB |
+| v3.5 | **Camadas ao vivo da CETESB/SEMIL**: Áreas Contaminadas (polígonos e pontos), Restrição de Uso das Águas Subterrâneas, Jurubatuba (CBH-AT 139/2021) e Portaria DAEE 2653/2011. O portal consulta o serviço público a cada uso, por caixa (só o que está na tela) e com paginação |
+
+## Camadas ao vivo do serviço da CETESB/SEMIL (v3.5)
+
+O cliente pediu as camadas do mapa de **Áreas Contaminadas** (`mapas.semil.sp.gov.br`) e
+escolheu **ligação ao vivo**, não foto na base. Ficou assim:
+
+| Camada | Geometria | Feições | Classe | Cor |
+|---|---|---|---|---|
+| Áreas Contaminadas (polígonos) | polígono | 115 | `Sigla_DG` | 6 cores do serviço |
+| Áreas Contaminadas (pontos) | ponto | 7.324 | `ClassificacaoAtual` | idem, pela sigla |
+| Restrição de Uso das Águas Subterrâneas | polígono | 879 | `Termo_AR` | `#ccfcdf` |
+| Restrição — Jurubatuba (CBH-AT 139/2021) | polígono | — | `Nome` | `#c6c1f5` |
+| Restrição — Portaria DAEE 2653/2011 | polígono | — | `Nome` | `#00c5ff` |
+
+Serviço: `https://mapas.semil.sp.gov.br/server/rest/services/SIGAM/Empreendimento_Contaminacao_SGP/MapServer`
+(ArcGIS, `capabilities: Query,Map,Data`, EPSG:4326, saída GeoJSON). Crédito declarado pelo
+próprio serviço: **SEMIL/CETESB**.
+
+### O aviso que muda decisão (e está na tela)
+
+Do campo `documentInfo` do serviço, literalmente:
+
+> *"A localização dos empreendimentos cujas coordenadas foram reprovadas na validação foi
+> gerada aleatoriamente dentro do município."*
+
+Ou seja: **a camada de PONTOS tem feições com localização inventada**. O portal mostra a
+etiqueta **"⚠ localização não confiável"** na lista e leva o texto completo para a fonte e para
+o relatório. As camadas de polígono não têm esse problema.
+
+### Como funciona a consulta
+
+- **Por caixa**: o portal pede só o que a janela mostra (ou a **área de influência** inteira,
+  no recorte) e reconsulta a cada parada do mapa — a chamada é leve.
+- **Com paginação**: o serviço limita 1000 feições por resposta; o portal continua pedindo até
+  acabar (`exceededTransferLimit`).
+- **Colunas e classes saem do próprio dado** (não há catálogo pronto numa camada ao vivo), e as
+  cores vêm do renderer do serviço.
+
+### O risco desta escolha, dito antes
+
+Camada ao vivo **depende do servidor da CETESB estar no ar** e **liberar consulta de outro
+site (CORS)**. Não consigo testar CORS daqui: o portal foi feito para falhar com mensagem clara
+("...se for bloqueio do navegador (CORS)... a saída é publicar uma foto da camada na base"). Se
+aparecer esse aviso no navegador, a correção é rodar a coleta e publicar como as outras
+camadas — o mesmo caminho das 6 da base fixa.
 
 ## A camada em tile ficou rápida (v3.4)
 
