@@ -363,18 +363,23 @@ dialog::backdrop { background: rgba(16, 32, 40, .55); }
    com caixa própria, que entra no recorte e no relatório como qualquer outra. Existe porque 22
    UGRHIs abertas na lista empurrariam todas as outras camadas para fora da tela. */
 .camada-grupo {
+  /* DISCRETO DE PROPÓSITO: são 22 unidades recolhidas num item só, e ele não pode competir com
+     as camadas de verdade na lista. Fonte menor e sem caixa pesada — a setinha é o convite. */
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 8px;
-  margin-top: 6px;
-  border-radius: 4px;
-  background: #eef2f5;
-  border: 1px solid #d3dde4;
-  font-weight: 600;
-  font-size: 13px;
+  gap: 4px;
+  padding: 2px 4px 2px 2px;
+  margin-top: 4px;
+  border-radius: 3px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dotted #c9d4dc;
+  font-weight: 500;
+  font-size: 11.5px;
+  color: #55636d;
 }
-.camada-grupo.aberto { background: #e3ebf1; }
+.camada-grupo.aberto { background: #f3f6f8; border-bottom-color: #a9bcc9; }
+.camada-grupo .estado { font-size: 10.5px; }
 .seta-grupo {
   border: 0;
   background: transparent;

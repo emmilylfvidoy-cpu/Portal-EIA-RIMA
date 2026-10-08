@@ -2701,270 +2701,9 @@
       ]
     },
     {
-      "id": "biomas",
-      "nome": "Biomas",
-      "meio": "biotico",
-      "tipo": "poligono",
-      "campo_classe": "Bioma",
-      "campos": [
-        {
-          "nome": "Bioma",
-          "tipo": "C",
-          "rotulo": "Bioma"
-        }
-      ],
-      "classes": [
-        {
-          "classe": "Cerrado",
-          "feicoes": 1
-        },
-        {
-          "classe": "Mata Atântica",
-          "feicoes": 1
-        }
-      ],
-      "estilo": {
-        "cor": "#2f6b3a",
-        "opacidade": 1,
-        "cores": {
-          "Cerrado": "#ffd37f",
-          "Mata Atântica": "#00734c"
-        }
-      },
-      "fonte": "Biomas do Estado de São Paulo (Cerrado e Mata Atlântica)",
-      "data_ref": "",
-      "origem": "importado",
-      "feicoes": 2,
-      "cores_origem": "estilo",
-      "estilo_arquivo": "Biomas.xml",
-      "obs": "Classe = Bioma (2 valores: Cerrado e Mata Atlântica), o agrupamento do Biomas.xml: 2/2 valores têm cor. São só 2 feições, mas com o contato entre biomas muito detalhado (3,9 MB de .shp). CONFIRMAR a citação oficial. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
-      "geometria": "exata",
-      "tiles": "data/biomas/exato/indice.json",
-      "niveis": [
-        {
-          "nivel": "visao",
-          "indice": "data/biomas/visao/indice.json",
-          "zoom_max": 9
-        }
-      ]
-    },
-    {
-      "id": "unidades-conservacao",
-      "nome": "Unidades de Conservação",
-      "meio": "socioeconomico",
-      "tipo": "poligono",
-      "campo_classe": "grupo",
-      "campos": [
-        {
-          "nome": "grupo",
-          "tipo": "C",
-          "rotulo": "grupo"
-        },
-        {
-          "nome": "gml_id",
-          "tipo": "C",
-          "rotulo": "gml_id"
-        },
-        {
-          "nome": "uc_id",
-          "tipo": "C",
-          "rotulo": "uc_id"
-        },
-        {
-          "nome": "cd_cnuc",
-          "tipo": "C",
-          "rotulo": "cd_cnuc"
-        },
-        {
-          "nome": "wdpa_pid",
-          "tipo": "C",
-          "rotulo": "wdpa_pid"
-        },
-        {
-          "nome": "nome_uc",
-          "tipo": "C",
-          "rotulo": "nome_uc"
-        },
-        {
-          "nome": "cria_ano",
-          "tipo": "C",
-          "rotulo": "cria_ano"
-        },
-        {
-          "nome": "cria_ato",
-          "tipo": "C",
-          "rotulo": "cria_ato"
-        },
-        {
-          "nome": "outro_ato",
-          "tipo": "C",
-          "rotulo": "outro_ato"
-        },
-        {
-          "nome": "pl_manejo",
-          "tipo": "C",
-          "rotulo": "pl_manejo"
-        },
-        {
-          "nome": "co_gestor",
-          "tipo": "C",
-          "rotulo": "co_gestor"
-        },
-        {
-          "nome": "quali_pol",
-          "tipo": "C",
-          "rotulo": "quali_pol"
-        },
-        {
-          "nome": "ppgr",
-          "tipo": "C",
-          "rotulo": "ppgr"
-        },
-        {
-          "nome": "ha_total",
-          "tipo": "C",
-          "rotulo": "ha_total"
-        },
-        {
-          "nome": "ha_ato",
-          "tipo": "C",
-          "rotulo": "ha_ato"
-        },
-        {
-          "nome": "esfera",
-          "tipo": "C",
-          "rotulo": "esfera"
-        },
-        {
-          "nome": "uf",
-          "tipo": "C",
-          "rotulo": "uf"
-        },
-        {
-          "nome": "municipio",
-          "tipo": "C",
-          "rotulo": "municipio"
-        },
-        {
-          "nome": "org_gestor",
-          "tipo": "C",
-          "rotulo": "org_gestor"
-        },
-        {
-          "nome": "categoria",
-          "tipo": "C",
-          "rotulo": "categoria"
-        },
-        {
-          "nome": "cat_iucn",
-          "tipo": "C",
-          "rotulo": "cat_iucn"
-        },
-        {
-          "nome": "amazonia",
-          "tipo": "C",
-          "rotulo": "amazonia"
-        },
-        {
-          "nome": "caatinga",
-          "tipo": "C",
-          "rotulo": "caatinga"
-        },
-        {
-          "nome": "cerrado",
-          "tipo": "C",
-          "rotulo": "cerrado"
-        },
-        {
-          "nome": "matlantica",
-          "tipo": "C",
-          "rotulo": "matlantica"
-        },
-        {
-          "nome": "pampa",
-          "tipo": "C",
-          "rotulo": "pampa"
-        },
-        {
-          "nome": "pantanal",
-          "tipo": "C",
-          "rotulo": "pantanal"
-        },
-        {
-          "nome": "marinho",
-          "tipo": "C",
-          "rotulo": "marinho"
-        },
-        {
-          "nome": "situacao",
-          "tipo": "C",
-          "rotulo": "situacao"
-        },
-        {
-          "nome": "limite",
-          "tipo": "C",
-          "rotulo": "limite"
-        },
-        {
-          "nome": "area_ha",
-          "tipo": "F",
-          "rotulo": "area_ha"
-        },
-        {
-          "nome": "NomeAbrev",
-          "tipo": "C",
-          "rotulo": "NomeAbrev"
-        }
-      ],
-      "classes": [
-        {
-          "classe": "Proteção Integral",
-          "feicoes": 873
-        },
-        {
-          "classe": "Uso Sustentável",
-          "feicoes": 1869
-        }
-      ],
-      "estilo": {
-        "cor": "#2f5b8a",
-        "opacidade": 1,
-        "cores": {
-          "Proteção Integral": "#ff7f7f",
-          "Uso Sustentável": "#38a800"
-        },
-        "contornos": {
-          "Proteção Integral": "#ff0000",
-          "Uso Sustentável": "#267300"
-        },
-        "contorno_cor": "#ff0000"
-      },
-      "fonte": "Unidades de Conservação do Estado de São Paulo",
-      "data_ref": "",
-      "origem": "importado",
-      "feicoes": 2742,
-      "cores_origem": "estilo",
-      "estilo_arquivo": "Unidades de Conservação.xml",
-      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial. GEOMETRIA EXATA, publicada em tiles binarios (data/unidades-conservacao/indice.json): nenhum vertice foi movido, e o portal carrega so as partes que a tela mostra (para recortar, busca a camada inteira).",
-      "geometria": "exata",
-      "tiles": "data/unidades-conservacao/exato/indice.json",
-      "niveis": [
-        {
-          "nivel": "visao",
-          "indice": "data/unidades-conservacao/visao/indice.json",
-          "zoom_max": 9
-        },
-        {
-          "nivel": "medio",
-          "indice": "data/unidades-conservacao/medio/indice.json",
-          "zoom_max": 11
-        }
-      ]
-    },
-    {
       "id": "cetesb-areas-contaminadas",
       "nome": "Áreas Contaminadas (CETESB)",
-      "meio": "socioeconomico",
+      "meio": "fisico",
       "campo_classe": "Sigla_DG",
       "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — dados atualizados até 2026-09-09; foto (consulta única ao serviço) de 2026-10-08. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
       "data_ref": "2026-09-09",
@@ -3103,133 +2842,9 @@
       ]
     },
     {
-      "id": "cetesb-aguas-subterraneas",
-      "nome": "Restrição de Uso das Águas Subterrâneas",
-      "meio": "fisico",
-      "campo_classe": null,
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
-      "data_ref": "2026-10-08",
-      "cor": "#ccfcdf",
-      "opacidade": 1,
-      "estilo": {
-        "cor": "#ccfcdf",
-        "opacidade": 1,
-        "cores": {},
-        "cores_origem": "estilo",
-        "contorno_cor": "#6e6e6e",
-        "contornos": null
-      },
-      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#ccfcdf). A coluna Termo_AR traz o termo da restrição. Camada de COR ÚNICA, como no serviço: os campos disponíveis são o número do processo (Termo_AR) e a atividade — e a atividade vem com o acento corrompido na origem (posto de serviXo, com X variando), então não serve para legenda. Agrupe pela coluna que quiser na tabela.",
-      "geometria": "exata",
-      "arquivo": "data/cetesb-aguas-subterraneas.geojson",
-      "data_coleta": "2026-10-08",
-      "classes": [],
-      "campos": [
-        {
-          "nome": "NMUNCP",
-          "tipo": "N",
-          "rotulo": "NMUNCP"
-        },
-        {
-          "nome": "NSEQNC",
-          "tipo": "N",
-          "rotulo": "NSEQNC"
-        },
-        {
-          "nome": "RazaoSocia",
-          "tipo": "C",
-          "rotulo": "RazaoSocia"
-        },
-        {
-          "nome": "Termo_AR",
-          "tipo": "C",
-          "rotulo": "Termo_AR"
-        },
-        {
-          "nome": "Atividade",
-          "tipo": "C",
-          "rotulo": "Atividade"
-        }
-      ]
-    },
-    {
-      "id": "cetesb-jurubatuba",
-      "nome": "Restrição — Jurubatuba (CBH-AT 139/2021)",
-      "meio": "fisico",
-      "campo_classe": "Nome",
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
-      "data_ref": "2026-10-08",
-      "cor": "#c6c1f5",
-      "opacidade": 1,
-      "estilo": {
-        "cor": "#c6c1f5",
-        "opacidade": 1,
-        "cores": {},
-        "cores_origem": "estilo",
-        "contorno_cor": "#6e6e6e",
-        "contornos": null
-      },
-      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#c6c1f5).",
-      "geometria": "exata",
-      "arquivo": "data/cetesb-jurubatuba.geojson",
-      "data_coleta": "2026-10-08",
-      "classes": [
-        {
-          "classe": "Jurubatuba - Restricao",
-          "feicoes": 3
-        },
-        {
-          "classe": "Monte Azul Paulista",
-          "feicoes": 1
-        }
-      ],
-      "campos": [
-        {
-          "nome": "Nome",
-          "tipo": "C",
-          "rotulo": "Nome"
-        }
-      ]
-    },
-    {
-      "id": "cetesb-daee-2653",
-      "nome": "Restrição — Portaria DAEE 2653/2011",
-      "meio": "fisico",
-      "campo_classe": "Nome",
-      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
-      "data_ref": "2026-10-08",
-      "cor": "#00c5ff",
-      "opacidade": 1,
-      "estilo": {
-        "cor": "#00c5ff",
-        "opacidade": 1,
-        "cores": {},
-        "cores_origem": "estilo",
-        "contorno_cor": "#6e6e6e",
-        "contornos": null
-      },
-      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#00c5ff).",
-      "geometria": "exata",
-      "arquivo": "data/cetesb-daee-2653.geojson",
-      "data_coleta": "2026-10-08",
-      "classes": [
-        {
-          "classe": "Lagoa de Carapicu",
-          "feicoes": 1
-        }
-      ],
-      "campos": [
-        {
-          "nome": "Nome",
-          "tipo": "C",
-          "rotulo": "Nome"
-        }
-      ]
-    },
-    {
       "id": "cetesb-pontos",
       "nome": "Áreas Contaminadas — pontos (CETESB)",
-      "meio": "socioeconomico",
+      "meio": "fisico",
       "tipo_geometria": "ponto",
       "campo_classe": "Sigla_DG",
       "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — ATENÇÃO: nesta camada, os empreendimentos cuja coordenada foi reprovada na validação tiveram a localização GERADA ALEATORIAMENTE dentro do município (informação do próprio serviço). O ponto mostra o município, não o endereço — confira antes de usar como referência de localização. SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — dados atualizados até 2026-10-07; foto (consulta única ao serviço) de 2026-10-08. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
@@ -3526,356 +3141,387 @@
       "tiles": "data/cetesb-pontos/exato/indice.json"
     },
     {
-      "id": "iphan-sitios-arqueologicos",
-      "nome": "Sítios Arqueológicos (IPHAN)",
-      "meio": "socioeconomico",
-      "filtro_bbox": [
-        -53.20419,
-        -25.32118,
-        -44.16341,
-        -19.758
-      ],
+      "id": "cetesb-aguas-subterraneas",
+      "nome": "Restrição de Uso das Águas Subterrâneas",
+      "meio": "fisico",
       "campo_classe": null,
-      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — Sítios Arqueológicos SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
       "data_ref": "2026-10-08",
-      "cor": "#8b5a2b",
+      "cor": "#ccfcdf",
       "opacidade": 1,
-      "tipo_geometria": "ponto",
       "estilo": {
-        "cor": "#8b5a2b",
+        "cor": "#ccfcdf",
         "opacidade": 1,
         "cores": {},
-        "cores_origem": "paleta do portal",
-        "contorno_cor": "#4a2f14",
+        "cores_origem": "estilo",
+        "contorno_cor": "#6e6e6e",
         "contornos": null
       },
-      "obs": "Camada nacional do IPHAN, publicada no portal com SELEÇÃO pela caixa de São Paulo (feições inteiras, nenhuma geometria alterada). Existe a versão em polígonos (SICG:sitios_pol) se você quiser a área dos sítios.",
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#ccfcdf). A coluna Termo_AR traz o termo da restrição. Camada de COR ÚNICA, como no serviço: os campos disponíveis são o número do processo (Termo_AR) e a atividade — e a atividade vem com o acento corrompido na origem (posto de serviXo, com X variando), então não serve para legenda. Agrupe pela coluna que quiser na tabela.",
       "geometria": "exata",
+      "arquivo": "data/cetesb-aguas-subterraneas.geojson",
       "data_coleta": "2026-10-08",
       "classes": [],
       "campos": [
         {
-          "nome": "id_bem",
+          "nome": "NMUNCP",
           "tipo": "N",
-          "rotulo": "id_bem"
+          "rotulo": "NMUNCP"
         },
         {
-          "nome": "identificacao_bem",
-          "tipo": "C",
-          "rotulo": "identificacao_bem"
-        },
-        {
-          "nome": "co_iphan",
-          "tipo": "C",
-          "rotulo": "co_iphan"
-        },
-        {
-          "nome": "no_logradouro",
-          "tipo": "C",
-          "rotulo": "no_logradouro"
-        },
-        {
-          "nome": "nu_logradouro",
-          "tipo": "C",
-          "rotulo": "nu_logradouro"
-        },
-        {
-          "nome": "id_natureza",
+          "nome": "NSEQNC",
           "tipo": "N",
-          "rotulo": "id_natureza"
+          "rotulo": "NSEQNC"
         },
         {
-          "nome": "ds_natureza",
+          "nome": "RazaoSocia",
           "tipo": "C",
-          "rotulo": "ds_natureza"
+          "rotulo": "RazaoSocia"
         },
         {
-          "nome": "codigo_iphan",
+          "nome": "Termo_AR",
           "tipo": "C",
-          "rotulo": "codigo_iphan"
+          "rotulo": "Termo_AR"
         },
         {
-          "nome": "id_classificacao",
-          "tipo": "N",
-          "rotulo": "id_classificacao"
-        },
-        {
-          "nome": "ds_classificacao",
+          "nome": "Atividade",
           "tipo": "C",
-          "rotulo": "ds_classificacao"
-        },
-        {
-          "nome": "id_tipo_bem",
-          "tipo": "N",
-          "rotulo": "id_tipo_bem"
-        },
-        {
-          "nome": "ds_tipo_bem",
-          "tipo": "C",
-          "rotulo": "ds_tipo_bem"
-        },
-        {
-          "nome": "sg_tipo_bem",
-          "tipo": "C",
-          "rotulo": "sg_tipo_bem"
-        },
-        {
-          "nome": "sintese_bem",
-          "tipo": "C",
-          "rotulo": "sintese_bem"
-        },
-        {
-          "nome": "dt_cadastro",
-          "tipo": "C",
-          "rotulo": "dt_cadastro"
+          "rotulo": "Atividade"
         }
-      ],
-      "tiles": "data/iphan-sitios-arqueologicos/exato/indice.json"
+      ]
     },
     {
-      "id": "iphan-bens-materiais",
-      "nome": "Bens Materiais (IPHAN)",
-      "meio": "socioeconomico",
-      "filtro_bbox": [
-        -53.20419,
-        -25.32118,
-        -44.16341,
-        -19.758
-      ],
-      "campo_classe": null,
-      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — Bens Materiais (classificação, natureza, tipo) SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "id": "cetesb-jurubatuba",
+      "nome": "Restrição — Jurubatuba (CBH-AT 139/2021)",
+      "meio": "fisico",
+      "campo_classe": "Nome",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
       "data_ref": "2026-10-08",
-      "cor": "#7a3b8f",
+      "cor": "#c6c1f5",
       "opacidade": 1,
       "estilo": {
-        "cor": "#7a3b8f",
+        "cor": "#c6c1f5",
         "opacidade": 1,
         "cores": {},
-        "cores_origem": "paleta do portal",
-        "contorno_cor": "#432153",
+        "cores_origem": "estilo",
+        "contorno_cor": "#6e6e6e",
         "contornos": null
       },
-      "obs": "Bens materiais protegidos (tombamento e outras formas), com classificação, natureza e tipo nos atributos — dá para agrupar por essas colunas na tabela. Seleção pela caixa de São Paulo.",
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#c6c1f5).",
       "geometria": "exata",
+      "arquivo": "data/cetesb-jurubatuba.geojson",
       "data_coleta": "2026-10-08",
-      "classes": [],
-      "campos": [
+      "classes": [
         {
-          "nome": "id_bem",
-          "tipo": "N",
-          "rotulo": "id_bem"
+          "classe": "Jurubatuba - Restricao",
+          "feicoes": 3
         },
         {
-          "nome": "identificacao_bem",
-          "tipo": "C",
-          "rotulo": "identificacao_bem"
-        },
-        {
-          "nome": "co_iphan",
-          "tipo": "C",
-          "rotulo": "co_iphan"
-        },
-        {
-          "nome": "no_logradouro",
-          "tipo": "C",
-          "rotulo": "no_logradouro"
-        },
-        {
-          "nome": "nu_logradouro",
-          "tipo": "C",
-          "rotulo": "nu_logradouro"
-        },
-        {
-          "nome": "id_natureza",
-          "tipo": "N",
-          "rotulo": "id_natureza"
-        },
-        {
-          "nome": "ds_natureza",
-          "tipo": "C",
-          "rotulo": "ds_natureza"
-        },
-        {
-          "nome": "codigo_iphan",
-          "tipo": "C",
-          "rotulo": "codigo_iphan"
-        },
-        {
-          "nome": "id_classificacao",
-          "tipo": "N",
-          "rotulo": "id_classificacao"
-        },
-        {
-          "nome": "ds_classificacao",
-          "tipo": "C",
-          "rotulo": "ds_classificacao"
-        },
-        {
-          "nome": "id_tipo_bem",
-          "tipo": "N",
-          "rotulo": "id_tipo_bem"
-        },
-        {
-          "nome": "ds_tipo_bem",
-          "tipo": "C",
-          "rotulo": "ds_tipo_bem"
-        },
-        {
-          "nome": "sg_tipo_bem",
-          "tipo": "C",
-          "rotulo": "sg_tipo_bem"
-        },
-        {
-          "nome": "sintese_bem",
-          "tipo": "C",
-          "rotulo": "sintese_bem"
-        },
-        {
-          "nome": "dt_cadastro",
-          "tipo": "C",
-          "rotulo": "dt_cadastro"
+          "classe": "Monte Azul Paulista",
+          "feicoes": 1
         }
       ],
-      "tiles": "data/iphan-bens-materiais/exato/indice.json"
-    },
-    {
-      "id": "iphan-bem-zrp",
-      "nome": "Zona de Restauração do Patrimônio — bem_zrp (IPHAN)",
-      "meio": "socioeconomico",
-      "filtro_bbox": [
-        -53.20419,
-        -25.32118,
-        -44.16341,
-        -19.758
-      ],
-      "campo_classe": null,
-      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — bem_zrp (DEPAM) SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
-      "data_ref": "2026-10-08",
-      "cor": "#c2410c",
-      "opacidade": 1,
-      "estilo": {
-        "cor": "#c2410c",
-        "opacidade": 1,
-        "cores": {},
-        "cores_origem": "paleta do portal",
-        "contorno_cor": "#7c2d12",
-        "contornos": null
-      },
-      "obs": "Zona de Restauração do Patrimônio. Existem as variantes zrp_especial e zrp_padronizada no mesmo serviço, se fizer falta. Seleção pela caixa de São Paulo.",
-      "geometria": "exata",
-      "arquivo": "data/iphan-bem-zrp.geojson",
-      "data_coleta": "2026-10-08",
-      "classes": [],
       "campos": [
         {
-          "nome": "id",
-          "tipo": "N",
-          "rotulo": "id"
-        },
-        {
-          "nome": "id_bem",
-          "tipo": "N",
-          "rotulo": "id_bem"
-        },
-        {
-          "nome": "identifica",
+          "nome": "Nome",
           "tipo": "C",
-          "rotulo": "identifica"
-        },
+          "rotulo": "Nome"
+        }
+      ]
+    },
+    {
+      "id": "cetesb-daee-2653",
+      "nome": "Restrição — Portaria DAEE 2653/2011",
+      "meio": "fisico",
+      "campo_classe": "Nome",
+      "fonte": "SEMIL/CETESB — dados públicos de áreas contaminadas — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
+      "cor": "#00c5ff",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#00c5ff",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "estilo",
+        "contorno_cor": "#6e6e6e",
+        "contornos": null
+      },
+      "obs": "Camada consultada AO VIVO no serviço da SEMIL/CETESB a cada uso (não é foto): o que aparece na tela é o que o serviço responde no momento. Os dados têm campo de data de atualização por feição. Cor única do serviço (#00c5ff).",
+      "geometria": "exata",
+      "arquivo": "data/cetesb-daee-2653.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [
         {
-          "nome": "co_iphan",
+          "classe": "Lagoa de Carapicu",
+          "feicoes": 1
+        }
+      ],
+      "campos": [
+        {
+          "nome": "Nome",
           "tipo": "C",
-          "rotulo": "co_iphan"
-        },
+          "rotulo": "Nome"
+        }
+      ]
+    },
+    {
+      "id": "biomas",
+      "nome": "Biomas",
+      "meio": "biotico",
+      "tipo": "poligono",
+      "campo_classe": "Bioma",
+      "campos": [
         {
-          "nome": "no_logrado",
+          "nome": "Bioma",
           "tipo": "C",
-          "rotulo": "no_logrado"
+          "rotulo": "Bioma"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "Cerrado",
+          "feicoes": 1
         },
         {
-          "nome": "nu_logrado",
+          "classe": "Mata Atântica",
+          "feicoes": 1
+        }
+      ],
+      "estilo": {
+        "cor": "#2f6b3a",
+        "opacidade": 1,
+        "cores": {
+          "Cerrado": "#ffd37f",
+          "Mata Atântica": "#00734c"
+        }
+      },
+      "fonte": "Biomas do Estado de São Paulo (Cerrado e Mata Atlântica)",
+      "data_ref": "",
+      "origem": "importado",
+      "feicoes": 2,
+      "cores_origem": "estilo",
+      "estilo_arquivo": "Biomas.xml",
+      "obs": "Classe = Bioma (2 valores: Cerrado e Mata Atlântica), o agrupamento do Biomas.xml: 2/2 valores têm cor. São só 2 feições, mas com o contato entre biomas muito detalhado (3,9 MB de .shp). CONFIRMAR a citação oficial. GEOMETRIA EXATA: publicada sem simplificação, como está no shapefile.",
+      "geometria": "exata",
+      "tiles": "data/biomas/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/biomas/visao/indice.json",
+          "zoom_max": 9
+        }
+      ]
+    },
+    {
+      "id": "unidades-conservacao",
+      "nome": "Unidades de Conservação",
+      "meio": "biotico",
+      "tipo": "poligono",
+      "campo_classe": "grupo",
+      "campos": [
+        {
+          "nome": "grupo",
           "tipo": "C",
-          "rotulo": "nu_logrado"
+          "rotulo": "grupo"
         },
         {
-          "nome": "id_naturez",
-          "tipo": "N",
-          "rotulo": "id_naturez"
-        },
-        {
-          "nome": "ds_naturez",
+          "nome": "gml_id",
           "tipo": "C",
-          "rotulo": "ds_naturez"
+          "rotulo": "gml_id"
         },
         {
-          "nome": "codigo_iph",
+          "nome": "uc_id",
           "tipo": "C",
-          "rotulo": "codigo_iph"
+          "rotulo": "uc_id"
         },
         {
-          "nome": "id_classif",
-          "tipo": "N",
-          "rotulo": "id_classif"
-        },
-        {
-          "nome": "ds_classif",
+          "nome": "cd_cnuc",
           "tipo": "C",
-          "rotulo": "ds_classif"
+          "rotulo": "cd_cnuc"
         },
         {
-          "nome": "id_tipo_be",
-          "tipo": "N",
-          "rotulo": "id_tipo_be"
-        },
-        {
-          "nome": "ds_tipo_be",
+          "nome": "wdpa_pid",
           "tipo": "C",
-          "rotulo": "ds_tipo_be"
+          "rotulo": "wdpa_pid"
         },
         {
-          "nome": "sg_tipo_be",
+          "nome": "nome_uc",
           "tipo": "C",
-          "rotulo": "sg_tipo_be"
+          "rotulo": "nome_uc"
         },
         {
-          "nome": "sintese_be",
+          "nome": "cria_ano",
           "tipo": "C",
-          "rotulo": "sintese_be"
+          "rotulo": "cria_ano"
         },
         {
-          "nome": "dt_cadastr",
+          "nome": "cria_ato",
           "tipo": "C",
-          "rotulo": "dt_cadastr"
+          "rotulo": "cria_ato"
         },
         {
-          "nome": "id_proteca",
-          "tipo": "N",
-          "rotulo": "id_proteca"
-        },
-        {
-          "nome": "id_tipo_pr",
-          "tipo": "N",
-          "rotulo": "id_tipo_pr"
-        },
-        {
-          "nome": "ds_tipo_pr",
+          "nome": "outro_ato",
           "tipo": "C",
-          "rotulo": "ds_tipo_pr"
+          "rotulo": "outro_ato"
         },
         {
-          "nome": "id_condica",
-          "tipo": "N",
-          "rotulo": "id_condica"
-        },
-        {
-          "nome": "ds_condica",
+          "nome": "pl_manejo",
           "tipo": "C",
-          "rotulo": "ds_condica"
+          "rotulo": "pl_manejo"
         },
         {
-          "nome": "id_zrp",
-          "tipo": "N",
-          "rotulo": "id_zrp"
+          "nome": "co_gestor",
+          "tipo": "C",
+          "rotulo": "co_gestor"
+        },
+        {
+          "nome": "quali_pol",
+          "tipo": "C",
+          "rotulo": "quali_pol"
+        },
+        {
+          "nome": "ppgr",
+          "tipo": "C",
+          "rotulo": "ppgr"
+        },
+        {
+          "nome": "ha_total",
+          "tipo": "C",
+          "rotulo": "ha_total"
+        },
+        {
+          "nome": "ha_ato",
+          "tipo": "C",
+          "rotulo": "ha_ato"
+        },
+        {
+          "nome": "esfera",
+          "tipo": "C",
+          "rotulo": "esfera"
+        },
+        {
+          "nome": "uf",
+          "tipo": "C",
+          "rotulo": "uf"
+        },
+        {
+          "nome": "municipio",
+          "tipo": "C",
+          "rotulo": "municipio"
+        },
+        {
+          "nome": "org_gestor",
+          "tipo": "C",
+          "rotulo": "org_gestor"
+        },
+        {
+          "nome": "categoria",
+          "tipo": "C",
+          "rotulo": "categoria"
+        },
+        {
+          "nome": "cat_iucn",
+          "tipo": "C",
+          "rotulo": "cat_iucn"
+        },
+        {
+          "nome": "amazonia",
+          "tipo": "C",
+          "rotulo": "amazonia"
+        },
+        {
+          "nome": "caatinga",
+          "tipo": "C",
+          "rotulo": "caatinga"
+        },
+        {
+          "nome": "cerrado",
+          "tipo": "C",
+          "rotulo": "cerrado"
+        },
+        {
+          "nome": "matlantica",
+          "tipo": "C",
+          "rotulo": "matlantica"
+        },
+        {
+          "nome": "pampa",
+          "tipo": "C",
+          "rotulo": "pampa"
+        },
+        {
+          "nome": "pantanal",
+          "tipo": "C",
+          "rotulo": "pantanal"
+        },
+        {
+          "nome": "marinho",
+          "tipo": "C",
+          "rotulo": "marinho"
+        },
+        {
+          "nome": "situacao",
+          "tipo": "C",
+          "rotulo": "situacao"
+        },
+        {
+          "nome": "limite",
+          "tipo": "C",
+          "rotulo": "limite"
+        },
+        {
+          "nome": "area_ha",
+          "tipo": "F",
+          "rotulo": "area_ha"
+        },
+        {
+          "nome": "NomeAbrev",
+          "tipo": "C",
+          "rotulo": "NomeAbrev"
+        }
+      ],
+      "classes": [
+        {
+          "classe": "Proteção Integral",
+          "feicoes": 873
+        },
+        {
+          "classe": "Uso Sustentável",
+          "feicoes": 1869
+        }
+      ],
+      "estilo": {
+        "cor": "#2f5b8a",
+        "opacidade": 1,
+        "cores": {
+          "Proteção Integral": "#ff7f7f",
+          "Uso Sustentável": "#38a800"
+        },
+        "contornos": {
+          "Proteção Integral": "#ff0000",
+          "Uso Sustentável": "#267300"
+        },
+        "contorno_cor": "#ff0000"
+      },
+      "fonte": "Unidades de Conservação do Estado de São Paulo",
+      "data_ref": "",
+      "origem": "importado",
+      "feicoes": 2742,
+      "cores_origem": "estilo",
+      "estilo_arquivo": "Unidades de Conservação.xml",
+      "obs": "Classe = grupo (Proteção Integral / Uso Sustentável), o agrupamento do Unidades de Conservação.xml: 2/2 valores têm cor. A camada traz categoria, esfera, órgão gestor, município e área oficial — dá para agrupar a tabela por elas. CONFIRMAR a citação oficial. GEOMETRIA EXATA, publicada em tiles binarios (data/unidades-conservacao/indice.json): nenhum vertice foi movido, e o portal carrega so as partes que a tela mostra (para recortar, busca a camada inteira).",
+      "geometria": "exata",
+      "tiles": "data/unidades-conservacao/exato/indice.json",
+      "niveis": [
+        {
+          "nivel": "visao",
+          "indice": "data/unidades-conservacao/visao/indice.json",
+          "zoom_max": 9
+        },
+        {
+          "nivel": "medio",
+          "indice": "data/unidades-conservacao/medio/indice.json",
+          "zoom_max": 11
         }
       ]
     },
@@ -6116,6 +5762,360 @@
               "rotulo": "NUGRHI"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "iphan-sitios-arqueologicos",
+      "nome": "Sítios Arqueológicos (IPHAN)",
+      "meio": "socioeconomico",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ],
+      "campo_classe": null,
+      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — Sítios Arqueológicos SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
+      "cor": "#8b5a2b",
+      "opacidade": 1,
+      "tipo_geometria": "ponto",
+      "estilo": {
+        "cor": "#8b5a2b",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#4a2f14",
+        "contornos": null
+      },
+      "obs": "Camada nacional do IPHAN, publicada no portal com SELEÇÃO pela caixa de São Paulo (feições inteiras, nenhuma geometria alterada). Existe a versão em polígonos (SICG:sitios_pol) se você quiser a área dos sítios.",
+      "geometria": "exata",
+      "data_coleta": "2026-10-08",
+      "classes": [],
+      "campos": [
+        {
+          "nome": "id_bem",
+          "tipo": "N",
+          "rotulo": "id_bem"
+        },
+        {
+          "nome": "identificacao_bem",
+          "tipo": "C",
+          "rotulo": "identificacao_bem"
+        },
+        {
+          "nome": "co_iphan",
+          "tipo": "C",
+          "rotulo": "co_iphan"
+        },
+        {
+          "nome": "no_logradouro",
+          "tipo": "C",
+          "rotulo": "no_logradouro"
+        },
+        {
+          "nome": "nu_logradouro",
+          "tipo": "C",
+          "rotulo": "nu_logradouro"
+        },
+        {
+          "nome": "id_natureza",
+          "tipo": "N",
+          "rotulo": "id_natureza"
+        },
+        {
+          "nome": "ds_natureza",
+          "tipo": "C",
+          "rotulo": "ds_natureza"
+        },
+        {
+          "nome": "codigo_iphan",
+          "tipo": "C",
+          "rotulo": "codigo_iphan"
+        },
+        {
+          "nome": "id_classificacao",
+          "tipo": "N",
+          "rotulo": "id_classificacao"
+        },
+        {
+          "nome": "ds_classificacao",
+          "tipo": "C",
+          "rotulo": "ds_classificacao"
+        },
+        {
+          "nome": "id_tipo_bem",
+          "tipo": "N",
+          "rotulo": "id_tipo_bem"
+        },
+        {
+          "nome": "ds_tipo_bem",
+          "tipo": "C",
+          "rotulo": "ds_tipo_bem"
+        },
+        {
+          "nome": "sg_tipo_bem",
+          "tipo": "C",
+          "rotulo": "sg_tipo_bem"
+        },
+        {
+          "nome": "sintese_bem",
+          "tipo": "C",
+          "rotulo": "sintese_bem"
+        },
+        {
+          "nome": "dt_cadastro",
+          "tipo": "C",
+          "rotulo": "dt_cadastro"
+        }
+      ],
+      "tiles": "data/iphan-sitios-arqueologicos/exato/indice.json"
+    },
+    {
+      "id": "iphan-bens-materiais",
+      "nome": "Bens Materiais (IPHAN)",
+      "meio": "socioeconomico",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ],
+      "campo_classe": null,
+      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — Bens Materiais (classificação, natureza, tipo) SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
+      "cor": "#7a3b8f",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#7a3b8f",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#432153",
+        "contornos": null
+      },
+      "obs": "Bens materiais protegidos (tombamento e outras formas), com classificação, natureza e tipo nos atributos — dá para agrupar por essas colunas na tabela. Seleção pela caixa de São Paulo.",
+      "geometria": "exata",
+      "data_coleta": "2026-10-08",
+      "classes": [],
+      "campos": [
+        {
+          "nome": "id_bem",
+          "tipo": "N",
+          "rotulo": "id_bem"
+        },
+        {
+          "nome": "identificacao_bem",
+          "tipo": "C",
+          "rotulo": "identificacao_bem"
+        },
+        {
+          "nome": "co_iphan",
+          "tipo": "C",
+          "rotulo": "co_iphan"
+        },
+        {
+          "nome": "no_logradouro",
+          "tipo": "C",
+          "rotulo": "no_logradouro"
+        },
+        {
+          "nome": "nu_logradouro",
+          "tipo": "C",
+          "rotulo": "nu_logradouro"
+        },
+        {
+          "nome": "id_natureza",
+          "tipo": "N",
+          "rotulo": "id_natureza"
+        },
+        {
+          "nome": "ds_natureza",
+          "tipo": "C",
+          "rotulo": "ds_natureza"
+        },
+        {
+          "nome": "codigo_iphan",
+          "tipo": "C",
+          "rotulo": "codigo_iphan"
+        },
+        {
+          "nome": "id_classificacao",
+          "tipo": "N",
+          "rotulo": "id_classificacao"
+        },
+        {
+          "nome": "ds_classificacao",
+          "tipo": "C",
+          "rotulo": "ds_classificacao"
+        },
+        {
+          "nome": "id_tipo_bem",
+          "tipo": "N",
+          "rotulo": "id_tipo_bem"
+        },
+        {
+          "nome": "ds_tipo_bem",
+          "tipo": "C",
+          "rotulo": "ds_tipo_bem"
+        },
+        {
+          "nome": "sg_tipo_bem",
+          "tipo": "C",
+          "rotulo": "sg_tipo_bem"
+        },
+        {
+          "nome": "sintese_bem",
+          "tipo": "C",
+          "rotulo": "sintese_bem"
+        },
+        {
+          "nome": "dt_cadastro",
+          "tipo": "C",
+          "rotulo": "dt_cadastro"
+        }
+      ],
+      "tiles": "data/iphan-bens-materiais/exato/indice.json"
+    },
+    {
+      "id": "iphan-bem-zrp",
+      "nome": "Zona de Restauração do Patrimônio — bem_zrp (IPHAN)",
+      "meio": "socioeconomico",
+      "filtro_bbox": [
+        -53.20419,
+        -25.32118,
+        -44.16341,
+        -19.758
+      ],
+      "campo_classe": null,
+      "fonte": "IPHAN — dados públicos do SICG (Sistema de Conhecimento da Gestão do Patrimônio) — bem_zrp (DEPAM) SELEÇÃO: só as feições que cruzam a caixa -53.20419, -25.32118, -44.16341, -19.758 (extensão de São Paulo) — feições inteiras, nenhuma geometria alterada. — foto (consulta única ao serviço) de 2026-10-08; a fonte não declara data de atualização por feição. A geometria é a do serviço, sem simplificação: só arredondada em 6 casas (~11 cm), a precisão que o portal publica.",
+      "data_ref": "2026-10-08",
+      "cor": "#c2410c",
+      "opacidade": 1,
+      "estilo": {
+        "cor": "#c2410c",
+        "opacidade": 1,
+        "cores": {},
+        "cores_origem": "paleta do portal",
+        "contorno_cor": "#7c2d12",
+        "contornos": null
+      },
+      "obs": "Zona de Restauração do Patrimônio. Existem as variantes zrp_especial e zrp_padronizada no mesmo serviço, se fizer falta. Seleção pela caixa de São Paulo.",
+      "geometria": "exata",
+      "arquivo": "data/iphan-bem-zrp.geojson",
+      "data_coleta": "2026-10-08",
+      "classes": [],
+      "campos": [
+        {
+          "nome": "id",
+          "tipo": "N",
+          "rotulo": "id"
+        },
+        {
+          "nome": "id_bem",
+          "tipo": "N",
+          "rotulo": "id_bem"
+        },
+        {
+          "nome": "identifica",
+          "tipo": "C",
+          "rotulo": "identifica"
+        },
+        {
+          "nome": "co_iphan",
+          "tipo": "C",
+          "rotulo": "co_iphan"
+        },
+        {
+          "nome": "no_logrado",
+          "tipo": "C",
+          "rotulo": "no_logrado"
+        },
+        {
+          "nome": "nu_logrado",
+          "tipo": "C",
+          "rotulo": "nu_logrado"
+        },
+        {
+          "nome": "id_naturez",
+          "tipo": "N",
+          "rotulo": "id_naturez"
+        },
+        {
+          "nome": "ds_naturez",
+          "tipo": "C",
+          "rotulo": "ds_naturez"
+        },
+        {
+          "nome": "codigo_iph",
+          "tipo": "C",
+          "rotulo": "codigo_iph"
+        },
+        {
+          "nome": "id_classif",
+          "tipo": "N",
+          "rotulo": "id_classif"
+        },
+        {
+          "nome": "ds_classif",
+          "tipo": "C",
+          "rotulo": "ds_classif"
+        },
+        {
+          "nome": "id_tipo_be",
+          "tipo": "N",
+          "rotulo": "id_tipo_be"
+        },
+        {
+          "nome": "ds_tipo_be",
+          "tipo": "C",
+          "rotulo": "ds_tipo_be"
+        },
+        {
+          "nome": "sg_tipo_be",
+          "tipo": "C",
+          "rotulo": "sg_tipo_be"
+        },
+        {
+          "nome": "sintese_be",
+          "tipo": "C",
+          "rotulo": "sintese_be"
+        },
+        {
+          "nome": "dt_cadastr",
+          "tipo": "C",
+          "rotulo": "dt_cadastr"
+        },
+        {
+          "nome": "id_proteca",
+          "tipo": "N",
+          "rotulo": "id_proteca"
+        },
+        {
+          "nome": "id_tipo_pr",
+          "tipo": "N",
+          "rotulo": "id_tipo_pr"
+        },
+        {
+          "nome": "ds_tipo_pr",
+          "tipo": "C",
+          "rotulo": "ds_tipo_pr"
+        },
+        {
+          "nome": "id_condica",
+          "tipo": "N",
+          "rotulo": "id_condica"
+        },
+        {
+          "nome": "ds_condica",
+          "tipo": "C",
+          "rotulo": "ds_condica"
+        },
+        {
+          "nome": "id_zrp",
+          "tipo": "N",
+          "rotulo": "id_zrp"
         }
       ]
     },
