@@ -73,16 +73,25 @@ function executar() {
       pl.get('bbox') === '-47.500000,-22.500000,-47.000000,-22.000000,' + S.CRS84, pl.get('bbox'));
 
     /* A VÍRGULA NÃO PODE IR CODIFICADA: o GeoServer do IPHAN responde 400 com %2C na caixa.
-     * As consultas que funcionaram levaram vírgula crua. */
+     * As consultas que funcionaram levaram vírgula crua. O que se confere é a CAIXA — o
+     * URLSearchParams lê a caixa crua sem problema, então exigir que ele não a ache seria erro
+     * do teste (foi o que estava aqui). */
+    const depoisDoBbox = url.slice(url.indexOf('&bbox='));
     ok('a caixa vai CRUA na URL, sem %2C',
-      p.get('bbox') === null && url.indexOf('%2C') < 0 && url.indexOf('&bbox=-22.500000,-47.500000') > 0,
-      url.slice(url.indexOf('&bbox='), url.indexOf('&bbox=') + 60));
+      url.indexOf('&bbox=-22.500000,-47.500000') > 0 && depoisDoBbox.indexOf('%2C') < 0,
+      depoisDoBbox.slice(0, 60));
 
     ok('caixaParaWfs troca a ordem conforme o eixo',
       S.caixaParaWfs([1, 2, 3, 4], null, 'latlon').indexOf('2.000000,1.000000,4.000000,3.000000') === 0
       && S.caixaParaWfs([1, 2, 3, 4], null, 'lonlat').indexOf('1.000000,2.000000,3.000000,4.000000') === 0);
 
-    ok('offset entra como startIndex', parametros(S.urlDaPagina(camada, CAIXA, 1000)).get('startIndex') === '1000');
+    /* O WFS NÃO PEDE PÁGINA: o GeoServer do IPHAN responde 400 a count/startIndex em camada sem
+     * chave primária. Consequência que precisa ficar registrada: pedir um offset maior devolve a
+     * MESMA consulta — quem pagina em WFS tem de parar pelo numberMatched, nunca pelo offset. */
+    ok('no WFS o offset não entra na URL (a parada é pelo numberMatched)',
+      parametros(S.urlDaPagina(camada, CAIXA, 1000)).get('startIndex') === null
+      && S.temMais('wfs', { numberMatched: 2500, numberReturned: 1000 }, 1000) === true
+      && S.temMais('wfs', { numberMatched: 1000, numberReturned: 1000 }, 1000) === false);
   }
 
   console.log('\n== paginação: cada serviço avisa de um jeito ==');

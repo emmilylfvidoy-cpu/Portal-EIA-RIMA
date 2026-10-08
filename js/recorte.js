@@ -122,12 +122,34 @@
       if (o.simplificar > 0) geo = simplificarGeometria(geo, o.simplificar);
 
       const antes = contarPartes(geo);
-      let recortado;
+      /* A ÁREA DE INFLUÊNCIA PODE TER VÁRIOS POLÍGONOS E FUROS, e isso tem de ser respeitado.
+       *
+       * Antes esta chamada recebia TODOS os anéis numa lista só, e o recorte aplicava a mesma
+       * operação a cada um: o FURO virava nova interseção (em vez de ser subtraído) e o SEGUNDO
+       * polígono virava furo do primeiro. Medido: área de 4 partes devolvia 0 feições, e área
+       * com furo devolvia só 1 das 4 manchas — o defeito que o cliente encontrou com o "AID
+       * Socio" (0 feições) contra o "AID Meios Físico e Biótico" (121 feições).
+       *
+       * Agora vai polígono por polígono: intersecta pelo anel EXTERNO e SUBTRAI cada FURO. Os
+       * pedaços dos vários polígonos são somados (as partes de uma área válida não se sobrepõem).
+       */
+      const poligonosArea = math.aneisDe(area.geometry);
+      let recortado = { type: 'FeatureCollection', features: [] };
       try {
-        recortado = vetorial.recortarFeatures(
-          [{ type: 'Feature', properties: f.properties, geometry: geo }],
-          aneisArea, operacao, { areaMinima: (o.areaMinimaHa || 0) / 10000 * 1e-4 }
-        );
+        for (const poligono of poligonosArea) {
+          if (!poligono.length) continue;
+          let pedacos = vetorial.recortarFeatures(
+            [{ type: 'Feature', properties: f.properties, geometry: geo }],
+            [poligono[0]], operacao, { areaMinima: (o.areaMinimaHa || 0) / 10000 * 1e-4 }
+          );
+          for (const furo of poligono.slice(1)) {
+            if (!pedacos.features.length) break;
+            pedacos = vetorial.recortarFeatures(
+              pedacos.features, [furo], 'diferenca', { areaMinima: 0 }
+            );
+          }
+          for (const p of pedacos.features) recortado.features.push(p);
+        }
       } catch (e) {
         descartadas++;
         continue;

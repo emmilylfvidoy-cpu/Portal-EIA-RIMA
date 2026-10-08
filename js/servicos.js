@@ -51,7 +51,10 @@
   function caixaParaWfs(caixa, crs, eixo) {
     const [a, b, c, d] = caixa.map((v) => Number(v));
     const ordem = (eixo === 'lonlat') ? [a, b, c, d] : [b, a, d, c];
-    return ordem.map((v) => v.toFixed(6)).join(',') + ',' + (crs || CRS_PADRAO);
+    // sem CRS declarado, o EIXO decide: 'lonlat' pede CRS84 (longitude,latitude por definição),
+    // senão vale o padrão brasileiro (SIRGAS 2000, latitude,longitude)
+    return ordem.map((v) => v.toFixed(6)).join(',') + ','
+      + (crs || (eixo === 'lonlat' ? CRS84 : CRS_PADRAO));
   }
 
   /**
