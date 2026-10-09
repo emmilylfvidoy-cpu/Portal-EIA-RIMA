@@ -156,8 +156,11 @@
     // cabeçalho
     const cab = caixa.cabecalho;
     doc.linha(pagina, cab.x, cab.y + cab.altura, cab.x + cab.largura, cab.y + cab.altura, { cor: cor, espessura: 0.6 });
-    const titulo = e.titulo || 'MAPA DE CARACTERIZAÇÃO';
-    doc.texto(pagina, titulo, cab.x + cab.largura / 2, cab.y + 12, { tamanho: e.folha === 'A4' ? 12 : 15, negrito: true, alinhamento: 'centro', cor: cor });
+    // O TÍTULO DO CABEÇALHO TAMBÉM É DO USUÁRIO — sem texto padrão (ver a nota da chapa)
+    const titulo = e.titulo || '';
+    if (titulo) {
+      doc.texto(pagina, titulo, cab.x + cab.largura / 2, cab.y + 12, { tamanho: e.folha === 'A4' ? 12 : 15, negrito: true, alinhamento: 'centro', cor: cor });
+    }
     const subtitulo = [e.projeto, e.assunto].filter(Boolean).join(' · ');
     if (subtitulo) {
       doc.texto(pagina, subtitulo, cab.x + cab.largura / 2, cab.y + 22, { tamanho: e.folha === 'A4' ? 8 : 10, alinhamento: 'centro', cor: '#43535d' });
@@ -280,9 +283,18 @@
     const xc = chapa.x + 2.5;
     const lc = chapa.largura - 5;
     let yc = chapa.y + 6;
-    const tituloChapa = e.tituloChapa || 'MAPA DAS ÁREAS DE INFLUÊNCIA';
-    doc.texto(pagina, cortar(tituloChapa, 34), chapa.x + chapa.largura / 2, yc,
-      { tamanho: e.folha === 'A4' ? 8.4 : 9.6, negrito: true, alinhamento: 'centro', cor: cor });
+    /* A CHAPA SAI EM BRANCO NO QUE É DO USUÁRIO.
+     *
+     * Título do mapa, nome do projeto, desenho e verificado são PREENCHIDOS POR ELE — a folha é um
+     * modelo, não um documento assinado. Antes havia um título padrão ("MAPA DAS ÁREAS DE
+     * INFLUÊNCIA") e a frase "arquivos fornecidos ao projeto": o cliente pediu que saiam em branco,
+     * e ele tem razão. Texto que ninguém escreveu, num documento técnico, é texto que alguém
+     * esquece de tirar. A DATA fica automática, porque é fato da folha e não escolha de ninguém. */
+    const tituloChapa = e.tituloChapa || '';
+    if (tituloChapa) {
+      doc.texto(pagina, cortar(tituloChapa, 34), chapa.x + chapa.largura / 2, yc,
+        { tamanho: e.folha === 'A4' ? 8.4 : 9.6, negrito: true, alinhamento: 'centro', cor: cor });
+    }
     yc += 4.6;
     if (e.projeto) {
       doc.texto(pagina, cortar(e.projeto, 40), chapa.x + chapa.largura / 2, yc,
