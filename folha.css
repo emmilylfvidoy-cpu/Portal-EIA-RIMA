@@ -1,0 +1,227 @@
+/* ============================================================================
+ * folha.css — A PRANCHA (plano B): HTML/CSS, impressa pelo MOTOR DO NAVEGADOR
+ *
+ * Aqui não há largura estimada nem texto cortado com "…": o navegador mede as fontes, alinha as
+ * colunas e imprime em PDF vetorial. É o que faz a legenda ficar uniforme e o bloco alinhar.
+ *
+ * Medidas em MILÍMETROS de verdade (mm), com a página vindo das variáveis --folha-largura e
+ * --folha-altura, que o modelo preenche. Assim a MESMA folha serve para A4, A3, A2, A1 e A0: muda
+ * o tamanho do papel, não o desenho — e o texto continua legível, porque ele NÃO encolhe junto.
+ * ========================================================================== */
+
+.folha {
+  width: var(--folha-largura);
+  height: var(--folha-altura);
+  background: #fff;
+  color: #1f2d36;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* moldura dupla, como nas pranchas de referência */
+.folha-moldura {
+  position: absolute;
+  inset: 6mm;
+  border: 0.5mm solid #1f2d36;
+  outline: 0.15mm solid #1f2d36;
+  outline-offset: 1mm;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------- cabeçalho */
+.folha-cabecalho {
+  flex: 0 0 auto;
+  padding: 3mm 4mm 2mm;
+  border-bottom: 0.2mm solid #1f2d36;
+  text-align: center;
+}
+.folha-cabecalho .titulo {
+  margin: 0;
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.folha-cabecalho .projeto {
+  margin: .8mm 0 0;
+  font-size: 8pt;
+  color: #43535d;
+}
+
+/* ---------------------------------------------------------------- o mapa */
+.folha-corpo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 3mm 3mm 2mm 22mm;   /* a canaleta da esquerda é a faixa dos rótulos de latitude */
+}
+.folha-mapa {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0.2mm solid #1f2d36;
+  overflow: hidden;
+  background: #eef2f4;
+}
+.folha-mapa img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.folha-mapa .mapa-vazio {
+  display: flex; align-items: center; justify-content: center;
+  height: 100%; color: #8b979d; font-size: 9pt;
+}
+.folha-mapa .norte {
+  position: absolute; top: 2mm; right: 2mm;
+  width: 7mm; height: 7mm; border-radius: 50%;
+  border: 0.2mm solid #1f2d36; background: rgba(255,255,255,.92);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8pt; font-weight: 700;
+}
+
+/* as canaletas dos rótulos: fora do quadro, dentro da moldura */
+.canaleta-topo {
+  position: absolute; left: 22mm; right: 3mm; top: 0; height: 3mm;
+}
+.canaleta-esquerda {
+  position: absolute; left: 0; top: 3mm; bottom: 2mm; width: 22mm;
+}
+.canaleta-topo span, .canaleta-esquerda span {
+  position: absolute; font-size: 6pt; color: #5b6b75; white-space: nowrap;
+}
+.canaleta-topo span { transform: translateX(-50%); }
+.canaleta-esquerda span { right: 2mm; transform: translateY(-50%); }
+
+/* ---------------------------------------------------------------- rodapé */
+.folha-rodape {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30mm 62mm;   /* legenda | articulação | chapa */
+  gap: 1.5mm;
+  padding: 2mm 3mm 3mm;
+  border-top: 0.2mm solid #1f2d36;
+  /* A ALTURA DO RODAPÉ É DO CONTEÚDO, não um número mágico: a legenda precisa de espaço para
+     tantas linhas quantas ela tiver, e em papel menor o texto NÃO encolhe — quem cede é o mapa. */
+  max-height: 42%;
+  min-height: 28mm;
+  box-sizing: border-box;
+}
+.bloco {
+  border: 0.2mm solid #b9c6cf;
+  padding: 1.5mm 2mm;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.bloco h2 {
+  margin: 0 0 1.5mm;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #1f4e5a;
+  border-bottom: 0.15mm solid #d3dde4;
+  padding-bottom: .8mm;
+}
+.bloco .vazio { margin: 0; font-size: 7pt; color: #8b979d; font-style: italic; }
+.bloco .nota { margin: 1mm 0 0; font-size: 6pt; color: #8b979d; text-align: center; }
+
+/* ---------------------------------------------------------------- LEGENDA UNIFORME
+ * O ponto do plano B. Cada meio tem um título; cada camada, um subtítulo; e os itens ficam numa
+ * GRADE de linhas de ALTURA IGUAL, com a amostra de largura fixa e o rótulo alinhado à esquerda.
+ * Como é o navegador que mede, nada sai torto nem cortado. */
+.bloco-legenda { display: flex; flex-direction: column; }
+.legenda-meio { margin-bottom: 1.2mm; }
+.legenda-meio > h3 {
+  margin: 0 0 .6mm; font-size: 7pt; font-weight: 700; color: #2c3e50;
+}
+.legenda-camada { margin: 0 0 .8mm 2mm; }
+.legenda-camada > h4 {
+  margin: 0 0 .4mm; font-size: 6.4pt; font-weight: 600; color: #55636d;
+}
+.legenda-itens {
+  margin: 0; padding: 0; list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(46mm, 1fr));   /* colunas uniformes */
+  column-gap: 3mm;
+  row-gap: .3mm;
+}
+.legenda-itens li {
+  display: grid;
+  grid-template-columns: 6mm 1fr;      /* amostra sempre na mesma largura: é o que alinha a coluna */
+  align-items: center;
+  height: 3.4mm;                        /* linha de altura fixa */
+  font-size: 6.4pt;
+  overflow: hidden;
+}
+.legenda-itens .amostra {
+  width: 5mm; height: 2.6mm;
+  background: var(--cor, #9aa7b0);
+  border: 0.15mm solid rgba(0,0,0,.35);
+  box-sizing: border-box;
+}
+.legenda-itens .forma-linha .amostra { height: 0; border: 0; border-top: 0.7mm solid var(--cor, #9aa7b0); }
+.legenda-itens .forma-ponto .amostra { width: 2.6mm; height: 2.6mm; border-radius: 50%; margin-left: 1.2mm; }
+.legenda-itens .rotulo { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------------------------------------------------------------- ARTICULAÇÃO */
+.bloco-articulacao { display: flex; flex-direction: column; }
+.articulacao-caixa {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 18mm;
+  background: #f4f7f9 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140'><rect x='2' y='2' width='96' height='136' fill='none' stroke='%238b979d' stroke-width='1'/></svg>") center/92% 92% no-repeat;
+}
+.articulacao-caixa .folha-marca {
+  position: absolute;
+  border: 0.5mm solid #c0392b;
+  min-width: 1.2mm; min-height: 1mm;
+}
+
+/* ---------------------------------------------------------------- CHAPA */
+.bloco-chapa { position: relative; display: flex; flex-direction: column; }
+.chapa-titulo {
+  margin: 0 0 .8mm; font-size: 8.4pt; font-weight: 700; text-align: center;
+  text-transform: none; letter-spacing: 0; color: #1f2d36; border-bottom: 0;
+}
+.chapa-projeto { margin: 0 0 1.2mm; font-size: 6.6pt; text-align: center; color: #43535d; min-height: 2.6mm; }
+.chapa-tabela {
+  width: 100%; border-collapse: collapse; table-layout: fixed;
+  margin-bottom: 1.2mm;
+}
+.chapa-tabela th, .chapa-tabela td {
+  border: 0.15mm solid #c3ced5; padding: .6mm .8mm; text-align: left;
+  font-size: 6pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.chapa-tabela th { background: #eef2f5; font-weight: 700; color: #55636d; }
+.chapa-tabela td { min-height: 3mm; }
+.chapa-logos {
+  display: flex; align-items: center; justify-content: space-around; gap: 2mm;
+  min-height: 12mm; margin-bottom: 1mm;
+}
+.chapa-logos img { max-height: 12mm; max-width: 45%; object-fit: contain; }
+.chapa-fonte, .chapa-datum, .chapa-resp {
+  margin: 0; font-size: 5.6pt; color: #43535d; line-height: 1.35;
+}
+.chapa-fonte b { color: #55636d; }
+.chapa-folha { position: absolute; right: 1mm; bottom: .6mm; font-size: 6pt; font-weight: 700; }
+.chapa-logos .vazio { font-size: 6pt; }
+
+/* ---------------------------------------------------------------- impressão
+ * Quem imprime é o navegador. A folha ocupa a página inteira, sem margem do papel (a margem é a
+ * moldura da prancha) — e a escala do papel é declarada pelo app, que injeta o @page da folha
+ * escolhida. */
+@media print {
+  body * { visibility: hidden !important; }
+  #previa-mapa, #previa-mapa * { visibility: visible !important; }
+  #previa-mapa {
+    position: absolute !important;
+    left: 0; top: 0; margin: 0; padding: 0; overflow: visible !important;
+  }
+  .folha { box-shadow: none; page-break-after: always; }
+}
+
+/* a prévia na tela: sombra leve, para o papel se destacar do painel */
+#previa-mapa .folha { box-shadow: 0 1px 4px rgba(0, 0, 0, .25); margin: 0 auto; }
+#previa-mapa { overflow: auto; }

@@ -2622,27 +2622,67 @@
       const jpeg = await rasterizarMapa(null, caixaPrevia.mapa.largura, escalaVista,
         caixaPrevia.mapa.altura / caixaPrevia.mapa.largura);
       if (seq !== previaSequencia) return;   // outra prévia já foi pedida: esta não vale mais
-      const imagens = [bytesParaDataUrl(jpeg, 'image/jpeg')]
-        .concat((estado.logos || []).map((l) => l.dataUrl).filter(Boolean));
-      const gravado = EIA.mapa.gravarFolha(Object.assign({}, e, {
-        bbox: null,
+      /* A PRÉVIA É A PRANCHA — E A PRANCHA É HTML/CSS (plano B).
+       *
+       * Quem desenha é o MOTOR DO NAVEGADOR: ele mede as fontes, alinha as colunas e imprime em PDF
+       * vetorial. O gerador de PDF escrito à mão ESTIMAVA larguras e cortava texto com "…" — era o
+       * que impedia a legenda de ficar uniforme, e nenhum ajuste resolvia, porque é limite de
+       * ferramenta.
+       *
+       * A simbologia vem das CAMADAS: `legendaPorMeio` usa a cor de cada camada e de cada classe
+       * (o mesmo `estilo.cores` que o mapa desenha), e mostra só as classes que apareceram no
+       * recorte — que é o que uma legenda deve mostrar.
+       *
+       * E prévia e impressão passam a ser a MESMA coisa: não há como divergirem. */
+      const porCamada = {};
+      for (const r of (estado.resultados || [])) {
+        if (!r || !r.camada || !r.features) continue;
+        const visto = porCamada[r.camada.id] || new Map();
+        for (const f of r.features) {
+          const c = f.properties && f.properties.eia_classe;
+          if (c === undefined || c === null || c === '') continue;
+          visto.set(String(c), (visto.get(String(c)) || 0) + 1);
+        }
+        porCamada[r.camada.id] = visto;
+      }
+      const classesPorCamada = {};
+      for (const id of Object.keys(porCamada)) {
+        classesPorCamada[id] = Array.from(porCamada[id].entries())
+          .sort((a, b) => b[1] - a[1]).map(([classe]) => classe);
+      }
+      const modeloFolha = EIA.folhaHtml.montarFolha(Object.assign({}, e, {
         escala: escalaVista,
         numeroFolha: e.articulacao ? e.articulacao.folhas[0].nome : ('1:' + EIA.math.num(escalaVista, 0)),
-        nomeImagemMapa: 'img0',
-        logos: (estado.logos || []).map((l, i) => ({
-          nomeImagem: 'img' + (i + 1), larguraMm: l.larguraMm, alturaMm: l.alturaMm,
-        })),
-      }), { imagens: imagens });
-      $('previa-mapa').innerHTML = EIA.mapa.itensParaSvg(gravado, {
-        /* GRANDE O BASTANTE PARA SER LIDA.
-         *
-         * Com 620 px numa folha A1, os textos de 5 a 8 pontos caíam para 1 ou 2 pixels: a estrutura
-         * podia estar certa e o cliente não tinha como julgar — e "não dá para ler" é lido como
-         * "está errado". Agora sai em ~1300 px e o painel rola na horizontal. Recolher o painel da
-         * esquerda (aba ‹) dá mais espaço, e a folha aumenta junto. */
-        escalaTela: Math.min(2.4, 1300 / (gravado.pagina.larguraMm || caixaPrevia.larguraFolha)),
-      });
-      status('Prévia do mapa pronta.');
+        mapaHref: bytesParaDataUrl(jpeg, 'image/jpeg'),
+        extensao: (function () {
+          try {
+            const b = estado.mapa.getBounds();
+            return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
+          } catch (err) { return null; }
+        })(),
+        rotulos: (function () {
+          const topo = [], esquerda = [];
+          const ext = (function () {
+            try {
+              const b = estado.mapa.getBounds();
+              return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
+            } catch (err) { return null; }
+          })();
+          if (ext) {
+            for (let i = 0; i <= 4; i++) {
+              const lon = ext[0] + (ext[2] - ext[0]) * i / 4;
+              const lat = ext[1] + (ext[3] - ext[1]) * i / 4;
+              topo.push({ pos: (i / 4 * 100).toFixed(1), texto: EIA.math.dms(lon, 'lon') });
+              esquerda.push({ pos: ((1 - i / 4) * 100).toFixed(1), texto: EIA.math.dms(lat, 'lat') });
+            }
+          }
+          return { topo: topo, esquerda: esquerda };
+        })(),
+        legenda: EIA.folhaHtml.legendaPorMeio(estado.camadas, classesPorCamada),
+        logos: (estado.logos || []).map((l) => ({ href: l.dataUrl })),
+      }));
+      $('previa-mapa').innerHTML = EIA.folhaHtml.paraHtml(modeloFolha);
+      status('Prévia da prancha pronta.');
     } catch (err) {
       status('Não consegui montar a prévia do mapa: ' + err.message, true);
     }
