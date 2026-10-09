@@ -2679,6 +2679,8 @@
           return { topo: topo, esquerda: esquerda };
         })(),
         legenda: EIA.folhaHtml.legendaPorMeio(estado.camadas, classesPorCamada),
+        // o contorno do estado para a articulação (js/uf-sp.js), com a caixa geográfica dele
+        uf: (EIA.ufSp && EIA.ufSp.caminho) ? EIA.ufSp : null,
         logos: (estado.logos || []).map((l) => ({ href: l.dataUrl })),
       }));
       $('previa-mapa').innerHTML = EIA.folhaHtml.paraHtml(modeloFolha);

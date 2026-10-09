@@ -167,6 +167,29 @@
 
 /* ---------------------------------------------------------------- ARTICULAÇÃO */
 .bloco-articulacao { display: flex; flex-direction: column; }
+/* O CONTORNO DE SÃO PAULO, vindo de js/uf-sp.js. O traço é `non-scaling-stroke`: o viewBox tem
+   1000 unidades de largura num quadrinho de 30 mm, então sem isso a linha sairia invisível. */
+.articulacao-mapa {
+  flex: 1 1 auto;
+  min-height: 18mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.articulacao-mapa svg { width: 100%; height: 100%; display: block; }
+.articulacao-mapa .uf {
+  fill: #eef2f5;
+  stroke: #6b7883;
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+.articulacao-mapa .folha-marca {
+  fill: rgba(192, 57, 43, .3);
+  stroke: #c0392b;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
 .articulacao-caixa {
   position: relative;
   flex: 1 1 auto;

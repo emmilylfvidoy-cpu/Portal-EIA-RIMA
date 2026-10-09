@@ -113,7 +113,13 @@
       datum: e.datum || 'SIRGAS 2000 / UTM 23S · WGS 84',
       escala: Number(e.escala) || 0,
       extensao: e.extensao || null,
-      cobertura: e.cobertura || [-53.2, -25.4, -44.1, -19.7],
+      /* O CONTORNO DO ESTADO, para a articulação. Vem de js/uf-sp.js, extraído do shapefile de
+       * Unidades da Federação do cliente (SIRGAS 2000 / UTM 23S, convertido para graus) e
+       * generalizado SÓ PARA ESTE DESENHO — as camadas de caracterização não passam por aqui.
+       * A caixa do contorno é a régua do quadrado vermelho: sem ela, o quadrado seria posicionado
+       * contra uma caixa aproximada e cairia fora de lugar. */
+      uf: e.uf || null,
+      cobertura: (e.uf && e.uf.bbox) ? e.uf.bbox : (e.cobertura || [-53.2, -25.4, -44.1, -19.7]),
       rotulos: e.rotulos || { topo: [], esquerda: [] },
       mapaHref: e.mapaHref || null,
       logos: (e.logos || []).filter((l) => l && l.href),
@@ -173,19 +179,35 @@
     }
     p.push('</section>');
 
-    // articulação: caixa do estado e o retângulo da folha
+    /* ARTICULAÇÃO — o contorno do estado e o quadrado da folha dentro dele.
+     *
+     * O contorno vem de js/uf-sp.js (extraído do shapefile de Unidades da Federação do cliente), e o
+     * quadrado é posicionado pela CAIXA DO PRÓPRIO CONTORNO — a mesma régua que desenhou o estado.
+     * Antes a base era um retângulo e a caixa era aproximada: o quadrado podia cair fora de lugar.
+     * Com a mesma régua nos dois, não há como divergir. */
     p.push('<section class="bloco bloco-articulacao"><h2>Articulação</h2>');
-    p.push('<div class="articulacao-caixa">');
-    if (m.extensao) {
-      const cob = m.cobertura;
-      const lx = (m.extensao[0] - cob[0]) / Math.max(1e-6, cob[2] - cob[0]);
-      const ly = (cob[3] - m.extensao[3]) / Math.max(1e-6, cob[3] - cob[1]);
-      const ll = (m.extensao[2] - m.extensao[0]) / Math.max(1e-6, cob[2] - cob[0]);
-      const la = (m.extensao[3] - m.extensao[1]) / Math.max(1e-6, cob[3] - cob[1]);
-      p.push('<span class="folha-marca" style="left:' + (lx * 100).toFixed(2) + '%;top:' + (ly * 100).toFixed(2)
-        + '%;width:' + Math.max(1.2, ll * 100).toFixed(2) + '%;height:' + Math.max(1, la * 100).toFixed(2) + '%"></span>');
+    if (m.uf && m.uf.caminho) {
+      const cob = m.uf.bbox;
+      p.push('<div class="articulacao-mapa">');
+      p.push('<svg viewBox="0 0 ' + m.uf.largura + ' ' + m.uf.altura
+        + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="contorno do estado">');
+      p.push('<path class="uf" d="' + m.uf.caminho + '"/>');
+      if (m.extensao) {
+        const dl = Math.max(1e-9, cob[2] - cob[0]);
+        const da = Math.max(1e-9, cob[3] - cob[1]);
+        const x = (m.extensao[0] - cob[0]) / dl * m.uf.largura;
+        const y = (cob[3] - m.extensao[3]) / da * m.uf.altura;
+        const w = Math.max(1.5, (m.extensao[2] - m.extensao[0]) / dl * m.uf.largura);
+        const h = Math.max(1.5, (m.extensao[3] - m.extensao[1]) / da * m.uf.altura);
+        p.push('<rect class="folha-marca" x="' + x.toFixed(1) + '" y="' + y.toFixed(1)
+          + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '"/>');
+      }
+      p.push('</svg></div>');
+    } else {
+      // sem o contorno carregado, o quadrinho fica vazio em vez de mentir uma forma
+      p.push('<div class="articulacao-caixa"></div>');
     }
-    p.push('</div><p class="nota">a folha, no estado</p></section>');
+    p.push('<p class="nota">a folha, no estado</p></section>');
 
     // chapa
     p.push('<section class="bloco bloco-chapa">');
