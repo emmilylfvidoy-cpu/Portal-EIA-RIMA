@@ -2245,6 +2245,7 @@
 
   async function gerarPdfRelatorio() {
     if (!estado.resultados.length) { alert('Faça o recorte primeiro.'); return; }
+    if (!estado.relato) montarRelato();
     status('Montando o relatório…');
     try {
       const imagens = await imagensDosGraficos();
@@ -2252,7 +2253,12 @@
       baixar(new Blob([bytes], { type: 'application/pdf' }), 'relatorio-eia.pdf');
       status('Relatório gerado.');
     } catch (e) {
+      /* AVISA EM JANELA, não só na linha de status: a linha passa despercebida, e o cliente ficou
+       * sem o relatório sem saber por quê. Com a janela, a mensagem chega — e ela diz o motivo. */
       status('Falha ao gerar o PDF: ' + e.message, true);
+      alert('Não consegui gerar o PDF do relatório.\n\n' + e.message
+        + '\n\nO texto do relatório está na aba Relatório — ele pode ser copiado de lá, e o '
+        + '"Baixar texto" salva em .txt enquanto isso.');
     }
   }
 
@@ -2532,7 +2538,6 @@
     mapa.setView(centro, zoom, configuracoes);
     await esperar(420);
 
-    const canvas = mapa.getPane('overlayPane').querySelector('canvas');
     const container = mapa.getContainer();
     const temporario = document.createElement('canvas');
     temporario.width = larguraPx;
@@ -2540,16 +2545,41 @@
     const ctx = temporario.getContext('2d');
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, temporario.width, temporario.height);
-    // desenha o que estiver em canvas (camadas vetoriais)
-    container.querySelectorAll('canvas').forEach((c) => {
+
+    /* AS IMAGENS DE FUNDO SÃO <img>, NÃO CANVAS.
+     *
+     * A versão anterior copiava só os canvas do container — e o mapa de satélite do Leaflet é
+     * feito de elementos <img> (as peças do tile). Ou seja: o fundo NUNCA entrava na captura.
+     * Pior: qualquer erro de cópia era engolido por um `catch` vazio, então a exportação podia
+     * terminar com uma FOLHA EM BRANCO e sem um único aviso — que foi o que o cliente viu.
+     *
+     * Agora: fundo primeiro, vetores por cima, e as FALHAS SÃO CONTADAS. Se o canvas vetorial (que
+     * é o conteúdo do mapa) não puder ser copiado, a exportação FALHA COM MENSAGEM, em vez de
+     * entregar uma folha em branco. Se falharem só peças do fundo, o PDF sai e o portal avisa. */
+    const rc = container.getBoundingClientRect();
+    const fatorX = temporario.width / rc.width, fatorY = temporario.height / rc.height;
+    const falhas = [];
+    function copiar(el, rotulo) {
       try {
-        const r = c.getBoundingClientRect();
-        const rc = container.getBoundingClientRect();
-        ctx.drawImage(c, (r.left - rc.left) * (temporario.width / rc.width), (r.top - rc.top) * (temporario.height / rc.height),
-          r.width * (temporario.width / rc.width), r.height * (temporario.height / rc.height));
-      } catch (e) { /* canvas de origem protegida: ignora */ }
-    });
-    void canvas;
+        const r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        ctx.drawImage(el, (r.left - rc.left) * fatorX, (r.top - rc.top) * fatorY,
+          r.width * fatorX, r.height * fatorY);
+      } catch (e) {
+        // guarda o MOTIVO: nome do erro diz se foi taint de canvas (SecurityError) ou outra coisa
+        falhas.push(rotulo + ': ' + ((e && e.name) || 'erro'));
+      }
+    }
+    container.querySelectorAll('img.leaflet-tile').forEach((img) => copiar(img, 'imagem de fundo'));
+    container.querySelectorAll('canvas').forEach((c) => copiar(c, 'camada vetorial'));
+    if (falhas.length) {
+      const vetorialFalhou = falhas.some((f) => f.indexOf('camada vetorial') >= 0);
+      if (vetorialFalhou) {
+        throw new Error('não consegui copiar as camadas do mapa para a imagem (' + falhas[0] + '). '
+          + 'Isso costuma ser o mapa de fundo bloqueando a captura: desligue a camada de fundo e tente de novo.');
+      }
+      status('Aviso: ' + falhas.length + ' peça(s) do mapa de fundo não entraram na imagem (' + falhas[0] + ').', true);
+    }
     return base64ParaBytes(temporario.toDataURL('image/jpeg', 0.9).split(',')[1]);
   }
 
