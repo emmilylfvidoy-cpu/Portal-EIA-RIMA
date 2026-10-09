@@ -419,6 +419,13 @@
    * Desenha com as primitivas públicas do documento (linha/texto) para não repetir
    * aqui as contas de conversão de milímetro para ponto — que é onde se erra.
    */
+  /**
+   * GRADE DE COORDENADAS NOS RÓTULOS DE FORA — EM CIMA E À ESQUERDA.
+   *
+   * Os rótulos de longitude ficavam ABAIXO do mapa, e o cliente pediu que saíssem em cima (é onde a
+   * folha de referência os tem). Repetir embaixo não acrescenta: quem lê a folha procura o valor
+   * uma vez, e a borda de baixo é justamente onde começa o rodapé com os blocos.
+   */
   function desenharGrade(pagina, e, caixa, doc) {
     const bbox = e.bbox;
     const mapa = caixa.mapa;
@@ -426,8 +433,9 @@
     for (let i = 0; i <= nDivisoes; i++) {
       const lon = bbox[0] + (bbox[2] - bbox[0]) * i / nDivisoes;
       const x = mapa.x + mapa.largura * i / nDivisoes;
-      doc.linha(pagina, x, mapa.y + mapa.altura, x, mapa.y + mapa.altura + 2.5, { cor: '#b8c2c8', espessura: 0.4 });
-      doc.texto(pagina, math.dms(lon, 'lon'), x, mapa.y + mapa.altura + 6, { tamanho: 6, alinhamento: 'centro', cor: '#5b6b75' });
+      // em cima: marca fora do quadro e rótulo acima dela
+      doc.linha(pagina, x, mapa.y, x, mapa.y - 2.5, { cor: '#b8c2c8', espessura: 0.4 });
+      doc.texto(pagina, math.dms(lon, 'lon'), x, mapa.y - 4, { tamanho: 6, alinhamento: 'centro', cor: '#5b6b75' });
 
       const lat = bbox[1] + (bbox[3] - bbox[1]) * i / nDivisoes;
       const y = mapa.y + mapa.altura * (1 - i / nDivisoes);
@@ -743,7 +751,14 @@
         return 0;
       },
       desenharImagem: function (p, nome, x, y, w, h) {
-        itens.push({ t: 'img', nome: nome, x: x, y: y, w: w, h: h, href: disponiveis[nome] || null });
+        /* O NOME É POSICIONAL ('img0', 'img1', ...) E A LISTA É UM ARRAY.
+         *
+         * Indexar array por string devolve undefined: `disponiveis['img0']` não é o primeiro item.
+         * Foi assim que a ÁREA DO MAPA saiu VAZIA na prévia — a imagem existia, e o desenho não a
+         * encontrava. O erro é silencioso por natureza, e só apareceu porque eu OLHEI a folha. */
+        const casado = /^img(\d+)$/.exec(String(nome || ''));
+        const href = casado ? disponiveis[Number(casado[1])] : disponiveis[nome];
+        itens.push({ t: 'img', nome: nome, x: x, y: y, w: w, h: h, href: href || null });
       },
     };
     desenharFolha(doc, especificacao);
