@@ -2539,16 +2539,25 @@
       if (seq !== previaSequencia) return;   // outra prévia já foi pedida: esta não vale mais
       const svgAtual = $('previa-mapa').querySelector('svg');
       if (!svgAtual) return;
+      /* A POSIÇÃO DA IMAGEM VEM DO PRÓPRIO RETÂNGULO DESENHADO NO SVG.
+       *
+       * Antes eu calculava a caixa aqui, de novo, e o SVG calculava a dele: qualquer diferença
+       * entre as duas contas punha a imagem fora do quadro — foi o que aconteceu, com a faixa do
+       * mapa espremida no alto de uma moldura grande. Lendo os atributos do retângulo que já está
+       * na tela, os dois não têm como divergir. */
+      const moldura = svgAtual.querySelector('rect[fill="#eef2f4"]');
+      if (!moldura) return;
       const imagem = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      imagem.setAttribute('x', caixaPrevia.mapa.x);
-      imagem.setAttribute('y', caixaPrevia.mapa.y);
-      imagem.setAttribute('width', caixaPrevia.mapa.largura);
-      imagem.setAttribute('height', caixaPrevia.mapa.altura);
+      imagem.setAttribute('x', moldura.getAttribute('x'));
+      imagem.setAttribute('y', moldura.getAttribute('y'));
+      imagem.setAttribute('width', moldura.getAttribute('width'));
+      imagem.setAttribute('height', moldura.getAttribute('height'));
       imagem.setAttribute('preserveAspectRatio', 'none');
       imagem.setAttribute('href', bytesParaDataUrl(jpeg, 'image/jpeg'));
-      const fundo = svgAtual.querySelector('rect[fill="#eef2f4"]');
-      if (fundo && fundo.nextSibling) svgAtual.insertBefore(imagem, fundo.nextSibling);
-      else svgAtual.appendChild(imagem);
+      svgAtual.insertBefore(imagem, moldura.nextSibling);
+      // o texto "área do mapa" do esboço sai: agora tem mapa ali
+      const esboco = moldura.nextElementSibling;
+      if (esboco && esboco.tagName && esboco.tagName.toLowerCase() === 'text') esboco.remove();
       status('Prévia do mapa pronta.');
     } catch (err) {
       status('Não consegui montar a prévia do mapa: ' + err.message, true);
