@@ -402,11 +402,18 @@ dialog::backdrop { background: rgba(16, 32, 40, .55); }
 
 /* ATRIBUTO hidden (fim) */
 
-/* A PRÉVIA DA FOLHA ROLA. Ela é desenhada no tamanho de leitura (cerca de 1300 px numa folha A1) e
-   o painel é estreito: sem rolagem, o navegador encolheria o desenho e os textos de 5 a 8 pontos
-   voltariam a ficar ilegíveis — e foi isso que fez o layout PARECER errado quando estava certo. */
-#previa-mapa { overflow: auto; }
-#previa-mapa svg { display: block; max-width: none; }
+/* A PRÉVIA DA FOLHA CABE INTEIRA NO PAINEL.
+ *
+ * Eu a tinha posto com 1300 px de largura para os textos ficarem legíveis — mas o painel tem cerca
+ * de 750: metade da folha saía da vista, com barra de rolagem, e o cliente leu isso, com razão,
+ * como "o mapa não está enquadrando". Para julgar o CONJUNTO a folha tem de aparecer inteira.
+ * Quem quiser ler os rótulos clica: abre numa aba própria, onde o zoom do navegador resolve. */
+#previa-mapa { overflow: auto; cursor: zoom-in; }
+#previa-mapa svg { display: block; width: 100%; height: auto; max-width: 100%; }
+#previa-mapa::after {
+  content: 'clique para abrir em tamanho grande';
+  display: block; text-align: center; font-size: 10.5px; color: #8b979d; padding: 3px 0 1px;
+}
 
 /* ------------------------------------------------------------------ ferramenta "i" */
 #mapa.identificando { cursor: crosshair; }

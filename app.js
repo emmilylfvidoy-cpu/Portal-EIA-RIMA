@@ -369,6 +369,24 @@
     $('btn-mapa-previa').onclick = atualizarPreviaMapa;
     $('btn-mapa-png').onclick = baixarFolhaPng;
     $('btn-mapa-pdf').onclick = gerarPdfMapa;
+
+    /* A PRÉVIA ABRE EM TAMANHO GRANDE AO CLIQUE.
+     *
+     * No painel a folha aparece INTEIRA (é assim que se julga o conjunto: proporções, blocos,
+     * equilíbrio), mas numa folha A1 os rótulos ficam pequenos demais para ler. Clicar abre o
+     * desenho numa aba própria, em tamanho natural, onde o zoom do navegador resolve — e não
+     * precisei inventar controle de zoom dentro do painel para isso. */
+    const alvoPrevia = $('previa-mapa');
+    if (alvoPrevia) {
+      alvoPrevia.title = 'Clique para abrir a folha em tamanho grande';
+      alvoPrevia.addEventListener('click', function () {
+        const desenho = alvoPrevia.querySelector('svg');
+        if (!desenho) return;
+        const url = URL.createObjectURL(new Blob([desenho.outerHTML], { type: 'image/svg+xml' }));
+        window.open(url, '_blank');
+        setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+      });
+    }
     $('btn-escala-auto').onclick = sugerirEscala;
     $('visao-tabela').onchange = renderizarTabela;
     $('filtro-meio').onchange = () => { renderizarTabela(); renderizarGraficos(); };
