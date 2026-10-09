@@ -372,7 +372,14 @@
     const margem = o.margem || 10;
     const moldura = o.moldura || 6;
     const alturaCabecalho = o.alturaCabecalho !== undefined ? o.alturaCabecalho : (folha === 'A4' ? 26 : folha === 'A3' ? 34 : 40);
-    const alturaRodape = o.alturaRodape !== undefined ? o.alturaRodape : (folha === 'A4' ? 30 : folha === 'A3' ? 34 : 38);
+    /* O RODAPÉ É A FAIXA DOS BLOCOS DE IDENTIFICAÇÃO: legenda, articulação, fonte e chapa.
+     *
+     * Estava com 38 mm numa folha de 594 mm — 6% da altura — e a legenda ficava espremida numa
+     * tira, com o resto do rodapé vazio. Nas folhas de referência essa faixa ocupa cerca de um
+     * quarto da altura, que é o que dá espaço para legenda longa (unidade litológica tem dezenas
+     * de entradas) e para os blocos da chapa. */
+    const alturaRodape = o.alturaRodape !== undefined ? o.alturaRodape
+      : (folha === 'A4' ? 46 : folha === 'A3' ? 66 : 122);
     return {
       folha: folha,
       orientacao: orientacao || 'paisagem',

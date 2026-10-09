@@ -2381,6 +2381,15 @@
       legenda: legendaAtual(),
       articulacao: art,
       logos: estado.logos,
+      // o quadrinho de ARTICULAÇÃO: a caixa do estado e o retângulo da folha dentro dela
+      cobertura: COBERTURA_PADRAO,
+      extensao: (function () {
+        // com o recorte da vista, a extensão da folha é a que está na tela
+        try {
+          const b = estado.mapa.getBounds();
+          return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
+        } catch (e) { return null; }
+      })(),
       data: new Date().toLocaleDateString('pt-BR'),
     };
   }
@@ -2524,23 +2533,20 @@
     const larguraViva = Math.round(estado.mapa.getContainer().getBoundingClientRect().width);
     const escalaVista = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
       larguraViva, caixaPrevia.mapa.largura) || escala;
-    const previa = EIA.mapa.previaSvg(Object.assign({}, e, {
-      bbox: null,
-      escala: escalaVista,
-      numeroFolha: e.articulacao ? e.articulacao.folhas[0].nome : ('1:' + EIA.math.num(escalaVista, 0)),
-    }), { escalaTela: Math.min(1.1, 620 / caixaPrevia.larguraFolha) });
-    $('previa-mapa').innerHTML = previa;
     atualizarInfoArticulacao();
 
-    /* A PRÉVIA PASSA A MOSTRAR O MAPA DE VERDADE.
+    /* A PRÉVIA DESENHA O LAYOUT INTEIRO, E DESENHA O MESMO QUE O PDF.
      *
-     * A prévia era só o ESBOÇO do layout: moldura, título e um retângulo escrito "área do mapa".
-     * Ela nunca desenhou o mapa — e o cliente leu isso, com razão, como folha em branco. Agora o
-     * mapa é rasterizado com a MESMA função que alimenta o PDF e entra como imagem no lugar do
-     * retângulo, com a proporção real da área do mapa (era 0,66 fixo, o que corta em papel retrato).
+     * Nada de um segundo desenho para a tela: `gravarFolha` chama a MESMA `desenharFolha` que gera
+     * o PDF, com um gravador no lugar do `doc`. O que sai aqui é, por construção, o que sai lá —
+     * moldura, cabeçalho, legenda, chapa (título, projeto, DATA/ESCALA/DESENHO/VERIFICADO, fonte,
+     * responsável), escala gráfica, norte e grade.
      *
-     * A sequência evita a corrida: se o usuário mexer na escala enquanto a imagem anterior ainda
-     * está sendo montada, a antiga não pode sobrescrever a nova. */
+     * As imagens entram na MESMA ORDEM do PDF: o mapa primeiro, os logos depois. Por isso os nomes
+     * são posicionais (img0, img1, ...) e a spec recebe `nomeImagemMapa: 'img0'`.
+     *
+     * A sequência evita a corrida: se o usuário mexer no mapa enquanto a imagem anterior ainda está
+     * sendo montada, a antiga não pode sobrescrever a nova. */
     const seq = ++previaSequencia;
     status('Montando a prévia do mapa…');
     try {
@@ -2548,27 +2554,20 @@
       const jpeg = await rasterizarMapa(null, caixaPrevia.mapa.largura, escalaVista,
         caixaPrevia.mapa.altura / caixaPrevia.mapa.largura);
       if (seq !== previaSequencia) return;   // outra prévia já foi pedida: esta não vale mais
-      const svgAtual = $('previa-mapa').querySelector('svg');
-      if (!svgAtual) return;
-      /* A POSIÇÃO DA IMAGEM VEM DO PRÓPRIO RETÂNGULO DESENHADO NO SVG.
-       *
-       * Antes eu calculava a caixa aqui, de novo, e o SVG calculava a dele: qualquer diferença
-       * entre as duas contas punha a imagem fora do quadro — foi o que aconteceu, com a faixa do
-       * mapa espremida no alto de uma moldura grande. Lendo os atributos do retângulo que já está
-       * na tela, os dois não têm como divergir. */
-      const moldura = svgAtual.querySelector('rect[fill="#eef2f4"]');
-      if (!moldura) return;
-      const imagem = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      imagem.setAttribute('x', moldura.getAttribute('x'));
-      imagem.setAttribute('y', moldura.getAttribute('y'));
-      imagem.setAttribute('width', moldura.getAttribute('width'));
-      imagem.setAttribute('height', moldura.getAttribute('height'));
-      imagem.setAttribute('preserveAspectRatio', 'none');
-      imagem.setAttribute('href', bytesParaDataUrl(jpeg, 'image/jpeg'));
-      svgAtual.insertBefore(imagem, moldura.nextSibling);
-      // o texto "área do mapa" do esboço sai: agora tem mapa ali
-      const esboco = moldura.nextElementSibling;
-      if (esboco && esboco.tagName && esboco.tagName.toLowerCase() === 'text') esboco.remove();
+      const imagens = [bytesParaDataUrl(jpeg, 'image/jpeg')]
+        .concat((estado.logos || []).map((l) => l.dataUrl).filter(Boolean));
+      const gravado = EIA.mapa.gravarFolha(Object.assign({}, e, {
+        bbox: null,
+        escala: escalaVista,
+        numeroFolha: e.articulacao ? e.articulacao.folhas[0].nome : ('1:' + EIA.math.num(escalaVista, 0)),
+        nomeImagemMapa: 'img0',
+        logos: (estado.logos || []).map((l, i) => ({
+          nomeImagem: 'img' + (i + 1), larguraMm: l.larguraMm, alturaMm: l.alturaMm,
+        })),
+      }), { imagens: imagens });
+      $('previa-mapa').innerHTML = EIA.mapa.itensParaSvg(gravado, {
+        escalaTela: Math.min(1.1, 620 / (gravado.pagina.larguraMm || caixaPrevia.larguraFolha)),
+      });
       status('Prévia do mapa pronta.');
     } catch (err) {
       status('Não consegui montar a prévia do mapa: ' + err.message, true);

@@ -183,8 +183,13 @@
     }
 
     // grade de coordenadas (rótulos nas bordas)
-    if (e.bbox) {
-      desenharGrade(pagina, e, caixa, doc);
+    /* A GRADE USA A EXTENSÃO DA FOLHA. Com o mapa virando RECORTE DA VISTA, o `bbox` deixou de ser
+     * preenchido — e a grade, que só rodava com ele, desapareceu da folha sem ninguém notar (só
+     * apareceu quando eu pude OLHAR a folha). A extensão da folha agora é `extensao`, e ela serve
+     * para as duas coisas: a articulação e a grade. */
+    const bboxGrade = e.extensao || e.bbox;
+    if (bboxGrade) {
+      desenharGrade(pagina, Object.assign({}, e, { bbox: bboxGrade }), caixa, doc);
     }
 
     /* RODAPÉ EM DUAS PARTES: LEGENDA À ESQUERDA, CHAPA À DIREITA.
@@ -205,11 +210,18 @@
     const larguraChapa = Math.max(56, Math.min(94, rod.largura * 0.33));
     const chapa = { x: rod.x + rod.largura - larguraChapa, y: rod.y + 1.5, largura: larguraChapa, altura: rod.altura - 2.5 };
     doc.retangulo(pagina, chapa.x, chapa.y, chapa.largura, chapa.altura, { borda: cor, espessura: 0.7 });
-    const larguraLegenda = rod.largura - larguraChapa - 3;
+
+    /* BLOCOS DO RODAPÉ, como nas folhas de referência: LEGENDA à esquerda, ARTICULAÇÃO no meio e
+     * CHAPA à direita. A legenda para antes da articulação, para não invadir os outros blocos. */
+    const larguraArt = Math.max(34, Math.min(58, rod.largura * 0.14));
+    const art = { x: chapa.x - larguraArt - 2, y: rod.y + 1.5, largura: larguraArt, altura: rod.altura - 2.5 };
+    const larguraLegenda = rod.largura - larguraChapa - larguraArt - 6;
 
     const itensLegenda = e.legenda || [];
+    // a folha de referência encima os itens com "Legenda": sem o título, a lista não se anuncia
+    doc.texto(pagina, 'LEGENDA', rod.x + 2, rod.y + 5.4, { tamanho: 7.6, negrito: true, cor: cor });
     if (itensLegenda.length) {
-      /* Quantas entradas cabem no rodapé desta folha?
+      /* Quantas entradas cabem na legenda desta folha?
        *
        * Antes eram 2 colunas fixas em A4 e 3 nas outras — servia para 6 camadas, não
        * para uma legenda de unidade litológica, que pode ter dezenas de entradas numa
@@ -217,7 +229,7 @@
        * cresce até caber; se ainda não couber (folha pequena com legenda enorme), o que
        * sobra é declarado em uma linha, em vez de sair do papel em silêncio. */
       const alturaLinha = 5.2;   // mm por linha de legenda
-      const linhasPorColuna = Math.max(3, Math.floor((rod.altura - 10) / alturaLinha));
+      const linhasPorColuna = Math.max(3, Math.floor((rod.altura - 16) / alturaLinha));
       const larguraMinimaColuna = 34;   // mm — abaixo disso o rótulo não cabe
       const colunasQueCabem = Math.max(1, Math.floor((larguraLegenda - 4) / larguraMinimaColuna));
       const colunasNecessarias = Math.ceil(itensLegenda.length / linhasPorColuna);
@@ -226,12 +238,13 @@
       const capacidade = porColuna * colunas;
       const cabem = itensLegenda.slice(0, capacidade);
       const sobra = itensLegenda.length - cabem.length;
+      const yTitulo = rod.y + 11;   // abaixo do título "LEGENDA"
 
       for (let c = 0; c < colunas; c++) {
         const x = rod.x + 2 + c * (larguraLegenda / colunas);
         const fatia = cabem.slice(c * porColuna, (c + 1) * porColuna);
         fatia.forEach((item, i) => {
-          const y = rod.y + 7 + i * alturaLinha;
+          const y = yTitulo + i * alturaLinha;
           if (item.forma === 'linha') {
             doc.linha(pagina, x, y, x + 8, y, { cor: item.cor, espessura: item.espessura || 0.9 });
           } else if (item.forma === 'ponto') {
@@ -244,9 +257,12 @@
       }
       if (sobra > 0) {
         doc.texto(pagina, 'e mais ' + sobra + ' classes — tabela de áreas em anexo',
-          rod.x + 2, rod.y + 7 + linhasPorColuna * alturaLinha + 1, { tamanho: 6.6, cor: '#43535d' });
+          rod.x + 2, yTitulo + linhasPorColuna * alturaLinha + 1, { tamanho: 6.6, cor: '#43535d' });
       }
     }
+
+    // articulação: o quadrinho que diz ONDE a folha cai no estado
+    desenharArticulacao(pagina, doc, art, e, cor);
 
     // escala gráfica em vetor (fica sob a legenda, à esquerda)
     const metrosPorPx = 1; // a escala gráfica abaixo é desenhada em mm direto
@@ -321,6 +337,42 @@
   function cortar(texto, maximo) {
     const t = String(texto === null || texto === undefined ? '' : texto);
     return t.length <= maximo ? t : t.slice(0, maximo - 1) + '…';
+  }
+
+  /**
+   * ARTICULAÇÃO — o quadrinho que diz ONDE a folha cai.
+   *
+   * É elemento corrente em folha de EIA (sem ele não se sabe que parte do estado está ali) e
+   * faltava. O desenho é ESQUEMÁTICO de propósito: a caixa do estado e o retângulo da folha. Não é
+   * o contorno do estado — para isso seria preciso carregar a malha, e o ganho não paga o custo no
+   * tamanho em que esse quadrinho é impresso. Fica dito aqui para ninguém confundir com descuido.
+   */
+  function desenharArticulacao(pagina, doc, caixa, e, cor) {
+    doc.retangulo(pagina, caixa.x, caixa.y, caixa.largura, caixa.altura, { borda: cor, espessura: 0.7 });
+    doc.texto(pagina, 'ARTICULAÇÃO', caixa.x + caixa.largura / 2, caixa.y + 4.4,
+      { tamanho: 6.4, negrito: true, alinhamento: 'centro', cor: cor });
+    const ext = e.extensao;
+    if (!ext) {
+      doc.texto(pagina, 'sem extensão', caixa.x + caixa.largura / 2, caixa.y + caixa.altura / 2,
+        { tamanho: 5.8, alinhamento: 'centro', cor: '#8b979d' });
+      return;
+    }
+    // caixa de São Paulo, se ninguém informar outra
+    const cob = e.cobertura || [-53.2, -25.4, -44.1, -19.7];
+    const x0 = caixa.x + 3, y0 = caixa.y + 7;
+    const w = caixa.largura - 6, h = caixa.altura - 12;
+    const escala = Math.min(w / Math.max(1e-6, cob[2] - cob[0]), h / Math.max(1e-6, cob[3] - cob[1]));
+    const lw = (cob[2] - cob[0]) * escala, lh = (cob[3] - cob[1]) * escala;
+    const bx = x0 + (w - lw) / 2, by = y0 + (h - lh) / 2;
+    doc.retangulo(pagina, bx, by, lw, lh, { borda: '#8b979d', espessura: 0.5, preenchimento: '#f4f7f9' });
+    // a folha dentro dela (o retângulo destacado da referência)
+    const fx = bx + (ext[0] - cob[0]) * escala;
+    const fy = by + (cob[3] - ext[3]) * escala;   // no mapa o norte fica em cima: o Y é invertido
+    const fw = Math.max(1.8, (ext[2] - ext[0]) * escala);
+    const fh = Math.max(1.4, (ext[3] - ext[1]) * escala);
+    doc.retangulo(pagina, fx, fy, fw, fh, { borda: '#c0392b', espessura: 1.1 });
+    doc.texto(pagina, 'a folha, no estado', caixa.x + caixa.largura / 2, caixa.y + caixa.altura - 2.6,
+      { tamanho: 5.4, alinhamento: 'centro', cor: '#5b6b75' });
   }
 
   /** Escala gráfica desenhada em milímetros reais na folha. */
@@ -637,9 +689,97 @@
     return Math.max(1, Math.round(mPorMm * 1000 / 10) * 10);
   }
 
+  /**
+   * A PRÉVIA DESENHA O MESMO QUE O PDF — PORQUE CHAMA A MESMA FUNÇÃO.
+   *
+   * `gravarFolha` põe um GRAVADOR no lugar do `doc` do PDF e chama `desenharFolha` sem alterá-la:
+   * cada texto, linha, retângulo, círculo e imagem vira um item de uma lista. `itensParaSvg`
+   * reproduz essa lista como SVG.
+   *
+   * POR QUE ASSIM, e não um segundo desenho para a tela: duas implementações do mesmo layout
+   * divergem — foi o que já aconteceu três vezes nesta função (proporção fixa contra a proporção
+   * da folha, posição calculada contra a posição desenhada, medida do cache contra a medida viva),
+   * e o defeito sempre aparece longe de onde está a causa. Aqui só existe UM desenho.
+   *
+   * As coordenadas vão como estão: o PDF recebe y do TOPO e converte por dentro (pdf.js faz
+   * alturaMm - y), e o SVG também conta do topo. Espessura de traço e tamanho de fonte são POINTS
+   * no PDF; o SVG conta em milímetros, então os dois são multiplicados por 0,352778.
+   *
+   * `opcoes.imagens` é uma lista de data URLs na MESMA ORDEM em que o PDF adiciona as imagens
+   * (o mapa e depois os logos): o gravador devolve nomes posicionais.
+   */
+  function gravarFolha(especificacao, opcoes) {
+    const o = opcoes || {};
+    const disponiveis = o.imagens || [];
+    const itens = [];
+    let proxima = 0;
+    const pagina = { larguraMm: 0, alturaMm: 0, conteudo: [] };
+    const doc = {
+      novaPagina: function (larguraMm, alturaMm) {
+        pagina.larguraMm = larguraMm;
+        pagina.alturaMm = alturaMm;
+        return pagina;
+      },
+      adicionarImagem: function () { return 'img' + (proxima++); },
+      construir: function () { return null; },
+      retangulo: function (p, x, y, w, h, op) { itens.push({ t: 'ret', x: x, y: y, w: w, h: h, o: op || {} }); },
+      linha: function (p, x1, y1, x2, y2, op) { itens.push({ t: 'linha', x1: x1, y1: y1, x2: x2, y2: y2, o: op || {} }); },
+      circulo: function (p, x, y, r, op) { itens.push({ t: 'circ', x: x, y: y, r: r, o: op || {} }); },
+      texto: function (p, s, x, y, op) { itens.push({ t: 'texto', s: String(s), x: x, y: y, o: op || {} }); },
+      textoMultilinha: function (p, s, x, y) {
+        itens.push({ t: 'texto', s: String(s), x: x, y: y, o: { tamanho: 8.6 } });
+        return 0;
+      },
+      desenharImagem: function (p, nome, x, y, w, h) {
+        itens.push({ t: 'img', nome: nome, x: x, y: y, w: w, h: h, href: disponiveis[nome] || null });
+      },
+    };
+    desenharFolha(doc, especificacao);
+    return { itens: itens, pagina: pagina };
+  }
+
+  /** Reproduz a lista gravada como SVG (mesmas coordenadas, mesmas cores). */
+  function itensParaSvg(gravado, opcoes) {
+    const o = opcoes || {};
+    const esc = o.escalaTela || 0.9;
+    const pt = 0.352778;   // point -> milímetro
+    const W = gravado.pagina.larguraMm, H = gravado.pagina.alturaMm;
+    const linhas = [];
+    linhas.push('<svg xmlns="http://www.w3.org/2000/svg" width="' + Math.round(W * esc) + '" height="'
+      + Math.round(H * esc) + '" viewBox="0 0 ' + W + ' ' + H + '" font-family="Segoe UI, Arial, sans-serif">');
+    linhas.push('<rect width="' + W + '" height="' + H + '" fill="#ffffff"/>');
+    for (const it of gravado.itens) {
+      const c = it.o || {};
+      if (it.t === 'ret') {
+        linhas.push('<rect x="' + it.x + '" y="' + it.y + '" width="' + it.w + '" height="' + it.h
+          + '" fill="' + (c.preenchimento || 'none') + '" stroke="' + (c.borda || 'none')
+          + '" stroke-width="' + ((c.espessura || 0.4) * pt).toFixed(3) + '"/>');
+      } else if (it.t === 'linha') {
+        linhas.push('<line x1="' + it.x1 + '" y1="' + it.y1 + '" x2="' + it.x2 + '" y2="' + it.y2
+          + '" stroke="' + (c.cor || '#1f2d36') + '" stroke-width="' + ((c.espessura || 0.4) * pt).toFixed(3) + '"/>');
+      } else if (it.t === 'circ') {
+        linhas.push('<circle cx="' + it.x + '" cy="' + it.y + '" r="' + it.r + '" fill="'
+          + (c.preenchimento || 'none') + '" stroke="' + (c.borda || 'none')
+          + '" stroke-width="' + ((c.espessura || 0.4) * pt).toFixed(3) + '"/>');
+      } else if (it.t === 'texto') {
+        const ancora = c.alinhamento === 'centro' ? 'middle' : (c.alinhamento === 'direita' ? 'end' : 'start');
+        linhas.push('<text x="' + it.x + '" y="' + it.y + '" font-size="' + ((c.tamanho || 7) * pt).toFixed(3)
+          + '" font-weight="' + (c.negrito ? '700' : '400') + '" text-anchor="' + ancora + '" fill="'
+          + (c.cor || '#1f2d36') + '" xml:space="preserve">' + svg.escapar(it.s) + '</text>');
+      } else if (it.t === 'img' && it.href) {
+        linhas.push('<image x="' + it.x + '" y="' + it.y + '" width="' + it.w + '" height="' + it.h
+          + '" preserveAspectRatio="none" href="' + it.href + '"/>');
+      }
+    }
+    linhas.push('</svg>');
+    return linhas.join('');
+  }
+
   return {
     ESCALAS: ESCALAS,
     escalaDaVista: escalaDaVista,
+    gravarFolha: gravarFolha,
+    itensParaSvg: itensParaSvg,
     Z_CAMADAS: Z_CAMADAS,
     ESTILOS_LINHA: ESTILOS_LINHA,
     GROSSURA_MIN: GROSSURA_MIN,
