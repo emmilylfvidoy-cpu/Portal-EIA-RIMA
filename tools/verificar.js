@@ -16,6 +16,7 @@ const suites = [
   ['servicos', path.join(raiz, 'verificacoes', 'verificar_servicos.js')],
   ['areas', path.join(raiz, 'verificacoes', 'verificar_recorte_areas.js')],
   ['consulta', path.join(raiz, 'verificacoes', 'verificar_consulta.js')],
+  ['docx', path.join(raiz, 'verificacoes', 'verificar_docx.js')],
   ['vetorial', path.join(raiz, 'verificacoes', 'verificar_vetorial.js')],
   ['formatos', path.join(raiz, 'verificacoes', 'verificar_formatos.js')],
   ['saidas', path.join(raiz, 'verificacoes', 'verificar_saidas.js')],

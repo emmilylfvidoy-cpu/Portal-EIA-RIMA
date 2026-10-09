@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.10';
+  const VERSAO = 'v3.11';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -364,6 +364,7 @@
     $('btn-grafico-png').onclick = baixarGraficoPng;
     $('btn-grafico-svg').onclick = baixarGraficoSvg;
     $('btn-relatorio-pdf').onclick = gerarPdfRelatorio;
+    $('btn-relatorio-docx').onclick = baixarDocx;
     $('btn-relatorio-txt').onclick = baixarTextoRelatorio;
     $('btn-mapa-previa').onclick = atualizarPreviaMapa;
     $('btn-mapa-png').onclick = baixarFolhaPng;
@@ -2265,6 +2266,28 @@
   function baixarTextoRelatorio() {
     if (!estado.relato) { alert('Faça o recorte primeiro.'); return; }
     baixar(new Blob([EIA.relatorio.textoSimples(estado.relato)], { type: 'text/plain;charset=utf-8' }), 'relatorio-eia.txt');
+  }
+
+  /** O relatório em .docx — o texto e as tabelas de área e percentual, editáveis no Word. */
+  async function baixarDocx() {
+    if (!estado.resultados.length) { alert('Faça o recorte primeiro.'); return; }
+    if (!estado.relato) montarRelato();
+    status('Montando o documento (.docx)…');
+    try {
+      const bytes = await EIA.docx.gerarDocx(estado.relato, estado.resultados, {
+        titulo: 'Relatório de caracterização ambiental',
+        projeto: dadosProjeto(),
+        data: new Date().toLocaleDateString('pt-BR'),
+      });
+      baixar(new Blob([bytes], {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      }), 'relatorio-eia.docx');
+      status('Documento .docx gerado.');
+    } catch (e) {
+      status('Falha ao gerar o .docx: ' + e.message, true);
+      alert('Não consegui gerar o .docx.\n\n' + e.message
+        + '\n\nEnquanto isso, o texto continua na aba Relatório e o PDF também está disponível.');
+    }
   }
 
   async function imagensDosGraficos() {
