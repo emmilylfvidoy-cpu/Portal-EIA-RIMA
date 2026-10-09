@@ -18,7 +18,7 @@
    * Existe por um motivo prático: sem ela, não há como saber se o site publicado é o
    * atual ou uma versão antiga em cache. Toda alteração publicada incrementa este
    * número, e a lista completa fica no README. */
-  const VERSAO = 'v3.9';
+  const VERSAO = 'v3.10';
   const VERSAO_DATA = '2026-10-07';
 
   const estado = {
@@ -124,6 +124,68 @@
     });
     estado.mapa = mapa;
     mapa.__cobertura = COBERTURA_PADRAO;
+
+    /* ------------------------------------------------------------------ FERRAMENTA "i"
+     * Clicar na camada e ver os ATRIBUTOS da feição.
+     *
+     * A consulta roda sobre as camadas LIGADAS — consultar camada desligada seria mentir sobre o
+     * que está no mapa. A conta (ponto dentro do polígono respeitando FURO, tolerância para linha
+     * e ponto) está em js/consulta.js, que é verificada sem navegador; aqui fica só o balão.
+     *
+     * LIMITE HONESTO: nas camadas em tiles só existem em memória as feições da área que o mapa
+     * carregou. Se a camada ainda não desenhou aquele ponto, não há o que consultar — e o balão
+     * diz isso, em vez de dizer que não há nada.
+     */
+    estado.identificar = false;
+    const botaoIdentificar = $('identificar');
+    function marcarIdentificar(ligado) {
+      estado.identificar = ligado;
+      if (botaoIdentificar) {
+        botaoIdentificar.classList.toggle('ativa', ligado);
+        botaoIdentificar.setAttribute('aria-pressed', ligado ? 'true' : 'false');
+      }
+      const alvo = $('mapa');
+      if (alvo) alvo.classList.toggle('identificando', ligado);
+    }
+    if (botaoIdentificar) botaoIdentificar.addEventListener('click', () => marcarIdentificar(!estado.identificar));
+
+    /* Os valores vêm de arquivo de terceiro: entram no HTML como TEXTO, nunca como marcação. */
+    function escapar(v) {
+      return String(v === null || v === undefined ? '' : v)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    mapa.on('click', function (ev) {
+      if (!estado.identificar) return;
+      const achados = EIA.consulta.encontrar(estado.camadas, [ev.latlng.lng, ev.latlng.lat]);
+      mapa.closePopup();
+      if (!achados.length) {
+        L.popup({ maxWidth: 300 }).setLatLng(ev.latlng).setContent(
+          '<div class="balao-consulta"><b>Nada neste ponto</b>'
+          + '<p class="balao-nota">Confira se a camada está ligada e se ela já desenhou esta parte do '
+          + 'mapa: as camadas em tiles carregam por área, então uma parte ainda não vista não tem o '
+          + 'que consultar.</p></div>').openOn(mapa);
+        return;
+      }
+      const partes = achados.map(function (x) {
+        const cor = (x.camada.estilo && x.camada.estilo.cor) || x.camada.cor || '#888';
+        const feicoes = x.feicoes.map(function (f) {
+          const props = f.properties || {};
+          const linhas = Object.keys(props).slice(0, 20).map(function (k) {
+            return '<tr><th>' + escapar(k) + '</th><td>' + escapar(EIA.consulta.formatarValor(props[k])) + '</td></tr>';
+          }).join('');
+          return '<div class="balao-feicao"><div class="balao-rotulo">'
+            + escapar(EIA.consulta.rotulo(f, x.camada)) + '</div><table>' + linhas + '</table></div>';
+        }).join('');
+        const mais = x.total > x.feicoes.length
+          ? '<p class="balao-nota">+ ' + (x.total - x.feicoes.length) + ' feição(ões) desta camada neste ponto.</p>'
+          : '';
+        return '<div class="balao-titulo"><span class="balao-cor" style="background:' + escapar(cor) + '"></span>'
+          + escapar(x.camada.nome) + (x.total > 1 ? ' <span class="balao-conta">' + x.total + '</span>' : '')
+          + '</div>' + feicoes + mais;
+      }).join('');
+      L.popup({ maxWidth: 360, maxHeight: 340 }).setLatLng(ev.latlng)
+        .setContent('<div class="balao-consulta">' + partes + '</div>').openOn(mapa);
+    });
 
     estado.base = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       maxZoom: 19,

@@ -362,6 +362,41 @@ dialog::backdrop { background: rgba(16, 32, 40, .55); }
    A setinha abre a lista de unidades. O grupo é só organização: cada filha é uma camada comum,
    com caixa própria, que entra no recorte e no relatório como qualquer outra. Existe porque 22
    UGRHIs abertas na lista empurrariam todas as outras camadas para fora da tela. */
+/* O ATRIBUTO hidden PRECISA GANHAR DE QUALQUER display.
+ *
+ * Sem esta regra, `.camada-item { display: flex }` vencia o `hidden` que o app.js põe nas filhas
+ * do grupo: as 22 UGRHIs ficavam SEMPRE visíveis e a seta não retraía nada — o clique até trocava
+ * o estado, mas a linha continuava aparecendo. O `!important` é o único jeito de o `[hidden]`
+ * (que é estilo do navegador, de precedência baixíssima) valer contra uma classe com display. */
+[hidden] { display: none !important; }
+
+/* ATRIBUTO hidden (fim) */
+
+/* ------------------------------------------------------------------ ferramenta "i" */
+#mapa.identificando { cursor: crosshair; }
+.mapa-ferramentas button.ativa {
+  background: var(--acento-escuro);
+  color: #fff;
+  border-color: var(--acento-escuro);
+}
+.balao-consulta { font-size: 12px; max-height: 300px; overflow: auto; }
+.balao-consulta .balao-titulo {
+  display: flex; align-items: center; gap: 5px;
+  font-weight: 700; margin: 2px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #e3e9ee;
+}
+.balao-consulta .balao-titulo + .balao-titulo { margin-top: 8px; }
+.balao-consulta .balao-cor { width: 11px; height: 11px; border-radius: 2px; border: 1px solid rgba(0,0,0,.3); flex: 0 0 auto; }
+.balao-consulta .balao-conta { font-weight: 400; color: #6b7883; font-size: 11px; }
+.balao-consulta .balao-feicao { margin: 0 0 6px 16px; }
+.balao-consulta .balao-rotulo { font-weight: 600; color: #2c3e50; margin-bottom: 2px; }
+.balao-consulta table { border-collapse: collapse; width: 100%; }
+.balao-consulta th, .balao-consulta td {
+  text-align: left; vertical-align: top; padding: 1px 4px 1px 0; font-weight: 400;
+  border-bottom: 1px solid #f0f4f7; word-break: break-word;
+}
+.balao-consulta th { color: #6b7883; width: 42%; }
+.balao-consulta .balao-nota { margin: 4px 0 0; color: #6b7883; font-size: 11px; }
+
 .camada-grupo {
   /* DISCRETO DE PROPÓSITO: são 22 unidades recolhidas num item só, e ele não pode competir com
      as camadas de verdade na lista. Fonte menor e sem caixa pesada — a setinha é o convite. */
