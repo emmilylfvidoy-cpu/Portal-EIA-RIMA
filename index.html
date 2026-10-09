@@ -237,6 +237,14 @@
             <button id="btn-escala-auto" class="botao">Calcular escala que cabe</button>
           </div>
         </div>
+        <div class="campo linha">
+          <div><label for="ajuste-fundo-x">Ajuste do fundo — L/O (m)</label><input type="text" id="ajuste-fundo-x" placeholder="0"></div>
+          <div><label for="ajuste-fundo-y">Ajuste do fundo — N/S (m)</label><input type="text" id="ajuste-fundo-y" placeholder="0"></div>
+        </div>
+        <p class="ajuda">Desloca <b>somente a imagem de satélite</b>, para casar com o dado quando o
+        provedor de imagens está fora de lugar (a imagem da Esri é deslocada em dezenas de metros no
+        litoral brasileiro). <b>O dado não é alterado</b> — a feição continua exatamente onde está no
+        arquivo. Escreva em metros o quanto a imagem deve andar; o valor vale no zoom atual.</p>
         <div class="campo">
           <label for="titulo-mapa">Título do mapa</label>
           <input type="text" id="titulo-mapa" placeholder="Escreva o título que sai na chapa da folha">

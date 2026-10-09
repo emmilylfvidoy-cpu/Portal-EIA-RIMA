@@ -197,6 +197,46 @@
       $('aviso-mapa').textContent = 'Sem acesso ao mapa de fundo (offline?). As camadas do projeto continuam funcionando.';
     });
 
+    /* ---------------------------------------------------- AJUSTE DO FUNDO (imagem × dado)
+     *
+     * POR QUE ISTO EXISTE, e por que NÃO fere a regra de não alterar a feição:
+     *
+     * A imagem de satélite da Esri é deslocada em dezenas de metros sobre o litoral brasileiro, e o
+     * mapa do cliente usa imagens do Google, com outro georreferenciamento. O resultado é o dado
+     * (correto) parecendo torto contra a imagem (deslocada) — e a conclusão errada de que "as
+     * camadas estão deslocadas". Conferido: as camadas de origem estão em SIRGAS 2000 e WGS 84, e
+     * camadas de DUAS origens independentes (os shapefiles do Estado e os serviços da CETESB)
+     * mostram o MESMO deslocamento — sinal de que o erro está no que elas têm em comum: a imagem.
+     *
+     * Aqui se desloca SOMENTE a imagem. O vetor não é tocado: a feição continua exatamente onde
+     * está no arquivo. É o mesmo recurso que QGIS e ArcGIS oferecem para este caso.
+     *
+     * O deslocamento é em METROS e vira pixels no zoom atual — a mesma conta do Web Mercator usada
+     * na escala da folha (256·2^z pixels no mundo; 40075016,686·cos φ metros no paralelo). */
+    estado.ajusteFundo = { x: 0, y: 0 };
+    function aplicarAjusteFundo() {
+      const pane = mapa.getPane('tilePane');
+      if (!pane) return;
+      const z = mapa.getZoom();
+      const lat = mapa.getCenter().lat;
+      const mPorPx = 40075016.686 * Math.cos(lat * Math.PI / 180) / (256 * Math.pow(2, z));
+      pane.style.transform = 'translate('
+        + (estado.ajusteFundo.x / mPorPx).toFixed(1) + 'px,'
+        + (-estado.ajusteFundo.y / mPorPx).toFixed(1) + 'px)';
+    }
+    function lerAjusteFundo() {
+      estado.ajusteFundo = {
+        x: Number(($('ajuste-fundo-x') || {}).value) || 0,
+        y: Number(($('ajuste-fundo-y') || {}).value) || 0,
+      };
+      aplicarAjusteFundo();
+      status('Fundo deslocado ' + estado.ajusteFundo.x + ' m (L/O) e ' + estado.ajusteFundo.y
+        + ' m (N/S). Só a imagem se moveu — o dado está intacto.');
+    }
+    if ($('ajuste-fundo-x')) $('ajuste-fundo-x').oninput = lerAjusteFundo;
+    if ($('ajuste-fundo-y')) $('ajuste-fundo-y').oninput = lerAjusteFundo;
+    mapa.on('zoomend', aplicarAjusteFundo);
+
     /* PAINÉIS COM z-index EXPLÍCITO.
      *
      * O Leaflet desenha por cima quem foi adicionado por último, e `desenharCamadas()` limpa e
