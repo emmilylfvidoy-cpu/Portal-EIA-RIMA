@@ -2372,6 +2372,10 @@
       folha: folha, orientacao: orientacao, escala: escala, bbox: bbox,
       projeto: $('projeto-nome').value, cliente: $('projeto-cliente').value,
       titulo: $('titulo-mapa').value, responsavel: $('responsavel').value, crea: $('crea').value,
+      // a chapa da folha usa o TÍTULO que o usuário escreveu, e os nomes de quem desenhou e verificou
+      tituloChapa: $('titulo-mapa') ? $('titulo-mapa').value : '',
+      desenhista: $('desenhista') ? $('desenhista').value : '',
+      verificador: $('verificador') ? $('verificador').value : '',
       datum: 'SIRGAS 2000 / UTM 23S · WGS 84',
       fonte: estado.camadas.map((c) => c.fonte).filter(Boolean).slice(0, 4).join(' · '),
       legenda: legendaAtual(),

@@ -187,9 +187,25 @@
       desenharGrade(pagina, e, caixa, doc);
     }
 
-    // rodapé: legenda, escala gráfica, norte, fonte
+    /* RODAPÉ EM DUAS PARTES: LEGENDA À ESQUERDA, CHAPA À DIREITA.
+     *
+     * Antes a legenda se espalhava pela largura TODA do rodapé e os textos da direita (fonte,
+     * datum, responsável, norte) eram escritos por cima dela — com legenda longa, um cobria o
+     * outro. Agora a legenda para antes da chapa.
+     *
+     * E OS LOGOS ERAM RECEBIDOS E NUNCA DESENHADOS: não havia uma única chamada de desenharImagem
+     * nesta função. A chapa é o lugar deles, como no modelo de referência.
+     *
+     * A chapa reúne o que IDENTIFICA a folha, e tudo vem do que o usuário preencheu: projeto,
+     * data, escala, quem desenhou e quem verificou — mais os logos que ele enviou.
+     */
     const rod = caixa.rodape;
     doc.linha(pagina, rod.x, rod.y, rod.x + rod.largura, rod.y, { cor: cor, espessura: 0.6 });
+
+    const larguraChapa = Math.max(56, Math.min(94, rod.largura * 0.33));
+    const chapa = { x: rod.x + rod.largura - larguraChapa, y: rod.y + 1.5, largura: larguraChapa, altura: rod.altura - 2.5 };
+    doc.retangulo(pagina, chapa.x, chapa.y, chapa.largura, chapa.altura, { borda: cor, espessura: 0.7 });
+    const larguraLegenda = rod.largura - larguraChapa - 3;
 
     const itensLegenda = e.legenda || [];
     if (itensLegenda.length) {
@@ -203,7 +219,7 @@
       const alturaLinha = 5.2;   // mm por linha de legenda
       const linhasPorColuna = Math.max(3, Math.floor((rod.altura - 10) / alturaLinha));
       const larguraMinimaColuna = 34;   // mm — abaixo disso o rótulo não cabe
-      const colunasQueCabem = Math.max(1, Math.floor((rod.largura - 4) / larguraMinimaColuna));
+      const colunasQueCabem = Math.max(1, Math.floor((larguraLegenda - 4) / larguraMinimaColuna));
       const colunasNecessarias = Math.ceil(itensLegenda.length / linhasPorColuna);
       const colunas = Math.max(1, Math.min(colunasQueCabem, Math.max(e.folha === 'A4' ? 2 : 3, colunasNecessarias)));
       const porColuna = Math.ceil(itensLegenda.length / colunas);
@@ -212,7 +228,7 @@
       const sobra = itensLegenda.length - cabem.length;
 
       for (let c = 0; c < colunas; c++) {
-        const x = rod.x + 2 + c * (rod.largura / colunas);
+        const x = rod.x + 2 + c * (larguraLegenda / colunas);
         const fatia = cabem.slice(c * porColuna, (c + 1) * porColuna);
         fatia.forEach((item, i) => {
           const y = rod.y + 7 + i * alturaLinha;
@@ -232,31 +248,79 @@
       }
     }
 
-    // escala gráfica em vetor
+    // escala gráfica em vetor (fica sob a legenda, à esquerda)
     const metrosPorPx = 1; // a escala gráfica abaixo é desenhada em mm direto
     desenharEscalaGrafica(pagina, doc, caixa, e, metrosPorPx);
 
-    // norte
-    doc.circulo(pagina, rod.x + rod.largura - 16, rod.y + rod.altura / 2, 6, { borda: cor, espessura: 0.5 });
-    doc.linha(pagina, rod.x + rod.largura - 16, rod.y + rod.altura / 2 + 4, rod.x + rod.largura - 16, rod.y + rod.altura / 2 - 4, { cor: cor, espessura: 0.7 });
-    doc.texto(pagina, 'N', rod.x + rod.largura - 16, rod.y + rod.altura / 2 - 7, { tamanho: 7, negrito: true, alinhamento: 'centro' });
+    /* NORTE NO CANTO DO MAPA (e não no rodapé): no modelo de referência ele fica sobre o mapa, e
+     * aqui o canto do rodapé passou a ser da chapa. */
+    const cxNorte = mapa.x + mapa.largura - 12;
+    const cyNorte = mapa.y + 12;
+    doc.circulo(pagina, cxNorte, cyNorte, 5.5, { preenchimento: '#ffffff', borda: cor, espessura: 0.5 });
+    doc.linha(pagina, cxNorte, cyNorte + 3.6, cxNorte, cyNorte - 3.6, { cor: cor, espessura: 0.7 });
+    doc.texto(pagina, 'N', cxNorte, cyNorte - 6.2, { tamanho: 6.6, negrito: true, alinhamento: 'centro' });
 
-    // textos de responsabilidade
+    // ---------------------------------------------------------------- chapa
+    const xc = chapa.x + 2.5;
+    const lc = chapa.largura - 5;
+    let yc = chapa.y + 6;
+    const tituloChapa = e.tituloChapa || 'MAPA DAS ÁREAS DE INFLUÊNCIA';
+    doc.texto(pagina, cortar(tituloChapa, 34), chapa.x + chapa.largura / 2, yc,
+      { tamanho: e.folha === 'A4' ? 8.4 : 9.6, negrito: true, alinhamento: 'centro', cor: cor });
+    yc += 4.6;
+    if (e.projeto) {
+      doc.texto(pagina, cortar(e.projeto, 40), chapa.x + chapa.largura / 2, yc,
+        { tamanho: 6.8, alinhamento: 'centro', cor: '#43535d' });
+    }
+    yc += 3.4;
+    doc.linha(pagina, chapa.x, yc, chapa.x + chapa.largura, yc, { cor: cor, espessura: 0.4 });
+
+    // tabela: DATA · ESCALA · DESENHO · VERIFICADO (os nomes são do usuário)
+    yc += 4.2;
+    const colunasChapa = [
+      { rotulo: 'DATA', valor: e.data || '' },
+      { rotulo: 'ESCALA', valor: '1:' + math.num(e.escala || 0, 0) },
+      { rotulo: 'DESENHO', valor: e.desenhista || e.responsavel || '' },
+      { rotulo: 'VERIFICADO', valor: e.verificador || '' },
+    ];
+    const larguraColuna = lc / colunasChapa.length;
+    colunasChapa.forEach((col, i) => {
+      const x = xc + i * larguraColuna;
+      doc.texto(pagina, col.rotulo, x, yc, { tamanho: 5.6, negrito: true, cor: '#5b6b75' });
+      doc.texto(pagina, cortar(col.valor, 14), x, yc + 4.2, { tamanho: 6.6 });
+      if (i > 0) doc.linha(pagina, x - 1, yc - 2.5, x - 1, yc + 7, { cor: '#c3ced5', espessura: 0.3 });
+    });
+    yc += 9.4;
+    doc.linha(pagina, chapa.x, yc, chapa.x + chapa.largura, yc, { cor: cor, espessura: 0.4 });
+
+    /* OS LOGOS FICAM NO CABEÇALHO, e isso já funcionava (ver o começo desta função). Eu cheguei a
+     * escrever aqui que eles "nunca eram desenhados" — ERRADO: concluí isso de um grep com padrão
+     * estreito demais (procurei `doc.imagem` e a chamada é `doc.desenharImagem`). Desenhar de novo
+     * aqui seria duplicar. */
+    yc += 4;
+
+    // fonte e sistema de referência: embaixo, dentro da chapa
     const fonte = e.fonte || '';
-    const datum = e.datum || 'SIRGAS 2000 / UTM 23S · WGS 84';
-    doc.texto(pagina, 'Base: ' + (fonte || 'arquivos fornecidos ao projeto'), rod.x + rod.largura - 34, rod.y + 8, { tamanho: 7, alinhamento: 'direita', cor: '#43535d' });
-    doc.texto(pagina, datum, rod.x + rod.largura - 34, rod.y + 14, { tamanho: 7, alinhamento: 'direita', cor: '#43535d' });
-    if (e.responsavel) {
-      doc.texto(pagina, 'Resp. técnico: ' + e.responsavel + (e.crea ? ' — CREA ' + e.crea : ''),
-        rod.x + rod.largura - 34, rod.y + 20, { tamanho: 7, alinhamento: 'direita', cor: '#43535d' });
+    doc.linha(pagina, chapa.x, yc, chapa.x + chapa.largura, yc, { cor: '#c3ced5', espessura: 0.3 });
+    doc.texto(pagina, 'FONTE', xc, yc + 3.6, { tamanho: 5.6, negrito: true, cor: '#5b6b75' });
+    doc.texto(pagina, cortar(fonte || 'arquivos fornecidos ao projeto', 52), xc + 11, yc + 3.6,
+      { tamanho: 5.8, cor: '#43535d' });
+    doc.texto(pagina, e.datum || 'SIRGAS 2000 / UTM 23S · WGS 84', xc, yc + 7.4, { tamanho: 5.8, cor: '#43535d' });
+    if (e.crea || e.responsavel) {
+      doc.texto(pagina, cortar('Resp. técnico: ' + (e.responsavel || '') + (e.crea ? ' — CREA ' + e.crea : ''), 52),
+        xc, yc + 11.2, { tamanho: 5.8, cor: '#43535d' });
     }
     if (e.numeroFolha) {
-      doc.texto(pagina, e.numeroFolha, rod.x + rod.largura - 34, rod.y + rod.altura - 4, { tamanho: 7.5, negrito: true, alinhamento: 'direita', cor: cor });
-    }
-    if (e.data) {
-      doc.texto(pagina, e.data, rod.x + 2, rod.y + rod.altura - 4, { tamanho: 7, cor: '#43535d' });
+      doc.texto(pagina, e.numeroFolha, chapa.x + chapa.largura - 2.5, chapa.y + chapa.altura - 2.5,
+        { tamanho: 6.6, negrito: true, alinhamento: 'direita', cor: cor });
     }
     return pagina;
+  }
+
+  /** Encurta um texto com reticências: chapa não pode transbordar para fora do papel. */
+  function cortar(texto, maximo) {
+    const t = String(texto === null || texto === undefined ? '' : texto);
+    return t.length <= maximo ? t : t.slice(0, maximo - 1) + '…';
   }
 
   /** Escala gráfica desenhada em milímetros reais na folha. */
