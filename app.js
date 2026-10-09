@@ -2561,7 +2561,7 @@
     estado.mapa.invalidateSize();
     const larguraViva = Math.round(estado.mapa.getContainer().getBoundingClientRect().width);
     const escalaVista = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
-      larguraViva, caixaInfo.mapa.largura);
+      larguraViva, caixaInfo.mapa.largura * (caixaInfo.base || 1));
     const partes = [];
     if ($('articulado').checked) {
       const art = EIA.mapa.articular(bbox, $('folha').value, $('orientacao').value, escala, { sobreposicao: 0.1 });
@@ -2600,7 +2600,7 @@
     estado.mapa.invalidateSize();
     const larguraViva = Math.round(estado.mapa.getContainer().getBoundingClientRect().width);
     const escalaVista = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
-      larguraViva, caixaPrevia.mapa.largura) || escala;
+      larguraViva, caixaPrevia.mapa.largura * (caixaPrevia.base || 1)) || escala;
     atualizarInfoArticulacao();
 
     /* A PRÉVIA DESENHA O LAYOUT INTEIRO, E DESENHA O MESMO QUE O PDF.
@@ -2837,7 +2837,7 @@
       const imagens = [];
       if (e.articulacao && e.articulacao.total > 1) {
         for (const folha of e.articulacao.folhas) {
-          const jpeg = await rasterizarMapa(folha.bbox, caixa.mapa.largura, e.escala,
+          const jpeg = await rasterizarMapa(folha.bbox, caixa.mapa.largura * (caixa.base || 1), e.escala,
             caixa.mapa.altura / caixa.mapa.largura);
           imagens.push({ chave: folha.numero, bytes: jpeg });
         }

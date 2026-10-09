@@ -366,50 +366,64 @@
    */
   function caixaDoMapa(folha, orientacao, opcoes) {
     const o = opcoes || {};
-    const base = FOLHAS[folha] || FOLHAS.A1;
-    const largura = orientacao === 'retrato' ? base.largura : base.altura;
-    const altura = orientacao === 'retrato' ? base.altura : base.largura;
-    const margem = o.margem || 10;
-    const moldura = o.moldura || 6;
-    const alturaCabecalho = o.alturaCabecalho !== undefined ? o.alturaCabecalho : (folha === 'A4' ? 26 : folha === 'A3' ? 34 : 40);
-    /* O RODAPÉ É A FAIXA DOS BLOCOS DE IDENTIFICAÇÃO: legenda, articulação, fonte e chapa.
+    const escolhida = FOLHAS[folha] || FOLHAS.A1;
+    const largura = orientacao === 'retrato' ? escolhida.largura : escolhida.altura;
+    const altura = orientacao === 'retrato' ? escolhida.altura : escolhida.largura;
+
+    /* COMO NUM SIG: O LAYOUT É MONTADO NUMA PÁGINA E OS ELEMENTOS SÃO PROPORCIONAIS A ELA.
      *
-     * Estava com 38 mm numa folha de 594 mm — 6% da altura — e a legenda ficava espremida numa
-     * tira, com o resto do rodapé vazio. Nas folhas de referência essa faixa ocupa cerca de um
-     * quarto da altura, que é o que dá espaço para legenda longa (unidade litológica tem dezenas
-     * de entradas) e para os blocos da chapa. */
-    const alturaRodape = o.alturaRodape !== undefined ? o.alturaRodape
-      : (folha === 'A4' ? 46 : folha === 'A3' ? 66 : 122);
-    /* A FAIXA DOS RÓTULOS DE COORDENADA — o mapa cede lugar para eles.
+     * Antes as medidas eram NÚMEROS POR FOLHA — rodapé de 50 mm em A4, 74 em A3, 122 em A1 — e cada
+     * acerto numa folha desmanchava a outra. O cliente viu o resultado e resumiu: "assim tá muito
+     * feio, quero que fique proporcional, como se fosse um SIG".
      *
-     * A grade escreve a longitude ACIMA do mapa e a latitude À ESQUERDA. Sem faixa reservada, esses
-     * rótulos caíam FORA DA MOLDURA, invadindo a margem da folha — o cliente viu e resumiu: "os
-     * grids estão extrapolando a página". A folha de referência tem exatamente esta faixa: o mapa é
-     * deslocado para dentro e os valores ficam na canaleta, entre a moldura e o mapa.
+     * Aqui é igual a um SIG: o desenho é SEMPRE feito nas medidas da PRANCHA DE REFERÊNCIA (A1, a
+     * que ele mandou) e a folha escolhida recebe tudo multiplicado por UM fator. Como a série A tem
+     * sempre a mesma proporção (A3 é A1 dividido por 2, A4 por 2,83), um fator só resolve A4, A3,
+     * A2, A1 e A0 — e a folha tem a MESMA CARA em qualquer papel.
      *
-     * Em cima: uma linha de 6 pt mais a marca de 2,5 mm. À esquerda: o que ocupa um rótulo de
-     * "23°35'15,6\"S" (que é largo, e é escrito alinhado à direita). */
+     * Os números abaixo, portanto, estão em milímetros de A1 — e não mudam com a folha. Quem os
+     * leva para o papel é o `docEscalado`, em mapa.js. */
+    const ref = FOLHAS.A1;
+    const larguraRef = orientacao === 'retrato' ? ref.largura : ref.altura;
+    const alturaRef = orientacao === 'retrato' ? ref.altura : ref.largura;
+    const base = largura / larguraRef;   // A3 dá 0,5;  A4 dá 0,3536;  A1 dá 1
+    // medidas da prancha de referência (A1), em milímetros
+    const margem = o.margem !== undefined ? o.margem : 10;
+    const moldura = o.moldura !== undefined ? o.moldura : 6;
+    const alturaCabecalho = o.alturaCabecalho !== undefined ? o.alturaCabecalho : 40;
+    /* O RODAPÉ é a faixa dos blocos de identificação: legenda, articulação, fonte e chapa. Nas
+     * folhas de referência ela ocupa cerca de um quinto da altura, que é o que dá espaço para
+     * legenda longa (unidade litológica tem dezenas de entradas) e para os blocos da chapa. */
+    const alturaRodape = o.alturaRodape !== undefined ? o.alturaRodape : 122;
+    /* A FAIXA DOS RÓTULOS DE COORDENADA: a grade escreve a longitude ACIMA do mapa e a latitude À
+     * ESQUERDA. Sem faixa reservada, os rótulos caíam fora da moldura, invadindo a margem — o
+     * cliente viu e disse "os grids estão extrapolando a página". Em cima cabe uma linha de 6 pt
+     * mais a marca; à esquerda, um rótulo de "23°35'15,6\"S", que é largo e escrito à direita. */
     const faixaRotulos = { topo: 8, esquerda: 24 };
     const xMapa = margem + moldura + faixaRotulos.esquerda;
     const yMapa = margem + moldura + alturaCabecalho + faixaRotulos.topo;
     return {
       folha: folha,
       orientacao: orientacao || 'paisagem',
+      // a PÁGINA é a folha de verdade; as CAIXAS estão em milímetros de A1 (o docEscalado converte)
       larguraFolha: largura,
       alturaFolha: altura,
+      base: base,
+      larguraDesenho: larguraRef,
+      alturaDesenho: alturaRef,
       margem: margem,
       faixaRotulos: faixaRotulos,
       mapa: {
         x: xMapa,
         y: yMapa,
-        largura: largura - 2 * (margem + moldura) - faixaRotulos.esquerda,
-        altura: altura - 2 * (margem + moldura) - alturaCabecalho - alturaRodape - faixaRotulos.topo,
+        largura: larguraRef - 2 * (margem + moldura) - faixaRotulos.esquerda,
+        altura: alturaRef - 2 * (margem + moldura) - alturaCabecalho - alturaRodape - faixaRotulos.topo,
       },
-      cabecalho: { x: margem + moldura, y: margem + moldura, largura: largura - 2 * (margem + moldura), altura: alturaCabecalho },
+      cabecalho: { x: margem + moldura, y: margem + moldura, largura: larguraRef - 2 * (margem + moldura), altura: alturaCabecalho },
       rodape: {
         x: margem + moldura,
-        y: altura - margem - moldura - alturaRodape,
-        largura: largura - 2 * (margem + moldura),
+        y: alturaRef - margem - moldura - alturaRodape,
+        largura: larguraRef - 2 * (margem + moldura),
         altura: alturaRodape,
       },
     };

@@ -140,9 +140,43 @@
    * nome do projeto, área do mapa, legenda e escala no rodapé, numeração de folha
    * quando articulado.
    */
+  /**
+   * O DOC ESCALADO — COMO NUM SIG.
+   *
+   * `caixaDoMapa` devolve as caixas em milímetros da PRANCHA DE REFERÊNCIA (A1). Este envoltório
+   * leva o desenho para o papel escolhido com UM fator único: posições, larguras, raios, corpos de
+   * texto e espessuras de traço. Como nada é acertado folha por folha, a prancha tem a MESMA CARA
+   * em A4, A3, A2, A1 e A0 — que é o que o cliente pediu ao dizer "como se fosse um SIG".
+   *
+   * `novaPagina` passa direto de propósito: a PÁGINA é a folha de verdade, e o conteúdo é que se
+   * ajusta a ela. Escalar a página também daria uma folha do tamanho errado.
+   */
+  function docEscalado(doc, base) {
+    const b = Number(base) > 0 ? Number(base) : 1;
+    if (b === 1) return doc;
+    const n = (v) => Number(v) * b;
+    const op = (o) => Object.assign({}, o, {
+      tamanho: (o && o.tamanho !== undefined ? o.tamanho : 7) * b,
+      espessura: (o && o.espessura !== undefined ? o.espessura : 0.4) * b,
+    });
+    return {
+      novaPagina: (l, a) => doc.novaPagina(l, a),
+      adicionarImagem: (bytes) => doc.adicionarImagem(bytes),
+      construir: () => (doc.construir ? doc.construir() : null),
+      retangulo: (p, x, y, w, h, o) => doc.retangulo(p, n(x), n(y), n(w), n(h), op(o)),
+      linha: (p, x1, y1, x2, y2, o) => doc.linha(p, n(x1), n(y1), n(x2), n(y2), op(o)),
+      circulo: (p, x, y, r, o) => doc.circulo(p, n(x), n(y), n(r), op(o)),
+      texto: (p, s, x, y, o) => doc.texto(p, s, n(x), n(y), op(o)),
+      textoMultilinha: (p, s, x, y, w, o) => doc.textoMultilinha(p, s, n(x), n(y), n(w), op(o)),
+      desenharImagem: (p, nome, x, y, w, h) => doc.desenharImagem(p, nome, n(x), n(y), n(w), n(h)),
+    };
+  }
+
   function desenharFolha(doc, especificacao) {
     const e = especificacao;
     const caixa = pdf.caixaDoMapa(e.folha, e.orientacao, e.layout);
+    // daqui para baixo tudo está em milímetros de A1: o envelope leva para o papel escolhido
+    doc = docEscalado(doc, caixa.base);
     const pagina = doc.novaPagina(caixa.larguraFolha, caixa.alturaFolha);
     const cor = (e.layout && e.layout.cor) || '#1f2d36';
 
@@ -235,7 +269,13 @@
       const larguraMinimaColuna = 34;   // mm — abaixo disso o rótulo não cabe
       const colunasQueCabem = Math.max(1, Math.floor((larguraLegenda - 4) / larguraMinimaColuna));
       const colunasNecessarias = Math.ceil(itensLegenda.length / linhasPorColuna);
-      const colunas = Math.max(1, Math.min(colunasQueCabem, Math.max(e.folha === 'A4' ? 2 : 3, colunasNecessarias)));
+      /* SÓ AS COLUNAS NECESSÁRIAS — e por que isso mudou.
+       *
+       * A regra antiga exigia no MÍNIMO 3 colunas (2 em A4), mesmo com duas entradas. O resultado
+       * era o que o cliente viu e resumiu como "não está bom": uma linha vermelha perdida na ponta
+       * esquerda, duas colunas vazias no meio, e o rótulo LONGE do seu símbolo. Coluna a mais não
+       * organiza nada — só afasta o que deveria estar junto. */
+      const colunas = Math.max(1, Math.min(colunasQueCabem, colunasNecessarias));
       const porColuna = Math.ceil(itensLegenda.length / colunas);
       const capacidade = porColuna * colunas;
       const cabem = itensLegenda.slice(0, capacidade);
@@ -466,6 +506,8 @@
   function desenharIndice(doc, articulacao, especificacao) {
     const e = especificacao || {};
     const caixa = pdf.caixaDoMapa(e.folha || 'A3', e.orientacao || 'paisagem', e.layout);
+    // mesmo envelope da folha: o índice também é desenhado em milímetros de A1
+    doc = docEscalado(doc, caixa.base);
     const pagina = doc.novaPagina(caixa.larguraFolha, caixa.alturaFolha);
     const cor = '#1f2d36';
     const m = caixa.margem;
