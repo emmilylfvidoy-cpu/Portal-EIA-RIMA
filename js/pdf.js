@@ -380,17 +380,30 @@
      * de entradas) e para os blocos da chapa. */
     const alturaRodape = o.alturaRodape !== undefined ? o.alturaRodape
       : (folha === 'A4' ? 46 : folha === 'A3' ? 66 : 122);
+    /* A FAIXA DOS RÓTULOS DE COORDENADA — o mapa cede lugar para eles.
+     *
+     * A grade escreve a longitude ACIMA do mapa e a latitude À ESQUERDA. Sem faixa reservada, esses
+     * rótulos caíam FORA DA MOLDURA, invadindo a margem da folha — o cliente viu e resumiu: "os
+     * grids estão extrapolando a página". A folha de referência tem exatamente esta faixa: o mapa é
+     * deslocado para dentro e os valores ficam na canaleta, entre a moldura e o mapa.
+     *
+     * Em cima: uma linha de 6 pt mais a marca de 2,5 mm. À esquerda: o que ocupa um rótulo de
+     * "23°35'15,6\"S" (que é largo, e é escrito alinhado à direita). */
+    const faixaRotulos = { topo: 8, esquerda: 24 };
+    const xMapa = margem + moldura + faixaRotulos.esquerda;
+    const yMapa = margem + moldura + alturaCabecalho + faixaRotulos.topo;
     return {
       folha: folha,
       orientacao: orientacao || 'paisagem',
       larguraFolha: largura,
       alturaFolha: altura,
       margem: margem,
+      faixaRotulos: faixaRotulos,
       mapa: {
-        x: margem + moldura,
-        y: margem + moldura + alturaCabecalho,
-        largura: largura - 2 * (margem + moldura),
-        altura: altura - 2 * (margem + moldura) - alturaCabecalho - alturaRodape,
+        x: xMapa,
+        y: yMapa,
+        largura: largura - 2 * (margem + moldura) - faixaRotulos.esquerda,
+        altura: altura - 2 * (margem + moldura) - alturaCabecalho - alturaRodape - faixaRotulos.topo,
       },
       cabecalho: { x: margem + moldura, y: margem + moldura, largura: largura - 2 * (margem + moldura), altura: alturaCabecalho },
       rodape: {

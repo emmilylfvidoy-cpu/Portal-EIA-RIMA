@@ -169,14 +169,13 @@
       doc.texto(pagina, e.areaInfluencia, cab.x + cab.largura / 2, cab.y + 31, { tamanho: e.folha === 'A4' ? 8 : 9, negrito: true, alinhamento: 'centro', cor: cor });
     }
 
-    // logos (data URL ou bytes) — desenhados nos cantos do cabeçalho
+    /* OS LOGOS VÃO NA CHAPA, NÃO NO CABEÇALHO.
+     *
+     * Eles eram desenhados nos cantos do cabeçalho, e o cliente pediu como está no MXD dele: os
+     * logos ficam na CHAPA, embaixo, ao lado da tabela de datas — que é onde a prancha de referência
+     * os tem (GEOTEC e TAMOIOS no canto inferior direito). Aqui só se separa a lista; o desenho
+     * acontece no bloco da chapa, mais abaixo. */
     const logos = (e.logos || []).filter((l) => l && l.nomeImagem);
-    logos.forEach((logo, i) => {
-      const largura = logo.larguraMm || 22;
-      const altura = logo.alturaMm || 12;
-      const x = i === 0 ? cab.x + 2 : cab.x + cab.largura - largura - 2;
-      doc.desenharImagem(pagina, logo.nomeImagem, x, cab.y + (cab.altura - altura) / 2, largura, altura);
-    });
 
     // área do mapa (o raster entra aqui, desenhado por quem chama)
     const mapa = caixa.mapa;
@@ -321,11 +320,27 @@
     yc += 9.4;
     doc.linha(pagina, chapa.x, yc, chapa.x + chapa.largura, yc, { cor: cor, espessura: 0.4 });
 
-    /* OS LOGOS FICAM NO CABEÇALHO, e isso já funcionava (ver o começo desta função). Eu cheguei a
-     * escrever aqui que eles "nunca eram desenhados" — ERRADO: concluí isso de um grep com padrão
-     * estreito demais (procurei `doc.imagem` e a chamada é `doc.desenharImagem`). Desenhar de novo
-     * aqui seria duplicar. */
-    yc += 4;
+    /* OS LOGOS DO USUÁRIO, NA CHAPA — como no MXD dele.
+     *
+     * Ficavam nos cantos do cabeçalho e ele pediu a posição da prancha de referência: dentro da
+     * chapa, embaixo, ao lado da tabela de datas. Até três, lado a lado, cada um cabendo na altura
+     * que sobra — e a proporção é preservada (o logo não estica). */
+    const alturaLogo = Math.max(8, Math.min(20, chapa.altura - (yc - chapa.y) - 22));
+    if (logos.length) {
+      const espaco = lc / logos.length;
+      logos.forEach((logo, i) => {
+        const l = Number(logo.larguraMm) || 20;
+        const a = Number(logo.alturaMm) || 10;
+        const fator = Math.min(espaco * 0.86 / l, alturaLogo / a);
+        const w = l * fator, h = a * fator;
+        const x = xc + i * espaco + (espaco - w) / 2;
+        doc.desenharImagem(pagina, logo.nomeImagem, x, yc + 1 + (alturaLogo - h) / 2, w, h);
+      });
+    } else {
+      doc.texto(pagina, 'logos do cabeçalho: nenhum enviado', chapa.x + chapa.largura / 2, yc + 5,
+        { tamanho: 5.8, alinhamento: 'centro', cor: '#8b979d' });
+    }
+    yc += alturaLogo + 5;
 
     // fonte e sistema de referência: embaixo, dentro da chapa
     const fonte = e.fonte || '';
