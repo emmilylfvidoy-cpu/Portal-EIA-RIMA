@@ -245,6 +245,12 @@
   .folha { box-shadow: none; page-break-after: always; }
 }
 
-/* a prévia na tela: sombra leve, para o papel se destacar do painel */
+/* A PRANCHA NÃO APARECE NO PAINEL.
+ *
+ * O painel tem cerca de 400 px e uma folha A1 nunca caberia nele — era ali que a prancha saía
+ * espremida e que eu mesmo li errado várias vezes. O elemento continua existindo porque é a FONTE
+ * do que vai para a janela da prancha (o `abrirPrevia` lê o HTML dele); só não é exibido. */
+#previa-mapa { display: none; }
+
+/* A prévia na tela: sombra leve, para o papel se destacar do painel */
 #previa-mapa .folha { box-shadow: 0 1px 4px rgba(0, 0, 0, .25); margin: 0 auto; }
-#previa-mapa { overflow: auto; }

@@ -406,7 +406,8 @@
     $('btn-relatorio-pdf').onclick = gerarPdfRelatorio;
     $('btn-relatorio-docx').onclick = baixarDocx;
     $('btn-relatorio-txt').onclick = baixarTextoRelatorio;
-    $('btn-mapa-previa').onclick = atualizarPreviaMapa;
+    // a prancha abre em janela própria, com os formatos de saída (ver abrirPrevia)
+    $('btn-mapa-previa').onclick = abrirPrevia;
     $('btn-mapa-png').onclick = baixarFolhaPng;
     $('btn-mapa-pdf').onclick = gerarPdfMapa;
 
@@ -2936,33 +2937,128 @@
     return doc.construir();
   }
 
-  // =========================================================== logos
+  // =========================================================== a prancha
+  /* O `imprimirFolha` que existia aqui foi REMOVIDO, e a suite de sintaxe foi quem avisou: ela
+   * extrai os `id` citados no app.js e confere se existem no index.html, e o botão dele já não
+   * existe. A impressão passou para dentro da janela da prancha (`abrirPrevia`), onde o `@page` é
+   * escrito com a folha e a orientação escolhidas — é o mesmo trabalho, no lugar certo, e sem
+   * deixar código morto apontando para um botão que ninguém vê. */
+
   /**
-   * IMPRIME A PRANCHA — e é o navegador que gera o PDF (plano B).
+   * ABRE A PRANCHA NUMA TELA PRÓPRIA, COM OS FORMATOS DE SAÍDA — ideia do cliente, e boa.
    *
-   * O `@page` é injetado com a folha e a orientação escolhidas: sem isso o navegador imprime em A4
-   * retrato, cortando a prancha. O resto é CSS (`folha.css`, @media print): só a prancha fica
-   * visível, e ela tem tamanho em milímetros, então o que sai é o que está na tela — vetorial.
+   * O painel tem cerca de 400 px e uma prancha A1 nunca caberia nele: era ali que a folha saía
+   * espremida e que eu mesmo li errado várias vezes. Aqui o painel CONFIGURA e a prancha é um
+   * PRODUTO, numa janela própria, onde os formatos de saída pertencem ao que está sendo exportado.
+   *
+   * A montagem da prancha é a MESMA de antes (`atualizarPreviaMapa`): ela só deixa de aparecer no
+   * painel e passa a ser a fonte do que vai para a janela. Um caminho, não dois.
    */
-  function imprimirFolha() {
-    const alvo = $('previa-mapa');
-    if (!alvo || !alvo.querySelector('.folha')) {
-      alert('Atualize a prévia primeiro: é ela que vira o PDF.');
+  async function abrirPrevia() {
+    await atualizarPreviaMapa();
+    const conteudo = $('previa-mapa') && $('previa-mapa').innerHTML;
+    if (!conteudo || conteudo.indexOf('class="folha"') < 0) {
+      alert('Não consegui montar a prancha ainda.\n\nCarregue uma área de influência ou faça o recorte, e tente de novo.');
       return;
     }
-    let regra = document.getElementById('regra-impressao');
-    if (!regra) {
-      regra = document.createElement('style');
-      regra.id = 'regra-impressao';
-      document.head.appendChild(regra);
-    }
     const folha = $('folha').value;
-    const orientacao = $('orientacao').value === 'retrato' ? 'portrait' : 'landscape';
-    regra.textContent = '@page { size: ' + folha + ' ' + orientacao + '; margin: 0; }';
-    status('Abrindo a impressão — escolha "Salvar como PDF" e o tamanho ' + folha + '.');
-    setTimeout(function () { window.print(); }, 300);
+    const orientacao = $('orientacao').value;
+    const janela = window.open('', 'prancha-eia');
+    if (!janela) {
+      alert('O navegador bloqueou a janela da prancha.\n\nPermita pop-ups para este site e clique de novo.');
+      return;
+    }
+    const doc = janela.document;
+    doc.open();
+    doc.write('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">'
+      + '<title>Prancha ' + folha + '</title>'
+      + '<link rel="stylesheet" href="folha.css?v=' + VERSAO + '">'
+      + '<style>'
+      + 'body{margin:0;background:#e9eef1;display:flex;flex-direction:column;min-height:100vh}'
+      + '.barra{position:sticky;top:0;z-index:9;background:#1f2d36;color:#fff;padding:8px 12px;'
+      + 'display:flex;gap:8px;align-items:center;font:13px "Segoe UI",Arial,sans-serif;flex-wrap:wrap}'
+      + '.barra b{font-weight:600;margin-right:6px}'
+      + '.barra button{cursor:pointer;padding:6px 14px;border-radius:4px;border:1px solid #3d6470;'
+      + 'background:#12303a;color:#fff;font:12.5px "Segoe UI",Arial,sans-serif}'
+      + '.barra button:hover{background:#1e4653}'
+      + '.barra button.principal{background:#2f7f92;border-color:#2f7f92;font-weight:600}'
+      + '.barra .dica{margin-left:auto;font-size:12px;color:#cfe0e6}'
+      + '.papel{padding:14px;display:flex;justify-content:center}'
+      + '@media print{.barra{display:none}.papel{padding:0}body{background:#fff}'
+      + '.folha{box-shadow:none !important;margin:0 !important}}'
+      + '@page{size:' + folha + ' ' + (orientacao === 'retrato' ? 'portrait' : 'landscape') + ';margin:0}'
+      + '</style></head><body>'
+      + '<div class="barra"><b>Prancha ' + folha + '</b>'
+      + '<button class="principal" id="b-pdf">Baixar PDF</button>'
+      + '<button id="b-png">Baixar PNG</button>'
+      + '<button id="b-jpg">Baixar JPEG</button>'
+      + '<span class="dica">o PDF sai vetorial, no tamanho da folha</span></div>'
+      + '<div class="papel" id="papel">' + conteudo + '</div>'
+      + '</body></html>');
+    doc.close();
+
+    doc.getElementById('b-pdf').onclick = function () {
+      janela.focus();
+      // o @page já está na janela: o diálogo abre com a folha e a orientação certas
+      janela.print();
+    };
+    doc.getElementById('b-png').onclick = function () { baixarImagemDaFolha(janela, 'image/png', 'prancha-' + folha + '.png'); };
+    doc.getElementById('b-jpg').onclick = function () { baixarImagemDaFolha(janela, 'image/jpeg', 'prancha-' + folha + '.jpg'); };
+    status('Prancha aberta em janela própria.');
   }
-  if ($('btn-folha-pdf')) $('btn-folha-pdf').onclick = imprimirFolha;
+  if ($('btn-mapa-previa')) $('btn-mapa-previa').onclick = abrirPrevia;
+
+  /**
+   * PNG e JPEG: o navegador desenha a própria prancha num canvas.
+   *
+   * O HTML vai embrulhado num SVG (`foreignObject`) porque é o único caminho de HTML -> canvas sem
+   * biblioteca externa — e o projeto não usa biblioteca externa. O CSS é buscado e embutido: dentro
+   * do SVG não existe folha de estilo, e sem ele a imagem sairia sem nenhuma formatação.
+   *
+   * SE FALHAR, AVISA. Um arquivo quebrado é pior que arquivo nenhum, e o PDF continua sendo o
+   * caminho vetorial — que é o que sai perfeito sempre.
+   */
+  async function baixarImagemDaFolha(janela, tipo, nome) {
+    const doc = janela.document;
+    const folhaEl = doc.querySelector('#papel .folha');
+    if (!folhaEl) { janela.alert('A prancha não está na tela.'); return; }
+    const recusar = (motivo) => janela.alert('Não consegui gerar a imagem neste navegador.'
+      + (motivo ? '\n\n(' + motivo + ')' : '')
+      + '\n\nO PDF sai vetorial e é o caminho garantido — use "Baixar PDF".');
+    try {
+      const css = await fetch('folha.css?v=' + VERSAO).then((r) => r.text());
+      const escala = 2;   // 2x: em 1x a imagem sai serrilhada em papel
+      const largura = Math.round(folhaEl.offsetWidth * escala);
+      const altura = Math.round(folhaEl.offsetHeight * escala);
+      const clone = folhaEl.cloneNode(true);
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + largura + '" height="' + altura + '">'
+        + '<foreignObject width="100%" height="100%">'
+        + '<div xmlns="http://www.w3.org/1999/xhtml">'
+        + '<style>' + css + '</style>'
+        + '<style>.folha{box-shadow:none;margin:0}</style>'
+        + clone.outerHTML
+        + '</div></foreignObject></svg>';
+      const img = new janela.Image();
+      img.onload = function () {
+        try {
+          const canvas = doc.createElement('canvas');
+          canvas.width = largura;
+          canvas.height = altura;
+          const ctx = canvas.getContext('2d');
+          if (tipo === 'image/jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, largura, altura); }
+          ctx.drawImage(img, 0, 0, largura, altura);
+          const a = doc.createElement('a');
+          a.href = canvas.toDataURL(tipo, 0.92);
+          a.download = nome;
+          a.click();
+        } catch (e) { recusar(e.message); }
+      };
+      img.onerror = function () { recusar('o navegador não desenhou a prancha'); };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    } catch (e) {
+      recusar(e.message);
+    }
+  }
 
   function carregarLogos(arquivos) {
     const alvo = $('lista-logos');
