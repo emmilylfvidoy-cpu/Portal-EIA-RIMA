@@ -2519,8 +2519,11 @@
      * enquadramento — calculada antes de desenhar, para o esboço, o PDF e a barra de escala
      * falarem do mesmo número. */
     const caixaPrevia = EIA.pdf.caixaDoMapa(folha, e.orientacao, {});
+    // tamanho VIVO do mapa: o cache do Leaflet pode estar velho — foi o que pôs o mundo na folha
+    estado.mapa.invalidateSize();
+    const larguraViva = Math.round(estado.mapa.getContainer().getBoundingClientRect().width);
     const escalaVista = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
-      estado.mapa.getSize().x, caixaPrevia.mapa.largura) || escala;
+      larguraViva, caixaPrevia.mapa.largura) || escala;
     const previa = EIA.mapa.previaSvg(Object.assign({}, e, {
       bbox: null,
       escala: escalaVista,
@@ -2645,7 +2648,20 @@
      * E a proporção importa: a área do mapa na folha tem a proporção da FOLHA, e o mapa na tela
      * tem outra. Copiar o mapa inteiro para dentro da moldura ESTICAVA a imagem. Por isso o zoom
      * é calculado para uma faixa com a proporção da moldura, e essa faixa central é a copiada. */
-    const tamanhoTela = mapa.getSize();
+    /* O TAMANHO VEM DO ELEMENTO, NÃO DO CACHE DO LEAFLET.
+     *
+     * `mapa.getSize()` devolve o tamanho GUARDADO pelo Leaflet, que só é atualizado quando alguém
+     * pede (`invalidateSize`). Quando esse número está velho — zero, por exemplo — o enquadramento
+     * sai absurdo: "fazer a extensão caber em 0 px" não tem resposta, e o Leaflet cai no zoom
+     * MÍNIMO. Foi assim que o cliente baixou a folha com o MUNDO INTEIRO repetido: a captura usava
+     * a medida viva do elemento e o enquadramento usava o cache velho — duas medidas do mesmo
+     * quadro, discordando.
+     *
+     * A medida do elemento é viva. O `invalidateSize` logo abaixo mantém o cache do Leaflet
+     * coerente para o resto do portal (escala da vista, prévia). */
+    mapa.invalidateSize();
+    const rectMapa = mapa.getContainer().getBoundingClientRect();
+    const tamanhoTela = { x: Math.round(rectMapa.width), y: Math.round(rectMapa.height) };
     const larguraPx = Math.max(600, Math.min(2200, Math.round(tamanhoTela.x * Math.min(2, window.devicePixelRatio || 1))));
     const alturaPx = Math.round(larguraPx * prop);
 
@@ -2757,7 +2773,7 @@
          * lida desse enquadramento. Se a prévia e o PDF usassem critérios diferentes, o que ele
          * aprova na tela não seria o que sai no arquivo — que é o pior desfecho possível. */
         e.escala = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
-          estado.mapa.getSize().x, caixa.mapa.largura) || e.escala;
+          Math.round(estado.mapa.getContainer().getBoundingClientRect().width), caixa.mapa.largura) || e.escala;
         const jpeg = await rasterizarMapa(null, caixa.mapa.largura, e.escala,
           caixa.mapa.altura / caixa.mapa.largura);
         imagens.push({ chave: 'unico', bytes: jpeg });
