@@ -56,6 +56,32 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 }
 .coluna { overflow-y: auto; background: var(--papel-2); border-right: 1px solid var(--borda); }
 .coluna.direita { border-right: none; border-left: 1px solid var(--borda); }
+
+/* ------------------------------------------- painéis laterais: retrair e esticar
+ *
+ * A largura das duas colunas vive em VARIÁVEIS CSS. Esticar é trocar o valor da variável — o
+ * layout não tem nada para recalcular. Quem manda o tamanho é o grid, então é aqui que ele lê.
+ * A alça fica DENTRO da coluna (na borda interna) porque a coluna rola: uma alça para fora seria
+ * recortada pelo overflow. As abas de retrair ficam no mapa, para continuarem visíveis quando a
+ * coluna tem largura zero. */
+.layout { grid-template-columns: var(--largura-esq, 330px) minmax(0, 1fr) var(--largura-dir, 400px); }
+.coluna { position: relative; }
+.coluna.recolhida { overflow: hidden; border-right-color: transparent; border-left-color: transparent; }
+.coluna-alca { position: absolute; top: 0; bottom: 0; width: 6px; z-index: 600; cursor: col-resize; }
+.coluna-alca.esq { right: 0; }
+.coluna-alca.dir { left: 0; }
+.coluna-alca:hover { background: var(--acento); }
+body.esticando { cursor: col-resize; user-select: none; }
+body.esticando .coluna-alca { background: var(--acento); }
+.aba-painel {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 620;
+  width: 18px; height: 46px; padding: 0; cursor: pointer; line-height: 1;
+  border: 1px solid var(--borda-forte); border-radius: 3px;
+  background: rgba(255,255,255,.94); color: var(--acento-escuro); font-size: 13px;
+}
+.aba-painel:hover { background: #fff; border-color: var(--acento); }
+.aba-painel.esq { left: 6px; }
+.aba-painel.dir { right: 6px; }
 .mapa-area { position: relative; min-width: 0; background: #dfe6e9; }
 #mapa { position: absolute; inset: 0; }
 
@@ -300,13 +326,17 @@ dialog::backdrop { background: rgba(16, 32, 40, .55); }
 .carregando { opacity: .6; pointer-events: none; }
 
 @media (max-width: 1200px) {
-  .layout { grid-template-columns: 300px minmax(0, 1fr) 340px; }
+  /* As larguras continuam vindo das VARIÁVEIS — só o PADRÃO é menor. Fixar em pixels aqui (como
+     estava) faria o esticar parar de funcionar em tela menor: a media query venceria a variável. */
+  .layout { grid-template-columns: var(--largura-esq, 300px) minmax(0, 1fr) var(--largura-dir, 340px); }
 }
 @media (max-width: 980px) {
   body { overflow: auto; }
+  /* Uma coluna só: os painéis ficam empilhados e não há o que retrair nem esticar. */
   .layout { grid-template-columns: 1fr; }
   .coluna { max-height: none; border: none; }
   .mapa-area { height: 60vh; }
+  .coluna-alca, .aba-painel { display: none; }
 }
 
 /* ------------------------------------------------------------------ quilometragem */

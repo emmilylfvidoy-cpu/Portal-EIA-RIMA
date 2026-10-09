@@ -210,6 +210,101 @@
     // precisa ser vista) e abaixo dos rótulos e do marcador da busca.
     mapa.createPane('pane-km');
     mapa.getPane('pane-km').style.zIndex = EIA.mapa.Z_CAMADAS + 60;
+    /* ---------------------------------------------------- PAINÉIS LATERAIS: RETRAIR E ESTICAR
+     *
+     * A largura das colunas vive em variáveis CSS (--largura-esq / --largura-dir), então esticar
+     * é trocar o valor — o grid faz o resto. O ponto que NÃO pode ser esquecido: a cada mudança o
+     * Leaflet precisa saber que o tamanho dele mudou (`invalidateSize`), senão ele continua
+     * desenhando na largura antiga e o mapa aparece torto e cortado.
+     *
+     * A alça de arrasto é presa ao documento durante o movimento (e não à alça), para o arrasto
+     * não parar quando o ponteiro sai do fio de 6 px — que é o que acontece em todo arrasto real.
+     */
+    function prepararPaineis() {
+      const layout = document.querySelector('.layout');
+      const esquerda = document.querySelector('.coluna.esquerda');
+      const direita = document.querySelector('.coluna.direita');
+      const area = document.querySelector('.mapa-area');
+      if (!layout || !esquerda || !direita || !area) return;
+
+      const LIMITE = { esq: [190, 640], dir: [240, 780] };
+      let guardado = {};
+      try { guardado = JSON.parse(localStorage.getItem('eia-paineis') || '{}') || {}; } catch (e) { guardado = {}; }
+      const painel = {
+        esq: Number(guardado.esq) || 330,
+        dir: Number(guardado.dir) || 400,
+        recolhidaEsq: !!guardado.recolhidaEsq,
+        recolhidaDir: !!guardado.recolhidaDir,
+      };
+      function salvar() {
+        try { localStorage.setItem('eia-paineis', JSON.stringify(painel)); } catch (e) { /* sem armazenamento: segue sem lembrar */ }
+      }
+      const abas = {};
+      function aplicar(revalidar) {
+        layout.style.setProperty('--largura-esq', (painel.recolhidaEsq ? 0 : painel.esq) + 'px');
+        layout.style.setProperty('--largura-dir', (painel.recolhidaDir ? 0 : painel.dir) + 'px');
+        esquerda.classList.toggle('recolhida', painel.recolhidaEsq);
+        direita.classList.toggle('recolhida', painel.recolhidaDir);
+        if (abas.esq) {
+          abas.esq.textContent = painel.recolhidaEsq ? '›' : '‹';
+          abas.esq.title = (painel.recolhidaEsq ? 'Mostrar' : 'Retrair') + ' o painel de camadas';
+        }
+        if (abas.dir) {
+          abas.dir.textContent = painel.recolhidaDir ? '‹' : '›';
+          abas.dir.title = (painel.recolhidaDir ? 'Mostrar' : 'Retrair') + ' o painel de resultados';
+        }
+        if (revalidar) mapa.invalidateSize();
+      }
+      function criarAba(lado) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'aba-painel ' + lado;
+        b.addEventListener('click', function () {
+          if (lado === 'esq') painel.recolhidaEsq = !painel.recolhidaEsq;
+          else painel.recolhidaDir = !painel.recolhidaDir;
+          aplicar(true);
+          salvar();
+        });
+        area.appendChild(b);
+        abas[lado] = b;
+      }
+      function criarAlca(coluna, lado) {
+        const h = document.createElement('div');
+        h.className = 'coluna-alca ' + lado;
+        h.title = 'Arraste para esticar';
+        coluna.appendChild(h);
+        h.addEventListener('mousedown', function (ev) {
+          ev.preventDefault();
+          const x0 = ev.clientX;
+          const largura0 = lado === 'esq' ? painel.esq : painel.dir;
+          document.body.classList.add('esticando');
+          function mover(e2) {
+            const delta = lado === 'esq' ? (e2.clientX - x0) : (x0 - e2.clientX);
+            const lim = lado === 'esq' ? LIMITE.esq : LIMITE.dir;
+            const v = Math.max(lim[0], Math.min(lim[1], Math.round(largura0 + delta)));
+            if (lado === 'esq') { painel.esq = v; painel.recolhidaEsq = false; } else { painel.dir = v; painel.recolhidaDir = false; }
+            aplicar(false);   // durante o arrasto não revalida: é caro e não muda nada na tela
+          }
+          function soltar() {
+            document.removeEventListener('mousemove', mover);
+            document.removeEventListener('mouseup', soltar);
+            document.body.classList.remove('esticando');
+            aplicar(true);
+            salvar();
+          }
+          document.addEventListener('mousemove', mover);
+          document.addEventListener('mouseup', soltar);
+        });
+      }
+      criarAlca(esquerda, 'esq');
+      criarAlca(direita, 'dir');
+      criarAba('esq');
+      criarAba('dir');
+      // no arranque REVALIDA: se houver painel recolhido guardado, o mapa já nasce no tamanho certo
+      aplicar(true);
+    }
+    prepararPaineis();
+
     estado.grupoCamadas = L.layerGroup().addTo(mapa);
     estado.grupoAreas = L.layerGroup().addTo(mapa);
     estado.grupoResultado = L.layerGroup().addTo(mapa);
