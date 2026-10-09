@@ -2604,8 +2604,21 @@
   async function rasterizarMapa(bbox, larguraMm, escala, proporcao) {
     const mapa = estado.mapa;
     const configuracoes = { animate: false };
-    const larguraPx = Math.max(600, Math.min(2200, Math.round(larguraMm * 8)));
-    const alturaPx = Math.round(larguraPx * (Number(proporcao) > 0 ? Number(proporcao) : 0.66));
+    /* O ENQUADRAMENTO TEM DE SER FEITO NO TAMANHO REAL DO MAPA NA TELA.
+     *
+     * A versão anterior pedia ao Leaflet um quadro de até 2200 px de largura, mas o mapa na tela
+     * tem cerca de 1000. Pedir um quadro MAIOR faz o Leaflet escolher um zoom MAIS PRÓXIMO (cada
+     * nível dobra a escala), e aí o serviço de imagens responde "Map data not yet available": as
+     * peças daquele zoom não existem. Foi o que apareceu na tela do cliente.
+     *
+     * E a proporção importa: a área do mapa na folha tem a proporção da FOLHA, e o mapa na tela
+     * tem outra. Copiar o mapa inteiro para dentro da moldura ESTICAVA a imagem. Por isso o zoom
+     * é calculado para uma faixa com a proporção da moldura, e essa faixa central é a copiada. */
+    const tamanhoTela = mapa.getSize();
+    // proporção altura/largura da ÁREA DO MAPA na folha (0,66 é só o padrão de segurança)
+    const prop = Number(proporcao) > 0 ? Number(proporcao) : 0.66;
+    const larguraPx = Math.max(600, Math.min(2200, Math.round(tamanhoTela.x * Math.min(2, window.devicePixelRatio || 1))));
+    const alturaPx = Math.round(larguraPx * prop);
     // pixels por grau necessários para a escala pedida
     const mPorMm = escala / 1000;
     const metrosLargura = larguraMm * mPorMm;
@@ -2613,45 +2626,54 @@
     const grausLargura = metrosLargura / (111320 * Math.cos(lat * Math.PI / 180));
     void grausLargura;
 
-    const zoom = mapa.getBoundsZoom([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], false, [larguraPx, alturaPx]);
+    const zoom = mapa.getBoundsZoom([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], false,
+      [tamanhoTela.x, Math.round(tamanhoTela.x * prop)]);
     const centro = [(bbox[1] + bbox[3]) / 2, (bbox[0] + bbox[2]) / 2];
-    mapa.setView(centro, zoom, configuracoes);
+    /* A VISTA DO USUÁRIO É EMPRESTADA, NÃO TOMADA.
+     *
+     * A rasterização move o mapa para o enquadramento da folha. Antes ela deixava o mapa assim — e
+     * era isso que o cliente via depois de pedir a prévia: o mapa da tela pulava para o quadro da
+     * folha e, se aquele zoom não tivesse imagem no serviço, ficava coberto de "Map data not yet
+     * available". Guardamos centro e zoom e devolvemos no fim.
+     *
+     * E o zoom é LIMITADO ao máximo que a camada de fundo tem: pedir além disso não dá erro, dá
+     * aquela mesma imagem de "sem dados" — que parece defeito do portal e não do serviço. */
+    const vistaAntes = { centro: mapa.getCenter(), zoom: mapa.getZoom() };
+    mapa.setView(centro, Math.min(zoom, mapa.getMaxZoom()), configuracoes);
     await esperar(420);
 
     const container = mapa.getContainer();
-    const temporario = document.createElement('canvas');
-    temporario.width = larguraPx;
-    temporario.height = alturaPx;
-    const ctx = temporario.getContext('2d');
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, temporario.width, temporario.height);
-
-    /* AS IMAGENS DE FUNDO SÃO <img>, NÃO CANVAS.
-     *
-     * A versão anterior copiava só os canvas do container — e o mapa de satélite do Leaflet é
-     * feito de elementos <img> (as peças do tile). Ou seja: o fundo NUNCA entrava na captura.
-     * Pior: qualquer erro de cópia era engolido por um `catch` vazio, então a exportação podia
-     * terminar com uma FOLHA EM BRANCO e sem um único aviso — que foi o que o cliente viu.
-     *
-     * Agora: fundo primeiro, vetores por cima, e as FALHAS SÃO CONTADAS. Se o canvas vetorial (que
-     * é o conteúdo do mapa) não puder ser copiado, a exportação FALHA COM MENSAGEM, em vez de
-     * entregar uma folha em branco. Se falharem só peças do fundo, o PDF sai e o portal avisa. */
     const rc = container.getBoundingClientRect();
-    const fatorX = temporario.width / rc.width, fatorY = temporario.height / rc.height;
+    const alturaFaixa = Math.min(rc.height, rc.width * prop);
+    const sobraY = Math.max(0, (rc.height - alturaFaixa) / 2);
+
+    // 1) o container inteiro vai para um canvas intermediário
+    const intermediario = document.createElement('canvas');
+    intermediario.width = Math.max(1, Math.round(rc.width));
+    intermediario.height = Math.max(1, Math.round(rc.height));
+    const ci = intermediario.getContext('2d');
+    ci.fillStyle = '#ffffff';
+    ci.fillRect(0, 0, intermediario.width, intermediario.height);
+
     const falhas = [];
+    const fatorInt = intermediario.width / rc.width;
     function copiar(el, rotulo) {
       try {
         const r = el.getBoundingClientRect();
         if (!r.width || !r.height) return;
-        ctx.drawImage(el, (r.left - rc.left) * fatorX, (r.top - rc.top) * fatorY,
-          r.width * fatorX, r.height * fatorY);
+        ci.drawImage(el, (r.left - rc.left) * fatorInt, (r.top - rc.top) * fatorInt,
+          r.width * fatorInt, r.height * fatorInt);
       } catch (e) {
-        // guarda o MOTIVO: nome do erro diz se foi taint de canvas (SecurityError) ou outra coisa
+        // guarda o MOTIVO: o nome do erro diz se foi taint de canvas (SecurityError) ou outra coisa
         falhas.push(rotulo + ': ' + ((e && e.name) || 'erro'));
       }
     }
     container.querySelectorAll('img.leaflet-tile').forEach((img) => copiar(img, 'imagem de fundo'));
     container.querySelectorAll('canvas').forEach((c) => copiar(c, 'camada vetorial'));
+
+    // a imagem já está capturada: devolve a vista do usuário ANTES de qualquer erro daqui para baixo
+    mapa.setView(vistaAntes.centro, vistaAntes.zoom, { animate: false });
+
     if (falhas.length) {
       const vetorialFalhou = falhas.some((f) => f.indexOf('camada vetorial') >= 0);
       if (vetorialFalhou) {
@@ -2660,6 +2682,17 @@
       }
       status('Aviso: ' + falhas.length + ' peça(s) do mapa de fundo não entraram na imagem (' + falhas[0] + ').', true);
     }
+
+    // 2) recorta a FAIXA CENTRAL na proporção da moldura — é o que evita a imagem esticada
+    const temporario = document.createElement('canvas');
+    temporario.width = larguraPx;
+    temporario.height = alturaPx;
+    const ctx = temporario.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, temporario.width, temporario.height);
+    ctx.drawImage(intermediario,
+      0, Math.round(sobraY * fatorInt), Math.round(rc.width * fatorInt), Math.round(alturaFaixa * fatorInt),
+      0, 0, temporario.width, temporario.height);
     return base64ParaBytes(temporario.toDataURL('image/jpeg', 0.9).split(',')[1]);
   }
 
