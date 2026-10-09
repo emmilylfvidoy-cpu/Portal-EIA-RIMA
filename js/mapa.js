@@ -180,11 +180,21 @@
     const pagina = doc.novaPagina(caixa.larguraFolha, caixa.alturaFolha);
     const cor = (e.layout && e.layout.cor) || '#1f2d36';
 
-    // moldura dupla
+    /* MOLDURA DUPLA — E O DEFEITO QUE ELA REVELOU.
+     *
+     * A moldura usava `caixa.larguraFolha`, que é a PÁGINA de verdade (a folha escolhida), enquanto
+     * TODO o resto do desenho está no espaço de referência (A1). Como o envelope depois multiplica
+     * tudo pelo fator, a moldura encolhia DUAS VEZES: numa A3 ela saía com 248 mm em vez de 407 —
+     * e o cabeçalho e o mapa ficavam PARA FORA dela. Foi o que o cliente viu como "ficou todo
+     * desproporcional".
+     *
+     * Quem está no espaço de desenho usa `larguraDesenho`/`alturaDesenho`. A página só serve para
+     * `novaPagina`. Achei isso medindo os retângulos que o desenho realmente produzia, em vez de
+     * deduzir do código. */
     const m = caixa.margem;
-    doc.retangulo(pagina, m, m, caixa.larguraFolha - 2 * m, caixa.alturaFolha - 2 * m, { borda: cor, espessura: 1.1 });
+    doc.retangulo(pagina, m, m, caixa.larguraDesenho - 2 * m, caixa.alturaDesenho - 2 * m, { borda: cor, espessura: 1.1 });
     doc.retangulo(pagina, m + caixa.moldura * 0.6, m + caixa.moldura * 0.6,
-      caixa.larguraFolha - 2 * (m + caixa.moldura * 0.6), caixa.alturaFolha - 2 * (m + caixa.moldura * 0.6),
+      caixa.larguraDesenho - 2 * (m + caixa.moldura * 0.6), caixa.alturaDesenho - 2 * (m + caixa.moldura * 0.6),
       { borda: cor, espessura: 0.4 });
 
     // cabeçalho
@@ -511,18 +521,18 @@
     const pagina = doc.novaPagina(caixa.larguraFolha, caixa.alturaFolha);
     const cor = '#1f2d36';
     const m = caixa.margem;
-    doc.retangulo(pagina, m, m, caixa.larguraFolha - 2 * m, caixa.alturaFolha - 2 * m, { borda: cor, espessura: 1 });
-    doc.texto(pagina, e.titulo || 'MAPA-ÍNDICE DE ARTICULAÇÃO', caixa.larguraFolha / 2, m + 14,
+    doc.retangulo(pagina, m, m, caixa.larguraDesenho - 2 * m, caixa.alturaDesenho - 2 * m, { borda: cor, espessura: 1 });
+    doc.texto(pagina, e.titulo || 'MAPA-ÍNDICE DE ARTICULAÇÃO', caixa.larguraDesenho / 2, m + 14,
       { tamanho: 14, negrito: true, alinhamento: 'centro' });
     doc.texto(pagina, (e.projeto || '') + ' · Escala 1:' + math.num(articulacao.escala, 0)
       + ' · ' + articulacao.total + ' folhas em ' + articulacao.linhas + '×' + articulacao.colunas
       + ' · sobreposição ' + math.num(articulacao.sobreposicao * 100, 0) + '%',
-      caixa.larguraFolha / 2, m + 22, { tamanho: 9, alinhamento: 'centro', cor: '#43535d' });
+      caixa.larguraDesenho / 2, m + 22, { tamanho: 9, alinhamento: 'centro', cor: '#43535d' });
 
     const area = {
       x: m + 16, y: m + 34,
-      largura: caixa.larguraFolha - 2 * (m + 16),
-      altura: caixa.alturaFolha - 2 * (m + 16) - 34 - (e.alturaRodape || 22),
+      largura: caixa.larguraDesenho - 2 * (m + 16),
+      altura: caixa.alturaDesenho - 2 * (m + 16) - 34 - (e.alturaRodape || 22),
     };
     doc.retangulo(pagina, area.x, area.y, area.largura, area.altura, { borda: cor, espessura: 0.6 });
 

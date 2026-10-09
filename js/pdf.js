@@ -384,9 +384,26 @@
      * Os números abaixo, portanto, estão em milímetros de A1 — e não mudam com a folha. Quem os
      * leva para o papel é o `docEscalado`, em mapa.js. */
     const ref = FOLHAS.A1;
-    const larguraRef = orientacao === 'retrato' ? ref.largura : ref.altura;
-    const alturaRef = orientacao === 'retrato' ? ref.altura : ref.largura;
-    const base = largura / larguraRef;   // A3 dá 0,5;  A4 dá 0,3536;  A1 dá 1
+    const larguraA1 = orientacao === 'retrato' ? ref.largura : ref.altura;
+    /* O PISO DE LEGIBILIDADE — a correção de um erro meu de leitura.
+     *
+     * O cliente pediu layout proporcional "como se fosse um SIG", e eu escalei TUDO, inclusive os
+     * corpos de texto. A medição mostrou o desastre: em A4 o título de 9,6 pt virava 2,1 pt e o
+     * menor texto, 1,9 pt. Ninguém lê isso — e texto ilegível se lê como "ficou todo
+     * desproporcional", que foi exatamente o que ele disse.
+     *
+     * O certo é o que ele descreveu depois: "manter o layout igual e o mesmo se mover e se adaptar
+     * à página". Ou seja: o layout encolhe até um PISO (62% da prancha de referência), mantendo a
+     * mesma cara e os mesmos corpos de texto legíveis — e abaixo desse ponto quem cede espaço é o
+     * MAPA, que se ajusta ao que sobra da página. Fonte não encolhe até sumir; mapa encolhe.
+     *
+     * A1 e A0 usam o fator cheio (1,000 e 1,414) e saem idênticos à prancha de referência; A3 fica
+     * em 0,62 em vez de 0,499; A4, em 0,62 em vez de 0,353. */
+    const PISO = 0.62;
+    const base = Math.max(largura / larguraA1, PISO);
+    // o espaço de desenho, em unidades da prancha de referência (encolhe até o piso)
+    const larguraRef = largura / base;
+    const alturaRef = altura / base;
     // medidas da prancha de referência (A1), em milímetros
     const margem = o.margem !== undefined ? o.margem : 10;
     const moldura = o.moldura !== undefined ? o.moldura : 6;
