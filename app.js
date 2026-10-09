@@ -2503,7 +2503,7 @@
     el.innerHTML = partes.join('<br>');
   }
 
-  function atualizarPreviaMapa() {
+  async function atualizarPreviaMapa() {
     const e = especificacaoMapa();
     if (!e.bbox) {
       $('previa-mapa').innerHTML = '<p class="vazio">Carregue uma área de influência ou faça o recorte para montar o mapa.</p>';
@@ -2520,6 +2520,53 @@
     }), { escalaTela: Math.min(1.1, 620 / (EIA.pdf.caixaDoMapa(folha, e.orientacao, {}).larguraFolha)) });
     $('previa-mapa').innerHTML = previa;
     atualizarInfoArticulacao();
+
+    /* A PRÉVIA PASSA A MOSTRAR O MAPA DE VERDADE.
+     *
+     * A prévia era só o ESBOÇO do layout: moldura, título e um retângulo escrito "área do mapa".
+     * Ela nunca desenhou o mapa — e o cliente leu isso, com razão, como folha em branco. Agora o
+     * mapa é rasterizado com a MESMA função que alimenta o PDF e entra como imagem no lugar do
+     * retângulo, com a proporção real da área do mapa (era 0,66 fixo, o que corta em papel retrato).
+     *
+     * A sequência evita a corrida: se o usuário mexer na escala enquanto a imagem anterior ainda
+     * está sendo montada, a antiga não pode sobrescrever a nova. */
+    const seq = ++previaSequencia;
+    status('Montando a prévia do mapa…');
+    const caixaPrevia = EIA.pdf.caixaDoMapa(folha, e.orientacao, {});
+    try {
+      const jpeg = await rasterizarMapa(bboxFolha, caixaPrevia.mapa.largura, escala,
+        caixaPrevia.mapa.altura / caixaPrevia.mapa.largura);
+      if (seq !== previaSequencia) return;   // outra prévia já foi pedida: esta não vale mais
+      const svgAtual = $('previa-mapa').querySelector('svg');
+      if (!svgAtual) return;
+      const imagem = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      imagem.setAttribute('x', caixaPrevia.mapa.x);
+      imagem.setAttribute('y', caixaPrevia.mapa.y);
+      imagem.setAttribute('width', caixaPrevia.mapa.largura);
+      imagem.setAttribute('height', caixaPrevia.mapa.altura);
+      imagem.setAttribute('preserveAspectRatio', 'none');
+      imagem.setAttribute('href', bytesParaDataUrl(jpeg, 'image/jpeg'));
+      const fundo = svgAtual.querySelector('rect[fill="#eef2f4"]');
+      if (fundo && fundo.nextSibling) svgAtual.insertBefore(imagem, fundo.nextSibling);
+      else svgAtual.appendChild(imagem);
+      status('Prévia do mapa pronta.');
+    } catch (err) {
+      status('Não consegui montar a prévia do mapa: ' + err.message, true);
+    }
+  }
+
+  let previaSequencia = 0;
+
+  /** Bytes -> data URL. O SVG só aceita imagem embutida assim, e em pedaços (String.fromCharCode
+   *  com um array inteiro de uma vez estoura a pilha numa imagem de 2200 px). */
+  function bytesParaDataUrl(bytes, tipo) {
+    const dados = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+    let binario = '';
+    const passo = 8192;
+    for (let i = 0; i < dados.length; i += passo) {
+      binario += String.fromCharCode.apply(null, dados.subarray(i, i + passo));
+    }
+    return 'data:' + tipo + ';base64,' + btoa(binario);
   }
 
   function enquadrarPorEscala(bbox, folha, orientacao, escala) {
@@ -2549,10 +2596,16 @@
   }
 
   /** Rasteriza o mapa atual no enquadramento pedido (para entrar no PDF). */
-  async function rasterizarMapa(bbox, larguraMm, escala) {
+  /** Rasteriza o mapa atual no enquadramento pedido (para entrar no PDF ou na prévia).
+   *
+   * `proporcao` é altura/largura da ÁREA DO MAPA na folha. Antes era 0,66 FIXO, e num papel retrato
+   * a área do mapa é alta: o enquadramento pedia um retângulo que não existe, e o que saía na
+   * folha não era o que estava no quadro. Quem chama tem a caixa do mapa em mãos e informa. */
+  async function rasterizarMapa(bbox, larguraMm, escala, proporcao) {
     const mapa = estado.mapa;
     const configuracoes = { animate: false };
     const larguraPx = Math.max(600, Math.min(2200, Math.round(larguraMm * 8)));
+    const alturaPx = Math.round(larguraPx * (Number(proporcao) > 0 ? Number(proporcao) : 0.66));
     // pixels por grau necessários para a escala pedida
     const mPorMm = escala / 1000;
     const metrosLargura = larguraMm * mPorMm;
@@ -2560,7 +2613,7 @@
     const grausLargura = metrosLargura / (111320 * Math.cos(lat * Math.PI / 180));
     void grausLargura;
 
-    const zoom = mapa.getBoundsZoom([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], false, [larguraPx, Math.round(larguraPx * 0.66)]);
+    const zoom = mapa.getBoundsZoom([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], false, [larguraPx, alturaPx]);
     const centro = [(bbox[1] + bbox[3]) / 2, (bbox[0] + bbox[2]) / 2];
     mapa.setView(centro, zoom, configuracoes);
     await esperar(420);
@@ -2568,7 +2621,7 @@
     const container = mapa.getContainer();
     const temporario = document.createElement('canvas');
     temporario.width = larguraPx;
-    temporario.height = Math.round(larguraPx * 0.66);
+    temporario.height = alturaPx;
     const ctx = temporario.getContext('2d');
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, temporario.width, temporario.height);
@@ -2636,12 +2689,14 @@
       const imagens = [];
       if (e.articulacao && e.articulacao.total > 1) {
         for (const folha of e.articulacao.folhas) {
-          const jpeg = await rasterizarMapa(folha.bbox, caixa.mapa.largura, e.escala);
+          const jpeg = await rasterizarMapa(folha.bbox, caixa.mapa.largura, e.escala,
+            caixa.mapa.altura / caixa.mapa.largura);
           imagens.push({ chave: folha.numero, bytes: jpeg });
         }
       } else {
         const bboxFolha = enquadrarPorEscala(e.bbox, e.folha, e.orientacao, e.escala);
-        const jpeg = await rasterizarMapa(bboxFolha, caixa.mapa.largura, e.escala);
+        const jpeg = await rasterizarMapa(bboxFolha, caixa.mapa.largura, e.escala,
+          caixa.mapa.altura / caixa.mapa.largura);
         imagens.push({ chave: 'unico', bytes: jpeg });
       }
 
