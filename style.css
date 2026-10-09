@@ -402,6 +402,12 @@ dialog::backdrop { background: rgba(16, 32, 40, .55); }
 
 /* ATRIBUTO hidden (fim) */
 
+/* A PRÉVIA DA FOLHA ROLA. Ela é desenhada no tamanho de leitura (cerca de 1300 px numa folha A1) e
+   o painel é estreito: sem rolagem, o navegador encolheria o desenho e os textos de 5 a 8 pontos
+   voltariam a ficar ilegíveis — e foi isso que fez o layout PARECER errado quando estava certo. */
+#previa-mapa { overflow: auto; }
+#previa-mapa svg { display: block; max-width: none; }
+
 /* ------------------------------------------------------------------ ferramenta "i" */
 #mapa.identificando { cursor: crosshair; }
 .mapa-ferramentas button.ativa {

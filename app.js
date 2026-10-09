@@ -2493,9 +2493,18 @@
     const bbox = extensaoAtual();
     if (!bbox) { el.hidden = true; return; }
     const escala = Number($('escala').value);
-    const cob = EIA.mapa.cobertura($('folha').value, $('orientacao').value, escala);
-    const partes = ['Cada folha cobre ' + EIA.math.num(cob.larguraKm, 2) + ' × ' + EIA.math.num(cob.alturaKm, 2)
-      + ' km (' + EIA.math.num(cob.areaKm2, 1) + ' km²) em 1:' + EIA.math.num(escala, 0) + '.'];
+    const caixaInfo = EIA.pdf.caixaDoMapa($('folha').value, $('orientacao').value, {});
+    /* A ESCALA DA FOLHA É A DA VISTA — e este texto dizia outra coisa.
+     *
+     * Ele lia o SELETOR de escala e anunciava "cada folha cobre 4,05 × 2,00 km em 1:5.000". Desde
+     * que a folha passou a ser o RECORTE do que está na tela, o seletor não manda mais no mapa: o
+     * texto anunciava uma coisa e o PDF saía com outra. Isso é pior do que um layout feio — é o
+     * portal mentindo sobre o que vai entregar. */
+    estado.mapa.invalidateSize();
+    const larguraViva = Math.round(estado.mapa.getContainer().getBoundingClientRect().width);
+    const escalaVista = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
+      larguraViva, caixaInfo.mapa.largura);
+    const partes = [];
     if ($('articulado').checked) {
       const art = EIA.mapa.articular(bbox, $('folha').value, $('orientacao').value, escala, { sobreposicao: 0.1 });
       partes.push('Articulação: <b>' + art.total + ' folhas</b> em ' + art.linhas + '×' + art.colunas
@@ -2505,8 +2514,9 @@
           + ' fica com legenda apertada — prefira A1 ou A0.');
       }
     } else {
-      const esc = EIA.mapa.escalaQueCabe(bbox, $('folha').value, $('orientacao').value);
-      partes.push('Sem articulação, a maior escala que cabe a extensão atual é 1:' + EIA.math.num(esc, 0) + '.');
+      partes.push('A folha usa o <b>enquadramento que está na tela</b>'
+        + (escalaVista > 0 ? ': escala <b>1:' + EIA.math.num(escalaVista, 0) + '</b>' : '') + '.');
+      partes.push('Para mudar a escala, aproxime ou afaste o mapa — a folha acompanha.');
     }
     el.hidden = false;
     el.innerHTML = partes.join('<br>');
@@ -2566,7 +2576,13 @@
         })),
       }), { imagens: imagens });
       $('previa-mapa').innerHTML = EIA.mapa.itensParaSvg(gravado, {
-        escalaTela: Math.min(1.1, 620 / (gravado.pagina.larguraMm || caixaPrevia.larguraFolha)),
+        /* GRANDE O BASTANTE PARA SER LIDA.
+         *
+         * Com 620 px numa folha A1, os textos de 5 a 8 pontos caíam para 1 ou 2 pixels: a estrutura
+         * podia estar certa e o cliente não tinha como julgar — e "não dá para ler" é lido como
+         * "está errado". Agora sai em ~1300 px e o painel rola na horizontal. Recolher o painel da
+         * esquerda (aba ‹) dá mais espaço, e a folha aumenta junto. */
+        escalaTela: Math.min(2.4, 1300 / (gravado.pagina.larguraMm || caixaPrevia.larguraFolha)),
       });
       status('Prévia do mapa pronta.');
     } catch (err) {
