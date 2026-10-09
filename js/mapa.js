@@ -614,8 +614,32 @@
     };
   }
 
+  /**
+   * A ESCALA QUE O ENQUADRAMENTO ATUAL REPRESENTA — lida, não imposta.
+   *
+   * É o coração da mudança pedida pelo cliente: em vez de escolher uma escala e forçar o mapa a
+   * caber nela, o usuário enquadra o mapa com os olhos e a folha recebe um RECORTE do que ele vê.
+   * A escala então é um RESULTADO — e precisa aparecer na folha, porque escala errada num mapa de
+   * EIA não é detalhe estético.
+   *
+   * Web Mercator: no zoom z o mundo tem 256.2^z pixels, e a circunferência do paralelo de latitude
+   * fi é 40075016,686.cos(fi) metros. Daí metros por pixel; metros por milímetro da folha é isso
+   * multiplicado por (pixels da tela / milímetros da área do mapa); e a escala é esse valor em
+   * metros por milímetro vezes mil.
+   *
+   * Função PURA de propósito (lat, zoom, px, mm), para poder ser conferida sem navegador.
+   */
+  function escalaDaVista(lat, zoom, larguraTelaPx, larguraFolhaMm) {
+    if (!larguraTelaPx || !larguraFolhaMm) return 0;
+    const mPorPx = 40075016.686 * Math.cos(Number(lat) * Math.PI / 180) / (256 * Math.pow(2, Number(zoom)));
+    const mPorMm = mPorPx * (larguraTelaPx / larguraFolhaMm);
+    // arredonda em dezenas: escala de mapa se escreve 1:25.000, não 1:24.987
+    return Math.max(1, Math.round(mPorMm * 1000 / 10) * 10);
+  }
+
   return {
     ESCALAS: ESCALAS,
+    escalaDaVista: escalaDaVista,
     Z_CAMADAS: Z_CAMADAS,
     ESTILOS_LINHA: ESTILOS_LINHA,
     GROSSURA_MIN: GROSSURA_MIN,

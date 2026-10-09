@@ -2513,11 +2513,19 @@
     const folha = e.folha;
     // enquadramento do mapa: quando articulado, mostra a primeira folha
     const bboxFolha = e.articulacao ? e.articulacao.folhas[0].bbox : enquadrarPorEscala(e.bbox, folha, e.orientacao, escala);
+    /* A ESCALA É LIDA DA VISTA, NÃO IMPOSTA.
+     *
+     * O mapa da folha é o RECORTE do que o usuário está vendo, e a escala é um RESULTADO desse
+     * enquadramento — calculada antes de desenhar, para o esboço, o PDF e a barra de escala
+     * falarem do mesmo número. */
+    const caixaPrevia = EIA.pdf.caixaDoMapa(folha, e.orientacao, {});
+    const escalaVista = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
+      estado.mapa.getSize().x, caixaPrevia.mapa.largura) || escala;
     const previa = EIA.mapa.previaSvg(Object.assign({}, e, {
-      bbox: bboxFolha,
-      numeroFolha: e.articulacao ? e.articulacao.folhas[0].nome : ('1:' + EIA.math.num(escala, 0)),
-      escala: escala,
-    }), { escalaTela: Math.min(1.1, 620 / (EIA.pdf.caixaDoMapa(folha, e.orientacao, {}).larguraFolha)) });
+      bbox: null,
+      escala: escalaVista,
+      numeroFolha: e.articulacao ? e.articulacao.folhas[0].nome : ('1:' + EIA.math.num(escalaVista, 0)),
+    }), { escalaTela: Math.min(1.1, 620 / caixaPrevia.larguraFolha) });
     $('previa-mapa').innerHTML = previa;
     atualizarInfoArticulacao();
 
@@ -2532,9 +2540,9 @@
      * está sendo montada, a antiga não pode sobrescrever a nova. */
     const seq = ++previaSequencia;
     status('Montando a prévia do mapa…');
-    const caixaPrevia = EIA.pdf.caixaDoMapa(folha, e.orientacao, {});
     try {
-      const jpeg = await rasterizarMapa(bboxFolha, caixaPrevia.mapa.largura, escala,
+      // bbox nulo = "o que está na tela": o recorte é o enquadramento do usuário
+      const jpeg = await rasterizarMapa(null, caixaPrevia.mapa.largura, escalaVista,
         caixaPrevia.mapa.altura / caixaPrevia.mapa.largura);
       if (seq !== previaSequencia) return;   // outra prévia já foi pedida: esta não vale mais
       const svgAtual = $('previa-mapa').querySelector('svg');
@@ -2610,46 +2618,55 @@
    * `proporcao` é altura/largura da ÁREA DO MAPA na folha. Antes era 0,66 FIXO, e num papel retrato
    * a área do mapa é alta: o enquadramento pedia um retângulo que não existe, e o que saía na
    * folha não era o que estava no quadro. Quem chama tem a caixa do mapa em mãos e informa. */
+  /** Rasteriza o mapa para a folha (PDF ou prévia).
+   *
+   * `bbox` NULO SIGNIFICA "O QUE ESTÁ NA TELA" — e é o modo recomendado. Quem enquadra o mapa é o
+   * usuário, com os olhos; a folha recebe um RECORTE do que ele está vendo, e a escala é LIDA
+   * desse enquadramento (ver escalaDaVista). É o contrário de impor uma escala e torcer para o
+   * Leaflet chegar no mesmo lugar: impor escala foi a origem de uma sequência de defeitos — zoom
+   * sem imagem no serviço, mapa pulando de lugar, enquadramento que não correspondia ao quadro.
+   *
+   * Com bbox (modo articulado) a função continua movendo o mapa para cada folha, como antes.
+   *
+   * `proporcao` é altura/largura da ÁREA DO MAPA na folha; o recorte é a FAIXA CENTRAL da vista,
+   * nessa proporção, para não esticar a imagem. */
   async function rasterizarMapa(bbox, larguraMm, escala, proporcao) {
     const mapa = estado.mapa;
     const configuracoes = { animate: false };
-    /* O ENQUADRAMENTO TEM DE SER FEITO NO TAMANHO REAL DO MAPA NA TELA.
+    const prop = Number(proporcao) > 0 ? Number(proporcao) : 0.66;
+    const usarVista = !bbox;
+
+    /* O ENQUADRAMENTO É FEITO NO TAMANHO REAL DO MAPA NA TELA.
      *
      * A versão anterior pedia ao Leaflet um quadro de até 2200 px de largura, mas o mapa na tela
      * tem cerca de 1000. Pedir um quadro MAIOR faz o Leaflet escolher um zoom MAIS PRÓXIMO (cada
-     * nível dobra a escala), e aí o serviço de imagens responde "Map data not yet available": as
-     * peças daquele zoom não existem. Foi o que apareceu na tela do cliente.
+     * nível dobra a escala), e aí o serviço de imagens responde "Map data not yet available".
      *
      * E a proporção importa: a área do mapa na folha tem a proporção da FOLHA, e o mapa na tela
      * tem outra. Copiar o mapa inteiro para dentro da moldura ESTICAVA a imagem. Por isso o zoom
      * é calculado para uma faixa com a proporção da moldura, e essa faixa central é a copiada. */
     const tamanhoTela = mapa.getSize();
-    // proporção altura/largura da ÁREA DO MAPA na folha (0,66 é só o padrão de segurança)
-    const prop = Number(proporcao) > 0 ? Number(proporcao) : 0.66;
     const larguraPx = Math.max(600, Math.min(2200, Math.round(tamanhoTela.x * Math.min(2, window.devicePixelRatio || 1))));
     const alturaPx = Math.round(larguraPx * prop);
-    // pixels por grau necessários para a escala pedida
-    const mPorMm = escala / 1000;
-    const metrosLargura = larguraMm * mPorMm;
-    const lat = (bbox[1] + bbox[3]) / 2;
-    const grausLargura = metrosLargura / (111320 * Math.cos(lat * Math.PI / 180));
-    void grausLargura;
 
-    const zoom = mapa.getBoundsZoom([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], false,
-      [tamanhoTela.x, Math.round(tamanhoTela.x * prop)]);
-    const centro = [(bbox[1] + bbox[3]) / 2, (bbox[0] + bbox[2]) / 2];
-    /* A VISTA DO USUÁRIO É EMPRESTADA, NÃO TOMADA.
-     *
-     * A rasterização move o mapa para o enquadramento da folha. Antes ela deixava o mapa assim — e
-     * era isso que o cliente via depois de pedir a prévia: o mapa da tela pulava para o quadro da
-     * folha e, se aquele zoom não tivesse imagem no serviço, ficava coberto de "Map data not yet
-     * available". Guardamos centro e zoom e devolvemos no fim.
-     *
-     * E o zoom é LIMITADO ao máximo que a camada de fundo tem: pedir além disso não dá erro, dá
-     * aquela mesma imagem de "sem dados" — que parece defeito do portal e não do serviço. */
     const vistaAntes = { centro: mapa.getCenter(), zoom: mapa.getZoom() };
-    mapa.setView(centro, Math.min(zoom, mapa.getMaxZoom()), configuracoes);
-    await esperar(420);
+    if (usarVista) {
+      // nada a fazer: o mapa já está onde o usuário o deixou
+      await esperar(200);
+    } else {
+      const mPorMm = escala / 1000;
+      const metrosLargura = larguraMm * mPorMm;
+      const lat = (bbox[1] + bbox[3]) / 2;
+      const grausLargura = metrosLargura / (111320 * Math.cos(lat * Math.PI / 180));
+      void grausLargura;
+      const zoom = mapa.getBoundsZoom([[bbox[1], bbox[0]], [bbox[3], bbox[2]]], false,
+        [tamanhoTela.x, Math.round(tamanhoTela.x * prop)]);
+      const centro = [(bbox[1] + bbox[3]) / 2, (bbox[0] + bbox[2]) / 2];
+      /* A VISTA DO USUÁRIO É EMPRESTADA, NÃO TOMADA — e o zoom é limitado ao máximo do fundo:
+       * pedir além disso não dá erro, dá a imagem de "sem dados". */
+      mapa.setView(centro, Math.min(zoom, mapa.getMaxZoom()), configuracoes);
+      await esperar(420);
+    }
 
     const container = mapa.getContainer();
     const rc = container.getBoundingClientRect();
@@ -2736,8 +2753,12 @@
           imagens.push({ chave: folha.numero, bytes: jpeg });
         }
       } else {
-        const bboxFolha = enquadrarPorEscala(e.bbox, e.folha, e.orientacao, e.escala);
-        const jpeg = await rasterizarMapa(bboxFolha, caixa.mapa.largura, e.escala,
+        /* MESMO CRITÉRIO DA PRÉVIA: o mapa é o RECORTE do que o usuário está vendo, e a escala é
+         * lida desse enquadramento. Se a prévia e o PDF usassem critérios diferentes, o que ele
+         * aprova na tela não seria o que sai no arquivo — que é o pior desfecho possível. */
+        e.escala = EIA.mapa.escalaDaVista(estado.mapa.getCenter().lat, estado.mapa.getZoom(),
+          estado.mapa.getSize().x, caixa.mapa.largura) || e.escala;
+        const jpeg = await rasterizarMapa(null, caixa.mapa.largura, e.escala,
           caixa.mapa.altura / caixa.mapa.largura);
         imagens.push({ chave: 'unico', bytes: jpeg });
       }
