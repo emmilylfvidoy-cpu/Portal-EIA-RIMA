@@ -2935,6 +2935,33 @@
   }
 
   // =========================================================== logos
+  /**
+   * IMPRIME A PRANCHA — e é o navegador que gera o PDF (plano B).
+   *
+   * O `@page` é injetado com a folha e a orientação escolhidas: sem isso o navegador imprime em A4
+   * retrato, cortando a prancha. O resto é CSS (`folha.css`, @media print): só a prancha fica
+   * visível, e ela tem tamanho em milímetros, então o que sai é o que está na tela — vetorial.
+   */
+  function imprimirFolha() {
+    const alvo = $('previa-mapa');
+    if (!alvo || !alvo.querySelector('.folha')) {
+      alert('Atualize a prévia primeiro: é ela que vira o PDF.');
+      return;
+    }
+    let regra = document.getElementById('regra-impressao');
+    if (!regra) {
+      regra = document.createElement('style');
+      regra.id = 'regra-impressao';
+      document.head.appendChild(regra);
+    }
+    const folha = $('folha').value;
+    const orientacao = $('orientacao').value === 'retrato' ? 'portrait' : 'landscape';
+    regra.textContent = '@page { size: ' + folha + ' ' + orientacao + '; margin: 0; }';
+    status('Abrindo a impressão — escolha "Salvar como PDF" e o tamanho ' + folha + '.');
+    setTimeout(function () { window.print(); }, 300);
+  }
+  if ($('btn-folha-pdf')) $('btn-folha-pdf').onclick = imprimirFolha;
+
   function carregarLogos(arquivos) {
     const alvo = $('lista-logos');
     for (const f of arquivos) {

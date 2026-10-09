@@ -68,6 +68,18 @@
       if (!itens.length) {
         itens.push({ rotulo: c.nome || c.id, cor: c.cor || estilo.cor || '#9aa7b0', forma: aparencia });
       }
+      /* TETO POR CAMADA, com o resto declarado.
+       *
+       * A Pedologia sozinha traz 27 classes e a Geologia, dezenas: uma legenda assim toma a prancha
+       * inteira e não se lê. Aqui a camada mostra as mais representativas e DIZ quantas ficaram de
+       * fora — cortar em silêncio seria mentir sobre o que está no mapa. A lista completa sai na
+       * tabela de áreas e no XLSX. */
+      const TETO_POR_CAMADA = 14;
+      if (itens.length > TETO_POR_CAMADA) {
+        const sobra = itens.length - (TETO_POR_CAMADA - 1);
+        itens.length = TETO_POR_CAMADA - 1;
+        itens.push({ rotulo: 'e mais ' + sobra + ' classes — ver tabela de áreas', cor: '#c8ced3', forma: 'poligono' });
+      }
       meio.camadas.push({ id: c.id, nome: c.nome || c.id, aparencia: aparencia, itens: itens });
     }
     return MEIOS.map((m) => porMeio.get(m.id)).filter((m) => m.camadas.length);
