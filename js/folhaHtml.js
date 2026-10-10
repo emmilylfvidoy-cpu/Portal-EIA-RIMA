@@ -59,8 +59,11 @@
         const nome = typeof classe === 'string' ? classe : classe.classe;
         if (!nome) continue;
         itens.push({
-          rotulo: nome,
-          // A COR DA CLASSE VEM DA CAMADA. Sem cor própria declarada, a cor da camada.
+          /* O RÓTULO PODE SER O NOME DA UNIDADE, e não a sigla — escolha do usuário, feita na aba
+           * "Rótulo" de cada camada. Quando vem um objeto, ele traz `classe` (que dá a COR) e
+           * `rotulo` (que vai escrito). A cor NUNCA vem do rótulo: ela é da classe, definida pelo
+           * renderizador de origem, e é o que mantém o quadradinho igual ao mapa. */
+          rotulo: (typeof classe === 'object' && classe.rotulo) ? classe.rotulo : nome,
           cor: cores[nome] || c.cor || estilo.cor || '#9aa7b0',
           forma: aparencia,
         });

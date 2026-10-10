@@ -773,6 +773,42 @@
     paineis.rotulo.appendChild(etiquetaRot);
     paineis.rotulo.appendChild(seletor);
 
+    /* COLUNA DA LEGENDA — "escolher qual coluna aparecer na legenda", pedido do cliente.
+     *
+     * Parecido com o seletor de cima, e a diferença importa: o de cima escreve no MAPA, este escreve
+     * na LEGENDA. Aqui a COR continua vindo da classe — é o renderizador de origem que a define, e
+     * sem isso o quadradinho perderia a cor certa. O que muda é o NOME ao lado dele: "A34atg" passa a
+     * ser "Coberturas detríticas indiferenciadas". O valor sai de uma feição representativa daquela
+     * classe (a primeira que aparecer com ela), porque é a feição que carrega os nomes. */
+    const etiquetaLeg = document.createElement('span');
+    etiquetaLeg.className = 'controle-rotulo';
+    etiquetaLeg.textContent = 'Coluna da legenda';
+    const seletorLeg = document.createElement('select');
+    seletorLeg.className = 'seletor-rotulo';
+    const opClasseLeg = document.createElement('option');
+    opClasseLeg.value = '';
+    opClasseLeg.textContent = '(sigla da classe)';
+    seletorLeg.appendChild(opClasseLeg);
+    for (const campo of camposParaRotulo(camada)) {
+      const op = document.createElement('option');
+      op.value = campo;
+      op.textContent = campo + (campo === camada.campo_classe ? '  (classe do mapa)' : '');
+      seletorLeg.appendChild(op);
+    }
+    estado.legendas = estado.legendas || {};
+    seletorLeg.value = estado.legendas[camada.id] || '';
+    seletorLeg.onchange = () => {
+      estado.legendas = estado.legendas || {};
+      if (seletorLeg.value) estado.legendas[camada.id] = seletorLeg.value;
+      else delete estado.legendas[camada.id];
+      // a legenda é montada na hora de abrir a prévia: sem dizer isso, a mudança parece não ter efeito
+      status(seletorLeg.value
+        ? 'A legenda desta camada vai escrever a coluna "' + seletorLeg.value + '". Clique em "Abrir prévia e exportar" para ver.'
+        : 'A legenda volta a escrever a sigla da classe. Clique em "Abrir prévia e exportar" para ver.');
+    };
+    paineis.rotulo.appendChild(etiquetaLeg);
+    paineis.rotulo.appendChild(seletorLeg);
+
     // ---- linha: cor, tipo de traço e grossura do CONTORNO da camada
     // A divisa que se lê bem na tela some num mapa 1:5.000 impresso; e cor única ajuda
     // quando o arquivo de estilo traz uma cor por classe e se quer tudo igual.
@@ -1305,10 +1341,53 @@
       amostra.style.background = area.cor;
       const nome = document.createElement('span');
       nome.className = 'nome';
-      nome.innerHTML = '<b>' + escapar(area.sigla) + '</b> ' + escapar(area.nome)
-        + '<br><span class="meta">' + EIA.math.num(area.area_ha, 2) + ' ha · '
+      /* O NOME DA ÁREA É EDITÁVEL NO PRÓPRIO PAINEL.
+       *
+       * Pedido do cliente: ele sobe um arquivo com um nome (ou sem nome nenhum) e quer outro na
+       * prancha. Clicar no nome e escrever resolve — e vale para o MAPA, a LEGENDA e a TABELA ao
+       * mesmo tempo, porque é o MESMO campo da área, e não uma etiqueta paralela que depois diverge
+       * (que foi a doença de vários defeitos desta sessão: duas coisas medindo o mesmo objeto).
+       *
+       * Enter confirma e sair do campo também. Nome vazio volta ao anterior, em vez de deixar a área
+       * sem identificação nenhuma. */
+      const sigla = document.createElement('b');
+      sigla.textContent = area.sigla;
+      const nomeEditavel = document.createElement('span');
+      nomeEditavel.className = 'nome-area';
+      nomeEditavel.textContent = area.nome || '(sem nome)';
+      nomeEditavel.title = 'clique para renomear a área — vale para o mapa, a legenda e a tabela';
+      nomeEditavel.setAttribute('contenteditable', 'true');
+      nomeEditavel.setAttribute('spellcheck', 'false');
+      nomeEditavel.style.borderBottom = '0.1em dashed #9aa7b0';
+      nomeEditavel.style.cursor = 'text';
+      const salvarNome = () => {
+        const texto = (nomeEditavel.textContent || '').trim();
+        if (!texto || texto === '(sem nome)') {
+          nomeEditavel.textContent = area.nome || '(sem nome)';
+          return;
+        }
+        if (texto === area.nome) return;
+        area.nome = texto;
+        desenharAreas();
+        renderizarAreas();
+      };
+      nomeEditavel.addEventListener('blur', salvarNome);
+      nomeEditavel.addEventListener('keydown', (ev) => {
+        if (ev.key !== 'Enter') return;
+        ev.preventDefault();
+        nomeEditavel.blur();
+      });
+      const meta = document.createElement('span');
+      meta.className = 'meta';
+      meta.textContent = EIA.math.num(area.area_ha, 2) + ' ha · '
         + EIA.math.num(area.area_ha / 100, 2) + ' km²'
-        + (area.partes > 1 ? ' · ' + area.partes + ' polígonos' : '') + '</span>';
+        + (area.partes > 1 ? ' · ' + area.partes + ' polígonos' : '');
+
+      nome.appendChild(sigla);
+      nome.appendChild(document.createTextNode(' '));
+      nome.appendChild(nomeEditavel);
+      nome.appendChild(document.createElement('br'));
+      nome.appendChild(meta);
 
       // Ajustes da área numa abinha, igual às camadas: o mesmo problema, o mesmo lugar.
       const lapis = document.createElement('button');   // lápis: abre os ajustes de aparência
@@ -2694,21 +2773,43 @@
        * recorte — que é o que uma legenda deve mostrar.
        *
        * E prévia e impressão passam a ser a MESMA coisa: não há como divergirem. */
+      /* POR CLASSE: QUANTAS FEIÇÕES, E UM EXEMPLO DAS PROPRIEDADES.
+       *
+       * O exemplo é o que permite escrever o NOME da unidade na legenda ("A34atg" -> "Coberturas
+       * detríticas indiferenciadas"): os nomes vêm nas FEIÇÕES, não no catálogo, que só guarda as
+       * cores por classe. Guardar uma feição por classe é barato e resolve o pedido inteiro. */
       const porCamada = {};
       for (const r of (estado.resultados || [])) {
         if (!r || !r.camada || !r.features) continue;
         const visto = porCamada[r.camada.id] || new Map();
         for (const f of r.features) {
-          const c = f.properties && f.properties.eia_classe;
+          const p = f.properties || {};
+          const c = p.eia_classe;
           if (c === undefined || c === null || c === '') continue;
-          visto.set(String(c), (visto.get(String(c)) || 0) + 1);
+          const chave = String(c);
+          const atual = visto.get(chave);
+          if (atual) atual.contagem += 1;
+          else visto.set(chave, { contagem: 1, exemplos: p });
         }
         porCamada[r.camada.id] = visto;
       }
+      /* A COLUNA DA LEGENDA ESCOLHIDA PELO USUÁRIO (aba "Rótulo" de cada camada).
+       *
+       * Cada classe vira `{ classe, rotulo }`: a COR sai da classe (é o renderizador de origem que
+       * a define, e é o que mantém o quadradinho igual ao mapa) e o TEXTO sai da coluna escolhida,
+       * lida no exemplo daquela classe. Sem coluna escolhida — ou sem valor na feição —, o rótulo é
+       * a própria sigla, como era antes: nada muda para quem não mexeu. */
       const classesPorCamada = {};
       for (const id of Object.keys(porCamada)) {
-        classesPorCamada[id] = Array.from(porCamada[id].entries())
-          .sort((a, b) => b[1] - a[1]).map(([classe]) => classe);
+        const campo = (estado.legendas || {})[id];
+        const lista = Array.from(porCamada[id].entries())
+          .sort((a, b) => b[1].contagem - a[1].contagem);
+        classesPorCamada[id] = lista.map(([classe, info]) => {
+          if (!campo) return classe;
+          const bruto = info.exemplos[campo];
+          const texto = (bruto === undefined || bruto === null) ? '' : String(bruto).trim();
+          return texto ? { classe: classe, rotulo: texto } : classe;
+        });
       }
       const modeloFolha = EIA.folhaHtml.montarFolha(Object.assign({}, e, {
         escala: escalaVista,
