@@ -2803,24 +2803,47 @@
        * lida no exemplo daquela classe. Sem coluna escolhida — ou sem valor na feição —, o rótulo é
        * a própria sigla, como era antes: nada muda para quem não mexeu. */
       const classesPorCamada = {};
-      for (const id of Object.keys(porCamada)) {
-        /* A LEGENDA SEGUE O MAPA, a não ser que o usuário escolha outra coluna só para ela.
+      for (const c of estado.camadas) {
+        if (!c || !c.id) continue;
+        const doRecorte = porCamada[c.id];
+        const campo = (estado.legendas || {})[c.id] || (estado.rotulos || {})[c.id];
+
+        /* OS NOMES VÊM DA PRÓPRIA CAMADA, E NÃO DO RECORTE.
          *
-         * O cliente relatou: "selecionei a coluna nome unidades para aparecer no mapa, mas na prévia
-         * aparecem as siglas". Ele tinha razão em esperar isso — e o erro foi meu, de produto: criei
-         * dois seletores parecidos, lado a lado, e não disse que eram independentes. Quem escolhe
-         * "NOME_UNIDA" para escrever no mapa espera a MESMA coisa na legenda.
+         * Aqui estava o defeito que o cliente relatou ("aparecem as siglas"). Eu lia as propriedades
+         * de `estado.resultados`, que só existe DEPOIS de recortar. Quem apenas abre a prancha, sem
+         * recortar, não tinha onde buscar o nome — e a legenda caía nas classes do catálogo, ou
+         * seja, nas siglas. Exatamente o que ele viu.
          *
-         * A ordem é: a coluna escolhida PARA A LEGENDA; senão a coluna escolhida PARA O MAPA; senão
-         * a sigla da classe, como era antes. Assim o caso comum acerta sozinho, e quem quiser
-         * diferente continua podendo. */
-        const campo = (estado.legendas || {})[id] || (estado.rotulos || {})[id];
-        const lista = Array.from(porCamada[id].entries())
-          .sort((a, b) => b[1].contagem - a[1].contagem);
-        classesPorCamada[id] = lista.map(([classe, info]) => {
-          if (!campo) return classe;
-          const bruto = info.exemplos[campo];
-          const texto = (bruto === undefined || bruto === null) ? '' : String(bruto).trim();
+         * `camada.geojson` está carregado sempre que a camada está ligada, e TEM todos os campos: é a
+         * mesma fonte que desenha o mapa e que alimenta os rótulos de tela. Monto um mapa
+         * classe -> nome (uma vez por camada) e uso tanto o que veio do recorte quanto a lista
+         * completa da camada, conforme o caso. */
+        const nomes = new Map();
+        if (campo && c.geojson && c.geojson.features) {
+          for (const f of c.geojson.features) {
+            const p = f.properties || {};
+            const chave = String(p[c.campo_classe]);
+            if (!chave || chave === 'undefined' || nomes.has(chave)) continue;
+            const bruto = p[campo];
+            const texto = (bruto === undefined || bruto === null) ? '' : String(bruto).trim();
+            if (texto) nomes.set(chave, texto);
+          }
+        }
+
+        // as classes: as que o recorte achou (ordenadas por quantidade) ou a lista da camada
+        let classes;
+        if (doRecorte) {
+          classes = Array.from(doRecorte.entries())
+            .sort((a, b) => b[1].contagem - a[1].contagem)
+            .map(([classe]) => String(classe));
+        } else {
+          classes = (c.classes || []).map((x) => String(typeof x === 'string' ? x : (x && x.classe)));
+        }
+        if (!classes.length) continue;
+
+        classesPorCamada[c.id] = classes.map((classe) => {
+          const texto = nomes.get(classe);
           return texto ? { classe: classe, rotulo: texto } : classe;
         });
       }
