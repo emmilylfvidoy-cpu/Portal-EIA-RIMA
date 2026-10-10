@@ -222,7 +222,11 @@
 }
 .chapa-projeto { margin: 0 0 1.2mm; font-size: 6.6pt; text-align: center; color: #43535d; min-height: 2.6mm; }
 .chapa-tabela {
-  width: 100%; border-collapse: collapse; table-layout: fixed;
+  width: 100%; border-collapse: collapse;
+  /* LARGURA AUTOMÁTICA. Com `table-layout: fixed` e quatro colunas iguais (depois 17/19/32/32), a
+     data "10/10/2026" quebrava no meio — o cliente viu "10/10/2 026". Aqui o NAVEGADOR distribui a
+     largura pelo conteúdo, que é justamente o que ele faz bem e o que eu estava atrapalhando. */
+  table-layout: auto;
   margin-bottom: 1.2mm;
 }
 /* O NOME COMPLETO, SEM CORTE.
@@ -238,11 +242,8 @@
 }
 .chapa-tabela th { background: #eef2f5; font-weight: 700; color: #55636d; }
 .chapa-tabela td { min-height: 3mm; }
-/* data e escala são curtos; os nomes precisam do dobro do espaço */
-.chapa-tabela th:nth-child(1), .chapa-tabela td:nth-child(1) { width: 17%; }
-.chapa-tabela th:nth-child(2), .chapa-tabela td:nth-child(2) { width: 19%; }
-.chapa-tabela th:nth-child(3), .chapa-tabela td:nth-child(3) { width: 32%; }
-.chapa-tabela th:nth-child(4), .chapa-tabela td:nth-child(4) { width: 32%; }
+/* data e escala não devem quebrar: são curtos e o valor tem de ser lido de uma vez */
+.chapa-tabela td:nth-child(1), .chapa-tabela td:nth-child(2) { white-space: nowrap; }
 .chapa-logos {
   display: flex; align-items: center; justify-content: space-around; gap: 2mm;
   min-height: 12mm; margin-bottom: 1mm;

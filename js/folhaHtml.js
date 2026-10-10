@@ -104,7 +104,10 @@
       titulo: e.titulo || '',
       projeto: e.projeto || '',
       data: e.data || '',
-      desenhista: e.deshista === undefined ? (e.desenho || '') : e.deshista,
+      /* O NOME DO DESENHO NÃO APARECIA, e era erro meu de nome de campo: eu lia `e.deshista` (com o
+       * "i" trocado) e o app manda `desenhista`. O campo estava preenchido na tela e a chapa saía
+       * vazia. É o quarto defeito desta família na sessão — nome de campo escrito de memória. */
+      desenhista: e.desenhista || e.desenho || '',
       verificador: e.verificador || '',
       responsavel: e.responsavel || '',
       crea: e.crea || '',
@@ -137,10 +140,12 @@
       + ' style="--folha-largura:' + m.larguraMm + 'mm;--folha-altura:' + m.alturaMm + 'mm">');
     p.push('<div class="folha-moldura">');
 
-    // ---- cabeçalho
+    // ---- cabeçalho: SÓ O TÍTULO, numa linha acima do quadro.
+    // O cliente pediu para tirar o nome do mapa e do projeto "em cima" e deixar "apenas acima do
+    // quadro": o título fica como uma linha enxuta logo acima do mapa, e o projeto vive na chapa,
+    // que é onde ele identifica a folha. A faixa que sobra vai para o mapa.
     p.push('<header class="folha-cabecalho">');
     if (m.titulo) p.push('<h1 class="titulo">' + escapar(m.titulo) + '</h1>');
-    if (m.projeto) p.push('<p class="projeto">' + escapar(m.projeto) + '</p>');
     p.push('</header>');
 
     // ---- mapa, com os rótulos de coordenada nas canaletas

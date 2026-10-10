@@ -440,9 +440,25 @@
     $('btn-agrupamento-padrao').onclick = limparAgrupamento;
     $('logos').onchange = (ev) => carregarLogos(Array.from(ev.target.files || []));
     $('articulado').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
-    // a escala é digitada pelo usuário: o mapa vai para ela (ver aplicarEscalaDigitada)
-    $('escala').onchange = aplicarEscalaDigitada;
-    $('escala').onkeydown = (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); aplicarEscalaDigitada(); } };
+    /* A ESCALA SE APLICA ENQUANTO SE DIGITA, COM UMA ESPERA.
+     *
+     * O cliente digitou 250000 e o mapa não foi para 1:250.000: o `change` do campo só dispara ao
+     * SAIR dele, e ele estava olhando a tela antes disso. Mas aplicar a cada tecla faria o mapa
+     * pular em "2", "25", "250"... então há uma espera de 700 ms: quando a digitação para, o mapa
+     * vai — sem precisar apertar nada. O Enter continua valendo para quem preferir. */
+    let esperaEscala = null;
+    const agendarEscala = () => {
+      if (esperaEscala) clearTimeout(esperaEscala);
+      esperaEscala = setTimeout(() => { esperaEscala = null; aplicarEscalaDigitada(); }, 700);
+    };
+    $('escala').oninput = agendarEscala;
+    $('escala').onchange = agendarEscala;
+    $('escala').onkeydown = (ev) => {
+      if (ev.key !== 'Enter') return;
+      ev.preventDefault();
+      if (esperaEscala) { clearTimeout(esperaEscala); esperaEscala = null; }
+      aplicarEscalaDigitada();
+    };
     $('folha').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
     $('orientacao').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
 
