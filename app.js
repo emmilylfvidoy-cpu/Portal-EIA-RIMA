@@ -2744,7 +2744,33 @@
           if (datum === 'WGS84') epsg = 'EPSG:' + (32700 + EIA.crs.fusoDe(centroLon));
           return EIA.crs.gradeUtm(ext, epsg, 4);
         })(),
-        legenda: EIA.folhaHtml.legendaPorMeio(estado.camadas, classesPorCamada),
+        /* AS ÁREAS DE INFLUÊNCIA DO USUÁRIO TAMBÉM SÃO LEGENDA.
+         *
+         * Elas estão no mapa e não apareciam: a legenda só olhava o catálogo, e o que o usuário
+         * subiu ficava sem identificação na prancha. O nome que aparece é o que ele deu ao arquivo —
+         * é assim que ele reconhece a própria área —, e a forma é LINHA, porque a área de influência
+         * vai desenhada como divisa, não como mancha de cor. */
+        legenda: (function () {
+          const grupos = EIA.folhaHtml.legendaPorMeio(estado.camadas, classesPorCamada);
+          const areas = (estado.areas || []).filter((a) => a && (a.nome || a.sigla));
+          if (areas.length) {
+            grupos.push({
+              id: 'areas-influencia',
+              nome: 'Áreas de influência',
+              camadas: [{
+                id: 'areas-influencia',
+                nome: 'Áreas do usuário',
+                aparencia: 'linha',
+                itens: areas.map((a) => ({
+                  rotulo: (a.sigla ? a.sigla + ' — ' : '') + (a.nome || a.sigla),
+                  cor: a.cor || '#d94f3d',
+                  forma: 'linha',
+                })),
+              }],
+            });
+          }
+          return grupos;
+        })(),
         // o contorno do estado para a articulação (js/uf-sp.js), com a caixa geográfica dele
         uf: (EIA.ufSp && EIA.ufSp.caminho) ? EIA.ufSp : null,
         logos: (estado.logos || []).map((l) => ({ href: l.dataUrl })),
