@@ -788,12 +788,18 @@
     estado.legendas = estado.legendas || {};
     const escolhaAtual = estado.legendas[camada.id];
     const colunasAtuais = Array.isArray(escolhaAtual) ? escolhaAtual : (escolhaAtual ? [escolhaAtual] : []);
-    const etiquetaLeg = document.createElement('span');
-    etiquetaLeg.className = 'controle-rotulo';
-    etiquetaLeg.textContent = 'Coluna da legenda';
-    paineis.rotulo.appendChild(etiquetaLeg);
     const seletoresLeg = [];
     for (let pos = 0; pos < 2; pos++) {
+      /* DOIS CAMPOS, CADA UM COM O SEU RÓTULO.
+       *
+       * Antes os dois seletores vinham sob um rótulo só ("Coluna da legenda"), e o cliente não
+       * percebeu que existiam dois — o segundo ficava abaixo do primeiro e parecia continuação. Um
+       * campo por linha, com "1ª" e "2ª" escritos, não deixa dúvida de que são duas escolhas. */
+      const rotuloLeg = document.createElement('span');
+      rotuloLeg.className = 'controle-rotulo';
+      rotuloLeg.textContent = pos === 0 ? 'Coluna da legenda (1ª)' : 'Coluna da legenda (2ª)';
+      paineis.rotulo.appendChild(rotuloLeg);
+
       const sel = document.createElement('select');
       sel.className = 'seletor-rotulo';
       const vazio = document.createElement('option');
