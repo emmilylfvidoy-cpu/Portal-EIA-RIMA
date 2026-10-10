@@ -773,44 +773,52 @@
     paineis.rotulo.appendChild(etiquetaRot);
     paineis.rotulo.appendChild(seletor);
 
-    /* COLUNA DA LEGENDA — "escolher qual coluna aparecer na legenda", pedido do cliente.
+    /* COLUNA DA LEGENDA — AGORA DUAS, COMBINADAS PELO USUÁRIO.
      *
-     * Parecido com o seletor de cima, e a diferença importa: o de cima escreve no MAPA, este escreve
-     * na LEGENDA. Aqui a COR continua vindo da classe — é o renderizador de origem que a define, e
-     * sem isso o quadradinho perderia a cor certa. O que muda é o NOME ao lado dele: "A34atg" passa a
-     * ser "Coberturas detríticas indiferenciadas". O valor sai de uma feição representativa daquela
-     * classe (a primeira que aparecer com ela), porque é a feição que carrega os nomes. */
+     * Pedido do cliente: "ter uma associação de duas colunas tipo 'nome unidade' + 'sigla unidade',
+     * mas o usuário que define isso". São duas escolhas independentes, na ORDEM em que aparecem: a
+     * primeira vem antes, a segunda depois, separadas por travessão. Uma só resolve o caso comum; as
+     * duas dão o rótulo completo — "Coberturas detríticas indiferenciadas — Qdi".
+     *
+     * A COR CONTINUA VINDO DA CLASSE, e isso não muda: é o renderizador de origem que a define, e é
+     * o que mantém o quadradinho igual ao mapa. O que muda é o TEXTO ao lado dele.
+     *
+     * A escolha é gravada como LISTA quando há duas colunas e como texto quando há uma, para não
+     * quebrar projeto salvo antes disto. */
+    estado.legendas = estado.legendas || {};
+    const escolhaAtual = estado.legendas[camada.id];
+    const colunasAtuais = Array.isArray(escolhaAtual) ? escolhaAtual : (escolhaAtual ? [escolhaAtual] : []);
     const etiquetaLeg = document.createElement('span');
     etiquetaLeg.className = 'controle-rotulo';
     etiquetaLeg.textContent = 'Coluna da legenda';
-    const seletorLeg = document.createElement('select');
-    seletorLeg.className = 'seletor-rotulo';
-    const opClasseLeg = document.createElement('option');
-    opClasseLeg.value = '';
-    /* "SEGUIR O MAPA", e não "sigla da classe": quando nada é escolhido aqui, a legenda usa a MESMA
-     * coluna que o seletor de cima — assim quem escolhe "NOME_UNIDA" para o mapa vê os nomes também
-     * na legenda, sem precisar escolher duas vezes. Foi a confusão que o cliente teve. */
-    opClasseLeg.textContent = '(seguir o mapa)';
-    seletorLeg.appendChild(opClasseLeg);
-    for (const campo of camposParaRotulo(camada)) {
-      const op = document.createElement('option');
-      op.value = campo;
-      op.textContent = campo + (campo === camada.campo_classe ? '  (classe do mapa)' : '');
-      seletorLeg.appendChild(op);
-    }
-    estado.legendas = estado.legendas || {};
-    seletorLeg.value = estado.legendas[camada.id] || '';
-    seletorLeg.onchange = () => {
-      estado.legendas = estado.legendas || {};
-      if (seletorLeg.value) estado.legendas[camada.id] = seletorLeg.value;
-      else delete estado.legendas[camada.id];
-      // a legenda é montada na hora de abrir a prévia: sem dizer isso, a mudança parece não ter efeito
-      status(seletorLeg.value
-        ? 'A legenda desta camada vai escrever a coluna "' + seletorLeg.value + '". Clique em "Abrir prévia e exportar" para ver.'
-        : 'A legenda volta a escrever a sigla da classe. Clique em "Abrir prévia e exportar" para ver.');
-    };
     paineis.rotulo.appendChild(etiquetaLeg);
-    paineis.rotulo.appendChild(seletorLeg);
+    const seletoresLeg = [];
+    for (let pos = 0; pos < 2; pos++) {
+      const sel = document.createElement('select');
+      sel.className = 'seletor-rotulo';
+      const vazio = document.createElement('option');
+      vazio.value = '';
+      vazio.textContent = pos === 0 ? '(seguir o mapa)' : '(sem segunda coluna)';
+      sel.appendChild(vazio);
+      for (const campo of camposParaRotulo(camada)) {
+        const op = document.createElement('option');
+        op.value = campo;
+        op.textContent = campo + (campo === camada.campo_classe ? '  (classe do mapa)' : '');
+        sel.appendChild(op);
+      }
+      sel.value = colunasAtuais[pos] || '';
+      sel.onchange = () => {
+        const escolhidas = seletoresLeg.map((s) => s.value).filter(Boolean);
+        if (escolhidas.length) estado.legendas[camada.id] = escolhidas;
+        else delete estado.legendas[camada.id];
+        // a legenda é montada ao abrir a prévia: sem dizer isso, a mudança parece não ter efeito
+        status(escolhidas.length
+          ? 'A legenda desta camada vai escrever: ' + escolhidas.join(' + ') + '. Clique em "Abrir prévia e exportar" para ver.'
+          : 'A legenda desta camada volta a seguir o mapa. Clique em "Abrir prévia e exportar" para ver.');
+      };
+      seletoresLeg.push(sel);
+      paineis.rotulo.appendChild(sel);
+    }
 
     // ---- linha: cor, tipo de traço e grossura do CONTORNO da camada
     // A divisa que se lê bem na tela some num mapa 1:5.000 impresso; e cor única ajuda
@@ -2851,7 +2859,12 @@
           for (const c of (estado.camadas || [])) {
             if (!c || !c.id) continue;
             const feicoes = (c.geojson && c.geojson.features) || [];
-            const campo = (estado.legendas || {})[c.id] || (estado.rotulos || {})[c.id];
+            /* As colunas: UMA OU DUAS, combinadas pelo usuário na ordem que ele escolheu. Se nada foi
+             * escolhido, a legenda segue o que está escrito no mapa (e, sem isso, a sigla da classe).
+             * A escolha pode vir como texto (uma coluna) ou lista (duas) — projeto salvo antes disto
+             * continua funcionando. */
+            const escolha = (estado.legendas || {})[c.id] || (estado.rotulos || {})[c.id];
+            const campos = Array.isArray(escolha) ? escolha : (escolha ? [escolha] : []);
             const contagem = new Map();
             const nomes = new Map();
             for (const f of feicoes) {
@@ -2863,10 +2876,15 @@
               const chave = String(p[c.campo_classe]);
               if (!chave || chave === 'undefined' || chave === 'null') continue;
               contagem.set(chave, (contagem.get(chave) || 0) + 1);
-              if (campo && !nomes.has(chave)) {
-                const bruto = p[campo];
-                const texto = (bruto === undefined || bruto === null) ? '' : String(bruto).trim();
-                if (texto) nomes.set(chave, texto);
+              if (campos.length && !nomes.has(chave)) {
+                // as colunas na ordem escolhida, separadas por travessão: "Nome da unidade — Qdi"
+                const partes = [];
+                for (const campo of campos) {
+                  const bruto = p[campo];
+                  const texto = (bruto === undefined || bruto === null) ? '' : String(bruto).trim();
+                  if (texto) partes.push(texto);
+                }
+                if (partes.length) nomes.set(chave, partes.join(' — '));
               }
             }
             if (!contagem.size) continue;   // nada desta camada está no mapa: fora da legenda
