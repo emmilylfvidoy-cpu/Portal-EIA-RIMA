@@ -2888,7 +2888,34 @@
          * é assim que ele reconhece a própria área —, e a forma é LINHA, porque a área de influência
          * vai desenhada como divisa, não como mancha de cor. */
         legenda: (function () {
-          const grupos = EIA.folhaHtml.legendaPorMeio(estado.camadas, classesPorCamada);
+          /* SÓ AS CAMADAS QUE ESTÃO NO ENQUADRAMENTO.
+           *
+           * Pedido do cliente: "na legenda apareça só os layers que estão enquadrados no mapa".
+           *
+           * O TESTE É POR FEIÇÃO, e não pela caixa da camada. A caixa da Geologia cobre o estado
+           * inteiro: qualquer vista dentro de São Paulo intersectaria essa caixa, e a legenda
+           * continuaria anunciando camadas que não têm nada ali — o filtro pareceria funcionar e não
+           * filtraria nada. O que responde à pergunta é: alguma FEIÇÃO desta camada cai na vista?
+           *
+           * A área de influência NÃO passa por este filtro: ela é a referência do mapa e o cliente
+           * a quer identificada, mesmo que parte dela saia do quadro. */
+          const ext = (function () {
+            try {
+              const b = estado.mapa.getBounds();
+              return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
+            } catch (err) { return null; }
+          })();
+          const temFeicaoNaVista = (c) => {
+            // sem medida ou sem dado, NÃO esconde: esconder por falta de informação é pior que mostrar
+            if (!ext || !c || !c.geojson || !c.geojson.features) return true;
+            for (const f of c.geojson.features) {
+              const bb = EIA.math.bbox({ type: 'FeatureCollection', features: [f] });
+              if (bb && EIA.math.bboxIntersecta(bb, ext)) return true;
+            }
+            return false;
+          };
+          const visiveis = (estado.camadas || []).filter(temFeicaoNaVista);
+          const grupos = EIA.folhaHtml.legendaPorMeio(visiveis, classesPorCamada);
           const areas = (estado.areas || []).filter((a) => a && (a.nome || a.sigla));
           if (areas.length) {
             grupos.push({
