@@ -256,8 +256,20 @@
      * as camadas de caracterização subiam por cima das áreas de influência do usuário, e as
      * áreas "sumiam" sem ninguém pedir. Painel próprio com número resolve: a ordem passa a ser
      * ESTADO, não efeito de quem foi adicionado por último. */
+    /* A ORDEM É DEFINIDA NA CRIAÇÃO — e a doença já estava descrita aqui em cima, faltava aplicar.
+     *
+     * Estes dois painéis eram criados SEM z-index. Quem não tem número é ordenado pelo DOM, e os
+     * painéis das camadas de caracterização (um por camada, criados depois) ficavam por cima: foi
+     * assim que a geologia cobriu a área de influência do usuário, que reclamou disso.
+     *
+     * Os números saem das MESMAS funções que o resto do portal usa (`zIndexDasAreas`,
+     * `zIndexDoResultado`), para não existirem duas contas para a mesma ordem. Com 19 camadas: as
+     * áreas em 421 e o recorte em 420, acima das camadas (até 418) e abaixo dos rótulos (600). */
     mapa.createPane('pane-areas');
+    mapa.getPane('pane-areas').style.zIndex =
+      EIA.mapa.zIndexDasAreas(estado.ordemCamadas || [], estado.areasAcima !== false);
     mapa.createPane('pane-resultado');
+    mapa.getPane('pane-resultado').style.zIndex = EIA.mapa.zIndexDoResultado(estado.ordemCamadas || []);
     // A camada de km fica acima das camadas de caracterização (é referência de localização,
     // precisa ser vista) e abaixo dos rótulos e do marcador da busca.
     mapa.createPane('pane-km');

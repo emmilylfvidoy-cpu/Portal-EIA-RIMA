@@ -140,13 +140,9 @@
       + ' style="--folha-largura:' + m.larguraMm + 'mm;--folha-altura:' + m.alturaMm + 'mm">');
     p.push('<div class="folha-moldura">');
 
-    // ---- cabeçalho: SÓ O TÍTULO, numa linha acima do quadro.
-    // O cliente pediu para tirar o nome do mapa e do projeto "em cima" e deixar "apenas acima do
-    // quadro": o título fica como uma linha enxuta logo acima do mapa, e o projeto vive na chapa,
-    // que é onde ele identifica a folha. A faixa que sobra vai para o mapa.
-    p.push('<header class="folha-cabecalho">');
-    if (m.titulo) p.push('<h1 class="titulo">' + escapar(m.titulo) + '</h1>');
-    p.push('</header>');
+    /* SEM CABEÇALHO. O cliente pediu para tirar o nome de cima: o título da folha vive na CHAPA,
+     * que é onde ele identifica o documento — e a faixa que sobra vai toda para o mapa. O elemento
+     * não é emitido, e não apenas escondido, para não deixar espaço vazio na prancha. */
 
     // ---- mapa, com os rótulos de coordenada nas canaletas
     p.push('<div class="folha-corpo">');

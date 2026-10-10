@@ -32,24 +32,10 @@
   box-sizing: border-box;
 }
 
-/* ---------------------------------------------------------------- cabeçalho */
-.folha-cabecalho {
-  flex: 0 0 auto;
-  padding: 3mm 4mm 2mm;
-  border-bottom: 0.2mm solid #1f2d36;
-  text-align: center;
-}
-.folha-cabecalho .titulo {
-  margin: 0;
-  font-size: 13pt;
-  font-weight: 700;
-  letter-spacing: .02em;
-}
-.folha-cabecalho .projeto {
-  margin: .8mm 0 0;
-  font-size: 8pt;
-  color: #43535d;
-}
+/* ---------------------------------------------------------------- (sem cabeçalho)
+ * Havia aqui um bloco `.folha-cabecalho`. Ele saiu junto com o título de cima: o cliente pediu para
+ * não ter o nome acima do mapa, e o título da folha vive na chapa. O elemento não é mais emitido
+ * pelo modelo, então manter o estilo seria deixar código morto no CSS. */
 
 /* ---------------------------------------------------------------- o mapa */
 .folha-corpo {
