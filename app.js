@@ -787,7 +787,10 @@
     seletorLeg.className = 'seletor-rotulo';
     const opClasseLeg = document.createElement('option');
     opClasseLeg.value = '';
-    opClasseLeg.textContent = '(sigla da classe)';
+    /* "SEGUIR O MAPA", e não "sigla da classe": quando nada é escolhido aqui, a legenda usa a MESMA
+     * coluna que o seletor de cima — assim quem escolhe "NOME_UNIDA" para o mapa vê os nomes também
+     * na legenda, sem precisar escolher duas vezes. Foi a confusão que o cliente teve. */
+    opClasseLeg.textContent = '(seguir o mapa)';
     seletorLeg.appendChild(opClasseLeg);
     for (const campo of camposParaRotulo(camada)) {
       const op = document.createElement('option');
@@ -2801,7 +2804,17 @@
        * a própria sigla, como era antes: nada muda para quem não mexeu. */
       const classesPorCamada = {};
       for (const id of Object.keys(porCamada)) {
-        const campo = (estado.legendas || {})[id];
+        /* A LEGENDA SEGUE O MAPA, a não ser que o usuário escolha outra coluna só para ela.
+         *
+         * O cliente relatou: "selecionei a coluna nome unidades para aparecer no mapa, mas na prévia
+         * aparecem as siglas". Ele tinha razão em esperar isso — e o erro foi meu, de produto: criei
+         * dois seletores parecidos, lado a lado, e não disse que eram independentes. Quem escolhe
+         * "NOME_UNIDA" para escrever no mapa espera a MESMA coisa na legenda.
+         *
+         * A ordem é: a coluna escolhida PARA A LEGENDA; senão a coluna escolhida PARA O MAPA; senão
+         * a sigla da classe, como era antes. Assim o caso comum acerta sozinho, e quem quiser
+         * diferente continua podendo. */
+        const campo = (estado.legendas || {})[id] || (estado.rotulos || {})[id];
         const lista = Array.from(porCamada[id].entries())
           .sort((a, b) => b[1].contagem - a[1].contagem);
         classesPorCamada[id] = lista.map(([classe, info]) => {
