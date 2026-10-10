@@ -3024,8 +3024,55 @@
         falhas.push(rotulo + ': ' + ((e && e.name) || 'erro'));
       }
     }
-    container.querySelectorAll('img.leaflet-tile').forEach((img) => copiar(img, 'imagem de fundo'));
-    container.querySelectorAll('canvas').forEach((c) => copiar(c, 'camada vetorial'));
+    /* A ORDEM DA CAPTURA É A ORDEM DE EMPILHAMENTO, NÃO A DO DOM.
+     *
+     * Defeito 1: as camadas vetoriais são canvas, e eu copiava TODOS os canvas na ordem em que
+     * aparecem no DOM — que é a ordem de CRIAÇÃO dos painéis. O painel das áreas de influência é
+     * criado ANTES dos painéis das camadas (e o cliente pediu para as áreas ficarem por CIMA), então
+     * a área saía embaixo na prancha mesmo estando em cima na tela. A tela usa z-index; a captura
+     * passa a usar o mesmo critério, e não um critério próprio.
+     */
+    const paineis = Array.prototype.slice.call(container.querySelectorAll('.leaflet-pane'))
+      .sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0));
+    for (const painel of paineis) {
+      painel.querySelectorAll('img.leaflet-tile').forEach((img) => copiar(img, 'imagem de fundo'));
+      painel.querySelectorAll('canvas').forEach((c) => copiar(c, 'camada vetorial'));
+    }
+
+    /* OS RÓTULOS DO MAPA SÃO TEXTO, E TEXTO NÃO SE COPIA.
+     *
+     * Defeito 2: as etiquetas das unidades são elementos de texto (div), e a captura só copiava
+     * imagens e canvas — por isso a prancha saía SEM NENHUM RÓTULO, com eles bem visíveis na tela.
+     * Aqui eles são DESENHADOS no canvas, na posição e com a fonte que o navegador está usando: a
+     * medida e o estilo vêm do próprio elemento (`getBoundingClientRect` e `getComputedStyle`), então
+     * não há número escolhido no olho. O halo branco é o mesmo recurso que a tela usa para o texto
+     * não se perder sobre a imagem. */
+    container.querySelectorAll('.leaflet-tooltip, .rotulo-mapa').forEach((el) => {
+      try {
+        /* A MEDIDA É DO TEXTO, NÃO DA CAIXA. O estilo de fonte do rótulo mora no `<span>` interno
+         * (`.rotulo-mapa span`, no style.css): medir o `<div>` de fora daria a fonte padrão, e o
+         * rótulo sairia no tamanho errado — silenciosamente, que é o pior jeito de errar. */
+        const alvo = el.querySelector('span') || el;
+        const r = alvo.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        const texto = (alvo.textContent || '').trim();
+        if (!texto) return;
+        const cs = window.getComputedStyle(alvo);
+        const x = (r.left - rc.left + r.width / 2) * fatorInt;
+        const y = (r.top - rc.top + r.height / 2) * fatorInt;
+        ci.font = (cs.fontStyle || 'normal') + ' ' + (cs.fontWeight || 'normal') + ' '
+          + (parseFloat(cs.fontSize) * fatorInt) + 'px ' + (cs.fontFamily || 'sans-serif');
+        ci.textAlign = 'center';
+        ci.textBaseline = 'middle';
+        ci.lineWidth = Math.max(1, 3 * fatorInt);
+        ci.strokeStyle = 'rgba(255, 255, 255, .92)';
+        ci.strokeText(texto, x, y);
+        ci.fillStyle = cs.color || '#333333';
+        ci.fillText(texto, x, y);
+      } catch (e) {
+        falhas.push('rotulo: ' + ((e && e.name) || 'erro'));
+      }
+    });
 
     // a imagem já está capturada: devolve a vista do usuário ANTES de qualquer erro daqui para baixo
     mapa.setView(vistaAntes.centro, vistaAntes.zoom, { animate: false });
