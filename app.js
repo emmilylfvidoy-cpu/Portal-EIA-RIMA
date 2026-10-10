@@ -119,10 +119,17 @@
       center: centro,
       zoom: 6,
       zoomControl: false,
-      /* ZOOM FINO, E O MOTIVO: a escala da folha é calculada do zoom. Com o passo inteiro padrão,
-       * uma escala digitada (1:250.000) cairia na potência de 2 mais próxima e voltaria a não
-       * bater — que é exatamente a reclamação do cliente. Com 0,05 o mapa atende a escala pedida. */
-      zoomSnap: 0.05,
+      /* ZOOM SEM ARREDONDAMENTO, E O MOTIVO — que eu aprendi com o cliente.
+       *
+       * A escala da folha é calculada DO ZOOM. Com qualquer passo (`zoomSnap`), o zoom pedido é
+       * arredondado e a escala sai torta: com 0,05 — que eu tinha posto achando que era fino o
+       * bastante — cada passo vale cerca de 3,5% na escala, e quem digitava 400.000 recebia
+       * 403.310. Com ZERO não há arredondamento: o zoom é o que a conta pediu e a escala é
+       * exatamente a digitada.
+       *
+       * O que se perde: os botões + e − passam a andar de `zoomDelta` em `zoomDelta` (0,5), e a
+       * roda do mouse fica contínua — que é o comportamento dos SIGs, e não um defeito. */
+      zoomSnap: 0,
       zoomDelta: 0.5,
       preferCanvas: true,
       renderer: L.canvas({ padding: 0.4, preserveDrawingBuffer: true }),
