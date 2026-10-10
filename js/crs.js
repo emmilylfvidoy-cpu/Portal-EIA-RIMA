@@ -226,6 +226,55 @@
     };
   }
 
+  /* ------------------------------------------------------------------ GRADE EM UTM
+   *
+   * A prancha de referência do cliente escreve LESTE/NORTE em UTM nas bordas (449800, 7409900), não
+   * graus. Estas duas funções fazem isso, e ficam AQUI — junto da conversão que já existia — para
+   * serem testáveis sem navegador, como o resto do módulo.
+   *
+   * Detalhe que importa: o LESTE de um ponto depende também da LATITUDE (convergência de
+   * meridianos), e o NORTE depende da LONGITUDE. Por isso o rótulo de cima é medido na borda de
+   * CIMA e o da esquerda na borda ESQUERDA — medir no meio daria um número que não corresponde à
+   * linha onde ele está escrito.
+   */
+  /* `deGeografico` recebe um PAR [lon, lat] — e não uma geometria, como eu supus ao escrever esta
+   * função da primeira vez. A suposição deu NaN em toda a grade, e o defeito só apareceu porque eu
+   * conferi o número: um UTM em São Paulo tem de cair em ~E 400.000 e ~N 7.400.000, e "NaN" não cai
+   * em lugar nenhum. Quinta vez na sessão que eu adivinho uma assinatura em vez de ler. */
+  function paraUtm(lon, lat, epsg) {
+    const p = deGeografico([Number(lon), Number(lat)], epsg);
+    if (!p || p.length < 2 || !isFinite(p[0]) || !isFinite(p[1])) return [NaN, NaN];
+    return p;
+  }
+
+  /** Em UTM, 10 m já é precisão de sobra para um rótulo de borda de prancha. */
+  function formatarUtm(valor, sufixo) {
+    if (!isFinite(valor)) return '';
+    const arredondado = Math.round(valor / 10) * 10;
+    return String(arredondado).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ' + sufixo;
+  }
+
+  function gradeUtm(extensao, epsg, passos) {
+    const n = Number(passos) > 0 ? Number(passos) : 4;
+    const topo = [];
+    const esquerda = [];
+    if (!extensao || extensao.length < 4) return { topo: topo, esquerda: esquerda };
+    for (let i = 0; i <= n; i++) {
+      const lon = extensao[0] + (extensao[2] - extensao[0]) * i / n;
+      const lat = extensao[1] + (extensao[3] - extensao[1]) * i / n;
+      const leste = paraUtm(lon, extensao[3], epsg)[0];
+      const norte = paraUtm(extensao[0], lat, epsg)[1];
+      topo.push({ pos: (i / n * 100).toFixed(1), texto: formatarUtm(leste, 'E') });
+      esquerda.push({ pos: ((1 - i / n) * 100).toFixed(1), texto: formatarUtm(norte, 'N') });
+    }
+    return { topo: topo, esquerda: esquerda };
+  }
+
+  /** O fuso UTM a partir da longitude (1 a 60). */
+  function fusoDe(lon) {
+    return Math.floor((Number(lon) + 180) / 6) + 1;
+  }
+
   return {
     DEFINICOES: DEFINICOES,
     definicao: definicao,
@@ -238,5 +287,9 @@
     paraGeografico: paraGeografico,
     deGeografico: deGeografico,
     diagnosticar: diagnosticar,
+    paraUtm: paraUtm,
+    formatarUtm: formatarUtm,
+    gradeUtm: gradeUtm,
+    fusoDe: fusoDe,
   };
 });

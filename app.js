@@ -2465,7 +2465,16 @@
       tituloChapa: $('titulo-mapa') ? $('titulo-mapa').value : '',
       desenhista: $('desenhista') ? $('desenhista').value : '',
       verificador: $('verificador') ? $('verificador').value : '',
-      datum: 'SIRGAS 2000 / UTM 23S · WGS 84',
+      /* O DATUM DA CHAPA VEM DO CAMPO, e o fuso, da longitude em tela — para o texto dizer
+       * exatamente o mesmo que a grade das bordas. Antes era fixo ("SIRGAS 2000 / UTM 23S"), e
+       * ficaria mentindo se o usuário escolhesse outro datum. */
+      datum: (function () {
+        const d = ($('datum') && $('datum').value) || 'SIRGAS2000';
+        const nomes = { SIRGAS2000: 'SIRGAS 2000', WGS84: 'WGS 84', SAD69: 'SAD 69' };
+        let fuso = 23;
+        try { fuso = EIA.crs.fusoDe(estado.mapa.getCenter().lng); } catch (err) { /* fica 23 */ }
+        return (nomes[d] || d) + ' / UTM ' + fuso + 'S';
+      })(),
       fonte: estado.camadas.map((c) => c.fonte).filter(Boolean).slice(0, 4).join(' · '),
       legenda: legendaAtual(),
       articulacao: art,
@@ -2691,6 +2700,14 @@
             return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
           } catch (err) { return null; }
         })(),
+        /* A GRADE EM UTM, COMO NA PRANCHA DE REFERÊNCIA.
+         *
+         * A referência do cliente escreve LESTE/NORTE em UTM nas bordas (449800, 7409900), não
+         * graus. O datum é escolhido por ele e entra na conversão.
+         *
+         * O EPSG sai do fuso (pela longitude) e do datum. Para SIRGAS 2000 e SAD 69 o próprio
+         * `math.epsgUTM` resolve; para WGS 84 ele devolve o código do SIRGAS, então a faixa
+         * 32701–32760 (WGS 84 / UTM nS) é aplicada aqui — regra conhecida, e explícita. */
         rotulos: (function () {
           const topo = [], esquerda = [];
           const ext = (function () {
@@ -2699,15 +2716,13 @@
               return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
             } catch (err) { return null; }
           })();
-          if (ext) {
-            for (let i = 0; i <= 4; i++) {
-              const lon = ext[0] + (ext[2] - ext[0]) * i / 4;
-              const lat = ext[1] + (ext[3] - ext[1]) * i / 4;
-              topo.push({ pos: (i / 4 * 100).toFixed(1), texto: EIA.math.dms(lon, 'lon') });
-              esquerda.push({ pos: ((1 - i / 4) * 100).toFixed(1), texto: EIA.math.dms(lat, 'lat') });
-            }
-          }
-          return { topo: topo, esquerda: esquerda };
+          if (!ext) return { topo: topo, esquerda: esquerda };
+          const centroLon = (ext[0] + ext[2]) / 2;
+          const centroLat = (ext[1] + ext[3]) / 2;
+          const datum = ($('datum') && $('datum').value) || 'SIRGAS2000';
+          let epsg = EIA.math.epsgUTM(centroLat, centroLon, datum);
+          if (datum === 'WGS84') epsg = 'EPSG:' + (32700 + EIA.crs.fusoDe(centroLon));
+          return EIA.crs.gradeUtm(ext, epsg, 4);
         })(),
         legenda: EIA.folhaHtml.legendaPorMeio(estado.camadas, classesPorCamada),
         // o contorno do estado para a articulação (js/uf-sp.js), com a caixa geográfica dele

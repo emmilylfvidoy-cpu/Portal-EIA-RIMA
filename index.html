@@ -235,6 +235,14 @@
             </datalist>
           </div>
           <div>
+            <label for="datum">Datum e coordenadas</label>
+            <select id="datum">
+              <option value="SIRGAS2000" selected>SIRGAS 2000 — UTM (padrão)</option>
+              <option value="WGS84">WGS 84 — UTM</option>
+              <option value="SAD69">SAD 69 — UTM (sem correção de datum)</option>
+            </select>
+          </div>
+          <div>
             <label for="escala-auto">Ajuste</label>
             <button id="btn-escala-auto" class="botao">Calcular escala que cabe</button>
           </div>
