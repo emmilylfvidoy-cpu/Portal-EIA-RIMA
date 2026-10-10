@@ -92,6 +92,18 @@
 }
 .canaleta-topo span { transform: translateX(-50%); }
 .canaleta-esquerda span { right: 2mm; transform: translateY(-50%); }
+/* OS RÓTULOS DAS PONTAS NÃO PODEM PASSAR DA MOLDURA.
+ * O primeiro e o último ficavam CENTRADOS no próprio limite do mapa, então metade do texto saía
+ * para fora do quadro — foi o que o cliente viu e circulou ("o número do grid extrapola a linha do
+ * quadro do mapa"). Nas pontas o rótulo passa a alinhar POR DENTRO: o primeiro começa no limite
+ * esquerdo e o último termina no direito. O valor continua sendo o daquela coordenada. */
+.canaleta-topo span:first-child { transform: translateX(0); }
+.canaleta-topo span:last-child { transform: translateX(-100%); }
+/* o mesmo vale para os rótulos da esquerda — e ATENÇÃO À ORDEM: o primeiro é o de BAIXO
+   (a latitude sul, em top 100%) e o último é o de cima (a latitude norte, em top 0). Por isso o
+   primeiro sobe e o último desce, e não o contrário. */
+.canaleta-esquerda span:first-child { transform: translateY(-100%); }
+.canaleta-esquerda span:last-child { transform: translateY(0); }
 
 /* ---------------------------------------------------------------- rodapé */
 .folha-rodape {
@@ -213,12 +225,24 @@
   width: 100%; border-collapse: collapse; table-layout: fixed;
   margin-bottom: 1.2mm;
 }
+/* O NOME COMPLETO, SEM CORTE.
+ * As células tinham `white-space: nowrap` com reticências, e "FELIPE CALDEIRA" saía "Felipe Cal...".
+ * Nome de responsável técnico cortado num documento de EIA não é detalhe estético: é o campo que
+ * identifica quem assina. Agora a célula QUEBRA LINHA, e a linha cresce o que precisar. */
 .chapa-tabela th, .chapa-tabela td {
   border: 0.15mm solid #c3ced5; padding: .6mm .8mm; text-align: left;
-  font-size: 6pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 6pt;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  vertical-align: top;
 }
 .chapa-tabela th { background: #eef2f5; font-weight: 700; color: #55636d; }
 .chapa-tabela td { min-height: 3mm; }
+/* data e escala são curtos; os nomes precisam do dobro do espaço */
+.chapa-tabela th:nth-child(1), .chapa-tabela td:nth-child(1) { width: 17%; }
+.chapa-tabela th:nth-child(2), .chapa-tabela td:nth-child(2) { width: 19%; }
+.chapa-tabela th:nth-child(3), .chapa-tabela td:nth-child(3) { width: 32%; }
+.chapa-tabela th:nth-child(4), .chapa-tabela td:nth-child(4) { width: 32%; }
 .chapa-logos {
   display: flex; align-items: center; justify-content: space-around; gap: 2mm;
   min-height: 12mm; margin-bottom: 1mm;
