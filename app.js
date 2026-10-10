@@ -2759,12 +2759,17 @@
               nome: 'Áreas de influência',
               camadas: [{
                 id: 'areas-influencia',
-                nome: 'Áreas do usuário',
-                aparencia: 'linha',
+                /* SEM NOME DE CAMADA: o cliente não quer "Áreas do usuário" escrito na legenda — é
+                 * nome técnico, e o grupo "Áreas de influência" já diz o que é. O subtítulo só sai
+                 * quando existe nome. */
+                nome: '',
+                aparencia: 'poligono',
                 itens: areas.map((a) => ({
                   rotulo: (a.sigla ? a.sigla + ' — ' : '') + (a.nome || a.sigla),
                   cor: a.cor || '#d94f3d',
-                  forma: 'linha',
+                  /* RETÂNGULO PREENCHIDO COM A COR DO USUÁRIO, como ele pediu. A área é desenhada no
+                   * mapa como divisa, mas na legenda o que identifica é a COR que ele escolheu. */
+                  forma: 'poligono',
                 })),
               }],
             });
@@ -3205,6 +3210,29 @@
     };
     doc.getElementById('b-png').onclick = function () { baixarImagemDaFolha(janela, 'image/png', 'prancha-' + folha + '.png'); };
     doc.getElementById('b-jpg').onclick = function () { baixarImagemDaFolha(janela, 'image/jpeg', 'prancha-' + folha + '.jpg'); };
+
+    /* A LEGENDA NASCE EDITÁVEL — pedido do cliente: "poder alterar o nome das áreas", porque ele
+     * sobe um arquivo com um nome e quer outro na prancha.
+     *
+     * O caminho mais curto é o que combina com o plano B: o que está na tela É o que sai. Clicar no
+     * nome e escrever por cima muda o PDF, o PNG e o JPEG — sem formulário, sem tela de edição. A
+     * edição vale para ESTA janela: gerar a prancha de novo a refaz a partir dos nomes do portal, e
+     * isso fica dito na própria barra, para ninguém perder trabalho sem saber. */
+    const editaveis = doc.querySelectorAll('#papel .legenda-itens .rotulo');
+    for (let i = 0; i < editaveis.length; i++) {
+      editaveis[i].setAttribute('contenteditable', 'true');
+      editaveis[i].setAttribute('spellcheck', 'false');
+      editaveis[i].setAttribute('title', 'clique para renomear — vale para o PDF, o PNG e o JPEG');
+      editaveis[i].style.outline = 'none';
+      editaveis[i].addEventListener('focus', function () { this.style.background = '#fff8d8'; });
+      editaveis[i].addEventListener('blur', function () { this.style.background = ''; });
+    }
+    if (editaveis.length) {
+      const dica = doc.querySelector('.barra .dica');
+      if (dica) {
+        dica.textContent = 'clique num nome da legenda para renomear (vale para esta janela) · o PDF sai vetorial, no tamanho da folha';
+      }
+    }
     status('Prancha aberta em janela própria.');
   }
   if ($('btn-mapa-previa')) $('btn-mapa-previa').onclick = abrirPrevia;

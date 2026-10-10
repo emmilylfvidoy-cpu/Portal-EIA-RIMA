@@ -166,7 +166,10 @@
         p.push('<div class="legenda-meio"><h3>' + escapar(meio.nome) + '</h3>');
         for (const camada of meio.camadas) {
           p.push('<div class="legenda-camada">');
-          p.push('<h4>' + escapar(camada.nome) + '</h4>');
+          /* O SUBTÍTULO DA CAMADA SÓ SAI QUANDO EXISTE.
+           * O cliente reclamou de "Áreas do usuário" escrito na legenda: era o nome TÉCNICO do
+           * grupo, e não o que ele subiu. Sem nome, não há subtítulo — o grupo já identifica. */
+          if (camada.nome) p.push('<h4>' + escapar(camada.nome) + '</h4>');
           p.push('<ul class="legenda-itens">');
           for (const item of camada.itens) {
             p.push('<li class="forma-' + escapar(item.forma) + '">'
