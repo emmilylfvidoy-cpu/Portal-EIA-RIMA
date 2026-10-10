@@ -2658,9 +2658,17 @@
     const seq = ++previaSequencia;
     status('Montando a prévia do mapa…');
     try {
+      /* A RESOLUÇÃO VEM DO CAMPO. O alvo em pixels é a largura REAL da área do mapa na folha
+       * escolhida (mm ÷ 25,4 × dpi). "Real" quer dizer com o fator da folha: as caixas estão em
+       * milímetros de A1, e numa A3 a área do mapa tem 0,62 disso — a mesma armadilha que já me
+       * custou um defeito nesta sessão. */
+      const dpiEscolhido = Number(($('dpi') && $('dpi').value) || 150);
+      const caixaAlvo = EIA.pdf.caixaDoMapa($('folha').value, $('orientacao').value, {});
+      const larguraMapaMm = caixaAlvo.mapa.largura * (caixaAlvo.base || 1);
+      const larguraAlvoPx = Math.round(larguraMapaMm * dpiEscolhido / 25.4);
       // bbox nulo = "o que está na tela": o recorte é o enquadramento do usuário
-      const jpeg = await rasterizarMapa(null, caixaPrevia.mapa.largura, escalaVista,
-        caixaPrevia.mapa.altura / caixaPrevia.mapa.largura);
+      const jpeg = await rasterizarMapa(null, larguraMapaMm, escalaVista,
+        caixaPrevia.mapa.altura / caixaPrevia.mapa.largura, larguraAlvoPx);
       if (seq !== previaSequencia) return;   // outra prévia já foi pedida: esta não vale mais
       /* A PRÉVIA É A PRANCHA — E A PRANCHA É HTML/CSS (plano B).
        *
@@ -2827,7 +2835,65 @@
    *
    * `proporcao` é altura/largura da ÁREA DO MAPA na folha; o recorte é a FAIXA CENTRAL da vista,
    * nessa proporção, para não esticar a imagem. */
-  async function rasterizarMapa(bbox, larguraMm, escala, proporcao) {
+  /**
+   * RESOLUÇÃO DE IMPRESSÃO ESCOLHIDA PELO USUÁRIO ("igual no SIG").
+   *
+   * O PROBLEMA: a imagem do mapa era um recorte da TELA (~70 dpi), e é por isso que a satélite saía
+   * macia no papel. Não é limitação do dado — as peças de tile TÊM a resolução; numa A3 a 300 dpi o
+   * mapa precisa de ~4370 px e os tiles fornecem isso.
+   *
+   * O QUE NÃO SE PODE FAZER, e está documentado no `rasterizarMapaEmTamanho`: pedir ao Leaflet um
+   * quadro MAIOR faz ele escolher um zoom mais próximo (cada nível dobra a escala) e o serviço
+   * responde "Map data not yet available". Foi por isso que uma tentativa anterior devolveu o mundo
+   * inteiro e outra devolveu "sem dados".
+   *
+   * O QUE SE FAZ: o mapa é MOVIDO PARA FORA DA TELA, no tamanho que a folha pede, com a MESMA vista
+   * (mesmo centro, mesmo zoom). Assim o Leaflet carrega MAIS TILES em vez de subir o zoom — a
+   * resolução vem do dado, não de um zoom forçado. Captura, e restaura no `finally`, para que
+   * nenhuma falha deixe o mapa do usuário largado fora da tela.
+   *
+   * A tela não pisca: o mapa está a 40 mil pixels de distância durante o processo, e quem avisa é a
+   * linha de estado.
+   */
+  async function rasterizarMapa(bbox, larguraMm, escala, proporcao, larguraAlvoPx) {
+    const alvo = Number(larguraAlvoPx) > 0 ? Math.round(larguraAlvoPx) : 0;
+    if (!alvo) return rasterizarMapaEmTamanho(bbox, larguraMm, escala, proporcao, 0);
+
+    const TETO = 5200;   // um canvas de 5200 x 3432 px guarda cerca de 71 MB: acima disso o navegador sofre e o ganho é nulo
+    const alvoLimitado = Math.min(TETO, alvo);
+    const prop = Number(proporcao) > 0 ? Number(proporcao) : 0.66;
+    const container = estado.mapa.getContainer();
+    const estiloAntes = container.getAttribute('style') || '';
+    const alturaAlvo = Math.round(alvoLimitado * prop);
+
+    if (alvoLimitado < alvo) {
+      status('Esta folha a ' + Math.round(alvoLimitado / (larguraMm / 25.4)) + ' dpi passaria do limite de pixels — usando o máximo.');
+    } else {
+      /* A CONTA DO dpi USA A LARGURA REAL DO MAPA NA FOLHA (que o chamador manda em `larguraMm`),
+       * e não a largura da folha: mostrar um número errado ao usuário é pior que não mostrar. */
+      status('Gerando o mapa em ' + Math.round(alvoLimitado / (larguraMm / 25.4))
+        + ' dpi (' + alvoLimitado + ' × ' + alturaAlvo + ' px). A área do mapa fica parada alguns segundos.');
+    }
+    try {
+      container.style.position = 'fixed';
+      container.style.left = '-40000px';
+      container.style.top = '0';
+      container.style.width = alvoLimitado + 'px';
+      container.style.height = alturaAlvo + 'px';
+      container.style.zIndex = '-1';
+      await esperar(80);
+      return await rasterizarMapaEmTamanho(bbox, larguraMm, escala, proporcao, alvoLimitado);
+    } finally {
+      /* RESTAURAR SEMPRE. Se a captura falhar, o mapa do usuário volta ao lugar de onde nunca devia
+       * ter saído — falha em gerar imagem é aceitável; mapa sumido, não. */
+      if (estiloAntes) container.setAttribute('style', estiloAntes);
+      else container.removeAttribute('style');
+      estado.mapa.invalidateSize();
+      await esperar(80);
+    }
+  }
+
+  async function rasterizarMapaEmTamanho(bbox, larguraMm, escala, proporcao, larguraAlvoPx) {
     const mapa = estado.mapa;
     const configuracoes = { animate: false };
     const prop = Number(proporcao) > 0 ? Number(proporcao) : 0.66;
@@ -2856,13 +2922,24 @@
     mapa.invalidateSize();
     const rectMapa = mapa.getContainer().getBoundingClientRect();
     const tamanhoTela = { x: Math.round(rectMapa.width), y: Math.round(rectMapa.height) };
-    const larguraPx = Math.max(600, Math.min(2200, Math.round(tamanhoTela.x * Math.min(2, window.devicePixelRatio || 1))));
+    /* COM A RESOLUÇÃO PEDIDA, o quadro já vem no tamanho certo e não se multiplica por nada: a
+     * fonte do detalhe são os TILES carregados nesse tamanho, não uma escala artificial. Sem
+     * resolução pedida vale o comportamento de antes (até 2x o pixel do dispositivo), que serve
+     * para a tela — e era justamente o que deixava a impressão macia. O teto subiu de 2200 px: com
+     * 2200 não havia como atender 300 dpi em folha nenhuma. */
+    const fatorPixel = larguraAlvoPx ? 1 : Math.min(2, window.devicePixelRatio || 1);
+    const larguraPx = Math.max(600, Math.min(6000, Math.round(tamanhoTela.x * fatorPixel)));
     const alturaPx = Math.round(larguraPx * prop);
 
     const vistaAntes = { centro: mapa.getCenter(), zoom: mapa.getZoom() };
     if (usarVista) {
-      // nada a fazer: o mapa já está onde o usuário o deixou
-      await esperar(200);
+      /* A ESPERA CRESCE COM O TAMANHO DA CAPTURA.
+       *
+       * Na tela, 200 ms bastam para os tiles que já estavam carregados aparecerem. Mas a 300 dpi
+       * numa A3 são 4551 px de largura, e isso é dezenas de tiles NOVOS: capturar em 200 ms traz a
+       * imagem pela metade, com buracos cinza. A espera é proporcional ao alvo — e limitada, para
+       * não pendurar a interface quando alguém pedir 600 dpi. */
+      await esperar(larguraAlvoPx ? Math.min(2600, 400 + Math.round(larguraAlvoPx / 2)) : 200);
     } else {
       const mPorMm = escala / 1000;
       const metrosLargura = larguraMm * mPorMm;
