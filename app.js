@@ -2956,11 +2956,19 @@
    */
   async function abrirPrevia() {
     await atualizarPreviaMapa();
-    const conteudo = $('previa-mapa') && $('previa-mapa').innerHTML;
-    if (!conteudo || conteudo.indexOf('class="folha"') < 0) {
+    /* A CONFERÊNCIA É NO DOM, NÃO NO TEXTO.
+     *
+     * Eu procurava a string `class="folha"` e ela NUNCA aparece: o elemento sai com três classes
+     * (`class="folha folha-A3 folha-paisagem"`), então a prancha estava sendo montada e a minha
+     * própria conferência dizia que não. Procurar texto em HTML é frágil por natureza — perguntar
+     * ao DOM é o que resolve. */
+    const alvoPrevia = $('previa-mapa');
+    const temPrancha = !!(alvoPrevia && alvoPrevia.querySelector('.folha'));
+    if (!temPrancha) {
       alert('Não consegui montar a prancha ainda.\n\nCarregue uma área de influência ou faça o recorte, e tente de novo.');
       return;
     }
+    const conteudo = alvoPrevia.innerHTML;
     const folha = $('folha').value;
     const orientacao = $('orientacao').value;
     const janela = window.open('', 'prancha-eia');
