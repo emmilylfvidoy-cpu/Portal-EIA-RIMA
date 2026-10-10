@@ -2776,77 +2776,13 @@
        * recorte — que é o que uma legenda deve mostrar.
        *
        * E prévia e impressão passam a ser a MESMA coisa: não há como divergirem. */
-      /* POR CLASSE: QUANTAS FEIÇÕES, E UM EXEMPLO DAS PROPRIEDADES.
-       *
-       * O exemplo é o que permite escrever o NOME da unidade na legenda ("A34atg" -> "Coberturas
-       * detríticas indiferenciadas"): os nomes vêm nas FEIÇÕES, não no catálogo, que só guarda as
-       * cores por classe. Guardar uma feição por classe é barato e resolve o pedido inteiro. */
-      const porCamada = {};
-      for (const r of (estado.resultados || [])) {
-        if (!r || !r.camada || !r.features) continue;
-        const visto = porCamada[r.camada.id] || new Map();
-        for (const f of r.features) {
-          const p = f.properties || {};
-          const c = p.eia_classe;
-          if (c === undefined || c === null || c === '') continue;
-          const chave = String(c);
-          const atual = visto.get(chave);
-          if (atual) atual.contagem += 1;
-          else visto.set(chave, { contagem: 1, exemplos: p });
-        }
-        porCamada[r.camada.id] = visto;
-      }
-      /* A COLUNA DA LEGENDA ESCOLHIDA PELO USUÁRIO (aba "Rótulo" de cada camada).
-       *
-       * Cada classe vira `{ classe, rotulo }`: a COR sai da classe (é o renderizador de origem que
-       * a define, e é o que mantém o quadradinho igual ao mapa) e o TEXTO sai da coluna escolhida,
-       * lida no exemplo daquela classe. Sem coluna escolhida — ou sem valor na feição —, o rótulo é
-       * a própria sigla, como era antes: nada muda para quem não mexeu. */
-      const classesPorCamada = {};
-      for (const c of estado.camadas) {
-        if (!c || !c.id) continue;
-        const doRecorte = porCamada[c.id];
-        const campo = (estado.legendas || {})[c.id] || (estado.rotulos || {})[c.id];
-
-        /* OS NOMES VÊM DA PRÓPRIA CAMADA, E NÃO DO RECORTE.
-         *
-         * Aqui estava o defeito que o cliente relatou ("aparecem as siglas"). Eu lia as propriedades
-         * de `estado.resultados`, que só existe DEPOIS de recortar. Quem apenas abre a prancha, sem
-         * recortar, não tinha onde buscar o nome — e a legenda caía nas classes do catálogo, ou
-         * seja, nas siglas. Exatamente o que ele viu.
-         *
-         * `camada.geojson` está carregado sempre que a camada está ligada, e TEM todos os campos: é a
-         * mesma fonte que desenha o mapa e que alimenta os rótulos de tela. Monto um mapa
-         * classe -> nome (uma vez por camada) e uso tanto o que veio do recorte quanto a lista
-         * completa da camada, conforme o caso. */
-        const nomes = new Map();
-        if (campo && c.geojson && c.geojson.features) {
-          for (const f of c.geojson.features) {
-            const p = f.properties || {};
-            const chave = String(p[c.campo_classe]);
-            if (!chave || chave === 'undefined' || nomes.has(chave)) continue;
-            const bruto = p[campo];
-            const texto = (bruto === undefined || bruto === null) ? '' : String(bruto).trim();
-            if (texto) nomes.set(chave, texto);
-          }
-        }
-
-        // as classes: as que o recorte achou (ordenadas por quantidade) ou a lista da camada
-        let classes;
-        if (doRecorte) {
-          classes = Array.from(doRecorte.entries())
-            .sort((a, b) => b[1].contagem - a[1].contagem)
-            .map(([classe]) => String(classe));
-        } else {
-          classes = (c.classes || []).map((x) => String(typeof x === 'string' ? x : (x && x.classe)));
-        }
-        if (!classes.length) continue;
-
-        classesPorCamada[c.id] = classes.map((classe) => {
-          const texto = nomes.get(classe);
-          return texto ? { classe: classe, rotulo: texto } : classe;
-        });
-      }
+      /* A LISTA DE CLASSES E OS NOMES SÃO CALCULADOS NA MONTAGEM DA LEGENDA, mais abaixo, a partir
+       * das MESMAS feições — as que estão no enquadramento. Havia aqui um cálculo separado, que lia
+       * a lista do catálogo e os nomes das feições: duas fontes para o mesmo dado, e foi exatamente
+       * isso que produziu os dois defeitos que o cliente viu (unidades só com sigla e unidades fora
+       * do quadro). Foi removido em vez de ficar ao lado do novo, porque cálculo órfão que roda a
+       * cada prévia é trabalho jogado fora e, pior, uma segunda resposta esperando para ser usada
+       * por engano. */
       const modeloFolha = EIA.folhaHtml.montarFolha(Object.assign({}, e, {
         escala: escalaVista,
         numeroFolha: e.articulacao ? e.articulacao.folhas[0].nome : ('1:' + EIA.math.num(escalaVista, 0)),
@@ -2888,34 +2824,63 @@
          * é assim que ele reconhece a própria área —, e a forma é LINHA, porque a área de influência
          * vai desenhada como divisa, não como mancha de cor. */
         legenda: (function () {
-          /* SÓ AS CAMADAS QUE ESTÃO NO ENQUADRAMENTO.
+          /* UMA FONTE SÓ: AS FEIÇÕES QUE ESTÃO NA VISTA.
            *
-           * Pedido do cliente: "na legenda apareça só os layers que estão enquadrados no mapa".
+           * O cliente viu dois defeitos na mesma legenda: unidades só com a sigla, e unidades que
+           * nem estavam enquadradas. Os dois tinham UMA causa — eu usava duas fontes para o mesmo
+           * dado: a LISTA de classes vinha do catálogo (todas as classes, inclusive as de fora) e os
+           * NOMES vinham das feições carregadas (que são apenas as da janela em tela). A legenda
+           * anunciava classes cujas feições não estavam carregadas — sem nome, portanto — e classes
+           * que nem apareciam no mapa.
            *
-           * O TESTE É POR FEIÇÃO, e não pela caixa da camada. A caixa da Geologia cobre o estado
-           * inteiro: qualquer vista dentro de São Paulo intersectaria essa caixa, e a legenda
-           * continuaria anunciando camadas que não têm nada ali — o filtro pareceria funcionar e não
-           * filtraria nada. O que responde à pergunta é: alguma FEIÇÃO desta camada cai na vista?
+           * Agora as duas coisas saem das MESMAS feições: as que intersectam o enquadramento. A
+           * classe vem do `campo_classe` da feição, o nome vem da coluna escolhida, e uma feição
+           * serve de exemplo para a classe dela. Se a primeira feição da classe tiver o campo vazio,
+           * a próxima é tentada — e não a classe inteira ficar sem nome.
            *
-           * A área de influência NÃO passa por este filtro: ela é a referência do mapa e o cliente
-           * a quer identificada, mesmo que parte dela saia do quadro. */
+           * A área de influência não passa por este filtro: é a referência do mapa. */
           const ext = (function () {
             try {
               const b = estado.mapa.getBounds();
               return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
             } catch (err) { return null; }
           })();
-          const temFeicaoNaVista = (c) => {
-            // sem medida ou sem dado, NÃO esconde: esconder por falta de informação é pior que mostrar
-            if (!ext || !c || !c.geojson || !c.geojson.features) return true;
-            for (const f of c.geojson.features) {
-              const bb = EIA.math.bbox({ type: 'FeatureCollection', features: [f] });
-              if (bb && EIA.math.bboxIntersecta(bb, ext)) return true;
+
+          const visiveis = [];
+          const classesNaVista = {};
+          for (const c of (estado.camadas || [])) {
+            if (!c || !c.id) continue;
+            const feicoes = (c.geojson && c.geojson.features) || [];
+            const campo = (estado.legendas || {})[c.id] || (estado.rotulos || {})[c.id];
+            const contagem = new Map();
+            const nomes = new Map();
+            for (const f of feicoes) {
+              if (ext) {
+                const bb = EIA.math.bbox({ type: 'FeatureCollection', features: [f] });
+                if (!bb || !EIA.math.bboxIntersecta(bb, ext)) continue;   // fora do quadro
+              }
+              const p = f.properties || {};
+              const chave = String(p[c.campo_classe]);
+              if (!chave || chave === 'undefined' || chave === 'null') continue;
+              contagem.set(chave, (contagem.get(chave) || 0) + 1);
+              if (campo && !nomes.has(chave)) {
+                const bruto = p[campo];
+                const texto = (bruto === undefined || bruto === null) ? '' : String(bruto).trim();
+                if (texto) nomes.set(chave, texto);
+              }
             }
-            return false;
-          };
-          const visiveis = (estado.camadas || []).filter(temFeicaoNaVista);
-          const grupos = EIA.folhaHtml.legendaPorMeio(visiveis, classesPorCamada);
+            if (!contagem.size) continue;   // nada desta camada está no mapa: fora da legenda
+
+            visiveis.push(c);
+            classesNaVista[c.id] = Array.from(contagem.entries())
+              .sort((a, b) => b[1] - a[1])
+              .map(([classe]) => {
+                const texto = nomes.get(classe);
+                return texto ? { classe: classe, rotulo: texto } : classe;
+              });
+          }
+
+          const grupos = EIA.folhaHtml.legendaPorMeio(visiveis, classesNaVista);
           const areas = (estado.areas || []).filter((a) => a && (a.nome || a.sigla));
           if (areas.length) {
             grupos.push({
