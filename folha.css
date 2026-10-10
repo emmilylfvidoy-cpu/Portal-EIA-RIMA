@@ -149,9 +149,16 @@
   display: grid;
   grid-template-columns: 6mm 1fr;      /* amostra sempre na mesma largura: é o que alinha a coluna */
   align-items: center;
-  height: 3.4mm;                        /* linha de altura fixa */
+  /* A LINHA CRESCE PARA CABER O NOME.
+   *
+   * Era `height: 3.4mm` com `ellipsis` no rótulo, e os nomes longos saíam cortados: "Costeiro,
+   * unidade de granito-gnaíssica migmatítica …". Nome de unidade geológica cortado não serve para
+   * nada — quem lê a legenda precisa do nome inteiro. Com altura MÍNIMA e o rótulo quebrando linha,
+   * o nome sai completo; e como a legenda é uma grade, a LINHA INTEIRA cresce junto, mantendo as
+   * colunas alinhadas — a uniformidade que importa (a das colunas) fica preservada. */
+  min-height: 3.4mm;
   font-size: 6.4pt;
-  overflow: hidden;
+  overflow: visible;
 }
 .legenda-itens .amostra {
   width: 5mm; height: 2.6mm;
@@ -161,7 +168,7 @@
 }
 .legenda-itens .forma-linha .amostra { height: 0; border: 0; border-top: 0.7mm solid var(--cor, #9aa7b0); }
 .legenda-itens .forma-ponto .amostra { width: 2.6mm; height: 2.6mm; border-radius: 50%; margin-left: 1.2mm; }
-.legenda-itens .rotulo { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.legenda-itens .rotulo { white-space: normal; overflow-wrap: anywhere; line-height: 1.15; }
 
 /* ---------------------------------------------------------------- ARTICULAÇÃO */
 .bloco-articulacao { display: flex; flex-direction: column; }
