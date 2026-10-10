@@ -119,6 +119,11 @@
       center: centro,
       zoom: 6,
       zoomControl: false,
+      /* ZOOM FINO, E O MOTIVO: a escala da folha é calculada do zoom. Com o passo inteiro padrão,
+       * uma escala digitada (1:250.000) cairia na potência de 2 mais próxima e voltaria a não
+       * bater — que é exatamente a reclamação do cliente. Com 0,05 o mapa atende a escala pedida. */
+      zoomSnap: 0.05,
+      zoomDelta: 0.5,
       preferCanvas: true,
       renderer: L.canvas({ padding: 0.4, preserveDrawingBuffer: true }),
     });
@@ -435,7 +440,9 @@
     $('btn-agrupamento-padrao').onclick = limparAgrupamento;
     $('logos').onchange = (ev) => carregarLogos(Array.from(ev.target.files || []));
     $('articulado').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
-    $('escala').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
+    // a escala é digitada pelo usuário: o mapa vai para ela (ver aplicarEscalaDigitada)
+    $('escala').onchange = aplicarEscalaDigitada;
+    $('escala').onkeydown = (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); aplicarEscalaDigitada(); } };
     $('folha').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
     $('orientacao').onchange = () => { atualizarInfoArticulacao(); atualizarPreviaMapa(); };
 
@@ -2714,20 +2721,53 @@
     return [centroLon - g.dLon / 2, centroLat - g.dLat / 2, centroLon + g.dLon / 2, centroLat + g.dLat / 2];
   }
 
+  /**
+   * A ESCALA É DIGITADA, E O MAPA VAI PARA ELA.
+   *
+   * O cliente quer o contrário do que estava: em vez de o mapa mandar na escala — e a folha sair no
+   * que a vista desse (1:147.330) — ele escreve 1:250.000 e o mapa se ajusta, para a folha sair
+   * exatamente naquela escala.
+   *
+   * A conta é a MESMA que mede a escala da vista (js/mapa.js, escalaDaVista), ao contrário:
+   *
+   *   metros que a folha cobre = escala × largura do mapa na folha (mm) ÷ 1000
+   *   metros por pixel         = metros ÷ largura da tela (px)
+   *   zoom                     = log2(40075016,686 · cos φ ÷ (256 · metros por pixel))
+   *
+   * A largura da folha vem multiplicada pelo fator (`caixa.base`), porque as caixas estão em
+   * milímetros de A1 e o papel pode ser A4, A3 ou A1 — a mesma armadilha que já me custou um
+   * defeito nesta sessão.
+   */
+  function aplicarEscalaDigitada() {
+    const digitado = String(($('escala') || {}).value || '');
+    const numero = Number(digitado.replace(/[^\d]/g, ''));
+    if (!numero || numero < 500) {
+      status('Não entendi a escala. Escreva como 1:25.000 ou 25000.', true);
+      return;
+    }
+    const mapa = estado.mapa;
+    if (!mapa) return;
+    const caixa = EIA.pdf.caixaDoMapa($('folha').value, $('orientacao').value, {});
+    const larguraFolhaMm = caixa.mapa.largura * (caixa.base || 1);
+    const larguraTela = Math.round(mapa.getContainer().getBoundingClientRect().width);
+    if (!larguraTela || !larguraFolhaMm) return;
+    const metrosFolha = numero * larguraFolhaMm / 1000;
+    const mPorPx = metrosFolha / larguraTela;
+    const lat = mapa.getCenter().lat;
+    const zoom = Math.log2(40075016.686 * Math.cos(lat * Math.PI / 180) / (256 * mPorPx));
+    mapa.setZoom(zoom, { animate: false });
+    const saida = EIA.mapa.escalaDaVista(lat, mapa.getZoom(), larguraTela, larguraFolhaMm);
+    status('Escala ajustada: 1:' + EIA.math.num(saida, 0) + ' (você digitou 1:' + EIA.math.num(numero, 0) + ').');
+    atualizarInfoArticulacao();
+  }
+
   function sugerirEscala() {
     const bbox = extensaoAtual();
     if (!bbox) { alert('Carregue uma área de influência ou faça o recorte primeiro.'); return; }
     const esc = EIA.mapa.escalaQueCabe(bbox, $('folha').value, $('orientacao').value);
-    const opcao = Array.from($('escala').options).find((o) => Number(o.value) === esc);
-    if (opcao) $('escala').value = opcao.value;
-    else {
-      const nova = document.createElement('option');
-      nova.value = String(esc);
-      nova.textContent = '1:' + EIA.math.num(esc, 0);
-      $('escala').appendChild(nova);
-      $('escala').value = String(esc);
-    }
-    atualizarInfoArticulacao();
+    // o campo agora é digitável: escreve o valor e deixa o mapa ir para ele
+    $('escala').value = String(esc);
+    aplicarEscalaDigitada();
     atualizarPreviaMapa();
   }
 
